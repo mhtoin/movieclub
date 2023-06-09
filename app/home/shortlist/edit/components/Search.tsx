@@ -8,6 +8,7 @@ import SearchResults from "./SearchResults";
 export default function Search() {
   const [searchValue, setSearchValue] = useState("");
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [slide, setSlide] = useState(0);
 
   const onSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -26,20 +27,29 @@ export default function Search() {
     <div className="form-control w-full max-w-xs gap-2 flex flex-column items-center">
       <input
         type="text"
-        placeholder="Type here"
+        placeholder="e.q title (2023)"
         className="input input-bordered w-full max-w-xs"
         onKeyDown={onSubmit}
         value={searchValue}
         onChange={handleChange}
       />
-      <button
+      <a
+        href={"#item0"}
         className="btn rounded-md w-50"
-        onClick={(event: React.MouseEvent) => setShouldFetch(true)}
+        onClick={(event: React.MouseEvent) => {
+          setShouldFetch(true);
+          setSlide(0);
+        }}
       >
         Search
-      </button>
-      <div className="w-1/4 rounded-md border-slate-50"></div>
-      <SearchResults searchValue={searchValue} shouldFetch={shouldFetch} setShouldFetch={setShouldFetch}/>
+      </a>
+      <SearchResults
+        searchValue={searchValue}
+        shouldFetch={shouldFetch}
+        setShouldFetch={setShouldFetch}
+        slide={slide}
+        setSlide={setSlide}
+      />
     </div>
   );
 }

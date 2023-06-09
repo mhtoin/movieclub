@@ -6,9 +6,9 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section>
+    <section className="h-full">
       {/* Include shared UI here e.g. a header or sidebar */}
-      <NavBar></NavBar>
+      <NavBar />
       {children}
     </section>
   );
