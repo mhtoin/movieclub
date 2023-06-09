@@ -6,6 +6,7 @@ import { start } from "repl";
 interface SearchResultCardProps {
   movie: {
     backdrop_path: string
+    poster_path: string
   };
 }
 
