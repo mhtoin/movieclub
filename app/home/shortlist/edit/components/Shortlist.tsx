@@ -1,5 +1,7 @@
 import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
+import { removeFromShortList } from "../actions/actions";
+import { randomUUID } from "crypto";
 
 async function getShortList() {
     const res = await fetch('http://localhost:3001/api/shortlist', {
@@ -23,7 +25,7 @@ export default async function Shortlist() {
     return (
         <div className="flex flex-row items-center rounded-lg h-60 w-1/2">
             {movies.map((movie: object) => {
-                return <ShortListItem key={movie.id} movie={movie} />
+                return <ShortListItem key={movie.id} movie={movie} removeFromShortList={removeFromShortList}/>
             })}
             {skeletons.map((skeleton) => {
                 return skeleton

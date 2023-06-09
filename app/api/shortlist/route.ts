@@ -9,8 +9,6 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
     const movies = await collection.find({}).toArray();
 
-    console.log("shortlist", movies);
-    console.log('request', request)
     return NextResponse.json({ movies });
   } catch (e) {
     console.error(e);
@@ -24,11 +22,9 @@ export async function POST(request: NextRequest, response: Response) {
     const body = await request.json();
 
     const res = await collection.insertOne(body);
-    console.log(request.nextUrl);
 
     //const movies = await collection.find({}).toArray();
     const tag = request.nextUrl.searchParams.get("tag");
-    console.log('tag', tag)
     revalidateTag('shortlist');
 
     return NextResponse.json({ res });
@@ -36,3 +32,4 @@ export async function POST(request: NextRequest, response: Response) {
     console.error(e);
   }
 }
+

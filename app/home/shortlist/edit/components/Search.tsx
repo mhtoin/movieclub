@@ -12,9 +12,9 @@ export default function Search() {
 
   const onSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      const target = e.target as HTMLInputElement;
       e.preventDefault();
-      console.log("submitted", target.value ?? "no value");
+      setShouldFetch(true);
+      setSlide(0);
     }
   };
 
