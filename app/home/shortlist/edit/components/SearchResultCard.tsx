@@ -4,7 +4,9 @@ import { addMovie } from "../actions/actions";
 import { start } from "repl";
 
 interface SearchResultCardProps {
-  movie: object;
+  movie: {
+    backdrop_path: string
+  };
 }
 
 export default function SearchResultCard({ movie }: SearchResultCardProps) {
