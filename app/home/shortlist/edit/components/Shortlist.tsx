@@ -23,15 +23,15 @@ export default async function Shortlist() {
     console.log('data in shortlist', movies)
     console.log('skeletons', skeletons)
     return (
+        <>
         <div className="flex flex-row items-center rounded-lg h-60 w-1/2">
-            {movies.map((movie: object) => {
+            {movies.map((movie: Movie) => {
                 return <ShortListItem key={movie.id} movie={movie} removeFromShortList={removeFromShortList}/>
             })}
             {skeletons.map((skeleton) => {
                 return skeleton
             })}
-            
-            
         </div>
+        </>
     )
 }

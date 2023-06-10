@@ -1,20 +1,27 @@
-'use client'
+/* eslint-disable @next/next/no-img-element */
+"use client";
 
 import { removeFromShortList } from "../actions/actions";
 import { useTransition } from "react";
 
 interface SearchResultCardProps {
-  movie: object;
-  removeFromShortList: Promise<void>
+  movie: Movie;
+  removeFromShortList: (id: string) => Promise<void>;
 }
 
-export default function ShortListItem({ movie, removeFromShortList }: SearchResultCardProps) {
-  let [isPending, startTransition] = useTransition()
+export default function ShortListItem({
+  movie,
+  removeFromShortList,
+}: SearchResultCardProps) {
+  let [isPending, startTransition] = useTransition();
 
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">
-        <button className="btn btn-circle btn-xs btn-error" onClick={() => startTransition(() => removeFromShortList(movie._id))}>
+        <button
+          className="btn btn-circle btn-xs btn-error"
+          onClick={() => startTransition(() => removeFromShortList(movie._id))}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-3 w-3"
