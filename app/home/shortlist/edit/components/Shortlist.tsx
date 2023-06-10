@@ -2,22 +2,12 @@ import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
 import { removeFromShortList } from "../actions/actions";
 import { randomUUID } from "crypto";
+import { getShortlist } from "@/lib/shortlist";
 
-async function getShortList() {
-    const res = await fetch('http://localhost:3001/api/shortlist', {
-        cache: 'no-store',
-        next: {
-            tags: ['shortlist']
-        }
-    })
-
-    const body = await res.json()
-    console.log(body)
-    return body
-}
 
 export default async function Shortlist() {
-    const { movies } = await getShortList()
+    const movies  = await getShortlist() ?? []
+    console.log('movies', movies)
     const skeletons = movies.length < 3 ? [...Array(3 - movies.length)].fill(<ItemSkeleton />) : []
 
     console.log('data in shortlist', movies)

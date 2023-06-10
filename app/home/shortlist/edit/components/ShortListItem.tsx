@@ -20,7 +20,7 @@ export default function ShortListItem({
       <div className="indicator-item indicator-end">
         <button
           className="btn btn-circle btn-xs btn-error"
-          onClick={() => startTransition(() => removeFromShortList(movie._id))}
+          onClick={() => startTransition(() => removeFromShortList(movie._id!))}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

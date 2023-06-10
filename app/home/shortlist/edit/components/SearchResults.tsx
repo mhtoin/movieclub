@@ -61,6 +61,7 @@ export default function SearchResults({
     if (fetchStatus !== "idle") {
       return <span className="loading loading-spinner"></span>;
     }
+    return <div></div>
   }
 
   return (
