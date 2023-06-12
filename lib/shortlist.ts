@@ -1,11 +1,9 @@
 import clientPromise from "@/lib/mongo";
-import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
-import { ObjectId } from "mongodb";
+import { ObjectId, OptionalId } from "mongodb";
 
 export const revalidate = 10
 
-export async function getShortlist() {
+export async function getShortList() {
   try {
     const client = await clientPromise;
     const collection = client.db("movieclub").collection("shortlist");
@@ -17,13 +15,24 @@ export async function getShortlist() {
   }
 }
 
-export async function addMovieToShortlist(movie: object) {
+export async function getUserShortList(userId?: string) {
   try {
     const client = await clientPromise;
     const collection = client.db("movieclub").collection("shortlist");
-    
 
-    const res = await collection.insertOne(movie);
+    const movies =  await collection.find<Movie>({ userId: new ObjectId(userId) }).toArray();
+    return movies
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function addMovieToShortlist(movie: Movie) {
+  try {
+    const client = await clientPromise;
+    const collection = client.db("movieclub").collection<Movie>("shortlist");
+    
+    const res = await collection.insertOne({...movie, userId: new ObjectId(movie.userId)});
 
     //revalidateTag("shortlist");
 

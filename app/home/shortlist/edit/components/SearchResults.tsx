@@ -53,10 +53,6 @@ export default function SearchResults({
     enabled: shouldFetch,
   });
 
-  const handleNext = (event: React.MouseEvent) => {};
-
-  const handlePrevious = (event: React.MouseEvent) => {};
-
   if (status === "loading") {
     if (fetchStatus !== "idle") {
       return <span className="loading loading-spinner"></span>;

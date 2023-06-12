@@ -1,17 +1,17 @@
 import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
 import { removeFromShortList } from "../actions/actions";
-import { randomUUID } from "crypto";
-import { getShortlist } from "@/lib/shortlist";
-
+import { getUserShortList } from "@/lib/shortlist";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function Shortlist() {
-    const movies  = await getShortlist() ?? []
+    const session = await getServerSession(authOptions)
+    const movies  = await getUserShortList(session?.user.userId) ?? []
     console.log('movies', movies)
     const skeletons = movies.length < 3 ? [...Array(3 - movies.length)].fill(<ItemSkeleton />) : []
 
-    console.log('data in shortlist', movies)
-    console.log('skeletons', skeletons)
+    console.log('session data', session)
     return (
         <>
         <div className="flex flex-row items-center rounded-lg h-60 w-1/2">

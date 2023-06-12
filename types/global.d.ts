@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export {};
 
 declare global {
@@ -17,5 +19,6 @@ declare global {
     original_title: string;
     release_date: string;
     overview: string;
+    userId: ObjectId | string;
   }
 }

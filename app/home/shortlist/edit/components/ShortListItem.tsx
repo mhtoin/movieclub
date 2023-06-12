@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { removeFromShortList } from "../actions/actions";
 import { useTransition } from "react";
 
 interface SearchResultCardProps {
