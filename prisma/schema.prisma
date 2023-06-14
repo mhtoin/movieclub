@@ -37,16 +37,16 @@ model Shortlist {
 model Movie {
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
   adult             Boolean
-  backdrop_path     String? 
+  backdrop_path     String?     @default("")
   genre_ids         Int[]
   tmdbId            Int         @unique
   original_language String
-  original_title    String?
-  overview          String?
+  original_title    String
+  overview          String
   popularity        Float
-  poster_path       String?
+  poster_path       String?     @default("")
   release_date      String
-  title             String?
+  title             String
   video             Boolean
   vote_average      Float
   vote_count        Int

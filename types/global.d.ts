@@ -13,8 +13,8 @@ declare global {
     video: boolean
     vote_average: number
     vote_count: number
-    backdrop_path: string;
-    poster_path: string;
+    backdrop_path: string | null;
+    poster_path: string | null;
     title: string;
     original_title: string;
     release_date: string;
@@ -30,8 +30,8 @@ declare global {
     video: boolean
     vote_average: number
     vote_count: number
-    backdrop_path: string;
-    poster_path: string;
+    backdrop_path: string | null;
+    poster_path: string | null;
     title: string;
     original_title: string;
     release_date: string;

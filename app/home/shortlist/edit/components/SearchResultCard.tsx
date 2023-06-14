@@ -25,7 +25,7 @@ export default function SearchResultCard({ movie }: SearchResultCardProps) {
         <h3>{movie.release_date}</h3>
         <p className="text-xs overflow-scroll">{movie.overview}</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-secondary" onClick={() => startTransition(() => addMovie(movie))}>
+          <button className="btn btn-secondary" onClick={() => startTransition(() => addMovie(movie as Movie))}>
             Choose</button>
         </div>
       </div>
