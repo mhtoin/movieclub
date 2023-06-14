@@ -1,14 +1,17 @@
-import { getShortList } from "@/lib/shortlist";
+import { getAllShortLists, getShortList } from "@/lib/shortlist";
 import Link from "next/link";
 import groupBy from 'ramda/src/groupBy'
 
 export default async function ShortList() {
+  const allShortlists = await getAllShortLists()
+
+  console.log('all shortlists', allShortlists)
+  /*
   const allMovies = await getShortList() ?? []
   const moviesByUser = groupBy((movie: Movie) => {
     return movie.userId.toString()
-  }, allMovies)
+  }, allMovies)*/
             
-  console.log(moviesByUser)
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <div className="flex flex-row items-center justify-evenly gap-5">

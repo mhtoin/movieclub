@@ -1,14 +1,13 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import 'dotenv/config'
 import clientPromise from "@/lib/mongo";
+import client from "@/lib/prisma";
+import { Adapter } from "next-auth/adapters";
 export const authOptions: NextAuthOptions = {
-    adapter: MongoDBAdapter(clientPromise, {
-        databaseName: 'movieclub'
-
-    }),
+    adapter: PrismaAdapter(client) as Adapter,
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
             //console.log('signin callback', user, account, profile, email, credentials)
@@ -35,9 +34,11 @@ export const authOptions: NextAuthOptions = {
             console.log('jwt profile', profile)
             console.log('jwt account', account)
             if (account && profile && user) {
+                console.log('first sign in')
                 token.profileId = profile.id
                 token.globalName = profile.global_name
                 token.userId= user.id
+                console.log(token)
             }
             return token
           }

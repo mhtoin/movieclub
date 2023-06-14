@@ -9,7 +9,7 @@ export async function addMovie(movie: Movie) {
   console.log("session data in add movie action", session);
 
   if (session && session.user && session.user.userId) {
-    let res = await addMovieToShortlist({ ...movie, userId: session.user.userId });
+    let res = await addMovieToShortlist(movie, session.user.userId);
     revalidate("shortlist");
     return res;
   } else {
