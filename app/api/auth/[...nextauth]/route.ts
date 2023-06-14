@@ -47,7 +47,9 @@ export const authOptions: NextAuthOptions = {
         DiscordProvider({
             clientId: process.env.DISCORD_CLIENT_ID ?? '',
             clientSecret: process.env.DISCORD_CLIENT_SECRET ?? '',
-            authorization: process.env.DISCORD_AUTH
+            authorization: process.env.DISCORD_AUTH,
+            // for now, need to disable checks for state cookie because production errors out
+            checks: ['none']
           })
     ],
     session: {
