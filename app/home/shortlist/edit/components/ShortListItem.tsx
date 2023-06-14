@@ -5,11 +5,13 @@ import { useTransition } from "react";
 
 interface SearchResultCardProps {
   movie: Movie;
-  removeFromShortList: (id: string) => Promise<void>;
+  shortlistId: string,
+  removeFromShortList?: (id: string, shortlistId: string) => Promise<void>;
 }
 
 export default function ShortListItem({
   movie,
+  shortlistId,
   removeFromShortList,
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
@@ -17,9 +19,9 @@ export default function ShortListItem({
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">
-        <button
+        {removeFromShortList && <button
           className="btn btn-circle btn-xs btn-error"
-          onClick={() => startTransition(() => removeFromShortList(movie._id!))}
+          onClick={() => startTransition(() => removeFromShortList(movie._id!, shortlistId))}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -35,10 +37,10 @@ export default function ShortListItem({
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-        </button>
+        </button>}
       </div>
       <a
-        href={`https://www.themoviedb.org/movie/${movie.id}`}
+        href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}
         target="_blank"
         rel="noopener noreferrer"
       >

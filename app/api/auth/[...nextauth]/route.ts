@@ -6,6 +6,7 @@ import 'dotenv/config'
 import clientPromise from "@/lib/mongo";
 import client from "@/lib/prisma";
 import { Adapter } from "next-auth/adapters";
+import { findOrCreateShortList } from "@/lib/shortlist";
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(client) as Adapter,
     callbacks: {
@@ -18,26 +19,25 @@ export const authOptions: NextAuthOptions = {
             return '/home'
         },
         async session({ session, user, token }) {
-            console.log('session callback')
-            console.log('session session', session)
-            console.log('session user', user)
-            console.log('session token', token)
             session.user.profileId = token.profileId
             session.user.userId = token.userId
             session.user.username = token.globalName
+            session.user.shortlistId = token.userShortlistId
             return session
         },
         async jwt({ token, user, account, profile }) {
-            console.log('jwt callback')
-            console.log('jwt token', token)
-            console.log('jwt user', user)
-            console.log('jwt profile', profile)
-            console.log('jwt account', account)
             if (account && profile && user) {
                 console.log('first sign in')
+                /**
+                 * Check on sign-in whether user has a shortlist
+                 * If not, create one 
+                 * Regardless, attach shortlist id to token
+                 */
+                const shortlist = await findOrCreateShortList(user.id)
                 token.profileId = profile.id
                 token.globalName = profile.global_name
                 token.userId= user.id
+                token.userShortlistId = shortlist?.id
                 console.log(token)
             }
             return token

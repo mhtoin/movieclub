@@ -1,6 +1,7 @@
 import prisma from "./prisma";
 import { ObjectId, OptionalId } from "mongodb";
 import { Prisma } from '@prisma/client'
+import { omit } from "ramda";
 
 export const revalidate = 10
 
@@ -27,80 +28,65 @@ export async function getAllShortLists() {
     })
 }
 
-export async function addMovieToShortlist(movie: Movie, userId: string) {
-  try {
-    // check if user has shortlist, create if absent
-    console.log('trying to add movie', movie, 'for ', userId)
-    let shortlist = await prisma.shortlist.findFirst({
+export async function findOrCreateShortList(userId: string) {
+    const shortlist = await prisma.shortlist.upsert({
         where: {
+            userId: userId
+        },
+        update: {},
+        create: {
             userId: userId
         }
     })
 
-    console.log('found shortlist', shortlist)
-    
-    if (!shortlist) {
-        shortlist = await prisma.shortlist.create({
-            data: {
-                userId: userId
-            }
-        })
+    return shortlist
 
-        console.log('created shortlist', shortlist)
-    }
+}
 
-    
-    const movieInDb = await prisma.movie.upsert({
-        where: {
-            id_: movie.id
-        }, update: {
-
-        },
-        create: {
-            ...movie,
-            id: movie._id,
-            id_: movie.id
-        }
-    })
-
-    console.log('movie data in db', movieInDb)
+export async function addMovieToShortlist(movie: Movie, userId: string, shortlistId: string) {
+  try {
+    // check if user has shortlist, create if absent
+    console.log('trying to add movie', movie, 'for ', userId)
 
     const updatedShortlist = await prisma.shortlist.update({
         where: {
-            id: shortlist.id
+            id: shortlistId
         },
         data: {
             movies: {
                 connectOrCreate: {
                     where: {
-                        id_: movie.id
+                        tmdbId: movie.tmdbId
                     },
-                    create: {
-                        ...movie,
-                        id: movieInDb.id,
-                        id_: movie.id
-                    }
+                    create: movie
                 }
             }
         }
 
     })
 
-    console.log('after creation', updatedShortlist)
-    // now that we have the movie, insert into shortlist (or create shortlist if absent)
+    return updatedShortlist
 
-    //revalidateTag("shortlist");
-    //return res
   } catch (e) {
     console.error(e);
   }
 }
 
 
-export async function removeMovieFromShortlist(id: string) {
+export async function removeMovieFromShortlist(id: string, shortlistId: string) {
   try {
-    //const movie = await prisma.
+    const movie = await prisma.shortlist.update({
+        where: {
+            id: shortlistId
+        },
+        data: {
+            movieIDs: [
+                id
+            ]
+        }
+    })
 
+    return movie
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (e) {
     console.log(e);

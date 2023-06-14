@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
 import SearchResultCard from "./SearchResultCard";
+import { omit } from "ramda";
 
 interface SearchResultsProps {
   searchValue: string;
@@ -44,7 +45,11 @@ export default function SearchResults({
     );
 
     setShouldFetch(false);
-    return await res.json();
+    const { results }: { results: TMDBMovie[] } = await res.json();
+    console.log("retrieved", results);
+    return results.map((row) => {
+      return {...omit(['id'], row), tmdbId: row.id}
+    }) as Movie[];
   };
 
   const { status, data, fetchStatus } = useQuery({
@@ -57,46 +62,50 @@ export default function SearchResults({
     if (fetchStatus !== "idle") {
       return <span className="loading loading-spinner"></span>;
     }
-    return <div></div>
+    return <div></div>;
   }
-
-  return (
-    <>
-      <div className="carousel carousel-center max-w-lg p-4 space-x-4 rounded-box">
-        {data.results.map((movie: any, index: number) => {
-          return (
-            <div
-              id={"item" + index}
-              key={"carousel-item-" + movie.id}
-              className="carousel-item"
-            >
-              <SearchResultCard key={movie.id} movie={movie} />
-              <div className="absolute flex justify-evenly place-items-center transform -translate-y-1/2 left-5 right-5 top-1/2">
-                <a
-                  href={"#item" + slide}
-                  className={
-                    slide > 0 ? "btn btn-circle" : "btn btn-circle btn-disabled"
-                  }
-                  onClick={(event: React.MouseEvent) => setSlide(slide - 1)}
-                >
-                  ❮
-                </a>
-                <a
-                  href={"#item" + slide}
-                  className={
-                    slide < data.results.length - 1
-                      ? "btn btn-circle"
-                      : "btn btn-circle btn-disabled"
-                  }
-                  onClick={(event: React.MouseEvent) => setSlide(slide + 1)}
-                >
-                  ❯
-                </a>
+  
+  if (data) {
+    return (
+      <>
+        <div className="carousel carousel-center max-w-lg p-4 space-x-4 rounded-box">
+          {data.map((movie: any, index: number) => {
+            return (
+              <div
+                id={"item" + index}
+                key={"carousel-item-" + movie.id}
+                className="carousel-item"
+              >
+                <SearchResultCard key={movie.id} movie={movie} />
+                <div className="absolute flex justify-evenly place-items-center transform -translate-y-1/2 left-5 right-5 top-1/2">
+                  <a
+                    href={"#item" + slide}
+                    className={
+                      slide > 0 ? "btn btn-circle" : "btn btn-circle btn-disabled"
+                    }
+                    onClick={(event: React.MouseEvent) => setSlide(slide - 1)}
+                  >
+                    ❮
+                  </a>
+                  <a
+                    href={"#item" + slide}
+                    className={
+                      slide < data.length - 1
+                        ? "btn btn-circle"
+                        : "btn btn-circle btn-disabled"
+                    }
+                    onClick={(event: React.MouseEvent) => setSlide(slide + 1)}
+                  >
+                    ❯
+                  </a>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
-  );
+            );
+          })}
+        </div>
+      </>
+    );
+  } else {
+    return <div>No results found</div>
+  }
 }

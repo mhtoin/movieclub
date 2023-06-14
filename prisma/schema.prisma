@@ -20,13 +20,13 @@ model Account {
   userId            String @db.ObjectId
   user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("accounts")
   @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Shortlist {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId   String   @db.ObjectId
+  userId   String   @unique @db.ObjectId
   user     User     @relation(fields: [userId], references: [id])
   movieIDs String[] @db.ObjectId
   movies   Movie[]  @relation(fields: [movieIDs], references: [id])
@@ -37,16 +37,16 @@ model Shortlist {
 model Movie {
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
   adult             Boolean
-  backdrop_path     String
+  backdrop_path     String? 
   genre_ids         Int[]
-  id_               Int         @unique @map("id")
+  tmdbId            Int         @unique
   original_language String
-  original_title    String
-  overview          String
+  original_title    String?
+  overview          String?
   popularity        Float
-  poster_path       String
+  poster_path       String?
   release_date      String
-  title             String
+  title             String?
   video             Boolean
   vote_average      Float
   vote_count        Int
@@ -58,7 +58,7 @@ model Movie {
 
 model User {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  email         String @unique
+  email         String      @unique
   /// Could not determine type: the field only had null or empty values in the sample set.
   emailVerified DateTime?
   image         String

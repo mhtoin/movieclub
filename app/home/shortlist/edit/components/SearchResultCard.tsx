@@ -9,10 +9,7 @@ interface SearchResultCardProps {
 
 export default function SearchResultCard({ movie }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition()
-  const { data: session, status } = useSession()
 
-  console.log('search result session', session, status)
- 
   return (
     <div className="card w-96 h-80 bg-base-100 shadow-2xl image-full">
       <figure>

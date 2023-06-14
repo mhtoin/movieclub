@@ -1,8 +1,6 @@
 "use client";
 
-import { ChangeEvent } from "react";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import SearchResults from "./SearchResults";
 
 export default function Search() {
