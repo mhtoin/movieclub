@@ -17,7 +17,7 @@ export default function ShortListItem({
   let [isPending, startTransition] = useTransition();
 
   return (
-    <div className="indicator mx-auto border-2 rounded-md flex-auto">
+    <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">
         {removeFromShortList && <button
           className="btn btn-circle btn-xs btn-error"
