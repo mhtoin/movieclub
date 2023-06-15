@@ -14,7 +14,7 @@ export default async function ShortList() {
   }, allMovies)*/
             
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="flex min-h-screen flex-col items-center p-24 overflow-hidden">
       <div className="flex flex-row items-center justify-evenly gap-5">
         <div className="bg-slate-700 border rounded-md border-slate-300 hover:border-slate-400 p-3">
           <Link href={"/home/shortlist/edit"}>Edit</Link>
@@ -30,7 +30,7 @@ export default async function ShortList() {
             <h1 className="text-xl m-5" key={shortlist.id}>{shortlist.user.name}</h1>
             <div className="flex flex-row gap-5 w-2/3 sm:w-auto">
               {shortlist.movies.map(movie => {
-                return <ShortListItem key={movie.id} movie={movie} shortlistId={shortlist.id} />
+                return <ShortListItem key={shortlist.id + movie.id} movie={movie} shortlistId={shortlist.id} />
               })}
             </div>
             </>
