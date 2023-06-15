@@ -27,7 +27,7 @@ export default async function ShortList() {
         {allShortlists.map(shortlist => {
           return (
             <>
-            <h1 key={shortlist.id + '-title'} className="text-xl m-5" key={shortlist.id}>{shortlist.user.name}</h1>
+            <h1 key={shortlist.id + '-title'} className="text-xl m-5">{shortlist.user.name}</h1>
             <div key={shortlist.id + '-container'} className="flex flex-row gap-5 w-2/3 sm:w-auto">
               {shortlist.movies.map(movie => {
                 return <ShortListItem key={shortlist.id + movie.id} movie={movie} shortlistId={shortlist.id} />
