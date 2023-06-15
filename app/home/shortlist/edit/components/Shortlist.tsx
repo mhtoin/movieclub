@@ -17,7 +17,7 @@ export default async function Shortlist() {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:flex lg:justify-between lg:flex-shrink">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:flex lg:justify-between p-5">
         {movies.map((movie: Movie) => {
           return (
             <ShortListItem
@@ -26,6 +26,7 @@ export default async function Shortlist() {
               removeFromShortList={removeFromShortList}
               shortlistId={session?.user.shortlistId}
             />
+            
           );
         })}
         {skeletons.map((skeleton) => {
