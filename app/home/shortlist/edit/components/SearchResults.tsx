@@ -48,7 +48,7 @@ export default function SearchResults({
     const { results }: { results: TMDBMovie[] } = await res.json();
     console.log("retrieved", results);
     return results.map((row) => {
-      return {...omit(['id'], row), tmdbId: row.id}
+      return { ...omit(["id"], row), tmdbId: row.id };
     }) as Movie[];
   };
 
@@ -64,48 +64,44 @@ export default function SearchResults({
     }
     return <div></div>;
   }
-  
+
   if (data) {
     return (
       <>
-        <div className="carousel carousel-center max-w-lg p-4 space-x-4 rounded-box">
+        <a
+          href={"#item" + slide}
+          className={
+            slide > 0 ? "btn btn-circle" : "btn btn-circle btn-disabled"
+          }
+          onClick={(event: React.MouseEvent) => setSlide(slide - 1)}
+        >
+          ˄
+        </a>
+        <div className="carousel carousel-vertical carousel-center h-96 space-y-4 rounded-box">
           {data.map((movie: any, index: number) => {
             return (
               <div
                 id={"item" + index}
                 key={"carousel-item-" + movie.id}
-                className="carousel-item"
+                className="carousel-item "
               >
                 <SearchResultCard key={movie.id} movie={movie} />
-                <div className="absolute flex justify-evenly place-items-center transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a
-                    href={"#item" + slide}
-                    className={
-                      slide > 0 ? "btn btn-circle" : "btn btn-circle btn-disabled"
-                    }
-                    onClick={(event: React.MouseEvent) => setSlide(slide - 1)}
-                  >
-                    ❮
-                  </a>
-                  <a
-                    href={"#item" + slide}
-                    className={
-                      slide < data.length - 1
-                        ? "btn btn-circle"
-                        : "btn btn-circle btn-disabled"
-                    }
-                    onClick={(event: React.MouseEvent) => setSlide(slide + 1)}
-                  >
-                    ❯
-                  </a>
-                </div>
               </div>
             );
           })}
         </div>
+        <a
+          href={"#item" + slide}
+          className={
+            slide < data.length - 1 ? "btn btn-circle" : "btn btn-circle btn-disabled"
+          }
+          onClick={(event: React.MouseEvent) => setSlide(slide + 1)}
+        >
+          V
+        </a>
       </>
     );
   } else {
-    return <div>No results found</div>
+    return <div>No results found</div>;
   }
 }

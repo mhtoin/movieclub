@@ -28,7 +28,7 @@ export default async function ShortList() {
           return (
             <>
             <h1 className="text-xl m-5" key={shortlist.id}>{shortlist.user.name}</h1>
-            <div className="flex flex-row gap-5">
+            <div className="flex flex-row gap-5 w-2/3 sm:w-auto">
               {shortlist.movies.map(movie => {
                 return <ShortListItem key={movie.id} movie={movie} shortlistId={shortlist.id} />
               })}
