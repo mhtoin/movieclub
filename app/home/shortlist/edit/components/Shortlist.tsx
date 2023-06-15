@@ -17,7 +17,7 @@ export default async function Shortlist() {
 
   return (
     <>
-      <div className="flex flex-row items-center rounded-lg h-60 w-1/2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:flex lg:justify-between lg:flex-shrink">
         {movies.map((movie: Movie) => {
           return (
             <ShortListItem
