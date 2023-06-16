@@ -50,6 +50,7 @@ model Movie {
   video             Boolean
   vote_average      Float
   vote_count        Int
+  movieOfTheWeek    Boolean? @default(false)
   shortlists        Shortlist[] @relation(fields: [shortlistIDs], references: [id])
   shortlistIDs      String[]    @db.ObjectId
 

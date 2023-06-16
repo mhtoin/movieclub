@@ -19,6 +19,7 @@ declare global {
     original_title: string;
     release_date: string;
     overview: string;
+    movieOfTheWeek?: boolean | null
   }
 
   interface TMDBMovie {

@@ -1,9 +1,16 @@
 import prisma from "./prisma";
 import { ObjectId, OptionalId } from "mongodb";
 import { Prisma } from "@prisma/client";
-import { omit } from "ramda";
 
 export const revalidate = 10;
+
+export async function getChosenMovie() {
+  return await prisma.movie.findFirst({
+    where: {
+      movieOfTheWeek: true
+    }
+  })
+}
 
 export async function getShortList(id: string) {
   const shortlist = await prisma.shortlist.findFirst({
@@ -95,4 +102,37 @@ export async function removeMovieFromShortlist(
   } catch (e) {
     console.log(e);
   }
+}
+
+export async function updateChosenMovie(movie: Movie) {
+  /**
+   * First update the last week's movie to false
+   */
+
+  let oldMovie = await prisma.movie.findFirst({
+    where: {
+      movieOfTheWeek: true
+    }
+  })
+
+  if (oldMovie) {
+    await prisma.movie.update({
+      where: {
+        id: oldMovie.id
+      },
+      data: {
+        movieOfTheWeek: false
+      }
+    })
+  }
+    let updatedMovie = await prisma.movie.update({
+        where: {
+            id: movie.id
+        },
+        data: {
+            movieOfTheWeek: true
+        }
+    })
+
+    return updatedMovie
 }

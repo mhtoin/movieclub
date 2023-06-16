@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
 import SearchResultCard from "./SearchResultCard";
-import { omit } from "ramda";
+import { omit } from 'underscore'
 
 interface SearchResultsProps {
   searchValue: string;
@@ -48,7 +48,7 @@ export default function SearchResults({
     const { results }: { results: TMDBMovie[] } = await res.json();
     console.log("retrieved", results);
     return results.map((row) => {
-      return { ...omit(["id"], row), tmdbId: row.id };
+      return { ...omit(row, ['id']), tmdbId: row.id };
     }) as Movie[];
   };
 

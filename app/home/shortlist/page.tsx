@@ -1,6 +1,5 @@
 import { getAllShortLists, getShortList } from "@/lib/shortlist";
 import Link from "next/link";
-import groupBy from 'ramda/src/groupBy'
 import ShortListItem from "./edit/components/ShortListItem";
 
 export default async function ShortList() {
@@ -20,7 +19,7 @@ export default async function ShortList() {
           <Link href={"/home/shortlist/edit"}>Edit</Link>
         </div>
         <button className="bg-slate-700 border rounded-md border-slate-300 hover:border-slate-400 p-3 ">
-          Raffle
+        <Link href={"/home/shortlist/raffle"}>Raffle</Link>
         </button>
       </div>
       <div className="flex flex-col place-items-center m-5">
