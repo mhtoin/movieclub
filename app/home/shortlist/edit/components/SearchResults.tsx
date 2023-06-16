@@ -66,6 +66,7 @@ export default function SearchResults({
   }
 
   if (data) {
+    console.log('data', data)
     return (
       <>
         <a
@@ -82,10 +83,10 @@ export default function SearchResults({
             return (
               <div
                 id={"item" + index}
-                key={"carousel-item-" + movie.id}
+                key={"carousel-item-" + movie.tmdbId}
                 className="carousel-item "
               >
-                <SearchResultCard key={movie.id} movie={movie} />
+                <SearchResultCard key={movie.tmdbId} movie={movie} />
               </div>
             );
           })}

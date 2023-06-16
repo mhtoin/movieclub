@@ -4,7 +4,7 @@ export {};
 
 declare global {
   interface Movie {
-    _id?: string | undefined
+    id?: string
     adult: boolean
     genre_ids: Array<number>
     tmdbId: number

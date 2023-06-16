@@ -16,16 +16,17 @@ export default function ShortListItem({
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
 
+  console.log('item', movie)
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">
         {removeFromShortList && <button
           className="btn btn-circle btn-xs btn-error"
-          onClick={() => startTransition(() => removeFromShortList(movie._id!, shortlistId))}
+          onClick={() => startTransition(() => removeFromShortList(movie.id!, shortlistId))}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-3 w-3"
+            className="h-3 w-3"  
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
