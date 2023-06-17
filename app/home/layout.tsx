@@ -1,5 +1,7 @@
 import { getChosenMovie } from "@/lib/shortlist";
 import NavBar from "./components/NavBar";
+import { getColours } from "./shortlist/edit/actions/actions";
+import Navigation from "./components/Navigation";
 
 export default async function HomeLayout({
   children, // will be a page or nested layout
@@ -11,21 +13,12 @@ export default async function HomeLayout({
     ? `http://image.tmdb.org/t/p/original${movieOfTheWeek["backdrop_path"]}`
     : "";
 
-    console.log('chosen movie', movieOfTheWeek, backgroundPath)
   return (
     <section>
-      <div
-      className="h-full bg-no-repeat bg-cover"
-        style={{
-          backgroundImage: `url(${backgroundPath})`,
-        }}
-      >
-        <div className="backdrop-blur-xl">
-        {/* Include shared UI here e.g. a header or sidebar */}
-        <NavBar />
-        {children}
-        </div>
-      </div>
+      {/* Include shared UI here e.g. a header or sidebar */}
+    
+      {children}
+   
     </section>
   );
 }

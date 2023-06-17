@@ -5,6 +5,7 @@ import { addMovieToShortlist, removeMovieFromShortlist, updateChosenMovie } from
 import { Shortlist, User } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import { sample } from "underscore";
+import { prominent } from 'color.js'
 
 export async function addMovie(movie: Movie) {
   const session = await getServerSession();
@@ -60,4 +61,11 @@ export async function startRaffle(
 
   let chosenMovie = await updateChosenMovie(movieChoice.movie)
   console.log('chosen', chosenMovie)
+}
+
+export async function getColours(img: string) {
+  const imageData = await fetch(img)
+
+  console.log(imageData)
+
 }

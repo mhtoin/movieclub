@@ -1,6 +1,8 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Navigation from "./home/components/Navigation";
+import NavBar from "./home/components/NavBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -15,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="min-h-screen bg-black">
+        {/* @ts-expect-error Server Component */}
+        <NavBar />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,14 +1,114 @@
+import { getServerSession } from "@/lib/getServerSession";
 import Link from "next/link";
 
-export default function NavBar() {
+export default async function NavBar() {
+  const session = await getServerSession();
+  const isAuthenticated = !!session;
+
   return (
-    <nav className="flex min-w-screen flex-row items-center justify-evenly p-3">
-        <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-2 lg:text-left">
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            <Link href={"/home/shortlist"}>Short list</Link>
-          </h2>
-          <h2 className={`mb-3 text-2xl font-semibold`}>Dashboard</h2>
+    <div className="min-w-screen flex justify-center">
+      <div className="navbar rounded-box my-10 border w-9/12 bg-transparent">
+        <div className="navbar-start">
+          <div className="dropdown z-50">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />
+              </svg>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <Link href={"/home"}>Home</Link>
+              </li>
+              <li>
+                <a>Shortlist</a>
+                <ul className="p-2">
+                  <li>
+                    <Link href={"/home/shortlist"}>View all</Link>
+                  </li>
+                  <li>
+                    <Link href={"/home/shortlist/edit"}>Edit</Link>
+                  </li>
+                  <li>
+                    <Link href={"/home/shortlist/raffle"}>Raffle</Link>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a>Dashboard</a>
+              </li>
+            </ul>
+          </div>
+          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
         </div>
-    </nav>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1 z-50">
+            <li>
+              <Link href={"/home"}>Home</Link>
+            </li>
+            <li tabIndex={0}>
+              <details>
+                <summary>Shortlist</summary>
+                <ul className="p-2">
+                  <li>
+                    <Link href={"/home/shortlist"}>View all</Link>
+                  </li>
+                  <li>
+                    <Link href={"/home/shortlist/edit"}>Edit</Link>
+                  </li>
+                  <li>
+                    <Link href={"/home/shortlist/raffle"}>Raffle</Link>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li>
+              <a>Dashboard</a>
+            </li>
+          </ul>
+        </div>
+        {isAuthenticated && (
+          <div className="navbar-end">
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img src={session.user?.image} />
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">{session.user?.name}</span>
+                  </a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                <Link href="/api/auth/signout">Logout</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
