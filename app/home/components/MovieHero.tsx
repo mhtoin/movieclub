@@ -5,7 +5,7 @@ export async function MovieHero({ movieOfTheWeek }) {
     ? `http://image.tmdb.org/t/p/original${movieOfTheWeek["backdrop_path"]}`
     : "";
   return (
-    <div className="card lg:w-5/12 lg:card-side bg-gradient-to-r from-purple-500 to-pink-500 shadow-xl">
+    <div className="card lg:w-5/12 lg:card-side bg-gradient-to-r from-purple-500 to-pink-50 shadow-xl">
       <figure>
         <img
           src={`http://image.tmdb.org/t/p/original${movieOfTheWeek["poster_path"]}`}
