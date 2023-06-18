@@ -1,20 +1,23 @@
 import { getChosenMovie } from "@/lib/shortlist";
 
-export async function MovieHero() {
-  const movieOfTheWeek = await getChosenMovie();
+export async function MovieHero({ movieOfTheWeek }) {
   const backgroundPath = movieOfTheWeek?.backdrop_path
     ? `http://image.tmdb.org/t/p/original${movieOfTheWeek["backdrop_path"]}`
     : "";
   return (
-    <div className="card lg:w-6/12 shadow-xl image-full">
+    <div className="card lg:w-5/12 lg:card-side bg-gradient-to-r from-purple-500 to-pink-500 shadow-xl">
       <figure>
-        <img src={backgroundPath} alt="Shoes" />
+        <img
+          src={`http://image.tmdb.org/t/p/original${movieOfTheWeek["poster_path"]}`}
+          alt="Album"
+          className="rounded-xl m-5"
+        />
       </figure>
-      <div className="card-body backdrop-blur-lg">
-        <h2 className="card-title">{movieOfTheWeek?.title}</h2>
-        <p>If a dog chews shoes whose shoes does he choose?</p>
+      <div className="card-body">
+        <h2 className="card-title">{movieOfTheWeek?.original_title}</h2>
+        <p>{movieOfTheWeek?.overview}</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-primary">Buy Now</button>
+          <button className="btn btn-primary">Listen</button>
         </div>
       </div>
     </div>
