@@ -9,10 +9,13 @@ export default async function HomePage() {
     : "";
 
   return (
-    <main className="flex flex-col items-center justify-normal p-20" >
+    <div
+      className="flex flex-col items-center justify-normal p-20"
+     
+    >
       <h2>Next movie in counter: 20:24:12</h2>
-       {/* @ts-expect-error Server Component */}
-      <MovieHero movieOfTheWeek={movieOfTheWeek}/>
-    </main>
+      {/* @ts-expect-error Server Component */}
+      <MovieHero movieOfTheWeek={movieOfTheWeek} />
+    </div>
   );
 }
