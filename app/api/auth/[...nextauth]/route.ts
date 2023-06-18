@@ -4,11 +4,11 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import 'dotenv/config'
 import clientPromise from "@/lib/mongo";
-import client from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { Adapter } from "next-auth/adapters";
 import { findOrCreateShortList } from "@/lib/shortlist";
 export const authOptions: NextAuthOptions = {
-    adapter: PrismaAdapter(client) as Adapter,
+    adapter: PrismaAdapter(prisma) as Adapter,
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
             //console.log('signin callback', user, account, profile, email, credentials)

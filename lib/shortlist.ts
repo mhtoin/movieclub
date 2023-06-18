@@ -7,9 +7,9 @@ export const revalidate = 10;
 export async function getChosenMovie() {
   return await prisma.movie.findFirst({
     where: {
-      movieOfTheWeek: true
-    }
-  })
+      movieOfTheWeek: true,
+    },
+  });
 }
 
 export async function getShortList(id: string) {
@@ -111,28 +111,28 @@ export async function updateChosenMovie(movie: Movie) {
 
   let oldMovie = await prisma.movie.findFirst({
     where: {
-      movieOfTheWeek: true
-    }
-  })
+      movieOfTheWeek: true,
+    },
+  });
 
   if (oldMovie) {
     await prisma.movie.update({
       where: {
-        id: oldMovie.id
+        id: oldMovie.id,
       },
       data: {
-        movieOfTheWeek: false
-      }
-    })
+        movieOfTheWeek: false,
+      },
+    });
   }
-    let updatedMovie = await prisma.movie.update({
-        where: {
-            id: movie.id
-        },
-        data: {
-            movieOfTheWeek: true
-        }
-    })
+  let updatedMovie = await prisma.movie.update({
+    where: {
+      id: movie.id,
+    },
+    data: {
+      movieOfTheWeek: true,
+    },
+  });
 
-    return updatedMovie
+  return updatedMovie;
 }

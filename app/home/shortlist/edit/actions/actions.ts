@@ -1,11 +1,15 @@
 "use server";
 
 import { getServerSession } from "@/lib/getServerSession";
-import { addMovieToShortlist, removeMovieFromShortlist, updateChosenMovie } from "@/lib/shortlist";
+import {
+  addMovieToShortlist,
+  removeMovieFromShortlist,
+  updateChosenMovie,
+} from "@/lib/shortlist";
 import { Shortlist, User } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import { sample } from "underscore";
-import { prominent } from 'color.js'
+import { prominent } from "color.js";
 
 export async function addMovie(movie: Movie) {
   const session = await getServerSession();
@@ -53,19 +57,19 @@ export async function startRaffle(
       )
     )
     .flat();
-  const movieChoice = sample(movies);
+  const movieChoice = sample(movies) ?? "";
 
-  // update movie in db
-  console.log("movies in raffle action", movies);
-  console.log("choice", movieChoice);
+  if (movieChoice) {
+    // update movie in db
+    console.log("movies in raffle action", movies);
+    console.log("choice", movieChoice);
 
-  let chosenMovie = await updateChosenMovie(movieChoice.movie)
-  console.log('chosen', chosenMovie)
+    let chosenMovie = await updateChosenMovie(movieChoice.movie);
+  }
 }
 
 export async function getColours(img: string) {
-  const imageData = await fetch(img)
+  const imageData = await fetch(img);
 
-  console.log(imageData)
-
+  console.log(imageData);
 }

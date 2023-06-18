@@ -1,16 +1,16 @@
 "use client";
 
-import { Prisma, Shortlist, User } from "@prisma/client";
 import ShortListItem from "../../edit/components/ShortListItem";
-import { startTransition } from "react";
+import { useTransition } from "react";
 import { startRaffle } from "../../edit/actions/actions";
+import { getAllShortLists } from "@/lib/shortlist";
 
-export default function RaffleClient({
-  allShortlists,
-}: (Shortlist & {
-  user: User;
-  movies: Movie[];
-})[]) {
+
+
+export function RaffleClient({ allShortlists }: { allShortlists: any}) {
+  let [isPending, startTransition] = useTransition()
+  //const allShortlists = await getAllShortLists()
+
   return (
     <>
       <button
@@ -19,7 +19,7 @@ export default function RaffleClient({
       >
         Start raffle
       </button>
-      {allShortlists.map((shortlist) => {
+      {allShortlists.map((shortlist: any) => {
         return (
           <>
             <h1 key={shortlist.id + "-title"} className="text-xl m-5">
@@ -29,7 +29,7 @@ export default function RaffleClient({
               key={shortlist.id + "-container"}
               className="flex flex-row gap-5 w-2/3 sm:w-auto"
             >
-              {shortlist.movies.map((movie) => {
+              {shortlist.movies.map((movie: Movie) => {
                 return (
                   <ShortListItem
                     key={shortlist.id + movie.id}
