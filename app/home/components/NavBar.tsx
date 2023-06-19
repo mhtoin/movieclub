@@ -52,7 +52,7 @@ export default async function NavBar() {
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+          <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 z-50">
@@ -82,7 +82,7 @@ export default async function NavBar() {
         </div>
         {isAuthenticated && (
           <div className="navbar-end">
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-end z-50">
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
                   <img src={session.user?.image} />
