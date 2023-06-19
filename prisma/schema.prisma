@@ -38,7 +38,11 @@ model Movie {
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
   adult             Boolean
   backdrop_path     String?     @default("")
+  runtime           Int?
+  tagline           String?
   genre_ids         Int[]
+  trailers          Json[]
+  watchProviders    Json?
   tmdbId            Int         @unique
   original_language String
   original_title    String
@@ -57,6 +61,23 @@ model Movie {
   @@map("movies")
 }
 
+enum WatchProviders {
+  link
+  flatrate
+  buy
+  rent
+}
+
+enum Genre {
+  id
+  name
+}
+
+enum Trailer {
+  name
+  id
+  key
+}
 model User {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   email         String      @unique

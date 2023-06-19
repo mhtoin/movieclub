@@ -16,42 +16,43 @@ export default function Rating() {
         type="radio"
         name="rating-10"
         className="bg-red-400 mask mask-heart mask-half-1"
+        
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-2"
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-1"
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-2"
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-1"
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-2"
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-1"
+      />
+      <input
+        type="radio"
+        name="rating-10"
+        className="bg-red-400 mask mask-heart mask-half-2"
         checked
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-2"
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-1"
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-2"
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-1"
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-2"
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-1"
-      />
-      <input
-        type="radio"
-        name="rating-10"
-        className="bg-red-400 mask mask-heart mask-half-2"
       />
     </div>
   );

@@ -12,6 +12,9 @@ declare global {
     popularity: number
     video: boolean
     vote_average: number
+    tagline?: string | undefined
+    trailers?: Array<any>
+    watchProviders?: object
     vote_count: number
     backdrop_path: string | null;
     poster_path: string | null;

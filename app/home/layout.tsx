@@ -8,11 +8,6 @@ export default async function HomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const movieOfTheWeek = await getChosenMovie();
-  const backgroundPath = movieOfTheWeek?.backdrop_path
-    ? `http://image.tmdb.org/t/p/original${movieOfTheWeek["backdrop_path"]}`
-    : "";
-
   return (
     <section>
       {/* Include shared UI here e.g. a header or sidebar */}
