@@ -1,4 +1,4 @@
-export default function MoviePosterCard({movieOfTheWeek}) {
+export default function MoviePosterCard({movieOfTheWeek}: {movieOfTheWeek: Movie}) {
   return (
     <div className="">
       <div className="blur-md">

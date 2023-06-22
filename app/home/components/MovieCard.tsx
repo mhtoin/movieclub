@@ -1,6 +1,6 @@
 import MoviePosterCard from "./MoviePosterCard";
 
-export default function MovieCard({ movieOfTheWeek }) {
+export default function MovieCard({ movieOfTheWeek }: {movieOfTheWeek: Movie}) {
   return (
     <div className="flex flex-row w-2/5 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 shadow-xl">
       <div className="flexw-1/2">

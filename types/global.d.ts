@@ -12,9 +12,6 @@ declare global {
     popularity: number
     video: boolean
     vote_average: number
-    tagline?: string | undefined
-    trailers?: Array<any>
-    watchProviders?: object
     vote_count: number
     backdrop_path: string | null;
     poster_path: string | null;
@@ -22,7 +19,13 @@ declare global {
     original_title: string;
     release_date: string;
     overview: string;
-    movieOfTheWeek?: boolean | null
+    movieOfTheWeek?: Date
+  }
+
+  interface MovieOfTheWeek extends Movie {
+    trailers: Trailer[]
+    watchProviders: WatchProviders
+    tagline: string
   }
 
   interface TMDBMovie {
@@ -41,5 +44,25 @@ declare global {
     release_date: string;
     overview: string;
     userId: ObjectId | string;
+  }
+
+  interface WatchProviders {
+    link: string
+    flatrate?: Array<WatchProvider>
+    rent?: Array<WatchProvider>
+    buy?: Array<WatchProvider>
+  }
+
+  interface Trailer {
+    name: string
+    id: string
+    key: string
+  }
+
+  interface WatchProvider {
+    logo_path: string
+    provider_id: number
+    provider_name: string
+    display_priority: number
   }
 }

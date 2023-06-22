@@ -9,7 +9,7 @@ export default async function NavBar() {
     <div className="min-w-screen flex justify-center">
       <div className="navbar rounded-box my-10 border w-9/12 bg-transparent">
         <div className="navbar-start">
-          <div className="dropdown z-50">
+          <div tabIndex={0} className="dropdown z-50">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@ export default async function NavBar() {
               </li>
               <li>
                 <a>Shortlist</a>
-                <ul className="p-2">
+                <ul tabIndex={0} className="p-2">
                   <li>
                     <Link href={"/home/shortlist"}>View all</Link>
                   </li>
@@ -48,21 +48,21 @@ export default async function NavBar() {
                 </ul>
               </li>
               <li>
-                <a>Dashboard</a>
+              <Link href={"/home/shortlist/raffle"}>Tierlists</Link>
               </li>
             </ul>
           </div>
           <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 z-50">
+          <ul tabIndex={0} className="menu menu-horizontal px-1 z-50">
             <li>
               <Link href={"/home"}>Home</Link>
             </li>
             <li tabIndex={0}>
-              <details>
-                <summary>Shortlist</summary>
-                <ul className="p-2">
+              <details tabIndex={0} >
+                <summary tabIndex={0}>Shortlist</summary>
+                <ul tabIndex={0} className="p-2">
                   <li>
                     <Link href={"/home/shortlist"}>View all</Link>
                   </li>
@@ -75,14 +75,24 @@ export default async function NavBar() {
                 </ul>
               </details>
             </li>
-            <li>
-              <a>Dashboard</a>
+            <li tabIndex={0}>
+            <details tabIndex={0}>
+              <summary tabIndex={0}>Tierlists</summary>
+              <ul tabIndex={0}>
+                <li >
+                <Link href={"/tierlists"}>All</Link>
+                </li>
+                <li>
+                <Link href={"/home/shortlist/tierlists"}>Edit</Link>
+                </li>
+              </ul>
+            </details>
             </li>
           </ul>
         </div>
         {isAuthenticated && (
           <div className="navbar-end">
-            <div className="dropdown dropdown-end z-50">
+            <div tabIndex={0} className="dropdown dropdown-end z-50">
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
                   <img src={session.user?.image} />

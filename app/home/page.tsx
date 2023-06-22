@@ -1,13 +1,11 @@
 import { getChosenMovie } from "@/lib/shortlist";
 import { MovieHero } from "./components/MovieHero";
 import MovieCard from "./components/MovieCard";
+import { getAdditionalInfo } from "@/lib/tmdb";
 
 export default async function HomePage() {
   const movieOfTheWeek = await getChosenMovie();
-  const backgroundPath = movieOfTheWeek?.backdrop_path
-    ? `http://image.tmdb.org/t/p/original${movieOfTheWeek["backdrop_path"]}`
-    : "";
-
+  
   return (
     <div className="flex flex-col items-center justify-normal p-10">
       

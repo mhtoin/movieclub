@@ -1,15 +1,48 @@
 import prisma from "./prisma";
 import { ObjectId, OptionalId } from "mongodb";
 import { Prisma } from "@prisma/client";
+import { getAdditionalInfo } from "./tmdb";
+import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
 
 export const revalidate = 10;
 
 export async function getChosenMovie() {
-  return await prisma.movie.findFirst({
+  // set today to 18:00:00 and check if it is a wednesday
+     const nextMovieDate = set(nextWednesday(new Date()), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0  });
+    
+  const now = isWednesday(new Date())
+    ? set(new Date(), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 })
+    : nextMovieDate
+
+  console.log("looking for date", now);
+  console.log('next one', nextMovieDate)
+
+  const movie = await prisma.movie.findFirst({
     where: {
-      movieOfTheWeek: true,
+      OR: [
+        {
+          movieOfTheWeek: {
+            equals: now,
+          },
+        },
+        {
+          movieOfTheWeek: {
+            equals: nextMovieDate
+          }
+        }
+      ],
     },
   });
+
+  const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
+
+  if (movie) {
+    const movieObject = Object.assign(
+      movie,
+      details
+    ) as unknown as MovieOfTheWeek;
+    return movieObject;
+  }
 }
 
 export async function getShortList(id: string) {
@@ -108,29 +141,21 @@ export async function updateChosenMovie(movie: Movie) {
   /**
    * First update the last week's movie to false
    */
-
-  let oldMovie = await prisma.movie.findFirst({
-    where: {
-      movieOfTheWeek: true,
-    },
+  const nextDate = set(nextWednesday(new Date()), {
+    hours: 18,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
   });
 
-  if (oldMovie) {
-    await prisma.movie.update({
-      where: {
-        id: oldMovie.id,
-      },
-      data: {
-        movieOfTheWeek: false,
-      },
-    });
-  }
+  console.log("next date", nextDate);
+
   let updatedMovie = await prisma.movie.update({
     where: {
       id: movie.id,
     },
     data: {
-      movieOfTheWeek: true,
+      movieOfTheWeek: nextDate,
     },
   });
 
