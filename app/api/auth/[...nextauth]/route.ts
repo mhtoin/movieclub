@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
             //console.log('signin callback', user, account, profile, email, credentials)
+            console.log('sign in', user, profile)
             return true
         },
         async redirect({ url, baseUrl }) {
@@ -19,15 +20,19 @@ export const authOptions: NextAuthOptions = {
             return '/home'
         },
         async session({ session, user, token }) {
+            console.log('session', user)
             session.user.profileId = token.profileId
             session.user.userId = token.userId
             session.user.username = token.globalName
             session.user.shortlistId = token.userShortlistId
+            session.user.accountId = token.accountId
+            session.user.sessionId = token.sessionId
             return session
         },
         async jwt({ token, user, account, profile }) {
             if (account && profile && user) {
                 console.log('first sign in')
+                console.log(user, profile, account)
                 /**
                  * Check on sign-in whether user has a shortlist
                  * If not, create one 
@@ -37,6 +42,8 @@ export const authOptions: NextAuthOptions = {
                 token.profileId = profile.id
                 token.globalName = profile.global_name
                 token.userId= user.id
+                token.sessionId = user.sessionId
+                token.accountId = user.accountId
                 token.userShortlistId = shortlist?.id
                 console.log(token)
             }

@@ -88,6 +88,8 @@ model User {
   emailVerified DateTime?
   image         String
   name          String
+  sessionId     String?
+  accountId     Int?
   shortlists    Shortlist[]
   accounts      Account[]
   tierlist      Tierlists?

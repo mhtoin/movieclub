@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { ObjectId } from "mongodb";
 
 export {};
@@ -76,5 +77,10 @@ declare global {
     id: string
     tiers: Array<Tier>
     userId: string
+  }
+  
+  interface User {
+    sessionId: string
+    accountId: number
   }
 }

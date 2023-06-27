@@ -15,6 +15,7 @@ export default async function Shortlist() {
       ? [...new Array(3 - movies.length)].map((element, index) => <ItemSkeleton key={index}/>)
       : [];
 
+      console.log('session search', session)
   return (
     <>
       <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
