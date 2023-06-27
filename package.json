@@ -34,6 +34,7 @@
     "prisma": "^4.15.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4",
     "underscore": "^1.13.6"

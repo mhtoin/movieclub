@@ -3,8 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
 import SearchResultCard from "./SearchResultCard";
-import { omit } from 'underscore'
-
+import { omit } from "underscore";
+import 'dotenv/config'
 interface SearchResultsProps {
   searchValue: string;
   shouldFetch: boolean;
@@ -39,7 +39,7 @@ export default function SearchResults({
         headers: {
           accept: "application/json",
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMzk2NWNiZGIwMzIyZmJmYWYyMDlhNmFhZmYzNzk1MSIsInN1YiI6IjY0N2YyZWVhMTc0OTczMDExODcyYmYzMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qyp0kTQZ4-coX7-DVv5I9IPYRBuAw6ic_x1m9U7yTIk",
+            `Bearer ${process.env.moviedbtoken}`
         },
       }
     );
@@ -48,7 +48,7 @@ export default function SearchResults({
     const { results }: { results: TMDBMovie[] } = await res.json();
     console.log("retrieved", results);
     return results.map((row) => {
-      return { ...omit(row, ['id']), tmdbId: row.id };
+      return { ...omit(row, ["id"]), tmdbId: row.id };
     }) as Movie[];
   };
 
@@ -66,7 +66,7 @@ export default function SearchResults({
   }
 
   if (data) {
-    console.log('data', data)
+    console.log('token', process.env['MOVIEDB_KEY'])
     return (
       <>
         <a
@@ -94,7 +94,9 @@ export default function SearchResults({
         <a
           href={"#item" + slide}
           className={
-            slide < data.length - 1 ? "btn btn-circle" : "btn btn-circle btn-disabled"
+            slide < data.length - 1
+              ? "btn btn-circle"
+              : "btn btn-circle btn-disabled"
           }
           onClick={(event: React.MouseEvent) => setSlide(slide + 1)}
         >

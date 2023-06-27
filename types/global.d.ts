@@ -65,4 +65,16 @@ declare global {
     provider_name: string
     display_priority: number
   }
+
+  interface Tier {
+    label: string
+    value: number
+    movies: Array<Movie>
+  }
+
+  interface Tierlist {
+    id: string
+    tiers: Array<Tier>
+    userId: string
+  }
 }

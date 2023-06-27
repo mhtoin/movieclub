@@ -9,7 +9,7 @@ datasource db {
 
 type TierlistsTier {
   label  String
-  value BigInt
+  value Int
   movies String[]
 }
 
@@ -64,6 +64,7 @@ model Movie {
   vote_average      Float
   vote_count        Int
   movieOfTheWeek    DateTime?
+  user              String?
   shortlists        Shortlist[] @relation(fields: [shortlistIDs], references: [id])
   shortlistIDs      String[]    @db.ObjectId
 
