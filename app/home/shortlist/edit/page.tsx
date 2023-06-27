@@ -8,7 +8,9 @@ export default function ShortListEdit() {
     <div className="flex min-h-screen flex-col items-center gap-5 overflow-hidden">
       {/* @ts-expect-error Shortlist */}
       <Shortlist />
-      <Search />
+      <div className="btn">Search</div>
+      <div className="btn">Add from watchlist</div>
+     
     </div>
   );
 }
