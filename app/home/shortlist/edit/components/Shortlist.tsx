@@ -12,10 +12,12 @@ export default async function Shortlist() {
   const movies = (shortlistData?.movies as Movie[]) || [];
   const skeletons =
     movies?.length < 3
-      ? [...new Array(3 - movies.length)].map((element, index) => <ItemSkeleton key={index}/>)
+      ? [...new Array(3 - movies.length)].map((element, index) => (
+          <ItemSkeleton key={index} />
+        ))
       : [];
 
-      console.log('session search', session)
+  console.log("session search", session);
   return (
     <>
       <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
@@ -27,7 +29,6 @@ export default async function Shortlist() {
               removeFromShortList={removeFromShortList}
               shortlistId={session?.user.shortlistId}
             />
-            
           );
         })}
         {skeletons.map((skeleton) => {

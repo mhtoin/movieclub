@@ -10,7 +10,7 @@ export default function ShortListEdit() {
       {/* @ts-expect-error Shortlist */}
       <Shortlist />
       <Link href={'/home/shortlist/edit/watchlist'}><div className="btn">Add from watchlist</div></Link>
-      <div className="btn">Search</div>
+      <Link href={'/home/shortlist/edit/search'}><div className="btn">Search</div></Link>
      
     </div>
   );

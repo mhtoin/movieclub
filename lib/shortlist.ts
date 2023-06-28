@@ -55,7 +55,6 @@ export async function getShortList(id: string) {
     },
   });
 
-  console.log("shortlist with id", id, shortlist);
   return shortlist as Prisma.ShortlistInclude;
 }
 

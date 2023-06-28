@@ -19,7 +19,7 @@ export async function getAllMoviesOfTheWeek() {
     const movies = await prisma.movie.findMany({
         where: {
             movieOfTheWeek: {
-                lt: now
+                lte: now
             }
         }
     })
