@@ -18,12 +18,16 @@ export default function TierAdd({
 
   const [movieIndex, setMovieIndex] = useState(currentTier && currentTier.movies ? currentTier?.movies?.length + 1 : 1);
 
-  const handleChange = (value) => {
+  const handleChange = (value: string) => {
     const movie = movies.find((item) => item.title === value);
-    setSelectedMovie(movie);
+
+    if (movie) {
+      setSelectedMovie(movie);
+    }
+    
   };
 
-  const handleTierChange = (value) => {
+  const handleTierChange = (value: string) => {
     setTierName(value);
   };
 

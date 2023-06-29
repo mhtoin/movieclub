@@ -20,7 +20,7 @@ declare global {
     original_title: string;
     release_date: string;
     overview: string;
-    movieOfTheWeek?: Date
+    movieOfTheWeek?: Date | null
   }
 
   interface MovieOfTheWeek extends Movie {

@@ -131,7 +131,7 @@ export default function Profile() {
         className="btn"
         onClick={() =>
           startTransition(() =>
-            saveProfile({ sessionId: sessionId, accountId: accountId } as User)
+            saveProfile({ sessionId: sessionId, accountId: parseInt(accountId) } as User)
           )
         }
       >

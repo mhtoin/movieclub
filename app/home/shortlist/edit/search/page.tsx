@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import SearchResultGrid from "./components/SearchResultGrid";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import MoviePosterCard from "@/app/components/MoviePosterCard";
 
@@ -38,7 +37,7 @@ const fetchMovies = async (page: number, searchValue: string) => {
 
 export default function SearchPage() {
   const [searchValue, setSearchValue] = useState("");
-  const loadMoreButtonRef = useRef();
+  const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(

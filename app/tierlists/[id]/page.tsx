@@ -5,7 +5,7 @@ import TierAdd from "./components/TierAdd";
 import { contains, difference, includes, intersection } from "underscore";
 import { getAllMoviesOfTheWeek } from "@/lib/movies";
 
-export async function staticParams() {
+async function staticParams() {
   const tierlists = await getTierlists();
 
   return tierlists.map((tierlist) => ({
