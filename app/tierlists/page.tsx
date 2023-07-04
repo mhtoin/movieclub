@@ -15,7 +15,7 @@ export default async function Tierlists() {
 
   console.log(allTierlists);
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-5">
       <div>Tierlists</div>
       <div>
         {!usersWithTierlist.includes(session?.user.userId) && (
@@ -40,7 +40,7 @@ export default async function Tierlists() {
           </form>
         )}
       </div>
-      <div>
+      <div className="flex flex-col gap-10">
         {allTierlists.map((tierlist) => {
           return (
             <>

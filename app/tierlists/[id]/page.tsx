@@ -1,9 +1,8 @@
-import { getShortList } from "@/lib/shortlist";
 import { getTierlist, getTierlists } from "@/lib/tierlists";
-import Link from "next/link";
 import TierAdd from "./components/TierAdd";
 import { contains, difference, includes, intersection } from "underscore";
 import { getAllMoviesOfTheWeek } from "@/lib/movies";
+import { getServerSession } from "@/lib/getServerSession";
 
 async function staticParams() {
   const tierlists = await getTierlists();
@@ -20,6 +19,7 @@ export const dynamic =
   process.env.NODE_ENV === "production" ? "auto" : "force-dynamic";
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const session = await getServerSession()
   const tierlist = await getTierlist(params.id);
   const moviesOfTheWeek = await getAllMoviesOfTheWeek()
 
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
  
   return (
     <div className="flex flex-col items-center">
-      <TierAdd movies={unrankedMovies} tierlist={tierlist} />
+      {params.id === session?.user.userId && <TierAdd movies={unrankedMovies} tierlist={tierlist} />}
       {tierlist?.tiers.map((tier) => {
         return (
           <>

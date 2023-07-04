@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import type { Rating, Review } from "@prisma/client"
 import { ObjectId } from "mongodb";
 
 export {};
@@ -27,6 +28,8 @@ declare global {
     trailers: Trailer[]
     watchProviders: WatchProviders
     tagline: string
+    reviews: Array<Review>
+    ratings: Array<Rating>
   }
 
   interface TMDBMovie {
@@ -80,6 +83,7 @@ declare global {
   }
   
   interface User {
+    [x: string]: string;
     sessionId: string
     accountId: number
   }

@@ -14,7 +14,7 @@ export default function MoviePosterCard({
 }) {
   let [isPending, startTransition] = useTransition();
   return (
-    <div className="indicator mx-auto border-2 rounded-md">
+    <div className="indicator mx-auto border-2 rounded-md z-30">
       <div className="indicator-item indicator-top indicator-start">
         <button
           className={`btn btn-circle btn-xs hover:bg-amber-500 ${

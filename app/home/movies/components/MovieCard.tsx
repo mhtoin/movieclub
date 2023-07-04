@@ -2,12 +2,27 @@
 import { prominent, average } from "color.js";
 import { useEffect, useState } from "react";
 import Rating from "./Rating";
-import Link from "next/link";
+import Review from "./Review";
+import TierlistFormModal from "./TierlistFormModal";
 
-export function MovieHero({ movieOfTheWeek }: { movieOfTheWeek: MovieOfTheWeek }) {
+export default function MovieCard({
+  movie,
+  tierlist,
+  user
+}: {
+  movie: MovieOfTheWeek;
+  tierlist: Tierlist;
+  user: User
+}) {
   const [colorPalette, setColorPalette] = useState<any>([]);
-  const backgroundPath = movieOfTheWeek?.backdrop_path
-    ? `http://image.tmdb.org/t/p/original${movieOfTheWeek["poster_path"]}`
+  const tierlistMovieIds = tierlist.tiers.flatMap((tier) =>
+    tier.movies.map((movie) => movie.id)
+  );
+  const movieInTierlist = tierlist.tiers.find((tier) => {
+    return tier.movies.find(movieItem => movieItem.id === movie.id)
+  });
+  const backgroundPath = movie?.backdrop_path
+    ? `http://image.tmdb.org/t/p/original${movie["poster_path"]}`
     : "";
 
   useEffect(() => {
@@ -21,7 +36,8 @@ export function MovieHero({ movieOfTheWeek }: { movieOfTheWeek: MovieOfTheWeek }
     }
   }, []);
 
-  if (movieOfTheWeek) {
+  console.log("movies in tierlist", movieInTierlist);
+  if (movie) {
     return (
       <div className="card w-11/12 md:w-8/12 lg:w-6/12 sm:card-side">
         <figure
@@ -41,22 +57,25 @@ export function MovieHero({ movieOfTheWeek }: { movieOfTheWeek: MovieOfTheWeek }
           />
         </figure>
         <div className="card-body">
-          <h2 className="card-title text-2xl">
-            {movieOfTheWeek?.original_title}
-          </h2>
+          <h2 className="card-title text-2xl">{movie?.original_title}</h2>
           <div className="avatar placeholder">
             <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
               <span className="text-xs">User</span>
             </div>
           </div>
-          <h3 className="text-sm italic">{movieOfTheWeek?.release_date}</h3>
-          <Link href={`/home/movies/${movieOfTheWeek.id}`}>
-          <Rating />
-          </Link>
-          <p className="text-xs xl:text-lg my-2">{movieOfTheWeek?.overview}</p>
+          <h3 className="text-sm italic">Released: {movie?.release_date}</h3>
+        
+          <p className="text-xs xl:text-lg my-2">{movie?.overview}</p>
+          {movieInTierlist ? (<div className="badge badge-lg">{movieInTierlist.label} Tier: {movieInTierlist.movies.findIndex(movieItem => movieItem.id === movie.id)}</div>) : (
+            <TierlistFormModal tierlist={tierlist} movie={movie} />
+          )}
+          <div className="divider">Thoughts</div>
+          <div>
+          <Review movie={movie} user={user}/>
+          </div>
           <div className="card-actions"></div>
           <div className="card-actions justify-end">
-            {movieOfTheWeek?.trailers?.map((trailer) => {
+            {movie?.trailers?.map((trailer) => {
               return (
                 <a
                   key={trailer.id + "-link"}
@@ -89,12 +108,12 @@ export function MovieHero({ movieOfTheWeek }: { movieOfTheWeek: MovieOfTheWeek }
               );
             })}
             <a
-              href={movieOfTheWeek?.watchProviders?.link}
+              href={movie?.watchProviders?.link}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div className="join">
-                {movieOfTheWeek?.watchProviders?.flatrate?.map((item) => {
+                {movie?.watchProviders?.flatrate?.map((item) => {
                   return (
                     <div className="avatar join-item" key={item.provider_id}>
                       <div className="w-10 rounded">
@@ -113,6 +132,6 @@ export function MovieHero({ movieOfTheWeek }: { movieOfTheWeek: MovieOfTheWeek }
       </div>
     );
   } else {
-    return <div>No movie for next week</div>
+    return <div>No movie for next week</div>;
   }
 }

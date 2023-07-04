@@ -1,6 +1,8 @@
 import { get } from "underscore";
 import { getServerSession } from "./getServerSession";
 
+export const revalidate = 10;
+
 export async function getAdditionalInfo(tmdbId: number) {
   let tmdbDetailsRes = await fetch(
     `https://api.themoviedb.org/3/movie/${tmdbId}?language=${"en-US"}&append_to_response=videos,watch/providers`,
@@ -40,17 +42,21 @@ export async function getAdditionalInfo(tmdbId: number) {
 
 export async function getWatchlist() {
   const session = await getServerSession();
-
+  
+  console.log('session in watchlist', session)
   let watchlist = await fetch(
-    `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc`,
+    `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=1&session_id=${session?.user.sessionId}&sort_by=created_at.asc`,
     {
       method: "GET",
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
       },
+      cache: 'no-store'
     }
   );
-
-  return await watchlist.json()
+  
+  const data = await watchlist.json()
+  console.log('retrieved watchlist', data)
+  return data
 }

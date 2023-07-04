@@ -1,15 +1,16 @@
 import { getChosenMovie } from "@/lib/shortlist";
 import { MovieHero } from "./components/MovieHero";
-import MovieCard from "./components/MovieCard";
-import { getAdditionalInfo } from "@/lib/tmdb";
+import Countdown from "./components/Countdown";
+import { getServerSession } from "@/lib/getServerSession";
+import { getTierlist } from "@/lib/tierlists";
 
 export default async function HomePage() {
   const movieOfTheWeek = await getChosenMovie();
   
   return (
-    <div className="flex flex-col items-center justify-normal p-10">
+    <div className="flex flex-col items-center justify-normal p-10 gap-10">
       
-      <h2>Next movie in counter: 20:24:12</h2>
+      <Countdown />
       {/* @ts-expect-error Server Component */}
       <MovieHero movieOfTheWeek={movieOfTheWeek} />
     </div>

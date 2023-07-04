@@ -16,6 +16,7 @@ export function RaffleClient({ allShortlists }: { allShortlists: any}) {
       <button
         className="btn"
         onClick={() => startTransition(() => startRaffle(allShortlists))}
+        disabled
       >
         Start raffle
       </button>

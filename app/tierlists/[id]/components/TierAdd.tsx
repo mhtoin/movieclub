@@ -14,7 +14,7 @@ export default function TierAdd({
 }) {
   const [selectedMovie, setSelectedMovie] = useState<Movie>(movies[0] ?? "");
   const [tierName, setTierName] = useState(tierlist?.tiers[0]?.label || "");
-  const currentTier = tierlist.tiers.find((tier) => tier.label === tierName);
+  const currentTier = tierlist?.tiers?.find((tier) => tier.label === tierName);
 
   const [movieIndex, setMovieIndex] = useState(currentTier && currentTier.movies ? currentTier?.movies?.length + 1 : 1);
 

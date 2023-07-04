@@ -1,16 +1,17 @@
-import clientPromise from "@/lib/mongo";
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
-import { ObjectId } from "mongodb";
+import { getShortList } from "@/lib/shortlist";
+import { getServerSession } from "@/lib/getServerSession";
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const client = await clientPromise;
-    const collection = client.db("movieclub").collection("shortlist");
-    const id = params.id
-    const res = await collection.deleteOne({ _id: new ObjectId(id)})
+    const id = params.id;
 
-    return NextResponse.json({ message: "Deleted succesfully"})
+    
+    let shortlist = await getShortList(id);
+    return NextResponse.json(shortlist);
   } catch (e) {
     console.log(e);
   }

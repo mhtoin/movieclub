@@ -40,6 +40,12 @@ export default async function NavBar() {
                     <Link href={"/home/shortlist"}>View all</Link>
                   </li>
                   <li>
+                    <label tabIndex={0}>Edit</label>
+                    <ul tabIndex={0} className="p-2">
+                      <li>
+                        <Link href={'/home/shortlist/edit/search'}>Search</Link></li>
+                      <li><Link href={'/home/shortlist/edit/watchlist'}>Watchlist</Link></li>
+                    </ul>
                     <Link href={"/home/shortlist/edit"}>Edit</Link>
                   </li>
                   <li>
@@ -48,7 +54,7 @@ export default async function NavBar() {
                 </ul>
               </li>
               <li>
-              <Link href={"/home/shortlist/raffle"}>Tierlists</Link>
+              <Link href={"/tierlists"}>Tierlists</Link>
               </li>
             </ul>
           </div>
