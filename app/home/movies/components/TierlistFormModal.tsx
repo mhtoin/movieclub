@@ -10,7 +10,11 @@ export default function TierlistFormModal({
   console.log("tierlist", tierlist);
   return (
     <div>
-      <button className="btn" onClick={() => window.tierlistmodal.showModal()}>
+      <button className="btn" onClick={() => {
+        if (document) {
+          (document.getElementById('tierlistmodal') as HTMLFormElement).showModal()
+        }
+      }}>
         Add to tierlist
       </button>
       <dialog id="tierlistmodal" className="modal">

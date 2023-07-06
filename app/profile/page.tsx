@@ -7,12 +7,16 @@ import { saveProfile } from "./actions/action";
 import { useTransition } from "react";
 
 export default function Profile() {
-  let [isPending, startTransition] = useTransition()
+  let [isPending, startTransition] = useTransition();
   const { data: session, status } = useSession();
-  const [sessionId, setSessionId] = useState("");
-  const [accountId, setAccountId] = useState("");
+  const [sessionId, setSessionId] = useState(session?.user.sessionId);
+  const [accountId, setAccountId] = useState(session?.user.accountId);
+  const [notification, setNotification] = useState("");
 
-  console.log(session);
+  useEffect(() => {
+    setSessionId(session?.user.sessionId)
+    setAccountId(session?.user.accountId)
+  }, [session])
 
   useEffect(() => {
     const loc = window.location.search;
@@ -46,6 +50,12 @@ export default function Profile() {
               console.log("account", accountBody);
 
               setAccountId(accountBody.id);
+              setNotification(
+                "You need to log out and log back in for the changes to take effect"
+              );
+              setTimeout(() => {
+                setNotification("");
+              }, 5000);
             }
             //console.log(res);
           };
@@ -54,12 +64,14 @@ export default function Profile() {
         }
       }
     }
-
-    console.log(loc);
   });
 
   if (status === "loading") {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex flex-col items-center justify-center gap-5">
+        <span className="loading loading-spinner text-success"></span>
+      </div>
+    );
   }
 
   if (status === "unauthenticated") {
@@ -88,13 +100,35 @@ export default function Profile() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-5">
+      {notification && (
+        <div className="alert alert-success max-w-md">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current shrink-0 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>{notification}</span>
+        </div>
+      )}
       <div>Welcome {session?.user.name}</div>
       <details className="collapse collapse-arrow border border-base-300 bg-base-200 max-w-sm">
         <summary className="collapse-title text-xl font-medium">
           TMDB Account Settings
         </summary>
         <div className="collapse-content flex flex-col items-center gap-5">
-          <div className="btn btn-success" onClick={handleClick}>
+          <button
+            className="btn btn-success"
+            onClick={handleClick}
+            disabled={sessionId && accountId}
+          >
             Link TMDB account
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +144,7 @@ export default function Profile() {
                 />
               </g>
             </svg>
-          </div>
+          </button>
           <input
             type="text"
             placeholder="TMDB Account ID"
@@ -131,7 +165,10 @@ export default function Profile() {
         className="btn"
         onClick={() =>
           startTransition(() =>
-            saveProfile({ sessionId: sessionId, accountId: parseInt(accountId) } as User)
+            saveProfile({
+              sessionId: sessionId,
+              accountId: parseInt(accountId),
+            } as User)
           )
         }
       >

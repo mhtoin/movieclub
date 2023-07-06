@@ -83,13 +83,11 @@ export async function findOrCreateShortList(userId: string) {
 
 export async function addMovieToShortlist(
   movie: Movie,
-  userId: string,
   shortlistId: string
 ) {
   try {
     // check if user has shortlist, create if absent
-    console.log("trying to add movie", movie, "for ", userId);
-
+    
     const updatedShortlist = await prisma.shortlist.update({
       where: {
         id: shortlistId,
@@ -103,7 +101,11 @@ export async function addMovieToShortlist(
             create: movie,
           },
         },
+        
       },
+      include: {
+        movies: true
+      }
     });
 
     return updatedShortlist;

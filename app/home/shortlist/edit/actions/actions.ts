@@ -19,7 +19,6 @@ export async function addMovie(movie: Movie) {
   if (session && session.user && session.user.userId) {
     let res = await addMovieToShortlist(
       {...movie},
-      session.user.userId,
       session.user.shortlistId
     );
     revalidate("shortlist");

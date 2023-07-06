@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import type { Rating, Review } from "@prisma/client"
 import { ObjectId } from "mongodb";
 
@@ -28,7 +28,7 @@ declare global {
     trailers: Trailer[]
     watchProviders: WatchProviders
     tagline: string
-    reviews: Array<Review>
+    reviews: Array<ReviewWithUser>
     ratings: Array<Rating>
   }
 
@@ -87,4 +87,7 @@ declare global {
     sessionId: string
     accountId: number
   }
+  type ReviewWithUser = Prisma.ReviewGetPayload<{
+    include: {user: true}
+  }>
 }

@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
-export default function ProviderToggle({handleProviderToggle}) {
+export default function ProviderToggle({handleProviderToggle}: {handleProviderToggle: Dispatch<SetStateAction<boolean>>}) {
     const [toggled, setToggled] = useState(true)
     return (
         <div className="flex flex-row">

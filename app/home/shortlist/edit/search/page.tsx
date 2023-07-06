@@ -1,33 +1,24 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import MoviePosterCard from "@/app/components/MoviePosterCard";
 import FiltersModal from "./components/FiltersModal";
 import { useSession } from "next-auth/react";
+import ShortListItem from "../components/ShortListItem";
+import { removeFromShortList } from "../actions/actions";
+import ShortlistMovieItem from "./components/ShortlistMovieItem";
+import ShortlistContainer from "./components/ShortlistContainer";
+import MovieCard from "./components/MovieCard";
 
-async function getInitialData() {
-  const initialSearch = await fetch(
-    "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8",
-    {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.moviedbtoken}`,
-      },
-    }
-  );
-  return initialSearch.json();
-}
-
-
+export const revalidate = 5
 
 const fetchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
-    : `include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8`;
+    : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8`;
   const initialSearch = await fetch(
-    `https://api.themoviedb.org/3/discover/movie?${searchQuery}`,
+    `https://api.themoviedb.org/3/${searchQuery}`,
     {
       method: "GET",
       headers: {
@@ -39,24 +30,36 @@ const fetchMovies = async (page: number, searchValue: string) => {
   return initialSearch.json();
 };
 
+
+
 export default function SearchPage() {
   const [searchValue, setSearchValue] = useState("");
-  const [genreSelections, setGenreSelections] = useState([]);
+  const [genreSelections, setGenreSelections] = useState<Array<number>>([]);
   const [yearRange, setYearRange] = useState({ min: "", max: "" });
   const [ratingRange, setRatingRange] = useState({ min: "", max: "" });
-  const [onlyNetflix, setOnlyNeflix] = useState(true)
+  const [onlyNetflix, setOnlyNeflix] = useState(true);
+  const [titleSearch, setTitleSearch] = useState("");
   const { data: session } = useSession();
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
+  const baseUrl = `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${
+    onlyNetflix && "&watch_region=FI&with_watch_providers=8"
+  }`;
+  const searchBaseUrl = `search/movie?query`;
 
   const { data: shortlist, status: shortlistStatus } = useQuery({
     queryKey: ["shortlist"],
     queryFn: async () => {
-      let res = await fetch(`/api/shortlist/${session?.user.userId}`)
-      return await res.json()
+      let res = await fetch(`/api/shortlist/${session?.user.userId}`, {
+        next: {
+          tags: ['shortlist'],
+          revalidate: 1
+        }
+      });
+      return await res.json();
     },
-    enabled: !!session
+    enabled: !!session,
   });
-
+  
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
       [searchValue],
@@ -94,9 +97,9 @@ export default function SearchPage() {
   }, [loadMoreButtonRef.current, hasNextPage]);
 
   const handleSearchSubmit = () => {
-    const baseUrl = `include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${onlyNetflix && '&watch_region=FI&with_watch_providers=8'}`;
+    //const baseUrl = `include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${onlyNetflix && '&watch_region=FI&with_watch_providers=8'}`;
     var queryStringArr = [];
-
+    console.log(genreSelections)
     if (genreSelections.length > 0) {
       queryStringArr.push(`with_genres=${genreSelections.join("|")}`);
     }
@@ -120,15 +123,16 @@ export default function SearchPage() {
     console.log("query", queryStringArr);
 
     const queryString = queryStringArr.join("&");
-    console.log('querystring', queryString);
+    console.log("querystring", queryString);
     setSearchValue(baseUrl + "&" + queryString);
   };
 
   const handleGenreSelection = (
-    genres: Array<{ label: string; value: number }>
+    genre: number
   ) => {
+    console.log('handling genre selections', genre)
     setGenreSelections(
-      genres.map((genre: { label: string; value: number }) => genre.value)
+      [...genreSelections, genre]
     );
     console.log(genreSelections);
   };
@@ -141,7 +145,13 @@ export default function SearchPage() {
     setRatingRange({ ...ratingRange, [label]: value });
   };
 
-  if (status === "loading" || shortlistStatus === 'loading') {
+  const handleSearchByTitle = () => {
+    setSearchValue(
+      `${searchBaseUrl}=${titleSearch}&append_to_response=watch/providers`
+    );
+  };
+
+  if (status === "loading" || shortlistStatus === "loading") {
     return (
       <div className="flex flex-row items-center justify-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -149,38 +159,59 @@ export default function SearchPage() {
     );
   }
 
-  const shortlistMovieIds = shortlist.movies.map((movie: Movie) => movie.tmdbId)
-  console.log('shortlist in search', shortlistMovieIds)
+  const shortlistMovieIds = shortlist.movies.map(
+    (movie: Movie) => movie.tmdbId
+  );
+
   return (
     <div className="flex flex-col items-center gap-5 z-10">
-      <input
-        type="text"
-        placeholder="Search by title"
-        className="input input-bordered w-full max-w-xs"
-      />
-      <FiltersModal
-        handleGenreSelection={handleGenreSelection}
-        genreSelections={genreSelections}
-        handleSearchSubmit={handleSearchSubmit}
-        handleYearRangeSelect={handleYearRangeSelect}
-        handleRatingRangeSelect={handleRatingRangeSelect}
-        handleProviderToggle={setOnlyNeflix}
-      />
-      
+      <ShortlistContainer />
+      <div className="flex flex-row gap-5 items-center">
+        <input
+          type="text"
+          placeholder="Search by title"
+          className="input input-bordered w-full max-w-xs"
+          value={titleSearch}
+          onChange={(event) => setTitleSearch(event.target.value)}
+        />
+        <button className="btn" onClick={handleSearchByTitle}>
+          Search
+        </button>
+      </div>
+      <div className="flex flex-row gap-5 items-center">
+        <FiltersModal
+          handleGenreSelection={handleGenreSelection}
+          genreSelections={genreSelections}
+          handleSearchSubmit={handleSearchSubmit}
+          handleYearRangeSelect={handleYearRangeSelect}
+          handleRatingRangeSelect={handleRatingRangeSelect}
+          handleProviderToggle={setOnlyNeflix}
+        />
+        <button className="btn" onClick={() => setSearchValue("")}>
+          Reset
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 justify-center gap-10 z-30">
         {data?.pages.map((page) => (
           <Fragment key={page.page}>
             {page.results.map((movie: TMDBMovie) => {
               return (
-                <MoviePosterCard key={movie.id} movie={movie} added={shortlistMovieIds.includes(movie.id)} />
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  added={shortlistMovieIds.includes(movie.id)}
+                />
               );
             })}
           </Fragment>
         ))}
       </div>
-      <button ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
-        Load More
-      </button>
+      {hasNextPage && (
+        <button ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
+          Load More
+        </button>
+      )}
     </div>
   );
 }

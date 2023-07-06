@@ -56,7 +56,7 @@ export default function MovieCard({
             className="rounded-2xl lg:w-10/12"
           />
         </figure>
-        <div className="card-body">
+        < div className="card-body">
           <h2 className="card-title text-2xl">{movie?.original_title}</h2>
           <div className="avatar placeholder">
             <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
@@ -66,13 +66,13 @@ export default function MovieCard({
           <h3 className="text-sm italic">Released: {movie?.release_date}</h3>
         
           <p className="text-xs xl:text-lg my-2">{movie?.overview}</p>
-          {movieInTierlist ? (<div className="badge badge-lg">{movieInTierlist.label} Tier: {movieInTierlist.movies.findIndex(movieItem => movieItem.id === movie.id)}</div>) : (
+          {movieInTierlist ? (<div className="badge badge-lg p-5">{movieInTierlist.label} Tier: {movieInTierlist.movies.findIndex(movieItem => movieItem.id === movie.id)}</div>) : (
             <TierlistFormModal tierlist={tierlist} movie={movie} />
           )}
           <div className="divider">Thoughts</div>
-          <div>
+          
           <Review movie={movie} user={user}/>
-          </div>
+          
           <div className="card-actions"></div>
           <div className="card-actions justify-end">
             {movie?.trailers?.map((trailer) => {

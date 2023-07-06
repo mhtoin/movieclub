@@ -1,12 +1,29 @@
 "use client";
 
-import { addMovie } from "../home/shortlist/edit/actions/actions";
 import { useTransition } from "react";
 import { useSession, getSession } from "next-auth/react";
 import { omit } from "underscore";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { Prisma } from '@prisma/client'
 
-export default function MoviePosterCard({
+interface addMovieVars {
+  movie: Movie;
+  shortlistId: string;
+}
+
+const addMovie = async ({ movie, shortlistId }: addMovieVars) => {
+  const res = await fetch(`/api/shortlist/${shortlistId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ movie: movie }),
+  });
+
+  return await res.json();
+};
+
+export default function MovieCard({
   movie,
   added,
 }: {
@@ -14,7 +31,27 @@ export default function MoviePosterCard({
   added: boolean;
 }) {
   let [isPending, startTransition] = useTransition();
-  const queryClient = useQueryClient()
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+  const addMutation = useMutation({
+    mutationFn: addMovie,
+    onSuccess: (data) => {
+      console.log("on success", data);
+      const addedMovie = data.movies.find(
+        (movieItem: Movie) => movieItem.tmdbId === movie.id
+      );
+      console.log("added", addedMovie);
+      queryClient.setQueryData(["shortlist"], (oldData: any) =>
+        oldData
+          ? {
+              ...oldData,
+              movies: data.movies,
+              movieIDs: data.movieIDs,
+            }
+          : oldData
+      );
+    },
+  });
   return (
     <div className="indicator mx-auto border-2 rounded-md z-30">
       <div className="indicator-item indicator-top indicator-start">
@@ -23,9 +60,15 @@ export default function MoviePosterCard({
             added ? "btn-success btn-disabled" : "btn-warning cursor-copy"
           }`}
           onClick={() => {
-            const movieObj = { ...omit(movie, ["id"]), tmdbId: movie.id } as Movie;
-            startTransition(() => addMovie(movieObj));
-            queryClient.invalidateQueries(['shortlist'])
+            const movieObj = {
+              ...omit(movie, ["id"]),
+              tmdbId: movie.id,
+            } as Movie;
+            addMutation.mutate({
+              movie: movieObj,
+              shortlistId: session?.user.shortlistId,
+            });
+            //queryClient.invalidateQueries(["shortlist"]);
           }}
         >
           {added ? (

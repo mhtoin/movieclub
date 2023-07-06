@@ -3,8 +3,19 @@
 import { useQuery } from "@tanstack/react-query";
 import GenreSelect from "./GenreSelect";
 import RangeSlider from "./RangeSlider";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import ProviderToggle from "./ProviderToggle";
+
+interface modalProps {
+  handleGenreSelection: (
+    genres: number
+  ) => void;
+  handleSearchSubmit: () => void
+  handleYearRangeSelect: (label: string, value: string) => void
+  handleRatingRangeSelect: (label: string, value: string) => void
+  handleProviderToggle: Dispatch<SetStateAction<boolean>>
+  genreSelections: number[]
+}
 
 async function getFilters() {
   let res = await fetch(
@@ -21,9 +32,9 @@ async function getFilters() {
   let responseBody = await res.json();
 
   if (responseBody.genres) {
-    return responseBody.genres.map((genre) => {
+    return responseBody.genres.map((genre: { name: string; id: number }) => {
       return { label: genre.name, value: genre.id };
-    });
+    }) as Array<{ label: string, value: number}>;
   }
 }
 
@@ -33,8 +44,8 @@ export default function FiltersModal({
   handleYearRangeSelect,
   handleRatingRangeSelect,
   handleProviderToggle,
-  genreSelections
-}) {
+  genreSelections,
+}: modalProps) {
   const [value, setValue] = useState({ min: 0, max: 100 });
   const { data: genreOptions, status } = useQuery({
     queryKey: ["genres"],
@@ -46,14 +57,18 @@ export default function FiltersModal({
   }
   return (
     <>
-      <button className="btn" onClick={() => window.my_modal_1.showModal()}>
+      <button className="btn" onClick={() => {
+        if (document) {
+          (document.getElementById('filtersModal') as HTMLFormElement).showModal()
+        }
+      }}>
         search filters
       </button>
-      <dialog id="my_modal_1" className="modal modal-bottom sm:modal-middle">
+      <dialog id="filtersModal" className="modal modal-bottom sm:modal-middle">
         <form method="dialog" className="modal-box h-1/2 ">
           <h3 className="font-bold text-lg m-5">Hello!</h3>
           <GenreSelect
-            genreOptions={genreOptions}
+            genreOptions={genreOptions!}
             handleGenreSelection={handleGenreSelection}
             genreSelections={genreSelections}
           />
@@ -96,7 +111,7 @@ export default function FiltersModal({
             onChange={handleYearRangeSelect}
           />
           <div className="divider">Providers</div>
-          <ProviderToggle handleProviderToggle={handleProviderToggle}/>
+          <ProviderToggle handleProviderToggle={handleProviderToggle} />
 
           <div className="modal-action">
             {/* if there is a button in form, it will close the modal */}

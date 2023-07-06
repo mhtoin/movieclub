@@ -40,13 +40,20 @@ export default async function NavBar() {
                     <Link href={"/home/shortlist"}>View all</Link>
                   </li>
                   <li>
-                    <label tabIndex={0}>Edit</label>
+                    <label tabIndex={0}>
+                      {" "}
+                      <Link href={"/home/shortlist/edit"}>Edit</Link>
+                    </label>
                     <ul tabIndex={0} className="p-2">
                       <li>
-                        <Link href={'/home/shortlist/edit/search'}>Search</Link></li>
-                      <li><Link href={'/home/shortlist/edit/watchlist'}>Watchlist</Link></li>
+                        <Link href={"/home/shortlist/edit/search"}>Search</Link>
+                      </li>
+                      <li>
+                        <Link href={"/home/shortlist/edit/watchlist"}>
+                          Watchlist
+                        </Link>
+                      </li>
                     </ul>
-                    <Link href={"/home/shortlist/edit"}>Edit</Link>
                   </li>
                   <li>
                     <Link href={"/home/shortlist/raffle"}>Raffle</Link>
@@ -54,13 +61,13 @@ export default async function NavBar() {
                 </ul>
               </li>
               <li>
-              <Link href={"/tierlists"}>Tierlists</Link>
+                <Link href={"/tierlists"}>Tierlists</Link>
               </li>
             </ul>
           </div>
         </div>
         <div className="navbar-center flex">
-        <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
+          <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
         </div>
         {isAuthenticated && (
           <div className="navbar-end">
@@ -75,7 +82,7 @@ export default async function NavBar() {
                 className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <Link href={'/profile'} className="justify-between">
+                  <Link href={"/profile"} className="justify-between">
                     Profile
                     <span className="badge">{session.user?.name}</span>
                   </Link>
@@ -84,7 +91,7 @@ export default async function NavBar() {
                   <a>Settings</a>
                 </li>
                 <li>
-                <Link href="/api/auth/signout">Logout</Link>
+                  <Link href="/api/auth/signout">Logout</Link>
                 </li>
               </ul>
             </div>
