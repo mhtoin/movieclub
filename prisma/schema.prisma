@@ -43,6 +43,9 @@ model Shortlist {
   user     User     @relation(fields: [userId], references: [id])
   movieIDs String[] @db.ObjectId
   movies   Movie[]  @relation(fields: [movieIDs], references: [id])
+  isReady           Boolean @default(false)
+  requiresSelection Boolean? @default(false)
+  selectedIndex     Int?
 
   @@map("shortlist")
 }
@@ -69,7 +72,6 @@ model Movie {
   shortlistIDs      String[]    @db.ObjectId
   ratings           Rating[]
   reviews           Review[]
-
   @@map("movies")
 }
 

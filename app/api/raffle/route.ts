@@ -9,18 +9,23 @@ export async function POST(request: NextRequest, response: Response) {
     // get all shortlists and check that everyone is ready
     const todayIsWednesday = isWednesday(new Date());
 
-    if (todayIsWednesday) {
+    if (true) {
       const chosenMovie = await chooseMovieOfTheWeek();
 
       // update the chosen movie with the date
       // return the movie
 
-      return NextResponse.json({ok: true, chosenMovie});
+      return NextResponse.json({ ok: true, chosenMovie });
     } else {
-       throw new Error("Unauthorized")
+      throw new Error("Unauthorized");
     }
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ message: 'Not movie day yet!'}, {status: 401})
+    console.error("error", e);
+    if (e instanceof Error) {
+      return NextResponse.json({ ok: false, message: e.message}, { status: 401 });
+    } else {
+      console.error('something went wrong', e)
+    }
+    
   }
 }

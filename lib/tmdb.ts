@@ -16,7 +16,6 @@ export async function getAdditionalInfo(tmdbId: number) {
   );
 
   let tmdbDetails = await tmdbDetailsRes.json();
-  console.log("details", tmdbDetails);
 
   let trailers = tmdbDetails.videos?.results
     .filter(
@@ -43,7 +42,6 @@ export async function getAdditionalInfo(tmdbId: number) {
 export async function getWatchlist() {
   const session = await getServerSession();
 
-  console.log("session in watchlist", session);
   let watchlist = await fetch(
     `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=1&session_id=${session?.user.sessionId}&sort_by=created_at.asc`,
     {
@@ -57,6 +55,6 @@ export async function getWatchlist() {
   );
 
   const data = await watchlist.json();
-  console.log("retrieved watchlist", data);
+  
   return data;
 }

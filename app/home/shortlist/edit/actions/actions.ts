@@ -5,6 +5,8 @@ import {
   addMovieToShortlist,
   removeMovieFromShortlist,
   updateChosenMovie,
+  updateShortlistSelection,
+  updateShortlistState,
 } from "@/lib/shortlist";
 import { Shortlist, User, Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
@@ -72,4 +74,14 @@ export async function getColours(img: string) {
   const imageData = await fetch(img);
 
   console.log(imageData);
+}
+
+export async function updateShortlistReadyState(ready: boolean) {
+  const session = await getServerSession();
+  await updateShortlistState(ready, session?.user.shortlistId)
+}
+
+export async function updateSelection(index: number) {
+  const session = await getServerSession();
+  await updateShortlistSelection(index, session?.user.shortlistId)
 }

@@ -17,7 +17,6 @@ export function MovieHero({ movieOfTheWeek }: { movieOfTheWeek: MovieOfTheWeek }
         setColorPalette(color);
       };
       getColor();
-      console.log("fetching colors");
     }
   }, []);
 

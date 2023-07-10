@@ -2,8 +2,9 @@ import prisma from "./prisma";
 import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { getAdditionalInfo } from "./tmdb";
 import { Shortlist } from "@prisma/client";
-import { sample, shuffle } from "underscore";
-import { getAllShortLists } from "./shortlist";
+import { every, filter, find, sample, shuffle } from "underscore";
+import { getAllShortLists, updateShortlistSelectionStatus, updateShortlistState } from "./shortlist";
+import { updateShortlistReadyState } from "@/app/home/shortlist/edit/actions/actions";
 
 export async function getAllMoviesOfTheWeek() {
   const nextMovieDate = set(nextWednesday(new Date()), {
@@ -77,36 +78,94 @@ export async function createReview(
 
 export async function chooseMovieOfTheWeek() {
   // get an array of all the movies and the user - Array<{user, movie}>
-  const shortlists = await getAllShortLists()
-  console.log('retrieved shortlists', shortlists)
+  const shortlists = await getAllShortLists();
+
+  const selectionRequired = filter(shortlists, (shortlist) =>
+    shortlist.requiresSelection ? true : false
+  );
+
+  if (selectionRequired.length > 0) {
+    /**
+     * Check to see that the shortlist(s) marked as needing selection have selected something
+     */
+    for (let listItem of selectionRequired) {
+      if (
+        listItem.selectedIndex === undefined ||
+        listItem.selectedIndex === null
+      ) {
+        //console.log(listItem)
+        throw new Error(
+          `${listItem.user.name} needs to select a movie to include`
+        );
+      }
+    }
+  }
+  const notReady = filter(shortlists, (shortlist) => !shortlist.isReady);
+  //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
+  console.log("not ready", notReady);
+  if (notReady.length > 0) {
+    console.log("some users are not ready");
+    throw new Error(
+      `Not all users are ready: ${notReady
+        .map((item) => item.user.name)
+        .join(", ")}`
+    );
+  }
+
+  console.log("retrieved shortlists", shortlists);
   const movies = shortlists
-    .map((shortlist) =>
-      shortlist.movies.map((movie) =>
+    .map((shortlist) => {
+      if (shortlist.requiresSelection) {
+        return {
+          user: shortlist.user.name,
+          shortlistId: shortlist.id,
+          movie: shortlist.movies[shortlist.selectedIndex!]
+        }
+      }
+      return shortlist.movies.map((movie) =>
         Object.assign(
           {},
           {
             user: shortlist.user.name,
+            shortlistId: shortlist.id,
             movie: movie,
           }
         )
-      )
-    )
+      );
+    })
     .flat();
   // shuffle a few times
   let shuffledMovies = shuffle(movies);
-  console.log('shuffled', shuffledMovies)
+  //console.log("shuffled", shuffledMovies);
   let chosen = sample(shuffledMovies);
 
-  let movieObject = await getMovie(chosen?.movie.id!)
-  
+  let movieObject = await getMovie(chosen?.movie.id!);
+
+  // update movie with the date
+  // reset selection state for the current week's winner
+  // set restrictions to new winner
+
+  //await updateChosenMovie(movieObject!)
+  for (let item of shortlists) {
+    await updateShortlistState(false, item.id)
+
+    const inSelectionRequired = find(selectionRequired, (listItem) => listItem.id === item.id)
+    if (inSelectionRequired) {
+      await updateShortlistSelectionStatus(false, item.id)
+    }
+
+    if (item.id === chosen?.shortlistId) {
+      await updateShortlistSelectionStatus(true, item.id)
+    }
+  }
+
   return {
     ...movieObject,
-    owner: chosen?.user
-  } as MovieOfTheWeek
+    owner: chosen?.user,
+  } as MovieOfTheWeek;
 }
 
 export async function updateChosenMovie(movie: Movie) {
-
   const nextDate = set(nextWednesday(new Date()), {
     hours: 18,
     minutes: 0,

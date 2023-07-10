@@ -8,14 +8,19 @@ export const revalidate = 10;
 
 export async function getChosenMovie() {
   // set today to 18:00:00 and check if it is a wednesday
-     const nextMovieDate = set(nextWednesday(new Date()), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0  });
-    
+  const nextMovieDate = set(nextWednesday(new Date()), {
+    hours: 18,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  });
+
   const now = isWednesday(new Date())
     ? set(new Date(), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 })
-    : nextMovieDate
+    : nextMovieDate;
 
   console.log("looking for date", now);
-  console.log('next one', nextMovieDate)
+  console.log("next one", nextMovieDate);
 
   const movie = await prisma.movie.findFirst({
     where: {
@@ -27,9 +32,9 @@ export async function getChosenMovie() {
         },
         {
           movieOfTheWeek: {
-            equals: nextMovieDate
-          }
-        }
+            equals: nextMovieDate,
+          },
+        },
       ],
     },
   });
@@ -81,13 +86,10 @@ export async function findOrCreateShortList(userId: string) {
   return shortlist;
 }
 
-export async function addMovieToShortlist(
-  movie: Movie,
-  shortlistId: string
-) {
+export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
   try {
     // check if user has shortlist, create if absent
-    
+
     const updatedShortlist = await prisma.shortlist.update({
       where: {
         id: shortlistId,
@@ -101,11 +103,10 @@ export async function addMovieToShortlist(
             create: movie,
           },
         },
-        
       },
       include: {
-        movies: true
-      }
+        movies: true,
+      },
     });
 
     return updatedShortlist;
@@ -161,4 +162,38 @@ export async function updateChosenMovie(movie: Movie) {
   });
 
   return updatedMovie;
+}
+
+export async function updateShortlistState(ready: boolean, shortlistId: string) {
+  return await prisma.shortlist.update({
+    where: {
+      id: shortlistId
+    },
+    data: {
+      isReady: ready
+    }
+  })
+}
+
+export async function updateShortlistSelection(index: number, shortlistId: string) {
+  return await prisma.shortlist.update({
+    where: {
+      id: shortlistId
+    }, 
+    data: {
+      selectedIndex: index
+    }
+  })
+}
+
+export async function updateShortlistSelectionStatus(status: boolean, shortlistId: string) {
+  return await prisma.shortlist.update({
+    where: {
+      id: shortlistId
+    }, 
+    data: {
+      requiresSelection: status,
+      selectedIndex: null
+    }
+  })
 }
