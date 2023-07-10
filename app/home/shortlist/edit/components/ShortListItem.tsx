@@ -16,7 +16,7 @@ export default function ShortListItem({
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
 
-  console.log('item', movie)
+
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">

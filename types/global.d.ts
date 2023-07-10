@@ -30,6 +30,7 @@ declare global {
     tagline: string
     reviews: Array<ReviewWithUser>
     ratings: Array<Rating>
+    owner?: string
   }
 
   interface TMDBMovie {

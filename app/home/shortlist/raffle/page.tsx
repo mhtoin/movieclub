@@ -5,7 +5,6 @@ import { startRaffle } from "../edit/actions/actions";
 export default async function Raffle() {
   const allShortlists = await getAllShortLists();
 
-  console.log("all shortlists", allShortlists);
   /*
   const allMovies = await getShortList() ?? []
   const moviesByUser = groupBy((movie: Movie) => {
