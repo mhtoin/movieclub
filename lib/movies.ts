@@ -145,7 +145,8 @@ export async function chooseMovieOfTheWeek() {
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
-  //await updateChosenMovie(movieObject!)
+  await updateChosenMovie(movieObject!)
+  
   for (let item of shortlists) {
     await updateShortlistState(false, item.id)
 
