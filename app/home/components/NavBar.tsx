@@ -34,7 +34,7 @@ export default async function NavBar() {
                 <Link href={"/home"}>Home</Link>
               </li>
               <li>
-                <label tabIndex={0}>Shortlist</label>
+                <Link href={"/home/shortlist"}><label tabIndex={0}>Shortlist</label></Link>
                 <ul tabIndex={0} className="p-2">
                   <li>
                     <Link href={"/home/shortlist"}>View all</Link>
