@@ -45,6 +45,7 @@ export async function getMovie(id: string) {
         },
       },
       ratings: true,
+      user: true
     },
   });
 

@@ -3,6 +3,7 @@ import TierAdd from "./components/TierAdd";
 import { contains, difference, includes, intersection } from "underscore";
 import { getAllMoviesOfTheWeek } from "@/lib/movies";
 import { getServerSession } from "@/lib/getServerSession";
+import Link from "next/link";
 
 async function staticParams() {
   const tierlists = await getTierlists();
@@ -47,17 +48,16 @@ export default async function Page({ params }: { params: { id: string } }) {
               return (
                 <>
                   <div className="indicator mx-auto border-2 rounded-md">
-                    <a
-                      href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={`/home/movies/${movie.id}`}
+                      
                     >
                       <img
                         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
                         alt=""
                         width={"150"}
                       />
-                    </a>
+                    </Link>
                   </div>
                 </>
               );

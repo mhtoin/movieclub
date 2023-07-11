@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Rating from "./Rating";
 import Review from "./Review";
 import TierlistFormModal from "./TierlistFormModal";
+import { format } from "date-fns";
 
 export default function MovieCard({
   movie,
@@ -36,7 +37,7 @@ export default function MovieCard({
     }
   }, []);
 
-  console.log("movies in tierlist", movieInTierlist);
+  
   if (movie) {
     return (
       <div className="card w-11/12 md:w-11/12 lg:w-8/12 xl:w-9/12 2xl:w-8/12 sm:card-side">
@@ -57,16 +58,16 @@ export default function MovieCard({
           />
         </figure>
         < div className="card-body">
-          <h2 className="card-title text-2xl">{movie?.original_title}</h2>
-          <div className="avatar placeholder">
-            <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-              <span className="text-xs">User</span>
+          <h2 className="card-title text-2xl">{`${movie?.title} (${movie?.original_title})`}</h2>
+          <div className="avatar">
+            <div className="w-12 rounded-full">
+              <img src={movie?.user?.image} alt={"user"} />
             </div>
           </div>
-          <h3 className="text-sm italic">Released: {movie?.release_date}</h3>
-        
+          <h3 className="text-sm italic">Released: {format(new Date(movie?.release_date), 'dd.MM.yyyy')}</h3>
+          <h3 className="text-sm italic">Watched: {movie?.movieOfTheWeek?.toLocaleDateString('fi-FI')}</h3>
           <p className="text-xs xl:text-lg my-2">{movie?.overview}</p>
-          {movieInTierlist ? (<div className="badge badge-lg p-5">{movieInTierlist.label} Tier: {movieInTierlist.movies.findIndex(movieItem => movieItem.id === movie.id)}</div>) : (
+          {movieInTierlist ? (<div className="badge badge-lg p-5">{movieInTierlist.label} Tier: {movieInTierlist.movies.findIndex(movieItem => movieItem.id === movie.id) + 1}</div>) : (
             <TierlistFormModal tierlist={tierlist} movie={movie} />
           )}
           <div className="divider">Thoughts</div>
