@@ -39,7 +39,7 @@ export default function MovieCard({
   console.log("movies in tierlist", movieInTierlist);
   if (movie) {
     return (
-      <div className="card w-11/12 md:w-8/12 lg:w-6/12 sm:card-side">
+      <div className="card w-11/12 md:w-11/12 lg:w-8/12 xl:w-9/12 2xl:w-8/12 sm:card-side">
         <figure
           className="shadow-xl"
           style={{

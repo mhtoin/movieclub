@@ -2,7 +2,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 
 interface SearchResultCardProps {
   movie: Movie;
@@ -29,6 +29,7 @@ export default function ShortlistMovieItem({
   shortlistId,
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
+  const [isDeleting, setIsDeleting] = useState(false)
   const queryClient = useQueryClient()
 
   const deleteMutation = useMutation({
@@ -37,13 +38,15 @@ export default function ShortlistMovieItem({
         queryClient.invalidateQueries(['shortlist'])
     }
   })
-  
+  console.log('pending', isPending)
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">
         <button
           className="btn btn-circle btn-xs btn-error"
-          onClick={() => startTransition(() => deleteMutation.mutate({movieId: movie.id!, shortlistId: shortlistId}))}
+          onClick={() => {
+            setIsDeleting(!isDeleting)
+            deleteMutation.mutate({movieId: movie.id!, shortlistId: shortlistId})}}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +64,9 @@ export default function ShortlistMovieItem({
           </svg>
         </button>
       </div>
-      <a
+      {deleteMutation.isLoading || isDeleting? 
+      <div className="w-[150px] h-[210px] flex flex-col items-center justify-center"><span className="loading loading-ring loading-lg"></span></div>
+      : <a
         href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -71,7 +76,7 @@ export default function ShortlistMovieItem({
           alt=""
           width={"150"}
         />
-      </a>
+      </a>}
     </div>
 
   );

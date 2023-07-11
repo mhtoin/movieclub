@@ -37,15 +37,19 @@ export async function getChosenMovie() {
         },
       ],
     },
+    include: {
+      user: true
+    }
   });
 
   const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
-
+  console.log('movie before', movie)
   if (movie) {
     const movieObject = Object.assign(
       movie,
       details
     ) as unknown as MovieOfTheWeek;
+    console.log('movie object', movieObject)
     return movieObject;
   }
 }

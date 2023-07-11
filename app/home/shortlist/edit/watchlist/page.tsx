@@ -3,6 +3,7 @@ import { getWatchlist } from "@/lib/tmdb";
 import Shortlist from "../components/Shortlist";
 import { getServerSession } from "@/lib/getServerSession";
 import { getShortList } from "@/lib/shortlist";
+import { Suspense } from "react";
 
 
 export default async function Watchlist() {
@@ -16,7 +17,7 @@ export default async function Watchlist() {
     <div className="flex flex-col items-center">
         <div className="divider m-10"><div className="text-xl">Shortlist</div></div>
       {/* @ts-expect-error Shortlist */}
-     <Shortlist />
+    <Suspense fallback={<p>Loading...</p>}><Shortlist /></Suspense> 
      <div className="divider m-10"><div className="text-xl">Watchlist</div></div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
         {watchlist.map((movie: TMDBMovie) => {

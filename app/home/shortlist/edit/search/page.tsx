@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, Suspense, useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import MoviePosterCard from "@/app/components/MoviePosterCard";
 import FiltersModal from "./components/FiltersModal";
@@ -46,7 +46,7 @@ export default function SearchPage() {
   }`;
   const searchBaseUrl = `search/movie?query`;
 
-  const { data: shortlist, status: shortlistStatus } = useQuery({
+  const { data: shortlist, status: shortlistStatus, fetchStatus } = useQuery({
     queryKey: ["shortlist"],
     queryFn: async () => {
       let res = await fetch(`/api/shortlist/${session?.user.userId}`, {
@@ -165,7 +165,7 @@ export default function SearchPage() {
 
   return (
     <div className="flex flex-col items-center gap-5 z-10">
-      <ShortlistContainer />
+     <ShortlistContainer />
       <div className="flex flex-row gap-5 items-center">
         <input
           type="text"

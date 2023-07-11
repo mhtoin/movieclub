@@ -16,9 +16,10 @@ export default async function ShortList() {
   return (
     <main className="flex min-h-screen flex-col items-center p-24 overflow-hidden">
       <div className="flex flex-row items-center justify-evenly gap-5">
-        <button className="btn btn-outline">
-          <Link href={"/home/shortlist/edit"}>Edit</Link>
-        </button>
+        <Link href={"/home/shortlist/edit"}>
+          {" "}
+          <button className="btn btn-outline">Edit</button>
+        </Link>
         <RaffleClient allShortlists={allShortlists} />
       </div>
       <div className="flex flex-col place-items-center m-5">

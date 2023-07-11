@@ -31,6 +31,7 @@ declare global {
     reviews: Array<ReviewWithUser>
     ratings: Array<Rating>
     owner?: string
+    user: User
   }
 
   interface TMDBMovie {
@@ -87,8 +88,14 @@ declare global {
     [x: string]: string;
     sessionId: string
     accountId: number
+    image: string,
+    name: string
   }
   type ReviewWithUser = Prisma.ReviewGetPayload<{
     include: {user: true}
+  }>
+
+  type ChosenMovie = Prisma.MovieGetPayload<{
+    include: { user: true }
   }>
 }

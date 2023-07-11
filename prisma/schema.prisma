@@ -67,11 +67,12 @@ model Movie {
   vote_average      Float
   vote_count        Int
   movieOfTheWeek    DateTime?
-  user              String?
+  user              User? @relation(fields: [userId], references: [id])
   shortlists        Shortlist[] @relation(fields: [shortlistIDs], references: [id])
   shortlistIDs      String[]    @db.ObjectId
   ratings           Rating[]
   reviews           Review[]
+  userId            String? @db.ObjectId
   @@map("movies")
 }
 
@@ -119,6 +120,7 @@ model User {
   tierlist      Tierlists?
   ratings       Rating[]
   reviews       Review[]
+  movies        Movie[]
 
   @@map("users")
 }

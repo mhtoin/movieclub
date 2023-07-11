@@ -117,7 +117,7 @@ export async function chooseMovieOfTheWeek() {
     .map((shortlist) => {
       if (shortlist.requiresSelection) {
         return {
-          user: shortlist.user.name,
+          user: shortlist.user,
           shortlistId: shortlist.id,
           movie: shortlist.movies[shortlist.selectedIndex!]
         }
@@ -126,7 +126,7 @@ export async function chooseMovieOfTheWeek() {
         Object.assign(
           {},
           {
-            user: shortlist.user.name,
+            user: shortlist.user,
             shortlistId: shortlist.id,
             movie: movie,
           }
@@ -145,7 +145,7 @@ export async function chooseMovieOfTheWeek() {
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
-  await updateChosenMovie(movieObject!)
+  await updateChosenMovie(movieObject!, chosen!.user.id)
   
   for (let item of shortlists) {
     await updateShortlistState(false, item.id)
@@ -162,11 +162,11 @@ export async function chooseMovieOfTheWeek() {
 
   return {
     ...movieObject,
-    owner: chosen?.user,
+    owner: chosen?.user.name,
   } as MovieOfTheWeek;
 }
 
-export async function updateChosenMovie(movie: Movie) {
+export async function updateChosenMovie(movie: Movie, userId: string) {
   const nextDate = set(nextWednesday(new Date()), {
     hours: 18,
     minutes: 0,
@@ -182,6 +182,11 @@ export async function updateChosenMovie(movie: Movie) {
     },
     data: {
       movieOfTheWeek: nextDate,
+      user: {
+        connect: {
+          id: userId
+        }
+      }
     },
   });
 

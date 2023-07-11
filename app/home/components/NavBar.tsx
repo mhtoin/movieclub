@@ -55,9 +55,6 @@ export default async function NavBar() {
                       </li>
                     </ul>
                   </li>
-                  <li>
-                    <Link href={"/home/shortlist/raffle"}>Raffle</Link>
-                  </li>
                 </ul>
               </li>
               <li>
