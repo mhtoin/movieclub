@@ -19,9 +19,7 @@ export default async function Watchlist() {
         <div className="text-xl">Shortlist</div>
       </div>
       {/* @ts-expect-error Shortlist */}
-      <Suspense fallback={<p>Loading...</p>}>
-        <Shortlist />
-      </Suspense>
+      <Shortlist />
       <div className="divider m-10">
         <div className="text-xl">Watchlist</div>
       </div>
