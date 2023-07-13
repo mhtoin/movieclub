@@ -81,14 +81,13 @@ export async function chooseMovieOfTheWeek() {
   // get an array of all the movies and the user - Array<{user, movie}>
   const shortlists = await getAllShortLists();
 
+  /*
   const selectionRequired = filter(shortlists, (shortlist) =>
     shortlist.requiresSelection ? true : false
   );
 
   if (selectionRequired.length > 0) {
-    /**
-     * Check to see that the shortlist(s) marked as needing selection have selected something
-     */
+    
     for (let listItem of selectionRequired) {
       if (
         listItem.selectedIndex === undefined ||
@@ -111,7 +110,7 @@ export async function chooseMovieOfTheWeek() {
         .map((item) => item.user.name)
         .join(", ")}`
     );
-  }
+  }*/
 
   console.log("retrieved shortlists", shortlists);
   const movies = shortlists
@@ -146,8 +145,9 @@ export async function chooseMovieOfTheWeek() {
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
-  await updateChosenMovie(movieObject!, chosen!.user.id)
+  //await updateChosenMovie(movieObject!, chosen!.user.id)
   
+  /*
   for (let item of shortlists) {
     await updateShortlistState(false, item.id)
 
@@ -159,21 +159,17 @@ export async function chooseMovieOfTheWeek() {
     if (item.id === chosen?.shortlistId) {
       await updateShortlistSelectionStatus(true, item.id)
     }
-  }
+  }*/
 
   return {
     ...movieObject,
+    movieOfTheWeek: getNextDate(),
     owner: chosen?.user.name,
   } as MovieOfTheWeek;
 }
 
 export async function updateChosenMovie(movie: Movie, userId: string) {
-  const nextDate = set(nextWednesday(new Date()), {
-    hours: 18,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
+  const nextDate = getNextDate()
 
   console.log("next date", nextDate);
 
@@ -192,4 +188,13 @@ export async function updateChosenMovie(movie: Movie, userId: string) {
   });
 
   return updatedMovie;
+}
+
+function getNextDate() {
+  return set(nextWednesday(new Date()), {
+    hours: 18,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  });
 }

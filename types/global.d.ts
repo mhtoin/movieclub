@@ -98,4 +98,10 @@ declare global {
   type ChosenMovie = Prisma.MovieGetPayload<{
     include: { user: true }
   }>
+
+  type RaffleNotification = {
+    id: number,
+    message: string,
+    data: MovieOfTheWeek
+  }
 }

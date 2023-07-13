@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { getAllShortLists } from "@/lib/shortlist";
 import { chooseMovieOfTheWeek } from "@/lib/movies";
 import { isWednesday } from "date-fns";
 import Pusher from "pusher"
@@ -8,25 +10,21 @@ export async function POST(request: NextRequest, response: Response) {
     // get all shortlists and check that everyone is ready
     const todayIsWednesday = isWednesday(new Date());
 
-    if (true) {
+    if (todayIsWednesday) {
       const chosenMovie = await chooseMovieOfTheWeek();
 
       // update the chosen movie with the date
       // return the movie
-      // trigger a pusher event to notify everyone
       const pusher = new Pusher({
         appId: process.env.app_id!,
         key: process.env.key!,
-        secret: process.env.secret!,
+        secret: process.env.key!,
         cluster: "eu",
         useTLS: true
       });
 
-      console.log('connected pusher', pusher)
-      await pusher.trigger("movieclub-raffle", "result", {
-        id: 1,
-        message: `Movie for ${chosenMovie.movieOfTheWeek?.toLocaleDateString('fi-FI')}`,
-        data: chosenMovie
+      pusher.trigger("movieclub-raffle", "result", {
+        message: JSON.stringify(chosenMovie)
       })
       return NextResponse.json({ ok: true, chosenMovie });
     } else {

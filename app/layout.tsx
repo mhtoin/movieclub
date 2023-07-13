@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Navigation from "./home/components/Navigation";
 import NavBar from "./home/components/NavBar";
+import RaffleNotification from "./components/RaffleNotification";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-black">
         {/* @ts-expect-error Server Component */}
         <NavBar />
+        <RaffleNotification />
         <Providers>{children}</Providers>
       </body>
     </html>
