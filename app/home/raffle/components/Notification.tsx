@@ -7,11 +7,11 @@ const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
 });
 
 export default function Notification() {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<RaffleNotification[]>([]);
   useEffect(() => {
     const channel = pusher.subscribe("movieclub-raffle");
 
-    channel.bind("result", (data) => {
+    channel.bind("result", (data: RaffleNotification) => {
       console.log("received data from pusher", data);
       setNotifications([...notifications, data]);
     });
@@ -26,7 +26,7 @@ export default function Notification() {
       <h2>Notifications</h2>
       <ul>
         {notifications.map((notification) => (
-          <li key={notification}>{notification.message}</li>
+          <li key={notification.id}>{notification.message}</li>
         ))}
       </ul>
       <button className="btn">Start</button>
