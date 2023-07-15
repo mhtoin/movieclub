@@ -24,9 +24,9 @@ export function RaffleClient({ allShortlists }: { allShortlists: any }) {
     mutationFn: initiateRaffle,
     onSuccess: (data) => {
       if (data.ok) {
-        console.log("successfully raffled", data);
-        setOpen(true);
-        setChosenMovie(data.chosenMovie);
+        //console.log("successfully raffled", data);
+        //setOpen(true);
+        //setChosenMovie(data.chosenMovie);
       } else {
         if (data.message) {
           setNotification(data.message);
