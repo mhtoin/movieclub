@@ -75,7 +75,7 @@ declare global {
   interface Tier {
     label: string
     value: number
-    movies: Array<Movie>
+    movies: Array<MovieOfTheWeek>
   }
 
   interface Tierlist {
@@ -103,5 +103,15 @@ declare global {
     id: number,
     message: string,
     data: MovieOfTheWeek
+  }
+
+  type ItemCoordinates = {
+    tier: number;
+    index: number;
+  }
+
+  type DraggableItem = {
+    id: string,
+    index: ItemCoordinates
   }
 }

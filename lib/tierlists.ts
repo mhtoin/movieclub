@@ -40,7 +40,7 @@ export async function getTierlist(id: string) {
                     movies.push(movieInDb)
                 }
             }
-            tierObj.movies = movies as Array<Movie>
+            tierObj.movies = movies as unknown as Array<MovieOfTheWeek>
             tiersWithMovies.push(tierObj)
         }
     }

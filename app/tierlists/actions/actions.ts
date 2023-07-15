@@ -20,3 +20,17 @@ export async function addMovieToTier(id: string, tiers: Array<TierlistsTier>) {
 
     revalidatePath('tierlists')
 }
+
+export async function saveTierlist(tierlist: Tierlist) {
+    console.log('saving', tierlist)
+    const tiers = tierlist.tiers.map((tier) => {
+        const movieIds = tier.movies.map(movie => movie.id)
+
+        return {
+            ...tier,
+            movies: movieIds
+        }
+    }) as Array<TierlistsTier>
+    
+    await updateTierlist(tierlist.id, tiers)
+}

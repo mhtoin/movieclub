@@ -4,6 +4,7 @@ import { contains, difference, includes, intersection } from "underscore";
 import { getAllMoviesOfTheWeek } from "@/lib/movies";
 import { getServerSession } from "@/lib/getServerSession";
 import Link from "next/link";
+import TierContainer from "./components/TierContainer";
 
 async function staticParams() {
   const tierlists = await getTierlists();
@@ -20,52 +21,29 @@ export const dynamic =
   process.env.NODE_ENV === "production" ? "auto" : "force-dynamic";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const session = await getServerSession()
+  const session = await getServerSession();
   const tierlist = await getTierlist(params.id);
-  const moviesOfTheWeek = await getAllMoviesOfTheWeek()
+  const moviesOfTheWeek = await getAllMoviesOfTheWeek();
 
   const tierlistMovies = tierlist
-    ? tierlist.tiers.flatMap((tier) => tier.movies.map(movie => movie.title))
+    ? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
     : [];
-  
-  console.log('tierlistmovies', tierlistMovies)
+
+  console.log("tierlistmovies", tierlistMovies);
   const unrankedMovies = moviesOfTheWeek.filter((movie) => {
-    const movieInList = contains(tierlistMovies, movie.title)
-    console.log(movie.title, movieInList)
-    return !movieInList
+    const movieInList = contains(tierlistMovies, movie.title);
+    console.log(movie.title, movieInList);
+    return !movieInList;
   });
- 
+  const authorized = params.id === session?.user.userId;
   return (
-    <div className="flex flex-col items-center">
-      {params.id === session?.user.userId && <TierAdd movies={unrankedMovies} tierlist={tierlist} />}
-      {tierlist?.tiers.map((tier) => {
-        return (
-          <>
-            <div className="divider">{tier.label}</div>
-            <div className="flex flex-row gap-5">
-            {tier?.movies?.map((movie) => {
-              console.log(movie);
-              return (
-                <>
-                  <div className="indicator mx-auto border-2 rounded-md">
-                    <Link
-                      href={`/home/movies/${movie.id}`}
-                      
-                    >
-                      <img
-                        src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
-                        alt=""
-                        width={"150"}
-                      />
-                    </Link>
-                  </div>
-                </>
-              );
-            })}
-            </div>
-          </>
-        );
-      })}
+    <div className="flex flex-col items-center gap-5">
+      {authorized && (
+        <>
+          <TierAdd movies={unrankedMovies} tierlist={tierlist} />{" "}
+        </>
+      )}
+      <TierContainer tierlist={tierlist} authorized={authorized} />
     </div>
   );
 }
