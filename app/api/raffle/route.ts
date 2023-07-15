@@ -8,7 +8,7 @@ export async function POST(request: NextRequest, response: Response) {
     // get all shortlists and check that everyone is ready
     const todayIsWednesday = isWednesday(new Date());
 
-    if (true) {
+    if (todayIsWednesday) {
       const chosenMovie = await chooseMovieOfTheWeek();
 
       // update the chosen movie with the date

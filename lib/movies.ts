@@ -81,7 +81,7 @@ export async function chooseMovieOfTheWeek() {
   // get an array of all the movies and the user - Array<{user, movie}>
   const shortlists = await getAllShortLists();
 
-  /*
+  
   const selectionRequired = filter(shortlists, (shortlist) =>
     shortlist.requiresSelection ? true : false
   );
@@ -110,7 +110,7 @@ export async function chooseMovieOfTheWeek() {
         .map((item) => item.user.name)
         .join(", ")}`
     );
-  }*/
+  }
 
   console.log("retrieved shortlists", shortlists);
   const movies = shortlists
@@ -145,9 +145,9 @@ export async function chooseMovieOfTheWeek() {
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
-  //await updateChosenMovie(movieObject!, chosen!.user.id)
+  await updateChosenMovie(movieObject!, chosen!.user.id)
   
-  /*
+  
   for (let item of shortlists) {
     await updateShortlistState(false, item.id)
 
@@ -159,7 +159,7 @@ export async function chooseMovieOfTheWeek() {
     if (item.id === chosen?.shortlistId) {
       await updateShortlistSelectionStatus(true, item.id)
     }
-  }*/
+  }
 
   return {
     ...movieObject,
