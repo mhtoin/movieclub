@@ -4,6 +4,8 @@ import { useCallback, useState, useTransition } from "react";
 import Tier from "./Tier";
 import { produce } from "immer";
 import { saveTierlist } from "../../actions/actions";
+import { useMutation } from "@tanstack/react-query";
+import { useNotificationStore } from "@/stores/useNotificationStore";
 
 export default function TierContainer({
   tierlist,
@@ -17,7 +19,34 @@ export default function TierContainer({
     return tier.movies.map((movie) => movie);
   });
   const [containerState, setContainerState] = useState(movieMatrix);
-  let [isPending, startTransition] = useTransition()
+  let [isPending, startTransition] = useTransition();
+  const setNotification = useNotificationStore(
+    (state) => state.setNotification
+  );
+  const saveMutation = useMutation({
+    mutationFn: async (saveState: Tierlist) => {
+      let res = await fetch(`/api/tierlists/${saveState.id}`, {
+        method: "PUT",
+        body: JSON.stringify(saveState),
+      });
+
+      let body = await res.json();
+
+      if (body.ok) {
+        return body;
+      } else {
+        throw new Error("Updating tierlist failed");
+      }
+    },
+    onSuccess: (data) => {
+      console.log("success!", data);
+      setNotification("Tierlist updated!", "success")
+    },
+    onError: (error) => {
+      console.log("error", error);
+      setNotification("Updating tierlist failed!", "error")
+    },
+  });
 
   const moveItem = useCallback(
     (dragIndex: ItemCoordinates, hoverIndex: ItemCoordinates) => {
@@ -40,32 +69,34 @@ export default function TierContainer({
   const handleSave = () => {
     // construct a tierlist from tiers and matrix
     const saveState = produce(tierlist, (draft) => {
-        draft.tiers.forEach((tier) => {
-            tier.movies = containerState[tier.value - 1]
-        })
-        return draft
-    })
+      draft.tiers.forEach((tier) => {
+        tier.movies = containerState[tier.value - 1];
+      });
+      return draft;
+    });
 
-    startTransition(() => saveTierlist(saveState))
-
-  }
+    //startTransition(() => saveTierlist(saveState))
+    saveMutation.mutate(saveState);
+  };
 
   return (
     <>
-    <button className="btn btn-outline btn-success" onClick={handleSave}>Save</button>
-    <div className="flex flex-col items-center gap-2 p-2">
-      {tiers.map((tier, tierIndex) => {
-        return (
-          <Tier
-            key={tier}
-            label={tier}
-            movies={containerState[tierIndex]}
-            moveItem={moveItem}
-            tierIndex={tierIndex}
-          />
-        );
-      })}
-    </div>
+      <button className="btn btn-outline btn-success" onClick={handleSave}>
+        Save
+      </button>
+      <div className="flex flex-col items-center gap-2 p-2">
+        {tiers.map((tier, tierIndex) => {
+          return (
+            <Tier
+              key={tier}
+              label={tier}
+              movies={containerState[tierIndex]}
+              moveItem={moveItem}
+              tierIndex={tierIndex}
+            />
+          );
+        })}
+      </div>
     </>
   );
 }

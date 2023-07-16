@@ -70,7 +70,7 @@ export default function TierAdd({
         {movies?.map((movie) => {
           return (
             <>
-              <option>{movie.title}</option>
+              <option key={movie.id}>{movie.title}</option>
             </>
           );
         })}

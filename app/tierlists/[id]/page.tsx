@@ -29,10 +29,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     ? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
     : [];
 
-  console.log("tierlistmovies", tierlistMovies);
+ 
   const unrankedMovies = moviesOfTheWeek.filter((movie) => {
     const movieInList = contains(tierlistMovies, movie.title);
-    console.log(movie.title, movieInList);
     return !movieInList;
   });
   const authorized = params.id === session?.user.userId;
