@@ -40,11 +40,11 @@ export default function TierContainer({
     },
     onSuccess: (data) => {
       console.log("success!", data);
-      setNotification("Tierlist updated!", "success")
+      setNotification("Tierlist updated!", "success");
     },
     onError: (error) => {
       console.log("error", error);
-      setNotification("Updating tierlist failed!", "error")
+      setNotification("Updating tierlist failed!", "error");
     },
   });
 
@@ -82,7 +82,11 @@ export default function TierContainer({
   return (
     <>
       <button className="btn btn-outline btn-success" onClick={handleSave}>
-        Save
+        {saveMutation.isLoading ? (
+          <span className="loading loading-spinner"></span>
+        ) : (
+          <span>Save</span>
+        )}
       </button>
       <div className="flex flex-col items-center gap-2 p-2">
         {tiers.map((tier, tierIndex) => {

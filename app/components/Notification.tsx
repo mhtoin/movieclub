@@ -1,6 +1,7 @@
 "use client"
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useEffect } from "react";
+import NotificationProgress from "./NotificationProgress";
 
 export default function Notification() {
   const notification = useNotificationStore((state) => state.notification);
@@ -69,8 +70,10 @@ export default function Notification() {
               ></path>
             </svg>
           )}
-          <span>{notification}</span>
+          <span>
+            {notification}</span>
         </div>
+        <NotificationProgress />
         </div>
       )}
     </>
