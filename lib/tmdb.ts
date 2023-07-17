@@ -42,19 +42,35 @@ export async function getAdditionalInfo(tmdbId: number) {
 export async function getWatchlist() {
   const session = await getServerSession();
 
-  let watchlist = await fetch(
-    `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=1&session_id=${session?.user.sessionId}&sort_by=created_at.asc`,
-    {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
-      },
-      cache: "no-store",
-    }
-  );
+  let pagesLeft = true;
+  let page = 1;
+  const movies = [];
 
-  const data = await watchlist.json();
-  
-  return data;
+  do {
+    let watchlist = await fetch(
+      `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${session?.user.sessionId}&sort_by=created_at.asc`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
+        },
+        cache: "no-store",
+      }
+    );
+
+    let data = await watchlist.json();
+    let results = data && data.results ? data.results : [];
+    movies.push(results);
+
+    let pages = data && data.total_pages ? data.total_pages : "";
+    
+    if (pages >= page) {
+      page++;
+    } else {
+      pagesLeft = false;
+    }
+  } while (pagesLeft);
+
+  return movies.flat();
 }

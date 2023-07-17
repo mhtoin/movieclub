@@ -1,7 +1,7 @@
 import { getWatchlist } from "@/lib/tmdb";
 
 export default async function Watchlist() {
-    const { results: watchlist }: { results: Array<TMDBMovie>} = await getWatchlist()
+    const watchlist = await getWatchlist()
 
     return (
         <div className="flex flex-row items-center">

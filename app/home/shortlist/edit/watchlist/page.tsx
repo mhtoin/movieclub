@@ -6,12 +6,10 @@ import { getShortList } from "@/lib/shortlist";
 import { Suspense } from "react";
 
 export default async function Watchlist() {
-  const { results: watchlist } = await getWatchlist();
+  const watchlist = await getWatchlist();
   const session = await getServerSession();
   const shortlistData = (await getShortList(session?.user.userId)) ?? [];
   const movies = (shortlistData?.movies as Movie[]) || [];
-
-  console.log("watchlist", watchlist);
 
   return (
     <div className="flex flex-col items-center">
