@@ -51,7 +51,6 @@ export default function Review({
                     value,
                     movie.id ?? ""
                   );
-                  console.log("creation response", createReviewAction);
                 }
               })
             }

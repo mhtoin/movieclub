@@ -99,7 +99,6 @@ export default function SearchPage() {
   const handleSearchSubmit = () => {
     //const baseUrl = `include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${onlyNetflix && '&watch_region=FI&with_watch_providers=8'}`;
     var queryStringArr = [];
-    console.log(genreSelections)
     if (genreSelections.length > 0) {
       queryStringArr.push(`with_genres=${genreSelections.join("|")}`);
     }
@@ -120,21 +119,16 @@ export default function SearchPage() {
       queryStringArr.push(`vote_average.lte=${ratingRange.max}`);
     }
 
-    console.log("query", queryStringArr);
-
     const queryString = queryStringArr.join("&");
-    console.log("querystring", queryString);
     setSearchValue(baseUrl + "&" + queryString);
   };
 
   const handleGenreSelection = (
     genre: number
   ) => {
-    console.log('handling genre selections', genre)
     setGenreSelections(
       [...genreSelections, genre]
     );
-    console.log(genreSelections);
   };
 
   const handleYearRangeSelect = (label: string, value: string) => {

@@ -38,7 +38,6 @@ export default function ShortlistMovieItem({
         queryClient.invalidateQueries(['shortlist'])
     }
   })
-  console.log('pending', isPending)
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">

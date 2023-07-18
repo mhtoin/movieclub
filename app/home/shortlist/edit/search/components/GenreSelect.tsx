@@ -21,7 +21,7 @@ export default function GenreSelect({
         name="genres"
         options={genreOptions}
         onChange={(selections) => {
-          console.log('genre values', selections)
+         
           let selected = [...selections]
 
           if (selected && selected.length > 0) {

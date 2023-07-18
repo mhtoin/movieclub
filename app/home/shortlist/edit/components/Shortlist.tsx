@@ -17,7 +17,6 @@ export default async function Shortlist() {
         ))
       : [];
 
-  console.log("session search", session);
   return (
     <>
       <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">

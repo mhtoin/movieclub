@@ -22,7 +22,6 @@ export async function POST(request: NextRequest, response: Response) {
         useTLS: true
       });
 
-      console.log('connected pusher', pusher)
       await pusher.trigger("movieclub-raffle", "result", {
         id: 1,
         message: `Movie for ${chosenMovie.movieOfTheWeek?.toLocaleDateString('fi-FI')}`,
@@ -33,12 +32,9 @@ export async function POST(request: NextRequest, response: Response) {
       throw new Error("Unauthorized");
     }
   } catch (e) {
-    console.error("error", e);
     if (e instanceof Error) {
       return NextResponse.json({ ok: false, message: e.message}, { status: 401 });
-    } else {
-      console.error('something went wrong', e)
-    }
+    } 
     
   }
 }

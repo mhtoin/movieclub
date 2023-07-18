@@ -36,11 +36,9 @@ export default function MovieCard({
   const addMutation = useMutation({
     mutationFn: addMovie,
     onSuccess: (data) => {
-      console.log("on success", data);
       const addedMovie = data.movies.find(
         (movieItem: Movie) => movieItem.tmdbId === movie.id
       );
-      console.log("added", addedMovie);
       queryClient.setQueryData(["shortlist"], (oldData: any) =>
         oldData
           ? {

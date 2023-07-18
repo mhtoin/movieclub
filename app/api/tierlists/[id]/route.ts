@@ -19,7 +19,6 @@ export async function PUT(
             movies: movieIds
         }
     }) as Array<TierlistsTier>
-  //console.log('updating', tiers, params.id)
   try {
     let res = await updateTierlist(params.id, tiers)
     return NextResponse.json({ ok: true })

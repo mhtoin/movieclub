@@ -6,13 +6,6 @@ import { RaffleClient } from "../components/RaffleClient";
 export default async function ShortList() {
   const allShortlists = await getAllShortLists();
 
-  //console.log("all shortlists", allShortlists);
-  /*
-  const allMovies = await getShortList() ?? []
-  const moviesByUser = groupBy((movie: Movie) => {
-    return movie.userId.toString()
-  }, allMovies)*/
-
   return (
     <main className="flex min-h-screen flex-col items-center p-24 overflow-hidden">
       <div className="flex flex-row items-center justify-evenly gap-5">

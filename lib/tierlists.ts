@@ -52,7 +52,7 @@ export async function getTierlist(id: string) {
 
 export async function createTierlist(formData: FormData) {
     const session = await getServerSession()
-    console.log(session)
+    
     const userId = session?.user?.userId
 
     
@@ -71,10 +71,10 @@ export async function createTierlist(formData: FormData) {
         } 
         
 
-        console.log('key', key, 'value', value)
+        
     }
 
-    console.log(tierlistTiers)
+    
     const tierList = {
         userId: userId,
         tiers: tierlistTiers

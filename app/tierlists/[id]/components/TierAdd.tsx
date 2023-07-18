@@ -32,7 +32,6 @@ export default function TierAdd({
   };
 
   const handleAdd = () => {
-    console.log("handling add", currentTier, movieIndex, selectedMovie);
     // need new object for converted tierlist
     if (currentTier && selectedMovie) {
       let currentTierMoviesWithIds = currentTier.movies.map(movie => movie.id) as Array<string>
@@ -54,7 +53,6 @@ export default function TierAdd({
       });
 
       tiers[currentTierIndex] = currentTierObj;
-      console.log(tiers);
       startTransition(() => {
         addMovieToTier(tierlist.id, tiers);
       });

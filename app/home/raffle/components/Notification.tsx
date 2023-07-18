@@ -12,7 +12,6 @@ export default function Notification() {
     const channel = pusher.subscribe("movieclub-raffle");
 
     channel.bind("result", (data: RaffleNotification) => {
-      console.log("received data from pusher", data);
       setNotifications([...notifications, data]);
     });
 

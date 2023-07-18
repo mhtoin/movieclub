@@ -13,7 +13,6 @@ export default async function Tierlists() {
   const usersWithTierlist = allTierlists.map((tierlist) => tierlist.userId);
   const session = await getServerSession();
 
-  console.log(allTierlists);
   return (
     <div className="flex flex-col items-center gap-5">
       <div>Tierlists</div>

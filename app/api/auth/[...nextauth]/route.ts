@@ -11,16 +11,12 @@ export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma) as Adapter,
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-            //console.log('signin callback', user, account, profile, email, credentials)
-            console.log('sign in', user, profile)
             return true
         },
         async redirect({ url, baseUrl }) {
-            console.log('redirecting', url, baseUrl)
             return '/home'
         },
         async session({ session, user, token }) {
-            console.log('session', user)
             session.user.profileId = token.profileId
             session.user.userId = token.userId
             session.user.username = token.globalName
@@ -31,8 +27,7 @@ export const authOptions: NextAuthOptions = {
         },
         async jwt({ token, user, account, profile }) {
             if (account && profile && user) {
-                console.log('first sign in')
-                console.log(user, profile, account)
+                
                 /**
                  * Check on sign-in whether user has a shortlist
                  * If not, create one 
@@ -45,7 +40,6 @@ export const authOptions: NextAuthOptions = {
                 token.sessionId = user.sessionId
                 token.accountId = user.accountId
                 token.userShortlistId = shortlist?.id
-                console.log(token)
             }
             return token
           }

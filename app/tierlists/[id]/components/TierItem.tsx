@@ -56,7 +56,6 @@ export default function TierItem({
         return;
       }
 
-      console.log('moving item')
       moveItem(dragIndex, hoverIndex);
 
       item.index = hoverIndex;

@@ -15,9 +15,7 @@ import "dotenv/config";
 
 export async function addMovie(movie: Movie) {
   const session = await getServerSession();
-  console.log("session data in add movie action", session);
-
- 
+  
   if (session && session.user && session.user.userId) {
     let res = await addMovieToShortlist(
       {...movie},
@@ -63,17 +61,12 @@ export async function startRaffle(
 
   if (movieChoice) {
     // update movie in db
-    console.log("movies in raffle action", movies);
-    console.log("choice", movieChoice);
-
     let chosenMovie = await updateChosenMovie(movieChoice.movie);
   }
 }
 
 export async function getColours(img: string) {
   const imageData = await fetch(img);
-
-  console.log(imageData);
 }
 
 export async function updateShortlistReadyState(ready: boolean) {

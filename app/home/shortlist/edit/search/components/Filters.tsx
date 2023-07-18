@@ -27,8 +27,6 @@ export default function Filters() {
   if (status === "loading") {
     return <div>Loading...</div>;
   }
-
-  console.log(data);
   return (
     <div className=" flex items-center z-60">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />

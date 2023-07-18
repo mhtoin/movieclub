@@ -33,16 +33,11 @@ export default async function Page({ params }: { params: { id: string } }) {
   const unrankedMovies = moviesOfTheWeek.filter((movie) => {
     const movieInList = contains(tierlistMovies, movie.title);
     return !movieInList;
-  });
+  }) as unknown as MovieOfTheWeek[];
   const authorized = params.id === session?.user.userId;
   return (
     <div className="flex flex-col items-center gap-5">
-      {authorized && (
-        <>
-          <TierAdd movies={unrankedMovies} tierlist={tierlist} />{" "}
-        </>
-      )}
-      <TierContainer tierlist={tierlist} authorized={authorized} />
+      <TierContainer tierlist={tierlist} authorized={authorized} unranked={unrankedMovies}/>
     </div>
   );
 }

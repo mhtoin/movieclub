@@ -93,7 +93,6 @@ export async function chooseMovieOfTheWeek() {
         listItem.selectedIndex === undefined ||
         listItem.selectedIndex === null
       ) {
-        //console.log(listItem)
         throw new Error(
           `${listItem.user.name} needs to select a movie to include`
         );
@@ -102,9 +101,8 @@ export async function chooseMovieOfTheWeek() {
   }
   const notReady = filter(shortlists, (shortlist) => !shortlist.isReady);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
-  console.log("not ready", notReady);
+  
   if (notReady.length > 0) {
-    console.log("some users are not ready");
     throw new Error(
       `Not all users are ready: ${notReady
         .map((item) => item.user.name)
@@ -112,7 +110,6 @@ export async function chooseMovieOfTheWeek() {
     );
   }
 
-  console.log("retrieved shortlists", shortlists);
   const movies = shortlists
     .map((shortlist) => {
       if (shortlist.requiresSelection) {
@@ -136,7 +133,7 @@ export async function chooseMovieOfTheWeek() {
     .flat();
   // shuffle a few times
   let shuffledMovies = shuffle(movies);
-  //console.log("shuffled", shuffledMovies);
+  
   let chosen = sample(shuffledMovies);
 
   let movieObject = await getMovie(chosen?.movie.id!);
@@ -171,8 +168,7 @@ export async function chooseMovieOfTheWeek() {
 export async function updateChosenMovie(movie: Movie, userId: string) {
   const nextDate = getNextDate()
 
-  console.log("next date", nextDate);
-
+  
   let updatedMovie = await prisma.movie.update({
     where: {
       id: movie.id,

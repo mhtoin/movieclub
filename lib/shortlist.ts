@@ -19,9 +19,6 @@ export async function getChosenMovie() {
     ? set(new Date(), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 })
     : nextMovieDate;
 
-  console.log("looking for date", now);
-  console.log("next one", nextMovieDate);
-
   const movie = await prisma.movie.findFirst({
     where: {
       OR: [
@@ -43,13 +40,12 @@ export async function getChosenMovie() {
   });
 
   const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
-  console.log('movie before', movie)
   if (movie) {
     const movieObject = Object.assign(
       movie,
       details
     ) as unknown as MovieOfTheWeek;
-    console.log('movie object', movieObject)
+    
     return movieObject;
   }
 }
@@ -123,7 +119,7 @@ export async function removeMovieFromShortlist(
   id: string,
   shortlistId: string
 ) {
-  console.log("deleting", id, shortlistId);
+  
   try {
     const movie = await prisma.shortlist.update({
       where: {
@@ -135,7 +131,7 @@ export async function removeMovieFromShortlist(
         },
       },
     });
-    console.log("deleted", movie);
+    
     return movie;
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (e) {
@@ -154,7 +150,7 @@ export async function updateChosenMovie(movie: Movie) {
     milliseconds: 0,
   });
 
-  console.log("next date", nextDate);
+  
 
   let updatedMovie = await prisma.movie.update({
     where: {

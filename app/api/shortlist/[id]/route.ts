@@ -40,8 +40,6 @@ export async function PUT(
 ) {
   let body = await request.json()
   const movieId = body.movieId
-
-  console.log('updating', movieId, params.id)
   let res = await removeMovieFromShortlist(movieId, params.id)
 
   return NextResponse.json(res)

@@ -18,7 +18,6 @@ export default function RaffleNotification() {
         const channel = pusher.subscribe("movieclub-raffle");
     
         channel.bind("result", (data: RaffleNotification) => {
-          console.log("received data from pusher", data);
           setNotification(data);
           setOpen(true)
         });
@@ -28,7 +27,6 @@ export default function RaffleNotification() {
         };
       }, [notification]);
     
-      console.log('notification modal')
       return (
         <RaffleResultModal open={open}>
         {notification ? (

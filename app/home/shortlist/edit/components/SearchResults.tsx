@@ -46,7 +46,6 @@ export default function SearchResults({
 
     setShouldFetch(false);
     const { results }: { results: TMDBMovie[] } = await res.json();
-    console.log("retrieved", results);
     return results.map((row) => {
       return { ...omit(row, ["id"]), tmdbId: row.id };
     }) as Movie[];
@@ -66,7 +65,6 @@ export default function SearchResults({
   }
 
   if (data) {
-    console.log('token', process.env['MOVIEDB_KEY'])
     return (
       <>
         <a

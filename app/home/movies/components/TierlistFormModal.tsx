@@ -7,7 +7,6 @@ export default function TierlistFormModal({
   tierlist: Tierlist;
   movie: MovieOfTheWeek;
 }) {
-  console.log("tierlist", tierlist);
   return (
     <div>
       <button className="btn" onClick={() => {

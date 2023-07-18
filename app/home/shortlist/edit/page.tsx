@@ -15,7 +15,6 @@ export default async function ShortListEdit() {
 
   const movies = (shortlistData?.movies as Movie[]) || [];
 
-  console.log('shortlist', shortlistData)
   return (
     <div className="flex min-w-fit flex-col items-center gap-5 overflow-hidden">
       {/* @ts-expect-error Shortlist */}

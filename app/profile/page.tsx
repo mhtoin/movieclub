@@ -26,9 +26,9 @@ export default function Profile() {
 
       if (locParts && locParts.length > 1) {
         let token = locParts[0].split("=")[1];
-        console.log(locParts, token);
+        
         let approved = locParts[1] === "approved=true";
-        console.log(approved);
+     
 
         if (approved) {
           let authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${token}`;
@@ -47,8 +47,6 @@ export default function Profile() {
 
               let accountBody = await accountRes.json();
 
-              console.log("account", accountBody);
-
               setAccountId(accountBody.id);
               setNotification(
                 "You need to log out and log back in for the changes to take effect"
@@ -57,7 +55,7 @@ export default function Profile() {
                 setNotification("");
               }, 5000);
             }
-            //console.log(res);
+           
           };
 
           getSessionId();

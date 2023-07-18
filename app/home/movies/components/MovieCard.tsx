@@ -33,7 +33,6 @@ export default function MovieCard({
         setColorPalette(color);
       };
       getColor();
-      console.log("fetching colors");
     }
   }, []);
 
