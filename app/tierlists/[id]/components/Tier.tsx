@@ -2,6 +2,8 @@
 import { useCallback, useState } from "react";
 import TierItem from "./TierItem";
 import { produce } from "immer";
+import { useDrop } from "react-dnd";
+import { Identifier } from "dnd-core";
 
 export default function Tier({
   label,
@@ -17,11 +19,20 @@ export default function Tier({
     hoverIndex: ItemCoordinates
   ) => void;
 }) {
+  const [{ handlerId }, drop] = useDrop<DraggableItem, void, { handlerId: Identifier | null}>({
+    accept: "Item",
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+  
+  });
   
   return (
     <>
       <div className="divider">{label}</div>
-      <div className="flex flex-row gap-5">
+      <div className="flex flex-row flex-wrap gap-5">
         {movies.map((movie, index) => {
           return (
             <TierItem
