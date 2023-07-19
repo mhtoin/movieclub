@@ -15,12 +15,12 @@ export default function Profile() {
 
   useEffect(() => {
     if (session?.user.sessionId) {
-      console.log('setting session id', session)
-      setSessionId(session?.user.sessionId)
+      console.log("setting session id", session);
+      setSessionId(session?.user.sessionId);
     }
-    
-    setAccountId(session?.user.accountId)
-  }, [session])
+
+    setAccountId(session?.user.accountId);
+  }, [session]);
 
   useEffect(() => {
     const loc = window.location.search;
@@ -28,12 +28,12 @@ export default function Profile() {
     if (loc) {
       let locParts = loc ? loc.split("&") : "";
 
-      console.log('locparts', locParts)
+      console.log("locparts", locParts);
       if (locParts && locParts.length > 1) {
         let token = locParts[0].split("=")[1];
-        
+
         let approved = locParts[1] === "approved=true";
-        console.log('token, approved', token, approved)
+        console.log("token, approved", token, approved);
 
         if (approved) {
           let authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${token}`;
@@ -43,7 +43,7 @@ export default function Profile() {
 
             if (res.ok) {
               let id = await res.json();
-              console.log('got id from getsessionid', id)
+              console.log("got id from getsessionid", id);
               setSessionId(id.session_id);
 
               // finally, fetch the account id
@@ -54,6 +54,15 @@ export default function Profile() {
               let accountBody = await accountRes.json();
 
               setAccountId(accountBody.id);
+
+              if (id.session_id && accountBody.id) {
+                startTransition(() =>
+                  saveProfile({
+                    sessionId: id.session_id,
+                    accountId: parseInt(accountBody.id),
+                  } as User)
+                );
+              }
               setNotification(
                 "You need to log out and log back in for the changes to take effect"
               );
@@ -61,7 +70,6 @@ export default function Profile() {
                 setNotification("");
               }, 5000);
             }
-           
           };
 
           getSessionId();
