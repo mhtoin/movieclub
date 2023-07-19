@@ -159,7 +159,7 @@ export default function Profile() {
           </button>
           <input
             type="text"
-            placeholder="TMDB Account ID"
+            placeholder="TMDB Account ID - link by pressing the above button"
             className="input input-bordered max-w-xs"
             value={accountId ? accountId : "No valid Account Id"}
             readOnly
