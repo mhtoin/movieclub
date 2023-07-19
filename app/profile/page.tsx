@@ -92,7 +92,7 @@ export default function Profile() {
 
     if (success && request_token) {
       //
-      window.location.href = `https://www.themoviedb.org/authenticate/${request_token}?redirect_to=http://localhost:3000/profile`;
+      window.location.href = `https://www.themoviedb.org/authenticate/${request_token}?redirect_to=https://movieclub-seven.vercel.app/profile`;
     }
   };
 
