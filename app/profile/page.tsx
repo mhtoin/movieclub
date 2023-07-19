@@ -14,7 +14,11 @@ export default function Profile() {
   const [notification, setNotification] = useState("");
 
   useEffect(() => {
-    setSessionId(session?.user.sessionId)
+    if (session?.user.sessionId) {
+      console.log('setting session id', session)
+      setSessionId(session?.user.sessionId)
+    }
+    
     setAccountId(session?.user.accountId)
   }, [session])
 
@@ -64,7 +68,7 @@ export default function Profile() {
         }
       }
     }
-  });
+  }, []);
 
   if (status === "loading") {
     return (
