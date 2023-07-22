@@ -125,6 +125,18 @@ export default function MovieCard({
                     </div>
                   );
                 })}
+                {movie?.watchProviders?.free?.map((item) => {
+                  return (
+                    <div className="avatar join-item" key={item.provider_id}>
+                      <div className="w-10 rounded">
+                        <img
+                          src={`http://image.tmdb.org/t/p/original${item["logo_path"]}`}
+                          alt="logo"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </a>
           </div>

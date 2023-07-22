@@ -55,6 +55,7 @@ declare global {
   interface WatchProviders {
     link: string
     flatrate?: Array<WatchProvider>
+    free?: Array<WatchProvider>
     rent?: Array<WatchProvider>
     buy?: Array<WatchProvider>
   }
