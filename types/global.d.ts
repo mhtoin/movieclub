@@ -114,4 +114,9 @@ declare global {
     id: string,
     index: ItemCoordinates
   }
+
+  interface UserChartData {
+    label: string,
+    data: Array<{user: string, movies: number}>
+}
 }

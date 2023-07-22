@@ -1,35 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
 import { getAllShortLists } from "@/lib/shortlist";
-import { chooseMovieOfTheWeek } from "@/lib/movies";
+import { chooseMovieOfTheWeek, simulateRaffle } from "@/lib/movies";
 import { isWednesday } from "date-fns";
 import Pusher from "pusher"
 
+/**
+ * Function to perform a raffle on the shortlist data x number of times
+ * @param request 
+ * @param response 
+ * @returns 
+ */
 export async function POST(request: NextRequest, response: Response) {
   try {
     // get all shortlists and check that everyone is ready
-    const todayIsWednesday = isWednesday(new Date());
+    const body = await request.json()
+    const repetitions = body.repetitions ? body.repetitions : 1
+    const movies = await simulateRaffle(repetitions)
 
-    if (todayIsWednesday) {
-      const chosenMovie = await chooseMovieOfTheWeek();
-
-      // update the chosen movie with the date
-      // return the movie
-      const pusher = new Pusher({
-        appId: process.env.app_id!,
-        key: process.env.key!,
-        secret: process.env.key!,
-        cluster: "eu",
-        useTLS: true
-      });
-
-      pusher.trigger("movieclub-raffle", "result", {
-        message: JSON.stringify(chosenMovie)
-      })
-      return NextResponse.json({ ok: true, chosenMovie });
-    } else {
-      throw new Error("Unauthorized");
-    }
+    //console.log('movies', movies)
+    return NextResponse.json(movies)
+    
+    
   } catch (e) {
     console.error("error", e);
     if (e instanceof Error) {

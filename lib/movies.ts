@@ -1,9 +1,14 @@
 import prisma from "./prisma";
 import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { getAdditionalInfo } from "./tmdb";
-import { Shortlist } from "@prisma/client";
-import { every, filter, find, sample, shuffle } from "underscore";
-import { getAllShortLists, updateShortlistSelectionStatus, updateShortlistState } from "./shortlist";
+import { Prisma, PrismaClient, Shortlist } from "@prisma/client";
+import { countBy, every, filter, find, sample, shuffle } from "underscore";
+import {
+  getAllShortLists,
+  updateShortlistSelectionStatus,
+  updateShortlistState,
+} from "./shortlist";
+import type { User } from "@prisma/client";
 import { updateShortlistReadyState } from "@/app/home/shortlist/edit/actions/actions";
 
 export async function getAllMoviesOfTheWeek() {
@@ -45,7 +50,7 @@ export async function getMovie(id: string) {
         },
       },
       ratings: true,
-      user: true
+      user: true,
     },
   });
 
@@ -77,17 +82,86 @@ export async function createReview(
   return data;
 }
 
+export async function simulateRaffle(repetitions: number) {
+  const shortlists = await getAllShortLists();
+  const resultArr = [];
+  let lastChosen: User;
+  for (let i = 0; i < repetitions; i++) {
+    const movies = shortlists
+      .map((shortlist) => {
+        if (i >15 && shortlist.user.id === lastChosen?.id) {
+          return {
+            user: shortlist.user,
+            shortlistId: shortlist.id,
+            movie: shortlist.movies[0],
+          };
+        }
+        if (shortlist.movies.length < 3) {
+          let movie = shortlist.movies[0];
+          return [
+            {
+              user: shortlist.user,
+              shortlistId: shortlist.id,
+              movie: { ...movie },
+            },
+            {
+              user: shortlist.user,
+              shortlistId: shortlist.id,
+              movie: { ...movie },
+            },
+            {
+              user: shortlist.user,
+              shortlistId: shortlist.id,
+              movie: { ...movie },
+            },
+          ];
+        }
+        return shortlist.movies.map((movie) =>
+          Object.assign(
+            {},
+            {
+              user: shortlist.user,
+              shortlistId: shortlist.id,
+              movie: movie,
+            }
+          )
+        );
+      })
+      .flat();
+    let shuffledMovies = shuffle(movies);
+
+    let chosen = sample(shuffledMovies);
+    resultArr.push(chosen);
+    lastChosen = chosen?.user!;
+  }
+  let moviesByUser = countBy(resultArr, (movie) => {
+    return movie?.user?.name!;
+  });
+
+  let dataObj = {
+    label: "Movies by user",
+    data: []
+  } as UserChartData
+  
+  for (let user in moviesByUser) {
+    dataObj.data.push({
+      user: user,
+      movies: moviesByUser[user]
+    })
+  }
+  console.log('by user', moviesByUser)
+  return dataObj;
+}
+
 export async function chooseMovieOfTheWeek() {
   // get an array of all the movies and the user - Array<{user, movie}>
   const shortlists = await getAllShortLists();
 
-  
   const selectionRequired = filter(shortlists, (shortlist) =>
     shortlist.requiresSelection ? true : false
   );
 
   if (selectionRequired.length > 0) {
-    
     for (let listItem of selectionRequired) {
       if (
         listItem.selectedIndex === undefined ||
@@ -101,7 +175,7 @@ export async function chooseMovieOfTheWeek() {
   }
   const notReady = filter(shortlists, (shortlist) => !shortlist.isReady);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
-  
+
   if (notReady.length > 0) {
     throw new Error(
       `Not all users are ready: ${notReady
@@ -116,8 +190,8 @@ export async function chooseMovieOfTheWeek() {
         return {
           user: shortlist.user,
           shortlistId: shortlist.id,
-          movie: shortlist.movies[shortlist.selectedIndex!]
-        }
+          movie: shortlist.movies[shortlist.selectedIndex!],
+        };
       }
       return shortlist.movies.map((movie) =>
         Object.assign(
@@ -133,7 +207,7 @@ export async function chooseMovieOfTheWeek() {
     .flat();
   // shuffle a few times
   let shuffledMovies = shuffle(movies);
-  
+
   let chosen = sample(shuffledMovies);
 
   let movieObject = await getMovie(chosen?.movie.id!);
@@ -142,19 +216,21 @@ export async function chooseMovieOfTheWeek() {
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
-  await updateChosenMovie(movieObject!, chosen!.user.id)
-  
-  
-  for (let item of shortlists) {
-    await updateShortlistState(false, item.id)
+  await updateChosenMovie(movieObject!, chosen!.user.id);
 
-    const inSelectionRequired = find(selectionRequired, (listItem) => listItem.id === item.id)
+  for (let item of shortlists) {
+    await updateShortlistState(false, item.id);
+
+    const inSelectionRequired = find(
+      selectionRequired,
+      (listItem) => listItem.id === item.id
+    );
     if (inSelectionRequired) {
-      await updateShortlistSelectionStatus(false, item.id)
+      await updateShortlistSelectionStatus(false, item.id);
     }
 
     if (item.id === chosen?.shortlistId) {
-      await updateShortlistSelectionStatus(true, item.id)
+      await updateShortlistSelectionStatus(true, item.id);
     }
   }
 
@@ -166,9 +242,8 @@ export async function chooseMovieOfTheWeek() {
 }
 
 export async function updateChosenMovie(movie: Movie, userId: string) {
-  const nextDate = getNextDate()
+  const nextDate = getNextDate();
 
-  
   let updatedMovie = await prisma.movie.update({
     where: {
       id: movie.id,
@@ -177,13 +252,91 @@ export async function updateChosenMovie(movie: Movie, userId: string) {
       movieOfTheWeek: nextDate,
       user: {
         connect: {
-          id: userId
-        }
-      }
+          id: userId,
+        },
+      },
     },
   });
 
   return updatedMovie;
+}
+
+export async function connectChosenMovies(movies: any[]) {
+  const users: any = {
+    Juhani: "64aec109b56d6dd5a8489cb4",
+    Jussi: "64b825e750ebc52d19bc72e7",
+    Miika: "648875d9b274755f19862cbf",
+    Niko: "64b7c8d13be96d82bde4a930",
+  };
+  for (let movie of movies) {
+    let username = movie.user;
+
+    if (username) {
+      console.log("user found for movie", username);
+
+      // retrieve the movie
+      const movieData = await prisma.movie.findUnique({
+        where: {
+          tmdbId: movie.tmdbId!,
+        },
+      });
+      //console.log(movieData)
+
+      if (!movieData?.userId) {
+        console.log("not connected", movieData);
+
+        let res = await prisma.movie.update({
+          where: {
+            id: movieData?.id,
+          },
+          data: {
+            user: {
+              connect: {
+                id: users[username],
+              },
+            },
+          },
+        });
+      }
+    }
+  }
+
+  //console.log('movies', movies)
+  return movies;
+}
+
+export async function getStatistics() {
+  const movies = await prisma.movie.findMany({
+    where: {
+      movieOfTheWeek: {
+        not: null,
+      },
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  let moviesByUser = countBy(movies, (movie) => {
+    return movie.user?.name!;
+  });
+
+  console.log("moviesbyuser", moviesByUser);
+  let dataArr = []
+  let dataObj = {
+    label: "Movies by user",
+    data: []
+  } as UserChartData
+  
+  for (let user in moviesByUser) {
+    dataObj.data.push({
+      user: user,
+      movies: moviesByUser[user]
+    })
+  }
+  dataArr.push(dataObj)
+  console.log(dataObj)
+  return dataObj;
 }
 
 function getNextDate() {

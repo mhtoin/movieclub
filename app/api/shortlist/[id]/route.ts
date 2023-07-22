@@ -9,7 +9,6 @@ export async function GET(
 ) {
   try {
     const id = params.id;
-
     let shortlist = await getShortList(id);
     return NextResponse.json(shortlist);
   } catch (e) {
