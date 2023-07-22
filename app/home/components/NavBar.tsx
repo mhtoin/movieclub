@@ -34,6 +34,9 @@ export default async function NavBar() {
                 <Link href={"/home"}>Home</Link>
               </li>
               <li>
+                <Link href={"/dashboard"}>Dashboard</Link>
+              </li>
+              <li>
                 <Link href={"/home/shortlist"}><label tabIndex={0}>Shortlist</label></Link>
                 <ul tabIndex={0} className="p-2">
                   <li>
@@ -59,6 +62,11 @@ export default async function NavBar() {
               </li>
               <li>
                 <Link href={"/tierlists"}>Tierlists</Link>
+                <ul tabIndex={0} className="p-2">
+                <li>
+                    <Link href={`/tierlists/${session?.user.userId}`}>Edit</Link>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
