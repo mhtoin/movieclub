@@ -158,7 +158,7 @@ export async function chooseMovieOfTheWeek() {
   const shortlists = await getAllShortLists();
 
   const selectionRequired = filter(shortlists, (shortlist) =>
-    shortlist.requiresSelection ? true : false
+    shortlist.requiresSelection && shortlist.participating? true : false
   );
 
   if (selectionRequired.length > 0) {
@@ -173,7 +173,7 @@ export async function chooseMovieOfTheWeek() {
       }
     }
   }
-  const notReady = filter(shortlists, (shortlist) => !shortlist.isReady);
+  const notReady = filter(shortlists, (shortlist) => !shortlist.isReady && shortlist.participating);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
 
   if (notReady.length > 0) {

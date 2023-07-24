@@ -5,6 +5,7 @@ import {
   addMovieToShortlist,
   removeMovieFromShortlist,
   updateChosenMovie,
+  updateShortlistParticipationState,
   updateShortlistSelection,
   updateShortlistState,
 } from "@/lib/shortlist";
@@ -72,6 +73,11 @@ export async function getColours(img: string) {
 export async function updateShortlistReadyState(ready: boolean) {
   const session = await getServerSession();
   await updateShortlistState(ready, session?.user.shortlistId)
+}
+
+export async function updateShortlistParticipation(ready: boolean) {
+  const session = await getServerSession();
+  await updateShortlistParticipationState(ready, session?.user.shortlistId)
 }
 
 export async function updateSelection(index: number) {

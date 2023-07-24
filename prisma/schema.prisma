@@ -46,6 +46,7 @@ model Shortlist {
   isReady           Boolean @default(false)
   requiresSelection Boolean? @default(false)
   selectedIndex     Int?
+  participating     Boolean @default(true)
 
   @@map("shortlist")
 }

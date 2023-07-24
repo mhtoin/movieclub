@@ -1,22 +1,21 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { updateShortlistReadyState } from "../actions/actions";
 
-export default function ReadyToggle({isReady}: { isReady: boolean }) {
+export default function ReadyToggle({isReady, onToggle, label}: { isReady: boolean, onToggle: any, label: string }) {
   const [toggled, setToggled] = useState(isReady);
   let [isPending, startTransition] = useTransition();
   return (
     <div className="flex flex-co p-2 rounded-md">
       <div className="form-control w-40">
         <label className="cursor-pointer label">
-          <span className="label-text">Ready</span>
+          <span className="label-text">{label}</span>
           <input
             type="checkbox"
             className="toggle toggle-success"
             checked={toggled}
             onChange={() => {
-              startTransition(() => updateShortlistReadyState(!toggled))
+              startTransition(() => onToggle(!toggled))
               setToggled(!toggled)}
             }
           />

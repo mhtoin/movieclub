@@ -175,6 +175,17 @@ export async function updateShortlistState(ready: boolean, shortlistId: string) 
   })
 }
 
+export async function updateShortlistParticipationState(ready: boolean, shortlistId: string) {
+  return await prisma.shortlist.update({
+    where: {
+      id: shortlistId
+    },
+    data: {
+      participating: ready
+    }
+  })
+}
+
 export async function updateShortlistSelection(index: number, shortlistId: string) {
   return await prisma.shortlist.update({
     where: {
