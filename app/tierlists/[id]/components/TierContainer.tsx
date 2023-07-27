@@ -176,7 +176,7 @@ export default function DnDTierContainer({
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
-                    className="flex flex-row flex-wrap gap-5 p-2 m-2"
+                    className="flex flex-row gap-5 p-2 m-2 max-w-xs overflow-y-auto lg:max-w-[1000px] xl:max-w-[1500px]"
                     {...provided.droppableProps}
                   >
                     {tier.map((item, index) => (
@@ -187,7 +187,7 @@ export default function DnDTierContainer({
                       >
                         {(provided, snapshot) => (
                           <div
-                            className="indicator mx-auto border-2 rounded-md"
+                            className="indicator mx-auto border-2 rounded-md max-w-[70px] md:max-w-[80px] lg:max-w-[90px] shrink-0"
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
@@ -196,7 +196,7 @@ export default function DnDTierContainer({
                               <img
                                 src={`http://image.tmdb.org/t/p/original/${item["poster_path"]}`}
                                 alt=""
-                                width={"150"}
+                                
                               />
                             </Link>
                           </div>
