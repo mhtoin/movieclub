@@ -7,18 +7,21 @@ interface SearchResultCardProps {
   movie: Movie;
   shortlistId: string,
   removeFromShortList?: (id: string, shortlistId: string) => Promise<void>;
+  highlight?: boolean;
+
 }
 
 export default function ShortListItem({
   movie,
   shortlistId,
   removeFromShortList,
+  highlight,
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
 
 
   return (
-    <div className="indicator mx-auto border-2 rounded-md">
+    <div className={`indicator mx-auto border-2 rounded-sm ${highlight && 'border-green-700 ring-2 ring-green-500'}`}>
       <div className="indicator-item indicator-end">
         {removeFromShortList && <button
           className="btn btn-circle btn-xs btn-error"

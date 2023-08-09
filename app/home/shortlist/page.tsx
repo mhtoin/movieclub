@@ -17,6 +17,7 @@ export default async function ShortList() {
       </div>
       <div className="flex flex-col place-items-center m-5">
         {allShortlists.map((shortlist) => {
+          console.log('shortlist', shortlist)
           return (
             <>
               <h1 key={shortlist.id + "-title"} className="text-xl m-5">
@@ -26,12 +27,13 @@ export default async function ShortList() {
                 key={shortlist.id + "-container"}
                 className="flex flex-row gap-5 w-2/3 sm:w-auto"
               >
-                {shortlist.movies.map((movie) => {
+                {shortlist.movies.map((movie, index) => {
                   return (
                     <ShortListItem
                       key={shortlist.id + movie.id}
                       movie={movie}
                       shortlistId={shortlist.id}
+                      highlight={shortlist.requiresSelection && shortlist.selectedIndex === index ? true : false}
                     />
                   );
                 })}
