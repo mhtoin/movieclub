@@ -27,3 +27,16 @@ export async function PUT(
     return NextResponse.json({ok: false, message: error}, { status: 500})
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    let res = await updateTierlist(params.id, [])
+    return NextResponse.json({ ok: true })
+  } catch (e) {
+    let error = e as Error
+    return NextResponse.json({ok: false, message: error}, { status: 500})
+  }
+}

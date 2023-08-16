@@ -69,9 +69,6 @@ export async function createTierlist(formData: FormData) {
                 movies: movies
             } as unknown as TierlistsTier)
         } 
-        
-
-        
     }
 
     
@@ -95,4 +92,40 @@ export async function updateTierlist(id: string, tiers: Array<TierlistsTier>) {
             tiers: tiers
         }
     })
+}
+
+export async function modifyTierlist(formData: FormData) {
+    const session = await getServerSession()
+    
+    const userId = session?.user?.userId
+    const tierlistTiers = parseTiers(formData)
+
+    return await prisma.tierlists.update({
+        where: {
+            userId: userId
+        },
+        data: {
+            tiers: tierlistTiers
+        }
+    })
+}
+
+function parseTiers(formData: FormData) {
+    const tierlistTiers = []
+    for (let [key, value] of formData.entries()) {
+        let tierValue = parseInt(key)
+        let tierLabel = value
+        let movies: Array<String> = []
+
+        if (tierValue) {
+            tierlistTiers.push({
+                label: tierLabel,
+                value: tierValue,
+                movies: movies
+            } as unknown as TierlistsTier)
+        } 
+    }
+
+    return tierlistTiers
+
 }

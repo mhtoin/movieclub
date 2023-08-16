@@ -11,6 +11,9 @@ import {
   DraggableLocation,
 } from "@hello-pangea/dnd";
 import Link from "next/link";
+import CreateForm from "./TierlistCreate";
+import { useRouter } from "next/navigation";
+import { ro } from "date-fns/locale";
 
 type MoveItemObject = {
   [x: string]: MovieOfTheWeek[];
@@ -57,10 +60,13 @@ export default function DnDTierContainer({
   const movieMatrix = tierlist.tiers.map((tier) => {
     return tier.movies.map((movie) => movie);
   });
+  const router = useRouter()
 
   if (unranked) {
     movieMatrix.unshift(unranked);
   }
+
+  console.log('movieMatrix', movieMatrix)
   const [containerState, setContainerState] = useState(movieMatrix);
   const setNotification = useNotificationStore(
     (state) => state.setNotification
@@ -129,6 +135,30 @@ export default function DnDTierContainer({
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (tierlistId: string) => {
+      let res = await fetch(`/api/tierlists/${tierlistId}`, {
+        method: "DELETE",
+      });
+
+      let body = await res.json();
+
+      if (body.ok) {
+        return body;
+      } else {
+        throw new Error("Deleting tierlist failed");
+      }
+    },
+    onSuccess: (data) => {
+      setNotification("Tierlist cleared!", "success");
+      window.location.reload()
+      
+    },
+    onError: (error) => {
+      setNotification("Deleting tierlist failed!", "error");
+    },
+  });
+
   const handleSave = () => {
     // construct a tierlist from tiers and matrix
     const saveState = produce(tierlist, (draft) => {
@@ -143,8 +173,9 @@ export default function DnDTierContainer({
 
   return (
     <>
+    <div className="flex flex-row items-center gap-2">
       <button
-        className="btn btn-outline btn-success"
+        className={`btn btn-outline ${authorized ? 'btn-success' : 'btn-disabled'}`}
         onClick={handleSave}
         disabled={!authorized}
       >
@@ -154,8 +185,28 @@ export default function DnDTierContainer({
           <span>Save</span>
         )}
       </button>
-
+      <button
+        className={`btn btn-outline ${authorized ? 'btn-success' : 'btn-disabled'}`}
+        onClick={() => {
+          if (movieMatrix.length > 1) {
+            deleteMutation.mutate(tierlist.id)
+          } else {
+            if (document) {
+              (document.getElementById('createModal') as HTMLFormElement).showModal()
+            }
+          }
+        }}
+        disabled={!authorized}
+      >
+        {deleteMutation.isLoading ? (
+          <span className="loading loading-spinner"></span>
+        ) : (
+          <span>{movieMatrix.length > 1 ? 'Reset' : 'Create'}</span>
+        )}
+      </button>
+      </div>
       <div className="flex flex-col items-center gap-2">
+        <CreateForm />
         <DragDropContext onDragEnd={onDragEnd}>
           {containerState.map((tier, tierIndex) => (
             <>

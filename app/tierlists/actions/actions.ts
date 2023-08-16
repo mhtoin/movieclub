@@ -1,31 +1,44 @@
-"use server"
+"use server";
 
-import { createTierlist, updateTierlist } from '@/lib/tierlists';
-import { TierlistsTier } from '@prisma/client';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation'
+import { getServerSession } from "@/lib/getServerSession";
+import {
+  createTierlist,
+  modifyTierlist,
+  updateTierlist,
+} from "@/lib/tierlists";
+import { TierlistsTier } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createNewTierlist(formData: FormData) {
-    const createdList =  await createTierlist(formData)
-   redirect(`/tierlists/`)
-   //return createTierlist
+  const createdList = await createTierlist(formData);
+  redirect(`/tierlists/`);
+  //return createTierlist
 }
 
 export async function addMovieToTier(id: string, tiers: Array<TierlistsTier>) {
-    await updateTierlist(id, tiers)
+  await updateTierlist(id, tiers);
 
-    revalidatePath('tierlists')
+  revalidatePath("tierlists");
 }
 
 export async function saveTierlist(tierlist: Tierlist) {
-    const tiers = tierlist.tiers.map((tier) => {
-        const movieIds = tier.movies.map(movie => movie.id)
+  const tiers = tierlist.tiers.map((tier) => {
+    const movieIds = tier.movies.map((movie) => movie.id);
 
-        return {
-            ...tier,
-            movies: movieIds
-        }
-    }) as Array<TierlistsTier>
-    
-    await updateTierlist(tierlist.id, tiers)
+    return {
+      ...tier,
+      movies: movieIds,
+    };
+  }) as Array<TierlistsTier>;
+
+  await updateTierlist(tierlist.id, tiers);
+}
+
+export async function recreateTierlist(formData: FormData) {
+  const session = await getServerSession();
+
+  const userId = session?.user?.userId;
+  const modified = await modifyTierlist(formData);
+  redirect(`/tierlists/${userId}`);
 }
