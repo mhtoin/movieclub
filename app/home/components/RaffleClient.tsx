@@ -1,6 +1,5 @@
 "use client";
 
-import ShortListItem from "./ShortListItem";
 import { useState, useTransition } from "react";
 import { useMutation } from "@tanstack/react-query";
 import RaffleResultModal from "./RaffleResultModal";

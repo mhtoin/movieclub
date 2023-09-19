@@ -26,7 +26,7 @@ export function MovieHero({
 
   if (movieOfTheWeek) {
     return (
-      <div className="card w-11/12 md:w-11/12 lg:w-8/12 xl:w-9/12 2xl:w-8/12 sm:card-side">
+      <div className="card w-11/12 md:w-11/12 lg:w-8/12 xl:w-6/12 2xl:w-6/12 sm:card-side">
         <figure
           className="shadow-xl"
           style={{
@@ -40,7 +40,7 @@ export function MovieHero({
           <img
             src={backgroundPath}
             alt="Album"
-            className="rounded-2xl lg:w-10/12"
+            className="rounded-2xl md:w-8/12 lg:w-9/12 object-cover"
           />
         </figure>
         <div className="card-body">
@@ -80,27 +80,21 @@ export function MovieHero({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <div
-                    key={trailer.id + "-tooltip"}
-                    className="tooltip tooltip-primary tooltip-open"
-                    data-tip={trailer.name}
+                  <svg
+                    key={trailer.id}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    <svg
-                      key={trailer.id}
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-10 w-10"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1"
-                        d="m20.84 2.18l-3.93.78l2.74 3.54l1.97-.4l-.78-3.92m-6.87 1.36L12 3.93l2.75 3.53l1.96-.39l-2.74-3.53m-4.9.96l-1.97.41l2.75 3.53l1.96-.39L9.07 4.5m-4.91 1l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97L4.16 5.5M20 12v8H4v-8h16m2-2H2v10a2 2 0 0 0 2 2h16c1.11 0 2-.89 2-2V10Z"
-                      />
-                    </svg>
-                  </div>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1"
+                      d="m20.84 2.18l-3.93.78l2.74 3.54l1.97-.4l-.78-3.92m-6.87 1.36L12 3.93l2.75 3.53l1.96-.39l-2.74-3.53m-4.9.96l-1.97.41l2.75 3.53l1.96-.39L9.07 4.5m-4.91 1l-.98.19a1.995 1.995 0 0 0-1.57 2.35L2 10l4.9-.97L4.16 5.5M20 12v8H4v-8h16m2-2H2v10a2 2 0 0 0 2 2h16c1.11 0 2-.89 2-2V10Z"
+                    />
+                  </svg>
                 </a>
               );
             })}

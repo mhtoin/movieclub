@@ -1,7 +1,6 @@
 import prisma from "./prisma";
 import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { getAdditionalInfo } from "./tmdb";
-import { Prisma, PrismaClient, Shortlist } from "@prisma/client";
 import { countBy, every, filter, find, sample, shuffle } from "underscore";
 import {
   getAllShortLists,
