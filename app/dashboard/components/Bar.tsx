@@ -51,15 +51,15 @@ export const options = {
 };
 type MovieData = { user: string; movies: number };
 
-export default function BarChart({ chartData }: { chartData: DrawResponse }) {
-  const labels = chartData?.data?.data?.map((item) => item.user);
+export default function BarChart({ chartData }: { chartData: UserChartData }) {
+  const labels = chartData?.data?.map((item) => item.user);
   const data = {
     labels,
     datasets: [
       {
         label: "Movies from user's shortlist",
         data: labels?.map(
-          (label) => chartData?.data?.data?.find((item) => item.user == label)?.movies
+          (label) => chartData?.data?.find((item) => item.user == label)?.movies
         ),
         backgroundColor: "rgba(215, 115, 210, 0.86)",
         borderWidth: 2,

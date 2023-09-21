@@ -1,4 +1,4 @@
-export default function Stats({ chartData }: { chartData: DrawResponse }) {
+export default function Stats({ chartData }: { chartData: UserChartData }) {
   console.log('chartData', chartData.data.data)
     const totalPicked = chartData?.data?.data?.reduce((prev, curr) => {
         return prev + curr.movies
