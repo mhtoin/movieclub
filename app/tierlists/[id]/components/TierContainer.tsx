@@ -66,7 +66,6 @@ export default function DnDTierContainer({
     movieMatrix.unshift(unranked);
   }
 
-  console.log('movieMatrix', movieMatrix)
   const [containerState, setContainerState] = useState(movieMatrix);
   const setNotification = useNotificationStore(
     (state) => state.setNotification

@@ -52,7 +52,6 @@ export async function getMovie(id: string) {
     },
   });
 
-  console.log('retrieved movie from db', movie)
   const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
 
   if (movie) {
@@ -61,7 +60,6 @@ export async function getMovie(id: string) {
       details
     ) as unknown as MovieOfTheWeek;
 
-    console.log('constructed movie object', movieObject)
     return movieObject;
   }
 }
@@ -151,7 +149,6 @@ export async function simulateRaffle(repetitions: number) {
       movies: moviesByUser[user]
     })
   }
-  console.log('by user', moviesByUser)
   return dataObj;
 }
 
@@ -162,8 +159,6 @@ export async function chooseMovieOfTheWeek() {
   const selectionRequired = shortlists.filter((shortlist) =>
     shortlist.requiresSelection && shortlist.participating? true : false
   );
-
-  console.log('required', selectionRequired)
 
   if (selectionRequired.length > 0) {
     for (let listItem of selectionRequired) {
@@ -179,8 +174,6 @@ export async function chooseMovieOfTheWeek() {
   }
   const notReady = shortlists.filter((shortlist) => !shortlist.isReady && shortlist.participating);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
-
-  console.log('not ready', notReady)
 
   if (notReady.length > 0) {
     throw new Error(
@@ -200,7 +193,7 @@ export async function chooseMovieOfTheWeek() {
           movie: shortlist.movies[shortlist.selectedIndex!],
         };
       }
-      console.log('shortlist', shortlist.movies)
+      
       return shortlist.movies.map((movie) =>
         Object.assign(
           {},
@@ -214,12 +207,9 @@ export async function chooseMovieOfTheWeek() {
     })
     .flat();
   // shuffle a few times
-  console.log('candidates', movies)
+ 
   let shuffledMovies = shuffle(movies);
-  console.log('shuffled', shuffledMovies)
-
   let chosen = sample(shuffledMovies, true);
-  console.log('chosen', chosen)
 
   let movieObject = await getMovie(chosen?.movie.id!);
 
@@ -234,8 +224,7 @@ export async function chooseMovieOfTheWeek() {
       user: chosen?.user,
     } as MovieOfTheWeek;
   }
-  console.log('movie object', movieObject)
-
+ 
   // update movie with the date
   // reset selection state for the current week's winner
   // set restrictions to new winner
@@ -296,19 +285,15 @@ export async function connectChosenMovies(movies: any[]) {
     let username = movie.user;
 
     if (username) {
-      console.log("user found for movie", username);
-
       // retrieve the movie
       const movieData = await prisma.movie.findUnique({
         where: {
           tmdbId: movie.tmdbId!,
         },
       });
-      //console.log(movieData)
+    
 
       if (!movieData?.userId) {
-        console.log("not connected", movieData);
-
         let res = await prisma.movie.update({
           where: {
             id: movieData?.id,
@@ -325,7 +310,6 @@ export async function connectChosenMovies(movies: any[]) {
     }
   }
 
-  //console.log('movies', movies)
   return movies;
 }
 
@@ -345,7 +329,6 @@ export async function getStatistics() {
     return movie.user?.name!;
   });
 
-  console.log("moviesbyuser", moviesByUser);
   let dataArr = []
   let dataObj = {
     label: "Movies by user",
@@ -359,7 +342,6 @@ export async function getStatistics() {
     })
   }
   dataArr.push(dataObj)
-  console.log(dataObj)
   return dataObj;
 }
 

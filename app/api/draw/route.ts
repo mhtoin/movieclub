@@ -10,7 +10,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const repetitions = body.repetitions ? body.repetitions : 1
     const movies = await simulateRaffle(repetitions)
 
-    //console.log('movies', movies)
     return NextResponse.json(movies, { status: 200 });
   } catch (e) {
     console.error("error", e);

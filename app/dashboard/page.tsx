@@ -5,7 +5,6 @@ import Link from "next/link";
 
 export default async function Dashboard() {
     const moviesByUser = await getStatistics()
-    console.log('data for chart', moviesByUser)
     return (
         <div className="flex flex-col items-center gap-5">
             <h1 className="text-2xl">Statistics</h1>

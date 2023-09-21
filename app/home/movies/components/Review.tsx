@@ -29,7 +29,7 @@ export default function Review({
         })}
       </div>
       {!reviewedByUser && (
-        <div className="form-control" onSubmit={() => console.log("submitted")}>
+        <div className="form-control">
           <label className="label">
             <span className="label-text">Your thoughts</span>
           </label>

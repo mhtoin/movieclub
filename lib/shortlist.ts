@@ -3,6 +3,7 @@ import { ObjectId, OptionalId } from "mongodb";
 import { Prisma } from "@prisma/client";
 import { getAdditionalInfo } from "./tmdb";
 import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
+import { NextResponse } from "next/server";
 
 export const revalidate = 10;
 
@@ -135,7 +136,7 @@ export async function removeMovieFromShortlist(
     return movie;
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (e) {
-    console.log(e);
+    return NextResponse.json({ message: "Something went wrong" }), { status: 500 };
   }
 }
 

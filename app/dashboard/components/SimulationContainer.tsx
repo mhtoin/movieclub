@@ -30,7 +30,6 @@ export default function SimulationContainer({
     }
   })
   
-  console.log('data', data)
   return (
     <div className="flex flex-col items-center gap-5">
     <input

@@ -15,7 +15,6 @@ export default function Profile() {
 
   useEffect(() => {
     if (session?.user.sessionId) {
-      console.log("setting session id", session);
       setSessionId(session?.user.sessionId);
     }
 
@@ -28,13 +27,11 @@ export default function Profile() {
     if (loc) {
       let locParts = loc ? loc.split("&") : "";
 
-      console.log("locparts", locParts);
       if (locParts && locParts.length > 1) {
         let token = locParts[0].split("=")[1];
 
         let approved = locParts[1] === "approved=true";
-        console.log("token, approved", token, approved);
-
+      
         if (approved) {
           let authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${token}`;
 
@@ -43,7 +40,6 @@ export default function Profile() {
 
             if (res.ok) {
               let id = await res.json();
-              console.log("got id from getsessionid", id);
               setSessionId(id.session_id);
 
               // finally, fetch the account id

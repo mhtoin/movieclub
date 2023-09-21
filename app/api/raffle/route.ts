@@ -6,12 +6,10 @@ import Pusher from "pusher"
 export async function POST(request: NextRequest, response: NextResponse): Promise<NextResponse> {
   try {
     // get all shortlists and check that everyone is ready
-    console.log(process.env.NODE_ENV)
     const todayIsWednesday = process.env.NODE_ENV !== 'development' ? isWednesday(new Date()) : true;
 
     if (todayIsWednesday) {
       const chosenMovie = await chooseMovieOfTheWeek();
-      console.log('chosen movie', chosenMovie)
       // update the chosen movie with the date
       // return the movie
       // trigger a pusher event to notify everyone
@@ -28,7 +26,7 @@ export async function POST(request: NextRequest, response: NextResponse): Promis
         message: `Movie for ${chosenMovie.movieOfTheWeek?.toLocaleDateString('fi-FI')}`,
         data: chosenMovie
       }).catch((err) => {
-        console.log('pusher error', err)
+        throw new Error(err.message)
       });
       return NextResponse.json({ ok: true, movie: chosenMovie }, { status: 200 });
     } else {

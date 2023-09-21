@@ -1,11 +1,8 @@
 type ArgValCallback<T> = (arg0: T) => any;
 
 export const omit = (obj: any, keys: string[]) => {
-  console.log("omit function: ", obj, keys);
   const result = { ...obj };
   keys.forEach((key) => result.hasOwnProperty(key) && delete result[key]);
-
-  console.log("omit result: ", result);
   return result;
 };
 
