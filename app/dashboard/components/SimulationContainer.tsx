@@ -2,7 +2,6 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { reduce } from "underscore";
 import Stats from "./Stats";
 import BarChart from "./Bar";
 
@@ -12,9 +11,8 @@ export default function SimulationContainer({
   chartData: UserChartData;
 }) {
   const [repetitions, setRepetitions] = useState(
-    reduce(
-      chartData.data,
-      (prev, curr) => {
+    chartData.data.reduce(
+       (prev, curr) => {
         return prev + curr.movies;
       },
       0

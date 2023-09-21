@@ -1,4 +1,3 @@
-import { get } from "underscore";
 import { getServerSession } from "./getServerSession";
 
 export const revalidate = 10;
@@ -30,7 +29,7 @@ export async function getAdditionalInfo(tmdbId: number) {
       };
     }) as Trailer[];
 
-  let watchProviders = get(tmdbDetails["watch/providers"]?.results, "FI");
+  let watchProviders = tmdbDetails["watch/providers"]?.results?.["FI"];
 
   return {
     trailers: trailers,

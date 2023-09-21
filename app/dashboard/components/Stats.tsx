@@ -1,13 +1,12 @@
-import { countBy, reduce } from "underscore";
-
-export default function Stats({ chartData }: { chartData: UserChartData }) {
-    const totalPicked = reduce(chartData.data, (prev, curr) => {
+export default function Stats({ chartData }: { chartData: DrawResponse }) {
+  console.log('chartData', chartData.data.data)
+    const totalPicked = chartData?.data?.data?.reduce((prev, curr) => {
         return prev + curr.movies
     }, 0)
     
   return (
     <div className="stats stats-vertical bg-slate-900 text-primary-content md:stats-horizontal shadow">
-      {chartData.data.map((item) => {
+      {chartData?.data?.data?.map((item) => {
         const percentage = (item.movies / totalPicked) * 100
         return (
           <div key={item.user} className="stat">

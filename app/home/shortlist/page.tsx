@@ -17,7 +17,7 @@ export default async function ShortList() {
       </div>
       <div className="flex flex-col place-items-center m-5">
         {allShortlists.map((shortlist) => {
-          console.log('shortlist', shortlist)
+          
           return (
             <>
               <h1 key={shortlist.id + "-title"} className="text-xl m-5">

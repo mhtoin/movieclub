@@ -51,6 +51,7 @@ export async function getTierlist(id: string) {
 }
 
 export async function createTierlist(formData: FormData) {
+    console.log('create tierlist', formData)
     const session = await getServerSession()
     
     const userId = session?.user?.userId
@@ -76,7 +77,7 @@ export async function createTierlist(formData: FormData) {
         userId: userId,
         tiers: tierlistTiers
     }
-
+    console.log(tierList)
     
     return await prisma.tierlists.create({
         data: tierList

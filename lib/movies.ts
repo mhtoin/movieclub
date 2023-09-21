@@ -1,14 +1,13 @@
 import prisma from "./prisma";
 import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { getAdditionalInfo } from "./tmdb";
-import { countBy, every, filter, find, sample, shuffle } from "underscore";
 import {
   getAllShortLists,
   updateShortlistSelectionStatus,
   updateShortlistState,
 } from "./shortlist";
 import type { User } from "@prisma/client";
-import { updateShortlistReadyState } from "@/app/home/shortlist/edit/actions/actions";
+import { countByKey, sample, shuffle } from "./utils";
 
 export async function getAllMoviesOfTheWeek() {
   const nextMovieDate = set(nextWednesday(new Date()), {
@@ -53,6 +52,7 @@ export async function getMovie(id: string) {
     },
   });
 
+  console.log('retrieved movie from db', movie)
   const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
 
   if (movie) {
@@ -60,6 +60,8 @@ export async function getMovie(id: string) {
       movie,
       details
     ) as unknown as MovieOfTheWeek;
+
+    console.log('constructed movie object', movieObject)
     return movieObject;
   }
 }
@@ -83,7 +85,7 @@ export async function createReview(
 
 export async function simulateRaffle(repetitions: number) {
   const shortlists = await getAllShortLists();
-  const resultArr = [];
+  const resultArr = Array<ChosenMovie>();
   let lastChosen: User;
   for (let i = 0; i < repetitions; i++) {
     const movies = shortlists
@@ -129,11 +131,12 @@ export async function simulateRaffle(repetitions: number) {
       .flat();
     let shuffledMovies = shuffle(movies);
 
-    let chosen = sample(shuffledMovies);
+    let chosen = sample(shuffledMovies, true);
     resultArr.push(chosen);
     lastChosen = chosen?.user!;
   }
-  let moviesByUser = countBy(resultArr, (movie) => {
+ 
+  let moviesByUser = countByKey(resultArr, (movie: ChosenMovie) => {
     return movie?.user?.name!;
   });
 
@@ -155,10 +158,12 @@ export async function simulateRaffle(repetitions: number) {
 export async function chooseMovieOfTheWeek() {
   // get an array of all the movies and the user - Array<{user, movie}>
   const shortlists = await getAllShortLists();
-
-  const selectionRequired = filter(shortlists, (shortlist) =>
+  /*
+  const selectionRequired = shortlists.filter((shortlist) =>
     shortlist.requiresSelection && shortlist.participating? true : false
   );
+
+  console.log('required', selectionRequired)
 
   if (selectionRequired.length > 0) {
     for (let listItem of selectionRequired) {
@@ -172,8 +177,10 @@ export async function chooseMovieOfTheWeek() {
       }
     }
   }
-  const notReady = filter(shortlists, (shortlist) => !shortlist.isReady && shortlist.participating);
+  const notReady = shortlists.filter((shortlist) => !shortlist.isReady && shortlist.participating);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
+
+  console.log('not ready', notReady)
 
   if (notReady.length > 0) {
     throw new Error(
@@ -181,17 +188,19 @@ export async function chooseMovieOfTheWeek() {
         .map((item) => item.user.name)
         .join(", ")}`
     );
-  }
+  }*/
 
   const movies = shortlists
     .map((shortlist) => {
+      /*
       if (shortlist.requiresSelection) {
         return {
           user: shortlist.user,
           shortlistId: shortlist.id,
           movie: shortlist.movies[shortlist.selectedIndex!],
         };
-      }
+      }*/
+      console.log('shortlist', shortlist.movies)
       return shortlist.movies.map((movie) =>
         Object.assign(
           {},
@@ -205,23 +214,39 @@ export async function chooseMovieOfTheWeek() {
     })
     .flat();
   // shuffle a few times
+  console.log('candidates', movies)
   let shuffledMovies = shuffle(movies);
+  console.log('shuffled', shuffledMovies)
 
-  let chosen = sample(shuffledMovies);
+  let chosen = sample(shuffledMovies, true);
+  console.log('chosen', chosen)
 
   let movieObject = await getMovie(chosen?.movie.id!);
+
+  /**
+   * For some reason some times including the user in the movie retrieved from db fails
+   * so we need to add it manually just in case
+   */
+
+  if (!movieObject?.user) {
+    movieObject = {
+      ...movieObject,
+      user: chosen?.user,
+    } as MovieOfTheWeek;
+  }
+  console.log('movie object', movieObject)
 
   // update movie with the date
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
   await updateChosenMovie(movieObject!, chosen!.user.id);
-
+  
+  /*
   for (let item of shortlists) {
     await updateShortlistState(false, item.id);
 
-    const inSelectionRequired = find(
-      selectionRequired,
+    const inSelectionRequired = selectionRequired.find(
       (listItem) => listItem.id === item.id
     );
     if (inSelectionRequired) {
@@ -231,7 +256,7 @@ export async function chooseMovieOfTheWeek() {
     if (item.id === chosen?.shortlistId) {
       await updateShortlistSelectionStatus(true, item.id);
     }
-  }
+  }*/
 
   return {
     ...movieObject,
@@ -316,7 +341,7 @@ export async function getStatistics() {
     },
   });
 
-  let moviesByUser = countBy(movies, (movie) => {
+  let moviesByUser = countByKey(movies, (movie) => {
     return movie.user?.name!;
   });
 

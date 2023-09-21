@@ -3,8 +3,8 @@
 import { addMovie } from "../home/shortlist/edit/actions/actions";
 import { useTransition } from "react";
 import { useSession, getSession } from "next-auth/react";
-import { omit } from "underscore";
 import { useQueryClient } from "@tanstack/react-query";
+import { omit } from "@/lib/utils";
 
 export default function MoviePosterCard({
   movie,
@@ -24,6 +24,7 @@ export default function MoviePosterCard({
           }`}
           onClick={() => {
             const movieObj = { ...omit(movie, ["id"]), tmdbId: movie.id } as Movie;
+            console.log('movie object', movieObj)
             startTransition(() => addMovie(movieObj));
             queryClient.invalidateQueries(['shortlist'])
           }}

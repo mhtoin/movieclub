@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useSession, getSession } from "next-auth/react";
-import { omit } from "underscore";
+import { omit } from "@/lib/utils";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { Prisma } from '@prisma/client'
 

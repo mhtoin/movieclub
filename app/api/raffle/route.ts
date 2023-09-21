@@ -3,7 +3,7 @@ import { chooseMovieOfTheWeek } from "@/lib/movies";
 import { isWednesday } from "date-fns";
 import Pusher from "pusher"
 
-export async function POST(request: NextRequest, response: Response) {
+export async function POST(request: NextRequest, response: NextResponse): Promise<NextResponse> {
   try {
     // get all shortlists and check that everyone is ready
     console.log(process.env.NODE_ENV)
@@ -11,7 +11,6 @@ export async function POST(request: NextRequest, response: Response) {
 
     if (todayIsWednesday) {
       const chosenMovie = await chooseMovieOfTheWeek();
-
       console.log('chosen movie', chosenMovie)
       // update the chosen movie with the date
       // return the movie
@@ -31,14 +30,15 @@ export async function POST(request: NextRequest, response: Response) {
       }).catch((err) => {
         console.log('pusher error', err)
       });
-      return NextResponse.json({ ok: true, chosenMovie });
+      return NextResponse.json({ ok: true, movie: chosenMovie }, { status: 200 });
     } else {
-      throw new Error("Unauthorized");
+      return NextResponse.json({ ok: true, message: 'Unauthorized!' }, { status: 401 });
     }
   } catch (e) {
     if (e instanceof Error) {
       return NextResponse.json({ ok: false, message: e.message}, { status: 401 });
-    } 
-    
+    }
   }
+
+  return NextResponse.json({ ok: false, message: 'Something went wrong!' }, { status: 500 });
 }

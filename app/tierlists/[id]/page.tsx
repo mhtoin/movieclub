@@ -1,9 +1,6 @@
 import { getTierlist, getTierlists } from "@/lib/tierlists";
-import TierAdd from "./components/TierAdd";
-import { contains, difference, includes, intersection } from "underscore";
 import { getAllMoviesOfTheWeek } from "@/lib/movies";
 import { getServerSession } from "@/lib/getServerSession";
-import Link from "next/link";
 import TierContainer from "./components/TierContainer";
 
 async function staticParams() {
@@ -31,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
  
   const unrankedMovies = moviesOfTheWeek.filter((movie) => {
-    const movieInList = contains(tierlistMovies, movie.title);
+    const movieInList = tierlistMovies.includes(movie.title);
     return !movieInList;
   }) as unknown as MovieOfTheWeek[];
   const authorized = params.id === session?.user.userId;

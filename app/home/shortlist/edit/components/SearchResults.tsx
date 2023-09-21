@@ -3,8 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
 import SearchResultCard from "./SearchResultCard";
-import { omit } from "underscore";
+
 import 'dotenv/config'
+import { omit } from "@/lib/utils";
 interface SearchResultsProps {
   searchValue: string;
   shouldFetch: boolean;

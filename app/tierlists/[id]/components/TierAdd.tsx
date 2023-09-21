@@ -2,8 +2,8 @@
 
 import { Tierlists, TierlistsTier } from "@prisma/client";
 import { startTransition, useState } from "react";
-import { findIndex, range } from "underscore";
 import { addMovieToTier } from "../../actions/actions";
+import { range } from "@/lib/utils";
 
 export default function TierAdd({
   movies,
@@ -48,7 +48,7 @@ export default function TierAdd({
         return {...tier, movies: tierMovies} as TierlistsTier
       }) as Array<TierlistsTier>
 
-      let currentTierIndex = findIndex(tiers, (tier) => {
+      let currentTierIndex = tiers.findIndex((tier) => {
         return tier.label === tierName;
       });
 

@@ -1,48 +1,48 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-import type { Rating, Review } from "@prisma/client"
+import type { Rating, Review } from "@prisma/client";
 import { ObjectId } from "mongodb";
 
 export {};
 
 declare global {
   interface Movie {
-    id?: string
-    adult: boolean
-    genre_ids: Array<number>
-    tmdbId: number
-    original_language: string
-    popularity: number
-    video: boolean
-    vote_average: number
-    vote_count: number
+    id?: string;
+    adult: boolean;
+    genre_ids: Array<number>;
+    tmdbId: number;
+    original_language: string;
+    popularity: number;
+    video: boolean;
+    vote_average: number;
+    vote_count: number;
     backdrop_path: string | null;
     poster_path: string | null;
     title: string;
     original_title: string;
     release_date: string;
     overview: string;
-    movieOfTheWeek?: Date | null
+    movieOfTheWeek?: Date | null;
   }
 
   interface MovieOfTheWeek extends Movie {
-    trailers: Trailer[]
-    watchProviders: WatchProviders
-    tagline: string
-    reviews: Array<ReviewWithUser>
-    ratings: Array<Rating>
-    owner?: string
-    user: User
+    trailers: Trailer[];
+    watchProviders: WatchProviders;
+    tagline: string;
+    reviews: Array<ReviewWithUser>;
+    ratings: Array<Rating>;
+    owner?: string;
+    user: User;
   }
 
   interface TMDBMovie {
-    adult: boolean
-    genre_ids: Array<number>
-    id: number
-    original_language: string
-    popularity: number
-    video: boolean
-    vote_average: number
-    vote_count: number
+    adult: boolean;
+    genre_ids: Array<number>;
+    id: number;
+    original_language: string;
+    popularity: number;
+    video: boolean;
+    vote_average: number;
+    vote_count: number;
     backdrop_path: string | null;
     poster_path: string | null;
     title: string;
@@ -53,71 +53,85 @@ declare global {
   }
 
   interface WatchProviders {
-    link: string
-    flatrate?: Array<WatchProvider>
-    free?: Array<WatchProvider>
-    rent?: Array<WatchProvider>
-    buy?: Array<WatchProvider>
+    link: string;
+    flatrate?: Array<WatchProvider>;
+    free?: Array<WatchProvider>;
+    rent?: Array<WatchProvider>;
+    buy?: Array<WatchProvider>;
   }
 
   interface Trailer {
-    name: string
-    id: string
-    key: string
+    name: string;
+    id: string;
+    key: string;
   }
 
   interface WatchProvider {
-    logo_path: string
-    provider_id: number
-    provider_name: string
-    display_priority: number
+    logo_path: string;
+    provider_id: number;
+    provider_name: string;
+    display_priority: number;
   }
 
   interface Tier {
-    label: string
-    value: number
-    movies: Array<MovieOfTheWeek>
+    label: string;
+    value: number;
+    movies: Array<MovieOfTheWeek>;
   }
 
   interface Tierlist {
-    id: string
-    tiers: Array<Tier>
-    userId: string
+    id: string;
+    tiers: Array<Tier>;
+    userId: string;
   }
-  
+
   interface User {
     [x: string]: string;
-    sessionId: string
-    accountId: number
-    image: string,
-    name: string
+    sessionId: string;
+    accountId: number;
+    image: string;
+    name: string;
   }
   type ReviewWithUser = Prisma.ReviewGetPayload<{
-    include: {user: true}
-  }>
+    include: { user: true };
+  }>;
 
   type ChosenMovie = Prisma.MovieGetPayload<{
-    include: { user: true }
-  }>
+    include: { user: true };
+  }>;
 
   type RaffleNotification = {
-    id: number,
-    message: string,
-    data: MovieOfTheWeek
-  }
+    id: number;
+    message: string;
+    data: MovieOfTheWeek;
+  };
 
   type ItemCoordinates = {
     tier: number;
     index: number;
-  }
+  };
 
   type DraggableItem = {
-    id: string,
-    index: ItemCoordinates
+    id: string;
+    index: ItemCoordinates;
+  };
+
+  interface DrawResponse {
+    ok: boolean;
+    data: {
+      label: string;
+      data: Array<{ user: string; movies: number }>;
+    }
   }
 
   interface UserChartData {
-    label: string,
-    data: Array<{user: string, movies: number}>
-}
+    label: string;
+    data: Array<{ user: string; movies: number }>;
+  }
+
+  interface ChosenMovie {
+    user: User;
+    shortlistId: string;
+    movie: Movie;
+  }
 }

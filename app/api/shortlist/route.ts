@@ -1,5 +1,5 @@
 import clientPromise from "@/lib/mongo";
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
 
 export async function GET(request: NextRequest, response: NextResponse) {
@@ -11,8 +11,14 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
     return NextResponse.json({ movies });
   } catch (e) {
-    console.error(e);
+    if (e instanceof Error) {
+      return NextResponse.json(
+        { ok: false, message: e.message },
+        { status: 401 }
+      );
+    }
   }
+  return NextResponse.json({ ok: false, message: "Something went wrong!" }, { status: 500 });
 }
 
 export async function POST(request: NextRequest, response: Response) {
@@ -25,11 +31,16 @@ export async function POST(request: NextRequest, response: Response) {
 
     //const movies = await collection.find({}).toArray();
     const tag = request.nextUrl.searchParams.get("tag");
-    revalidateTag('shortlist');
+    revalidateTag("shortlist");
 
     return NextResponse.json({ res });
   } catch (e) {
-    console.error(e);
+    if (e instanceof Error) {
+      return NextResponse.json(
+        { ok: false, message: e.message },
+        { status: 401 }
+      );
+    }
   }
+  return NextResponse.json({ ok: false, message: "Something went wrong!" }, { status: 500 });
 }
-

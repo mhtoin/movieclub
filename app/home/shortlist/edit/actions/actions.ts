@@ -11,8 +11,8 @@ import {
 } from "@/lib/shortlist";
 import { Shortlist, User, Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
-import { get, sample } from "underscore";
 import "dotenv/config";
+import { sample } from "@/lib/utils";
 
 export async function addMovie(movie: Movie) {
   const session = await getServerSession();
@@ -58,7 +58,7 @@ export async function startRaffle(
       )
     )
     .flat();
-  const movieChoice = sample(movies) ?? "";
+  const movieChoice = sample(movies, true) ?? "";
 
   if (movieChoice) {
     // update movie in db
