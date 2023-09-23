@@ -1,3 +1,4 @@
+"use client";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import ShortlistMovieItem from "./ShortlistMovieItem";
@@ -14,6 +15,16 @@ export default function ShortlistContainer() {
     enabled: !!session,
   });
 
+  if (shortlistStatus === "loading" && !shortlist) {
+    return (
+      <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
+        <ItemSkeleton />
+        <ItemSkeleton />
+        <ItemSkeleton />
+      </div>
+    );
+  }
+
   const movies = (shortlist?.movies as Movie[]) || [];
   const skeletons =
     movies?.length < 3
@@ -24,7 +35,7 @@ export default function ShortlistContainer() {
 
   return (
     <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
-      {shortlist.movies.map((movie: Movie) => {
+      {shortlist ? shortlist?.movies?.map((movie: Movie) => {
         return (
           <ShortlistMovieItem
             key={movie.tmdbId}
@@ -32,7 +43,7 @@ export default function ShortlistContainer() {
             shortlistId={session?.user.shortlistId}
           />
         );
-      })}
+      }) : []}
       {skeletons.map((skeleton) => {
           return skeleton;
         })} 

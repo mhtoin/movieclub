@@ -22,7 +22,6 @@ export async function POST(request: NextRequest, response: NextResponse): Promis
       });
 
       await pusher.trigger("movieclub-raffle", "result", {
-        id: 1,
         message: `Movie for ${chosenMovie.movieOfTheWeek?.toLocaleDateString('fi-FI')}`,
         data: chosenMovie
       }).catch((err) => {

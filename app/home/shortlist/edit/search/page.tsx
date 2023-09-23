@@ -145,7 +145,7 @@ export default function SearchPage() {
     );
   };
 
-  if (status === "loading" || shortlistStatus === "loading") {
+  if (status === "loading" || shortlistStatus === "loading" || !shortlist) {
     return (
       <div className="flex flex-row items-center justify-center">
         <span className="loading loading-ring loading-lg"></span>
@@ -153,9 +153,9 @@ export default function SearchPage() {
     );
   }
 
-  const shortlistMovieIds = shortlist.movies.map(
+  const shortlistMovieIds = shortlist ? shortlist?.movies?.map(
     (movie: Movie) => movie.tmdbId
-  );
+  ) : [];
 
   return (
     <div className="flex flex-col items-center gap-5 z-10">
@@ -187,19 +187,19 @@ export default function SearchPage() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 justify-center gap-10 z-30">
-        {data?.pages.map((page) => (
+        {data ? data?.pages?.map((page) => (
           <Fragment key={page.page}>
             {page.results.map((movie: TMDBMovie) => {
               return (
                 <MovieCard
                   key={movie.id}
                   movie={movie}
-                  added={shortlistMovieIds.includes(movie.id)}
+                  added={shortlistMovieIds?.includes(movie.id)}
                 />
               );
             })}
           </Fragment>
-        ))}
+        )) : []}
       </div>
       {hasNextPage && (
         <button ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>

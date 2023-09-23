@@ -1,19 +1,20 @@
-import { getChosenMovie } from "@/lib/shortlist";
-import NavBar from "./components/NavBar";
-import { getColours } from "./shortlist/edit/actions/actions";
-import Navigation from "./components/Navigation";
+"use client";
 
-export default async function HomeLayout({
+import Pusher from "pusher-js";
+import { PusherPovider } from "./components/PusherProvider";
+
+export default function HomeLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
 }) {
+
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+      });
+
+      console.log('created connection')
   return (
-    <section>
-      {/* Include shared UI here e.g. a header or sidebar */}
-    
-      {children}
-   
-    </section>
-  );
+    <PusherPovider pusher={pusher}>{children}</PusherPovider>
+    );
 }

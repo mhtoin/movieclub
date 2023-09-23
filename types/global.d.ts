@@ -134,4 +134,22 @@ declare global {
     shortlistId: string;
     movie: Movie;
   }
+
+  interface PusherMessage {
+    message: string;
+    data: Shortlist | Movie | MovieOfTheWeek;
+  }
+
+  interface Shortlist {
+    id: string;
+    isReady: boolean;
+    movieIds: Array<string>;
+    movies: Array<Movie>;
+    participation: boolean;
+    requiresSelection: boolean;
+    selectedIndex?: number;
+    user: User;
+    userId: string;
+  }
 }
+

@@ -40,7 +40,7 @@ export function RaffleClient({ allShortlists }: { allShortlists: any }) {
           raffle.mutate();
         }}
       >
-        Start raffle
+        Raffle
       </button>
       <RaffleResultModal open={open}>
         {chosenMovie ? (

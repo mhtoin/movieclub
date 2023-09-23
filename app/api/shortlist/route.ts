@@ -1,15 +1,14 @@
 import clientPromise from "@/lib/mongo";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
+import { getAllShortLists } from "@/lib/shortlist";
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function GET(
+  request: NextRequest,
+) {
   try {
-    const client = await clientPromise;
-    const collection = client.db("movieclub").collection("shortlist");
-
-    const movies = await collection.find({}).toArray();
-
-    return NextResponse.json({ movies });
+    const shortlists = await getAllShortLists();
+    return NextResponse.json(shortlists, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
       return NextResponse.json(
@@ -18,29 +17,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
       );
     }
   }
+
   return NextResponse.json({ ok: false, message: "Something went wrong!" }, { status: 500 });
 }
 
-export async function POST(request: NextRequest, response: Response) {
-  try {
-    const client = await clientPromise;
-    const collection = client.db("movieclub").collection("shortlist");
-    const body = await request.json();
-
-    const res = await collection.insertOne(body);
-
-    //const movies = await collection.find({}).toArray();
-    const tag = request.nextUrl.searchParams.get("tag");
-    revalidateTag("shortlist");
-
-    return NextResponse.json({ res });
-  } catch (e) {
-    if (e instanceof Error) {
-      return NextResponse.json(
-        { ok: false, message: e.message },
-        { status: 401 }
-      );
-    }
-  }
-  return NextResponse.json({ ok: false, message: "Something went wrong!" }, { status: 500 });
-}

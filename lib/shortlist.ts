@@ -4,8 +4,17 @@ import { Prisma } from "@prisma/client";
 import { getAdditionalInfo } from "./tmdb";
 import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
+import Pusher from "pusher";
 
 export const revalidate = 10;
+
+const pusher = new Pusher({
+  appId: process.env.app_id!,
+  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
+  secret: process.env.secret!,
+  cluster: "eu",
+  useTLS: true
+});
 
 export async function getChosenMovie() {
   // set today to 18:00:00 and check if it is a wednesday
@@ -110,6 +119,14 @@ export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
       },
     });
 
+    await pusher.trigger("movieclub-shortlist", "shortlist-update", {
+      message: `movies`,
+      data: updatedShortlist
+      }).catch((err) => {
+        throw new Error(err.message)
+      }
+    );
+
     return updatedShortlist;
   } catch (e) {
     console.error(e);
@@ -131,8 +148,19 @@ export async function removeMovieFromShortlist(
           disconnect: [{ id: id }],
         },
       },
+      include: {
+        movies: true,
+      },
     });
-    
+
+    await pusher.trigger("movieclub-shortlist", "shortlist-update", {
+      message: `movies`,
+      data: movie
+      }).catch((err) => {
+        throw new Error(err.message)
+      }
+    );
+    console.log('removed', movie)
     return movie;
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (e) {
@@ -166,7 +194,8 @@ export async function updateChosenMovie(movie: Movie) {
 }
 
 export async function updateShortlistState(ready: boolean, shortlistId: string) {
-  return await prisma.shortlist.update({
+  
+  const updated = await prisma.shortlist.update({
     where: {
       id: shortlistId
     },
@@ -174,6 +203,16 @@ export async function updateShortlistState(ready: boolean, shortlistId: string) 
       isReady: ready
     }
   })
+
+  await pusher.trigger("movieclub-shortlist", "shortlist-update", {
+    message: `ready`,
+    data: updated
+  }).catch((err) => {
+    throw new Error(err.message)
+  }
+  );
+  console.log('updated', updated)
+  return updated;
 }
 
 export async function updateShortlistParticipationState(ready: boolean, shortlistId: string) {
@@ -188,7 +227,7 @@ export async function updateShortlistParticipationState(ready: boolean, shortlis
 }
 
 export async function updateShortlistSelection(index: number, shortlistId: string) {
-  return await prisma.shortlist.update({
+  const updated = await prisma.shortlist.update({
     where: {
       id: shortlistId
     }, 
@@ -196,10 +235,19 @@ export async function updateShortlistSelection(index: number, shortlistId: strin
       selectedIndex: index
     }
   })
+
+  await pusher.trigger("movieclub-shortlist", "shortlist-update", {
+    message: `selection`,
+    data: updated
+  }).catch((err) => {
+    throw new Error(err.message)
+  }
+  );
+  return updated;
 }
 
 export async function updateShortlistSelectionStatus(status: boolean, shortlistId: string) {
-  return await prisma.shortlist.update({
+  const updated = await prisma.shortlist.update({
     where: {
       id: shortlistId
     }, 
@@ -208,4 +256,13 @@ export async function updateShortlistSelectionStatus(status: boolean, shortlistI
       selectedIndex: null
     }
   })
+
+  await pusher.trigger("movieclub-shortlist", "shortlist-update", {
+    message: `selection`,
+    data: updated
+  }).catch((err) => {
+    throw new Error(err.message)
+  }
+  );
+  return updated;
 }
