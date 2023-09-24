@@ -5,6 +5,7 @@ import Link from "next/link";
 import ShortListItem from "./edit/components/ShortListItem";
 import { RaffleClient } from "../components/RaffleClient";
 import { usePusher, useShortlistQuery } from "@/lib/hooks";
+import { Fragment } from "react";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistQuery();
@@ -18,7 +19,7 @@ export default function ShortList() {
     );
   }
 
-  if (allShortlists && status === "success") {
+  
     return (
       <main className="flex min-h-screen flex-col items-center p-12 overflow-hidden">
         <div className="flex flex-row items-center justify-evenly gap-5">
@@ -29,18 +30,17 @@ export default function ShortList() {
           <RaffleClient allShortlists={allShortlists} />
         </div>
         <div className="flex flex-col place-items-center m-5 gap-5">
-          {allShortlists && allShortlists.length > 0
-            ? allShortlists?.map((shortlist: Shortlist) => {
+          {allShortlists?.map((shortlist: Shortlist) => {
                 return (
-                  <>
-                    <div className="flex flex-row justify-center place-items-center">
-                      <div className="avatar">
+                  <Fragment key={`fragment-${shortlist.id}`}>
+                    <div className="flex flex-row justify-center place-items-center" key={`name-container-${shortlist.id}`}>
+                      <div className="avatar" key={`avatar-${shortlist.userId}`}>
                         <div
                           className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
                             shortlist.isReady ? "ring-success" : "ring-error"
                           }`}
-                        >
-                          <img src={shortlist?.user?.image} alt="" />
+                        key={`avatar-ring ${shortlist.userId}`}>
+                          <img src={shortlist?.user?.image} alt="" key={`profile-img-${shortlist.userId}`}/>
                         </div>
                       </div>
                       <h1 key={shortlist.id + "-title"} className="text-xl m-5">
@@ -67,12 +67,12 @@ export default function ShortList() {
                         );
                       })}
                     </div>
-                  </>
+                  </Fragment>
                 );
               })
-            : []}
+            }
         </div>
       </main>
     );
-  }
+  
 }
