@@ -6,6 +6,7 @@ import NavBar from "./home/components/NavBar";
 import RaffleNotification from "./components/RaffleNotification";
 import Notification from "./components/Notification";
 import WebNavbar from "./home/components/WebNavbar";
+import MobileNavbar from "./home/components/MobileNavbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -27,6 +28,8 @@ export default function RootLayout({
         
         <RaffleNotification />
         <Providers>{children}</Providers>
+         {/* @ts-expect-error Server Component */}
+        <MobileNavbar />
       </body>
     </html>
   );
