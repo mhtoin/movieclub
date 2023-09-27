@@ -2,7 +2,7 @@
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useMutation } from "@tanstack/react-query";
 import { produce } from "immer";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -208,9 +208,9 @@ export default function DnDTierContainer({
         <CreateForm />
         <DragDropContext onDragEnd={onDragEnd}>
           {containerState.map((tier, tierIndex) => (
-            <>
+            <Fragment key={tierIndex}>
               {tierIndex === 0 && tier.length === 0 ? (
-                <div></div>
+                <div key={tierIndex}></div>
               ) : (
                 <div className={`divider`}>
                   <div className="badge badge-secondary badge-lg">
@@ -219,7 +219,7 @@ export default function DnDTierContainer({
                 </div>
               )}
               <Droppable
-                key={tierIndex}
+                key={`droppable-${tierIndex}`}
                 droppableId={`${tierIndex}`}
                 direction="horizontal"
               >
@@ -257,7 +257,7 @@ export default function DnDTierContainer({
                   </div>
                 )}
               </Droppable>
-            </>
+            </Fragment>
           ))}
         </DragDropContext>
       </div>

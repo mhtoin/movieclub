@@ -1,13 +1,11 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
-import { Inter } from "next/font/google";
-import Navigation from "./home/components/Navigation";
-import NavBar from "./home/components/NavBar";
 import RaffleNotification from "./components/RaffleNotification";
 import Notification from "./components/Notification";
 import WebNavbar from "./home/components/WebNavbar";
 import MobileNavbar from "./home/components/MobileNavbar";
-const inter = Inter({ subsets: ["latin"] });
+import { NextAuthProvider } from "@/utils/NextAuthProvider";
+
 
 export const metadata = {
   title: "movieclub",
@@ -28,8 +26,8 @@ export default function RootLayout({
         
         <RaffleNotification />
         <Providers>{children}</Providers>
-         {/* @ts-expect-error Server Component */}
-        <MobileNavbar />
+         
+       <NextAuthProvider><MobileNavbar /></NextAuthProvider> 
       </body>
     </html>
   );
