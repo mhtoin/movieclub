@@ -6,7 +6,6 @@ import WebNavbar from "./home/components/WebNavbar";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
 
-
 export const metadata = {
   title: "movieclub",
   description: "Th app for your long-distance movie club",
@@ -20,14 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-black">
-      <Notification />
-         {/* @ts-expect-error Server Component */}
-        <WebNavbar />
-        
-        <RaffleNotification />
-        <Providers>{children}</Providers>
-         
-       <NextAuthProvider><MobileNavbar /></NextAuthProvider> 
+        <Notification />
+        <NextAuthProvider>
+          {/* @ts-expect-error Server Component */}
+          <WebNavbar />
+
+          <RaffleNotification />
+          <Providers>{children}</Providers>
+
+          <MobileNavbar />
+        </NextAuthProvider>
       </body>
     </html>
   );

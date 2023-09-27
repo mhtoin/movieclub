@@ -7,8 +7,6 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SessionProvider>
-      {children}
-    </SessionProvider>
+    children
   );
 }
