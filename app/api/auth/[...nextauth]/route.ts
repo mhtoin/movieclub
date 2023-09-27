@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
             return token
           }
     },
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
         DiscordProvider({
             clientId: process.env.DISCORD_CLIENT_ID ?? '',

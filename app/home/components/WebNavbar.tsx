@@ -1,8 +1,11 @@
-import { getServerSession } from "@/lib/getServerSession";
+
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 export default async function WebNavbar() {
-  const session = await getServerSession();
+  //const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const isAuthenticated = !!session;
 
   return (
