@@ -1,7 +1,7 @@
 "use client";
 import { SessionProvider } from "next-auth/react";
 
-export default async function ProfileLayout({
+export default function ProfileLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
