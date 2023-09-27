@@ -38,7 +38,9 @@ export default async function WebNavbar() {
                 <Link href={"/dashboard"}>Dashboard</Link>
               </li>
               <li>
-                <Link href={"/home/shortlist"}><label tabIndex={0}>Shortlist</label></Link>
+                <Link href={"/home/shortlist"}>
+                  <label tabIndex={0}>Shortlist</label>
+                </Link>
                 <ul tabIndex={0} className="p-2">
                   <li>
                     <Link href={"/home/shortlist"}>View all</Link>
@@ -64,8 +66,10 @@ export default async function WebNavbar() {
               <li>
                 <Link href={"/tierlists"}>Tierlists</Link>
                 <ul tabIndex={0} className="p-2">
-                <li>
-                    <Link href={`/tierlists/${session?.user.userId}`}>Edit</Link>
+                  <li>
+                    <Link href={`/tierlists/${session?.user.userId}`}>
+                      Edit
+                    </Link>
                   </li>
                 </ul>
               </li>
@@ -86,10 +90,10 @@ export default async function WebNavbar() {
                 <summary>Shortlist</summary>
                 <ul className="p-2">
                   <li>
-                  <Link href={"/home/shortlist"}>All</Link>
+                    <Link href={"/home/shortlist"}>All</Link>
                   </li>
                   <li>
-                  <Link href={"/home/shortlist/edit"}>Edit</Link>
+                    <Link href={"/home/shortlist/edit"}>Edit</Link>
                   </li>
                 </ul>
               </details>
@@ -99,44 +103,57 @@ export default async function WebNavbar() {
                 <summary>Tierlist</summary>
                 <ul className="p-2">
                   <li>
-                  <Link href={"/tierlists"}>All</Link>
+                    <Link href={"/tierlists"}>All</Link>
                   </li>
                   <li>
-                  <Link href={"/tierlists/edit"}>Edit</Link>
+                    <Link href={"/tierlists/edit"}>Edit</Link>
                   </li>
                 </ul>
               </details>
             </li>
           </ul>
         </div>
-        {isAuthenticated && (
+        {
           <div className="navbar-end">
-            <div tabIndex={0} className="dropdown dropdown-end z-50">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img src={session.user?.image} />
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <Link href={"/profile"} className="justify-between">
-                    Profile
-                    <span className="badge">{session.user?.name}</span>
-                  </Link>
-                </li>
-                <li>
-                  <a>Settings</a>
-                </li>
-                <li>
-                  <Link href="/api/auth/signout">Logout</Link>
-                </li>
-              </ul>
-            </div>
+            {isAuthenticated ? (
+              <div tabIndex={0} className="dropdown dropdown-end z-50">
+                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                  <div className="w-10 rounded-full">
+                    <img src={session?.user?.image} alt="P" />
+                  </div>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <Link href={"/profile"} className="justify-between">
+                      Profile
+                      <span className="badge">{session?.user?.name}</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <a>Settings</a>
+                  </li>
+                  <li>
+                    <Link href="/api/auth/signout">Logout</Link>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <div className="avatar">
+              <div className="w-10 rounded-full">
+                <img
+                  src={
+                    'data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="16" height="16" viewBox="0 0 16 16"%3E%3Cpath fill="currentColor" fill-rule="evenodd" d="M8 14.5a6.47 6.47 0 0 0 3.25-.87V11.5A2.25 2.25 0 0 0 9 9.25H7a2.25 2.25 0 0 0-2.25 2.25v2.13A6.47 6.47 0 0 0 8 14.5Zm4.75-3v.937a6.5 6.5 0 1 0-9.5 0V11.5a3.752 3.752 0 0 1 2.486-3.532a3 3 0 1 1 4.528 0A3.752 3.752 0 0 1 12.75 11.5ZM8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16ZM9.5 6a1.5 1.5 0 1 1-3 0a1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd"%2F%3E%3C%2Fsvg%3E'
+                  }
+                  alt="P"
+                />
+              </div>
+              </div>
+            )}
           </div>
-        )}
+        }
       </div>
     </div>
   );
