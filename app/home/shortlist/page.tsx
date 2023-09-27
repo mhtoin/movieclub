@@ -4,11 +4,11 @@ import { getAllShortLists, getShortList } from "@/lib/shortlist";
 import Link from "next/link";
 import ShortListItem from "./edit/components/ShortListItem";
 import { RaffleClient } from "../components/RaffleClient";
-import { usePusher, useShortlistQuery } from "@/lib/hooks";
+import { usePusher, useShortlistsQuery } from "@/lib/hooks";
 import { Fragment } from "react";
 
 export default function ShortList() {
-  const { data: allShortlists, isLoading, status } = useShortlistQuery();
+  const { data: allShortlists, isLoading, status } = useShortlistsQuery();
   usePusher("movieclub-shortlist", "shortlist-update");
 
   if (isLoading || !allShortlists) {
