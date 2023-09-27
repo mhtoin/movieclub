@@ -7,7 +7,9 @@ export async function GET(
   request: NextRequest,
 ) {
   try {
+    console.log('getting shortlists')
     const shortlists = await getAllShortLists();
+    console.log('got response', shortlists)
     return NextResponse.json(shortlists, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
