@@ -106,7 +106,7 @@ export default async function WebNavbar() {
                     <Link href={"/tierlists"}>All</Link>
                   </li>
                   <li>
-                    <Link href={"/tierlists/edit"}>Edit</Link>
+                    <Link href={`/tierlists/${session?.user.userId}`}>Edit</Link>
                   </li>
                 </ul>
               </details>
