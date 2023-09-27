@@ -6,7 +6,7 @@ import { useTransition } from "react";
 interface SearchResultCardProps {
   movie: Movie;
   shortlistId: string,
-  removeFromShortList?: (id: string, shortlistId: string) => Promise<void>;
+  removeFromShortList?: boolean
   highlight?: boolean;
 
 }
