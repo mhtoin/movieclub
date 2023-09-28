@@ -1,14 +1,17 @@
+"use client"
 import MoviePosterCard from "@/app/components/MoviePosterCard";
-import { getWatchlist } from "@/lib/tmdb";
-import Shortlist from "../components/Shortlist";
-import { getServerSession } from "@/lib/getServerSession";
-import { getShortList } from "@/lib/shortlist";
-import { Suspense } from "react";
+import { useGetWatchlistQuery, useShortlistQuery } from "@/lib/hooks";
+import { useSession } from "next-auth/react";
+import ShortlistContainer from "../search/components/ShortlistContainer";
 
-export default async function Watchlist() {
-  const watchlist = await getWatchlist();
-  const session = await getServerSession();
-  const shortlistData = (await getShortList(session?.user.userId)) ?? [];
+export default function Watchlist() {
+  const { data: session, status } = useSession();
+  console.log('session', session)
+  const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(session?.user)
+  console.log('watchlist', watchlist)
+  const { data: shortlistData } = useShortlistQuery(
+    session?.user?.shortlistId
+  );
   const movies = (shortlistData?.movies as Movie[]) || [];
 
   return (
@@ -16,14 +19,13 @@ export default async function Watchlist() {
       <div className="divider m-10">
         <div className="text-xl">Shortlist</div>
       </div>
-      {/* @ts-expect-error Shortlist */}
-      <Shortlist />
+      <ShortlistContainer />
       <div className="divider m-10">
         <div className="text-xl">Watchlist</div>
       </div>
       {session?.user.sessionId ? (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-          {watchlist.map((movie: TMDBMovie) => {
+          {watchlist?.map((movie: TMDBMovie) => {
             return (
               <div
                 key={`container-${movie.id}`}
@@ -45,7 +47,7 @@ export default async function Watchlist() {
           })}
         </div>
       ) : (
-        <div className="alert alert-error">
+        <div className="alert alert-error w-1/2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="stroke-current shrink-0 h-6 w-6"

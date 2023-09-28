@@ -8,6 +8,7 @@ import {
 import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/message-types";
 import { useContext, useEffect } from "react";
 import { produce } from "immer";
+import { getWatchlist } from "./tmdb";
 
 export const useShortlistsQuery = () => {
   return useQuery(["shortlist"], async () => {
@@ -24,7 +25,6 @@ export const useShortlistQuery = (id: string) => {
       return await response.json();
     },
     enabled: !!id,
-    
   });
 };
 
@@ -47,11 +47,11 @@ export const useUpdateShortlistMutation = (method: string) => {
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["shortlist"]
+        queryKey: ["shortlist"],
       });
     },
   });
-}
+};
 
 export const useRemoveFromShortlistMutation = () => {
   const queryClient = useQueryClient();
@@ -72,7 +72,7 @@ export const useRemoveFromShortlistMutation = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["shortlist"]
+        queryKey: ["shortlist"],
       });
     },
   });
@@ -96,16 +96,17 @@ export const useAddToShortlistMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(["shortlist", variables.shortlistId], (oldData: any) => {
-        return produce(oldData, (draft: Shortlist) => {
-          draft.movies.push(variables.movie);
-        });
-      }
+      queryClient.setQueryData(
+        ["shortlist", variables.shortlistId],
+        (oldData: any) => {
+          return produce(oldData, (draft: Shortlist) => {
+            draft.movies.push(variables.movie);
+          });
+        }
       );
     },
   });
 };
-
 
 const handleShortlistMessage = (
   eventName: string,
@@ -164,4 +165,45 @@ export const usePusher = (channelName: string, eventName: string) => {
       pusher.unsubscribe(channelName);
     };
   }, []);
+};
+
+export const useGetWatchlistQuery = (user: User) => {
+  return useQuery({
+    queryKey: ["watchlist"],
+    queryFn: async () => {
+      
+      let pagesLeft = true;
+      let page = 1;
+      const movies = [];
+
+      do {
+        let watchlist = await fetch(
+          `https://api.themoviedb.org/3/account/${user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.sessionId}&sort_by=created_at.asc`,
+          {
+            method: "GET",
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
+            },
+            cache: "no-store",
+          }
+        );
+
+        let data = await watchlist.json();
+        let results = data && data.results ? data.results : [];
+        movies.push(results);
+
+        let pages = data && data.total_pages ? data.total_pages : "";
+
+        if (pages >= page) {
+          page++;
+        } else {
+          pagesLeft = false;
+        }
+      } while (pagesLeft);
+
+      return movies.flat();
+    },
+    enabled: !!user && !!user.sessionId && !!user.accountId,
+  });
 };
