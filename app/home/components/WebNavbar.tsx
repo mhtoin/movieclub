@@ -15,7 +15,7 @@ export default async function WebNavbar() {
       <div className="navbar rounded-box my-10 border w-9/12 bg-transparent">
         <div className="navbar-start">
           {/** dropdown for smaller screens */}
-          <div className="dropdown z-50">
+          <div className="dropdown z-40">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ export default async function WebNavbar() {
             <li>
               <Link href={"/dashboard"}>Dashboard</Link>
             </li>
-            <li tabIndex={0} className="z-50">
+            <li tabIndex={0} className="z-40">
               <details>
                 <summary>Shortlist</summary>
                 <ul className="p-2">
@@ -121,7 +121,7 @@ export default async function WebNavbar() {
         {
           <div className="navbar-end">
             {isAuthenticated ? (
-              <div tabIndex={0} className="dropdown dropdown-end z-50">
+              <div tabIndex={0} className="dropdown dropdown-end z-40">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                   <div className="w-10 rounded-full">
                     <img src={session?.user?.image} alt="P" />
