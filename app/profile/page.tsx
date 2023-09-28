@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { saveProfile } from "./actions/action";
 import { useTransition } from "react";
+import { useGetTMDBSession } from "@/lib/hooks";
 
 export default function Profile() {
   let [isPending, startTransition] = useTransition();
@@ -20,59 +21,8 @@ export default function Profile() {
 
     setAccountId(session?.user.accountId);
   }, [session]);
-
-  useEffect(() => {
-    const loc = window.location.search;
-
-    if (loc) {
-      let locParts = loc ? loc.split("&") : "";
-
-      if (locParts && locParts.length > 1) {
-        let token = locParts[0].split("=")[1];
-
-        let approved = locParts[1] === "approved=true";
-      
-        if (approved) {
-          let authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${token}`;
-
-          let getSessionId = async () => {
-            let res = await fetch(authenticationCallback);
-
-            if (res.ok) {
-              let id = await res.json();
-              setSessionId(id.session_id);
-
-              // finally, fetch the account id
-              let accountRes = await fetch(
-                `https://api.themoviedb.org/3/account?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&session_id=${id.session_id}`
-              );
-
-              let accountBody = await accountRes.json();
-
-              setAccountId(accountBody.id);
-
-              if (id.session_id && accountBody.id) {
-                startTransition(() =>
-                  saveProfile({
-                    sessionId: id.session_id,
-                    accountId: parseInt(accountBody.id),
-                  } as User)
-                );
-              }
-              setNotification(
-                "You need to log out and log back in for the changes to take effect"
-              );
-              setTimeout(() => {
-                setNotification("");
-              }, 5000);
-            }
-          };
-
-          getSessionId();
-        }
-      }
-    }
-  }, []);
+  console.log(session)
+  useGetTMDBSession(session?.user.userId, setSessionId, setAccountId);
 
   if (status === "loading") {
     return (
@@ -101,8 +51,8 @@ export default function Profile() {
     const { success, request_token } = await res.json();
 
     if (success && request_token) {
-      //
-      window.location.href = `https://www.themoviedb.org/authenticate/${request_token}?redirect_to=https://movieclub-seven.vercel.app/profile`;
+      let redirectUrl = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://movieclub-seven.vercel.app";
+      window.location.href = `https://www.themoviedb.org/authenticate/${request_token}?redirect_to=${redirectUrl}/profile`;
     }
   };
 

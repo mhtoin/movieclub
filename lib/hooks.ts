@@ -9,6 +9,8 @@ import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/messag
 import { useContext, useEffect } from "react";
 import { produce } from "immer";
 import { getWatchlist } from "./tmdb";
+import { useNotificationStore } from "@/stores/useNotificationStore";
+import { useSession } from "next-auth/react";
 
 export const useShortlistsQuery = () => {
   return useQuery(["shortlist"], async () => {
@@ -171,7 +173,6 @@ export const useGetWatchlistQuery = (user: User) => {
   return useQuery({
     queryKey: ["watchlist"],
     queryFn: async () => {
-      
       let pagesLeft = true;
       let page = 1;
       const movies = [];
@@ -183,7 +184,7 @@ export const useGetWatchlistQuery = (user: User) => {
             method: "GET",
             headers: {
               accept: "application/json",
-              Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
             },
             cache: "no-store",
           }
@@ -206,4 +207,64 @@ export const useGetWatchlistQuery = (user: User) => {
     },
     enabled: !!user && !!user.sessionId && !!user.accountId,
   });
+};
+
+export const useGetTMDBSession = (
+  userId: string,
+  setSessionId: (value: any) => void,
+  setAccountId: (value: any) => void
+) => {
+  const setNotification = useNotificationStore((state) => state.setNotification);
+  const { data: session } = useSession();
+  console.log('id in session', session)
+  useEffect(() => {
+    const loc = window.location.search;
+    
+
+    if (loc && session?.user?.userId) {
+      let locParts = loc ? loc.split("&") : "";
+
+      if (locParts && locParts.length > 1) {
+        let token = locParts[0].split("=")[1];
+
+        let approved = locParts[1] === "approved=true";
+
+        if (approved) {
+          let authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${token}`;
+
+          let getSessionId = async () => {
+            let res = await fetch(authenticationCallback);
+
+            if (res.ok) {
+              let id = await res.json();
+              setSessionId(id.session_id);
+
+              // finally, fetch the account id
+              let accountRes = await fetch(
+                `https://api.themoviedb.org/3/account?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&session_id=${id.session_id}`
+              );
+
+              let accountBody = await accountRes.json();
+
+              setAccountId(accountBody.id);
+
+              if (id.session_id && accountBody.id) {
+                console.log('fetching', userId)
+                await fetch(`/api/user/${session?.user?.userId}`, {
+                  method: "PUT",
+                  body: JSON.stringify({
+                    sessionId: id.session_id,
+                    accountId: accountBody.id,
+                  }),
+                })
+              }
+              setNotification("You need to log out and log back in for the changes to take effect", "success");
+            }
+          };
+
+          getSessionId();
+        }
+      }
+    }
+  }, [session] );
 };
