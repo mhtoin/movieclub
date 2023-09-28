@@ -63,7 +63,7 @@ export async function getChosenMovie() {
 export async function getShortList(id: string) {
   const shortlist = await prisma.shortlist.findFirst({
     where: {
-      userId: id,
+      id: id,
     },
     include: {
       movies: true,

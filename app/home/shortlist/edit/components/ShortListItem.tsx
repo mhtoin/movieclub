@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useRemoveFromShortlist } from "@/lib/hooks";
+import { useRemoveFromShortlistMutation } from "@/lib/hooks";
 import { useTransition } from "react";
 
 interface SearchResultCardProps {
@@ -19,7 +19,7 @@ export default function ShortListItem({
   highlight,
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
-  const removeMutation = useRemoveFromShortlist();
+  const removeMutation = useRemoveFromShortlistMutation();
 
 
   return (

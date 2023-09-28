@@ -1,5 +1,10 @@
 import { PusherContext } from "@/app/home/components/PusherProvider";
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/message-types";
 import { useContext, useEffect } from "react";
 import { produce } from "immer";
@@ -15,15 +20,49 @@ export const useShortlistQuery = (id: string) => {
   return useQuery({
     queryKey: ["shortlist", id],
     queryFn: async () => {
-    const response = await fetch(`/api/shortlist/${id}`);
-    return await response.json();
-  },
-enabled: !!id});
+      const response = await fetch(`/api/shortlist/${id}`);
+      return await response.json();
+    },
+    enabled: !!id,
+    
+  });
 };
 
-export const useRemoveFromShortlist = () => {
+export const useUpdateShortlistMutation = (method: string) => {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({movieId, shortlistId }: { movieId: string, shortlistId: string}) => {
+    mutationFn: async ({
+      movieId,
+      shortlistId,
+    }: {
+      movieId: string;
+      shortlistId: string;
+    }) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}`, {
+        method: method,
+        body: JSON.stringify({ movieId }),
+      });
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["shortlist"]
+      });
+    },
+  });
+}
+
+export const useRemoveFromShortlistMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      movieId,
+      shortlistId,
+    }: {
+      movieId: string;
+      shortlistId: string;
+    }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}`, {
         method: "PUT",
         body: JSON.stringify({ movieId }),
@@ -31,8 +70,42 @@ export const useRemoveFromShortlist = () => {
 
       return await response.json();
     },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["shortlist"]
+      });
+    },
   });
-}
+};
+
+export const useAddToShortlistMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      movie,
+      shortlistId,
+    }: {
+      movie: Movie;
+      shortlistId: string;
+    }) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}`, {
+        method: "POST",
+        body: JSON.stringify({ movie }),
+      });
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlist", variables.shortlistId], (oldData: any) => {
+        return produce(oldData, (draft: Shortlist) => {
+          draft.movies.push(variables.movie);
+        });
+      }
+      );
+    },
+  });
+};
+
 
 const handleShortlistMessage = (
   eventName: string,
@@ -40,7 +113,7 @@ const handleShortlistMessage = (
   queryClient: QueryClient
 ) => {
   let messageData = data.data as Shortlist;
-  let messageType = data.message
+  let messageType = data.message;
   queryClient.setQueryData(["shortlist"], (oldData: any) => {
     return produce(oldData, (draft: Array<Shortlist>) => {
       let targetShortlist = draft.find(

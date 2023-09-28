@@ -12,13 +12,13 @@ import {
 } from "./actions/actions";
 import { useShortlistQuery } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
-import ShortlistContainer from "./components/ShortlistContainer";
+import ShortlistContainer from "./search/components/ShortlistContainer";
 
 export default function ShortListEdit() {
   const { data: session, status } = useSession();
   console.log('session', session)
   const { data: shortlistData, status: shortlistStatus } = useShortlistQuery(
-    session?.user.userId
+    session?.user?.shortlistId
   );
   console.log('shortlistData', shortlistData)
 
@@ -29,9 +29,7 @@ export default function ShortListEdit() {
     return (
       <div className="flex min-w-fit flex-col items-center gap-5 overflow-hidden">
         {shortlistData.requiresSelection && <SelectionAlert />}
-
-        <ShortlistContainer shortlist={shortlistData} />
-
+        <ShortlistContainer />
         {shortlistData.requiresSelection && (
           <SelectionRadio
             length={movies.length}

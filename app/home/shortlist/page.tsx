@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import ShortListItem from "./edit/components/ShortListItem";
-import { getAllShortLists, getShortList } from "@/lib/shortlist";
 import { RaffleClient } from "../components/RaffleClient";
 import { usePusher, useShortlistsQuery } from "@/lib/hooks";
 import { Fragment } from "react";
@@ -18,7 +17,7 @@ export default function ShortList() {
       </div>
     );
   }
-  console.log("allShortlists", allShortlists);
+
   return (
     <main className="flex min-h-screen flex-col items-center p-12 overflow-hidden">
       <div className="flex flex-row items-center justify-evenly gap-5">

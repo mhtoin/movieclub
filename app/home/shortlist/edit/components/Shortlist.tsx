@@ -25,7 +25,7 @@ export default async function Shortlist() {
             <ShortListItem
               key={movie.tmdbId}
               movie={movie}
-              removeFromShortList={removeFromShortList}
+              removeFromShortList={true}
               shortlistId={session?.user.shortlistId}
             />
           );

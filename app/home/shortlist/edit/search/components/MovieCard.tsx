@@ -1,27 +1,9 @@
 "use client";
 
-import { useTransition } from "react";
-import { useSession, getSession } from "next-auth/react";
+
+import { useSession } from "next-auth/react";
 import { omit } from "@/lib/utils";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { Prisma } from '@prisma/client'
-
-interface addMovieVars {
-  movie: Movie;
-  shortlistId: string;
-}
-
-const addMovie = async ({ movie, shortlistId }: addMovieVars) => {
-  const res = await fetch(`/api/shortlist/${shortlistId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ movie: movie }),
-  });
-
-  return await res.json();
-};
+import { useAddToShortlistMutation } from "@/lib/hooks";
 
 export default function MovieCard({
   movie,
@@ -30,26 +12,8 @@ export default function MovieCard({
   movie: TMDBMovie;
   added: boolean;
 }) {
-  let [isPending, startTransition] = useTransition();
   const { data: session } = useSession();
-  const queryClient = useQueryClient();
-  const addMutation = useMutation({
-    mutationFn: addMovie,
-    onSuccess: (data) => {
-      const addedMovie = data.movies.find(
-        (movieItem: Movie) => movieItem.tmdbId === movie.id
-      );
-      queryClient.setQueryData(["shortlist"], (oldData: any) =>
-        oldData
-          ? {
-              ...oldData,
-              movies: data.movies,
-              movieIDs: data.movieIDs,
-            }
-          : oldData
-      );
-    },
-  });
+  const addMutation = useAddToShortlistMutation();
   return (
     <div className="indicator mx-auto border-2 rounded-md z-30">
       <div className="indicator-item indicator-top indicator-start">
@@ -66,7 +30,6 @@ export default function MovieCard({
               movie: movieObj,
               shortlistId: session?.user.shortlistId,
             });
-            //queryClient.invalidateQueries(["shortlist"]);
           }}
         >
           {added ? (

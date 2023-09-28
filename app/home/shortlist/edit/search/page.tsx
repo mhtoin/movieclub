@@ -10,6 +10,7 @@ import { removeFromShortList } from "../actions/actions";
 import ShortlistMovieItem from "./components/ShortlistMovieItem";
 import ShortlistContainer from "./components/ShortlistContainer";
 import MovieCard from "./components/MovieCard";
+import { useShortlistQuery } from "@/lib/hooks";
 
 export const revalidate = 5
 
@@ -45,19 +46,7 @@ export default function SearchPage() {
   }`;
   const searchBaseUrl = `search/movie?query`;
 
-  const { data: shortlist, status: shortlistStatus, fetchStatus } = useQuery({
-    queryKey: ["shortlist", session?.user?.userId],
-    queryFn: async () => {
-      let res = await fetch(`/api/shortlist/${session?.user.userId}`, {
-        next: {
-          tags: ['shortlist'],
-          revalidate: 1
-        }
-      });
-      return await res.json();
-    },
-    enabled: !!session,
-  });
+  const { data: shortlist, status: shortlistStatus, fetchStatus } = useShortlistQuery(session?.user?.shortlistId)
   
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(

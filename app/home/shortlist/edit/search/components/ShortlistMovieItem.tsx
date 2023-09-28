@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { useRemoveFromShortlistMutation } from "@/lib/hooks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useTransition } from "react";
 
@@ -30,14 +31,8 @@ export default function ShortlistMovieItem({
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
   const [isDeleting, setIsDeleting] = useState(false)
-  const queryClient = useQueryClient()
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteMovieFromShortlist,
-    onSuccess: () => {
-        queryClient.invalidateQueries(['shortlist'])
-    }
-  })
+ 
+  const deleteMutation = useRemoveFromShortlistMutation()
   return (
     <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-end">
