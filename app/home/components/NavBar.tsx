@@ -84,7 +84,7 @@ export default function NavBar() {
           <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-lg menu-horizontal px-1">
+          <ul className="menu menu-lg menu-horizontal  px-1">
             <li>
               <Link href={"/home"}>Home</Link>
             </li>
