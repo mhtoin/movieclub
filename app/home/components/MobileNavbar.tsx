@@ -3,16 +3,34 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import path from "path";
+import { useEffect, useState } from "react";
 
 export default function MobileNavbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session } = useSession();
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  const handleScroll = () => {
+    const currentScrollPos = window.scrollY;
+    const visible = prevScrollPos > currentScrollPos;
+
+    setPrevScrollPos(currentScrollPos);
+    setVisible(visible);
+  }
+
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [prevScrollPos]);
 
   return (
-    <div className="btm-nav btm-nav-xs z-50 sm:hidden">
+    <div className={`btm-nav btm-nav-sm z-50 h-16 ${visible ? "visible": "hidden"} sm:hidden`}>
       <button
-        className={`transform active:scale-75 transition-transform ${pathname == "/home" ? "active" : ""}`}
+        className={`transform active:scale-75 transition-transform ${pathname === "/home" ? "text-secondary" : ""}`}
         onClick={() => router.push("/home")}
       >
         <svg
@@ -32,7 +50,7 @@ export default function MobileNavbar() {
         <span className="btm-nav-label">Home</span>
       </button>
       <button
-        className={`transform active:scale-75 transition-transform ${pathname == "/dashboard" ? "active" : ""}`}
+        className={`transform active:scale-75 transition-transform ${pathname.includes("/dashboard") ? "text-secondary" : ""}`}
         onClick={() => router.push("/dashboard")}
       >
         <svg
@@ -52,7 +70,7 @@ export default function MobileNavbar() {
         <span className="btm-nav-label">Dashboard</span>
       </button>
       <button
-        className={`transform active:scale-75 transition-transform ${pathname == "/home/shortlist" ? "active" : ""}`}
+        className={`transform active:scale-75 transition-transform ${pathname.includes("/shortlist") ? "text-secondary" : ""}`}
         onClick={() => router.push("/home/shortlist")}
       >
         <svg
@@ -61,7 +79,7 @@ export default function MobileNavbar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-8 h-8"
+          className="w-6 h-6"
         >
           <path
             strokeLinecap="round"
@@ -73,7 +91,7 @@ export default function MobileNavbar() {
         <span className="btm-nav-label">Shortlist</span>
       </button>
       <button
-        className={`transform active:scale-75 transition-transform ${pathname == "/tierlists" ? "active" : ""}`}
+        className={`transform active:scale-75 transition-transform ${pathname.includes("/tierlists") ? "text-secondary" : ""}`}
         onClick={() => router.push("/tierlists")}
       >
         <svg
@@ -99,7 +117,7 @@ export default function MobileNavbar() {
         }`}
         onClick={() => router.push("/profile")}
       >
-        <div className="w-6 rounded-full">
+        <div className="w-8 rounded-full">
           <img src={session?.user?.image} alt="P" />
         </div>
       </button>
