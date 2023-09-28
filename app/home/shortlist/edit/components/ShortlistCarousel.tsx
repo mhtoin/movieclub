@@ -30,7 +30,7 @@ export default async function Shortlist() {
               <ShortListItem
                 key={movie.tmdbId}
                 movie={movie}
-                removeFromShortList={removeFromShortList}
+                removeFromShortList={false}
                 shortlistId={session?.user.shortlistId}
               />
             </div>
