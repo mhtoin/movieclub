@@ -13,7 +13,7 @@ const initiateRaffle = async () => {
   return await res.json();
 };
 
-export function RaffleClient({ allShortlists }: { allShortlists: any }) {
+export function RaffleClient() {
   let [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const [chosenMovie, setChosenMovie] = useState<MovieOfTheWeek>();

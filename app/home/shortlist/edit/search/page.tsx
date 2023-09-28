@@ -14,6 +14,7 @@ import MovieCard from "./components/MovieCard";
 export const revalidate = 5
 
 const fetchMovies = async (page: number, searchValue: string) => {
+  console.log("token", process.env.NEXT_PUBLIC_TMDB_TOKEN)
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
     : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8`;
@@ -30,8 +31,6 @@ const fetchMovies = async (page: number, searchValue: string) => {
   return initialSearch.json();
 };
 
-
-
 export default function SearchPage() {
   const [searchValue, setSearchValue] = useState("");
   const [genreSelections, setGenreSelections] = useState<Array<number>>([]);
@@ -47,7 +46,7 @@ export default function SearchPage() {
   const searchBaseUrl = `search/movie?query`;
 
   const { data: shortlist, status: shortlistStatus, fetchStatus } = useQuery({
-    queryKey: ["shortlist"],
+    queryKey: ["shortlist", session?.user?.userId],
     queryFn: async () => {
       let res = await fetch(`/api/shortlist/${session?.user.userId}`, {
         next: {

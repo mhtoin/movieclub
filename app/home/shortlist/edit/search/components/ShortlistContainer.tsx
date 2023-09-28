@@ -7,7 +7,7 @@ import ItemSkeleton from "../../components/ItemSkeleton";
 export default function ShortlistContainer() {
   const { data: session } = useSession();
   const { data: shortlist, status: shortlistStatus } = useQuery({
-    queryKey: ["shortlist"],
+    queryKey: ["shortlist", session?.user?.userId],
     queryFn: async () => {
       let res = await fetch(`/api/shortlist/${session?.user.userId}`, {});
       return await res.json();
