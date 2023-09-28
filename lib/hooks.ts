@@ -1,15 +1,38 @@
 import { PusherContext } from "@/app/home/components/PusherProvider";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/message-types";
 import { useContext, useEffect } from "react";
 import { produce } from "immer";
 
-export const useShortlistQuery = () => {
+export const useShortlistsQuery = () => {
   return useQuery(["shortlist"], async () => {
     const response = await fetch(`/api/shortlist`);
     return await response.json();
   });
 };
+
+export const useShortlistQuery = (id: string) => {
+  return useQuery({
+    queryKey: ["shortlist", id],
+    queryFn: async () => {
+    const response = await fetch(`/api/shortlist/${id}`);
+    return await response.json();
+  },
+enabled: !!id});
+};
+
+export const useRemoveFromShortlist = () => {
+  return useMutation({
+    mutationFn: async ({movieId, shortlistId }: { movieId: string, shortlistId: string}) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}`, {
+        method: "PUT",
+        body: JSON.stringify({ movieId }),
+      });
+
+      return await response.json();
+    },
+  });
+}
 
 const handleShortlistMessage = (
   eventName: string,

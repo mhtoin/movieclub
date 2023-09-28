@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { useRemoveFromShortlist } from "@/lib/hooks";
 import { useTransition } from "react";
 
 interface SearchResultCardProps {
   movie: Movie;
   shortlistId: string,
-  removeFromShortList?: (id: string, shortlistId: string) => Promise<void>;
+  removeFromShortList?: boolean
   highlight?: boolean;
 
 }
@@ -18,6 +19,7 @@ export default function ShortListItem({
   highlight,
 }: SearchResultCardProps) {
   let [isPending, startTransition] = useTransition();
+  const removeMutation = useRemoveFromShortlist();
 
 
   return (
@@ -25,7 +27,7 @@ export default function ShortListItem({
       <div className="indicator-item indicator-end">
         {removeFromShortList && <button
           className="btn btn-circle btn-xs btn-error"
-          onClick={() => startTransition(() => removeFromShortList(movie.id!, shortlistId))}
+          onClick={() => removeMutation.mutate({movieId: movie.id!, shortlistId})}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

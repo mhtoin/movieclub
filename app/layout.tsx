@@ -2,9 +2,9 @@ import Providers from "@/utils/provider";
 import "./globals.css";
 import RaffleNotification from "./components/RaffleNotification";
 import Notification from "./components/Notification";
-import WebNavbar from "./home/components/WebNavbar";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
+import WebNavbar from "./home/components/WebNavbar";
 
 export const metadata = {
   title: "movieclub",
