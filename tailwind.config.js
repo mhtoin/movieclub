@@ -21,11 +21,17 @@ module.exports = {
           from: { transform: "translateY(0)" },
           to: { transform: "translateY(100%)" },
         },
+        "button-press": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(0.95)" },
+          "100%": { transform: "scale(0.9)" },
+        },
       },
       animation: {
         "slide-up": "slide-up 0.5s ease-out",
         "slide-in": "slide-in 0.5s ease-out",
         "slide-out": "slide-out 0.5s ease-out",
+        "button-press": "button-press 0.2s ease-in",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

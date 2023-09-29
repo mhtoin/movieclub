@@ -1,10 +1,8 @@
 "use client";
-import classNames from "classnames";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import path from "path";
 import { useEffect, useState } from "react";
+import MobileNavbarButton from "./MobileNavbarButton";
 
 export default function MobileNavbar() {
   const pathname = usePathname();
@@ -30,11 +28,8 @@ export default function MobileNavbar() {
 
   return (
     <div className={`btm-nav btm-nav-sm z-50 h-16 ${visible ? "animate-slide-in" : "animate-slide-out fill-mode-forwards"} sm:hidden`}>
-      <button
-        className={`transform active:scale-50 transition-transform ${pathname === "/home" ? "text-secondary" : ""}`}
-        onClick={() => router.push("/home")}
-      >
-        <svg
+      <MobileNavbarButton pathname={pathname} destination="/home">
+      <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"
           fill="none"
@@ -49,11 +44,8 @@ export default function MobileNavbar() {
           />
         </svg>
         <span className="btm-nav-label">Home</span>
-      </button>
-      <button
-        className={`transform active:scale-75 transition-transform ${pathname.includes("/dashboard") ? "text-secondary" : ""}`}
-        onClick={() => router.push("/dashboard")}
-      >
+      </MobileNavbarButton>
+      <MobileNavbarButton pathname={pathname} destination="/dashboard">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"
@@ -69,11 +61,8 @@ export default function MobileNavbar() {
           />
         </svg>
         <span className="btm-nav-label">Dashboard</span>
-      </button>
-      <button
-        className={`transform active:scale-75 transition-transform ${pathname.includes("/shortlist") ? "text-secondary" : ""}`}
-        onClick={() => router.push("/home/shortlist")}
-      >
+      </MobileNavbarButton>
+      <MobileNavbarButton pathname={pathname} destination="/home/shortlist">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -90,11 +79,8 @@ export default function MobileNavbar() {
         </svg>
 
         <span className="btm-nav-label">Shortlist</span>
-      </button>
-      <button
-        className={`transform active:scale-75 transition-transform ${pathname.includes("/tierlists") ? "text-secondary" : ""}`}
-        onClick={() => router.push("/tierlists")}
-      >
+      </MobileNavbarButton>
+      <MobileNavbarButton pathname={pathname} destination="/tierlists">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -111,7 +97,7 @@ export default function MobileNavbar() {
         </svg>
 
         <span className="btm-nav-label">Tierlists</span>
-      </button>
+      </MobileNavbarButton>
       <button
         className={`transform active:scale-75 transition-transform btn-circle avatar ${
           pathname == "/profile" ? "active" : ""
