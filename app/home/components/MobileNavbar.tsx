@@ -1,4 +1,5 @@
 "use client";
+import classNames from "classnames";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,9 +29,9 @@ export default function MobileNavbar() {
   }, [prevScrollPos]);
 
   return (
-    <div className={`btm-nav btm-nav-sm z-50 h-16 ${visible ? "visible": "hidden"} sm:hidden`}>
+    <div className={`btm-nav btm-nav-sm z-50 h-16 ${visible ? "animate-slide-in" : "animate-slide-out fill-mode-forwards"} sm:hidden`}>
       <button
-        className={`transform active:scale-75 focus:scale-75 transition-transform ${pathname === "/home" ? "text-secondary" : ""}`}
+        className={`transform active:scale-50 transition-transform ${pathname === "/home" ? "text-secondary" : ""}`}
         onClick={() => router.push("/home")}
       >
         <svg
@@ -52,7 +53,6 @@ export default function MobileNavbar() {
       <button
         className={`transform active:scale-75 transition-transform ${pathname.includes("/dashboard") ? "text-secondary" : ""}`}
         onClick={() => router.push("/dashboard")}
-        onTouchStart={() => console.log('touch')}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

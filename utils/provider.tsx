@@ -16,7 +16,7 @@ function Providers({ children }: React.PropsWithChildren) {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
     })
   );
-
+    console.log('providers')
   return (
     <QueryClientProvider client={client}>
       <PusherPovider pusher={pusher}>
