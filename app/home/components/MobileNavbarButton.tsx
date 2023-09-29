@@ -10,20 +10,24 @@ export default function MobileNavbarButton({
   pathname: string;
   destination: string;
 }) {
-    const [effect, setEffect] = useState(false);
-    const router = useRouter();
+  const [effect, setEffect] = useState(false);
+  const router = useRouter();
   return (
     <button
-      className={`${effect && "animate-button-press"} ${
+      className={`transform active:scale-75 transition-transform ${effect && "animate-button-press"} ${
         pathname === destination ? "text-secondary" : ""
       }`}
-      onClick={() => {
+      onTouchStart={() => {
         setEffect(true);
+        
+      }}
+      onClick={() => {
         router.push(destination);
       }}
       onAnimationEnd={() => {
-        console.log('animation ended')
-        setEffect(false)}}
+        console.log("animation ended");
+        setEffect(false);
+      }}
     >
       {children}
     </button>
