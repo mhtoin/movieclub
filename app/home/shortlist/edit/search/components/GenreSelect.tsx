@@ -37,6 +37,7 @@ export default function GenreSelect() {
       <Select
         isMulti
         name="genres"
+        isSearchable={false}
         defaultValue={genres}
         options={genreOptions}
         onChange={(selections) => {
