@@ -30,7 +30,7 @@ export default function MobileNavbar() {
   return (
     <div className={`btm-nav btm-nav-sm z-50 h-16 ${visible ? "visible": "hidden"} sm:hidden`}>
       <button
-        className={`transform active:scale-75 transition-transform ${pathname === "/home" ? "text-secondary" : ""}`}
+        className={`transform active:scale-75 focus:scale-75 transition-transform ${pathname === "/home" ? "text-secondary" : ""}`}
         onClick={() => router.push("/home")}
       >
         <svg
@@ -52,6 +52,7 @@ export default function MobileNavbar() {
       <button
         className={`transform active:scale-75 transition-transform ${pathname.includes("/dashboard") ? "text-secondary" : ""}`}
         onClick={() => router.push("/dashboard")}
+        onTouchStart={() => console.log('touch')}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

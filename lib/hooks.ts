@@ -1,4 +1,4 @@
-import { PusherContext } from "@/app/home/components/PusherProvider";
+import { PusherContext } from "@/utils/PusherProvider";
 import {
   QueryClient,
   useMutation,
