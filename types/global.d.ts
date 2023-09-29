@@ -121,7 +121,7 @@ declare global {
     data: {
       label: string;
       data: Array<{ user: string; movies: number }>;
-    }
+    };
   }
 
   interface UserChartData {
@@ -151,5 +151,14 @@ declare global {
     user: User;
     userId: string;
   }
-}
 
+  interface Genre {
+    label: string;
+    value: number;
+  }
+
+  interface RangeSelection {
+    min: string
+    max: string
+  }
+}

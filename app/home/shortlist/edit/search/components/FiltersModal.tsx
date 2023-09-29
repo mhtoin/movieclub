@@ -5,56 +5,23 @@ import GenreSelect from "./GenreSelect";
 import RangeSlider from "./RangeSlider";
 import { Dispatch, SetStateAction, useState } from "react";
 import ProviderToggle from "./ProviderToggle";
+import { useFilterStore } from "@/stores/useFilterStore";
+import { setYear } from "date-fns";
 
 interface modalProps {
-  handleGenreSelection: (
-    genres: number
-  ) => void;
   handleSearchSubmit: () => void
-  handleYearRangeSelect: (label: string, value: string) => void
-  handleRatingRangeSelect: (label: string, value: string) => void
   handleProviderToggle: Dispatch<SetStateAction<boolean>>
-  genreSelections: number[]
-}
-
-async function getFilters() {
-  let res = await fetch(
-    "https://api.themoviedb.org/3/genre/movie/list?language=en",
-    {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
-      },
-    }
-  );
-
-  let responseBody = await res.json();
-
-  if (responseBody.genres) {
-    return responseBody.genres.map((genre: { name: string; id: number }) => {
-      return { label: genre.name, value: genre.id };
-    }) as Array<{ label: string, value: number}>;
-  }
 }
 
 export default function FiltersModal({
-  handleGenreSelection,
   handleSearchSubmit,
-  handleYearRangeSelect,
-  handleRatingRangeSelect,
   handleProviderToggle,
-  genreSelections,
 }: modalProps) {
-  const [value, setValue] = useState({ min: 0, max: 100 });
-  const { data: genreOptions, status } = useQuery({
-    queryKey: ["genres"],
-    queryFn: getFilters,
-  });
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  const yearRange = useFilterStore.use.yearRange()
+  const ratingRange = useFilterStore.use.ratingRange()
+  const setYearRange = useFilterStore.use.setYearRange()
+  const setRatingRange = useFilterStore.use.setRatingRange()
+ 
   return (
     <>
       <button className="btn" onClick={() => {
@@ -64,51 +31,47 @@ export default function FiltersModal({
       }}>
         search filters
       </button>
-      <dialog id="filtersModal" className="modal modal-bottom sm:modal-middle">
-        <form method="dialog" className="modal-box h-1/2 ">
+      <dialog id="filtersModal" className="modal modal-middle sm:modal-middle">
+        <form method="dialog" className="modal-box h-2/3 ">
           <h3 className="font-bold text-lg m-5">Hello!</h3>
-          <GenreSelect
-            genreOptions={genreOptions!}
-            handleGenreSelection={handleGenreSelection}
-            genreSelections={genreSelections}
-          />
+          <GenreSelect />
           <div className="divider">Rating range</div>
           <h3 className="font-bold text-lg m-5">Min</h3>
           <RangeSlider
-            startingValue="0"
+            startingValue={ratingRange.min}
             min="0"
             max="10"
             step="0.1"
             label="min"
-            onChange={handleRatingRangeSelect}
+            onChange={setRatingRange}
           />
           <h3 className="font-bold text-lg m-5">Max</h3>
           <RangeSlider
-            startingValue="10"
+            startingValue={ratingRange.max}
             min="0"
             max="10"
             step="0.1"
             label="max"
-            onChange={handleRatingRangeSelect}
+            onChange={setRatingRange}
           />
           <div className="divider">Release year </div>
           <h3 className="font-bold text-lg m-5">Min</h3>
           <RangeSlider
-            startingValue="1900"
+            startingValue={yearRange.min}
             min="1900"
             max={new Date().getFullYear().toString()}
             step="1"
             label="min"
-            onChange={handleYearRangeSelect}
+            onChange={setYearRange}
           />
           <h3 className="font-bold text-lg m-5">Max</h3>
           <RangeSlider
-            startingValue={new Date().getFullYear().toString()}
+            startingValue={yearRange.max}
             min="1900"
             max={new Date().getFullYear().toString()}
             step="1"
             label="max"
-            onChange={handleYearRangeSelect}
+            onChange={setYearRange}
           />
           <div className="divider">Providers</div>
           <ProviderToggle handleProviderToggle={handleProviderToggle} />

@@ -1,21 +1,17 @@
 "use client";
 
-import { Fragment, Suspense, useEffect, useRef, useState } from "react";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import MoviePosterCard from "@/app/components/MoviePosterCard";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { useInfiniteQuery} from "@tanstack/react-query";
 import FiltersModal from "./components/FiltersModal";
 import { useSession } from "next-auth/react";
-import ShortListItem from "../components/ShortListItem";
-import { removeFromShortList } from "../actions/actions";
-import ShortlistMovieItem from "./components/ShortlistMovieItem";
 import ShortlistContainer from "./components/ShortlistContainer";
 import MovieCard from "./components/MovieCard";
 import { useShortlistQuery } from "@/lib/hooks";
+import { useFilterStore } from "@/stores/useFilterStore";
 
 export const revalidate = 5
 
 const fetchMovies = async (page: number, searchValue: string) => {
-  console.log("token", process.env.NEXT_PUBLIC_TMDB_TOKEN)
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
     : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8`;
@@ -34,9 +30,9 @@ const fetchMovies = async (page: number, searchValue: string) => {
 
 export default function SearchPage() {
   const [searchValue, setSearchValue] = useState("");
-  const [genreSelections, setGenreSelections] = useState<Array<number>>([]);
-  const [yearRange, setYearRange] = useState({ min: "", max: "" });
-  const [ratingRange, setRatingRange] = useState({ min: "", max: "" });
+  const genreSelections = useFilterStore.use.genres()
+  const yearRange = useFilterStore.use.yearRange()
+  const ratingRange = useFilterStore.use.ratingRange()
   const [onlyNetflix, setOnlyNeflix] = useState(true);
   const [titleSearch, setTitleSearch] = useState("");
   const { data: session } = useSession();
@@ -45,6 +41,7 @@ export default function SearchPage() {
     onlyNetflix && "&watch_region=FI&with_watch_providers=8"
   }`;
   const searchBaseUrl = `search/movie?query`;
+  console.log('genres', genreSelections)
 
   const { data: shortlist, status: shortlistStatus, fetchStatus } = useShortlistQuery(session?.user?.shortlistId)
   
@@ -88,7 +85,7 @@ export default function SearchPage() {
     //const baseUrl = `include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${onlyNetflix && '&watch_region=FI&with_watch_providers=8'}`;
     var queryStringArr = [];
     if (genreSelections.length > 0) {
-      queryStringArr.push(`with_genres=${genreSelections.join("|")}`);
+      queryStringArr.push(`with_genres=${genreSelections.map((genre: Genre) => genre.value).join("|")}`);
     }
 
     if (yearRange.min) {
@@ -109,22 +106,6 @@ export default function SearchPage() {
 
     const queryString = queryStringArr.join("&");
     setSearchValue(baseUrl + "&" + queryString);
-  };
-
-  const handleGenreSelection = (
-    genre: number
-  ) => {
-    setGenreSelections(
-      [...genreSelections, genre]
-    );
-  };
-
-  const handleYearRangeSelect = (label: string, value: string) => {
-    setYearRange({ ...yearRange, [label]: value });
-  };
-
-  const handleRatingRangeSelect = (label: string, value: string) => {
-    setRatingRange({ ...ratingRange, [label]: value });
   };
 
   const handleSearchByTitle = () => {
@@ -162,11 +143,7 @@ export default function SearchPage() {
       </div>
       <div className="flex flex-row gap-5 items-center">
         <FiltersModal
-          handleGenreSelection={handleGenreSelection}
-          genreSelections={genreSelections}
           handleSearchSubmit={handleSearchSubmit}
-          handleYearRangeSelect={handleYearRangeSelect}
-          handleRatingRangeSelect={handleRatingRangeSelect}
           handleProviderToggle={setOnlyNeflix}
         />
         <button className="btn" onClick={() => setSearchValue("")}>

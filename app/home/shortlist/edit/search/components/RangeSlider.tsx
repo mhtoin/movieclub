@@ -15,7 +15,7 @@ export default function RangeSlider({
   max: string;
   step: string;
   label: string;
-  onChange: any;
+  onChange: (label: string, value: string) => void;
 }) {
   const [value, setValue] = useState(startingValue);
   return (
