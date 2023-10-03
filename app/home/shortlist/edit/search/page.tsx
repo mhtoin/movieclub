@@ -163,13 +163,19 @@ export default function SearchPage() {
         </button>
       </div>
       <div className="flex flex-row gap-5 items-center">
-      {providers?.map((provider: any) => {
-        return (
-          <div key={provider.provider_id}>
-            <img src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} width={50}/>
-          </div>
-        );
-      })}
+        {providers?.map((provider: any) => {
+          return (
+            <div
+              key={provider.provider_id}
+              className="btn btn-square w-50 border-1 "
+            >
+              <img
+                src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
+                className="object-fill object-center rounded-md"
+              />
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 justify-center gap-10 z-30">
