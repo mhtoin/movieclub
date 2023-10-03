@@ -209,17 +209,56 @@ export const useGetWatchlistQuery = (user: User) => {
   });
 };
 
+export const useGetWatchProvidersQuery = () => {
+  return useQuery({
+    queryKey: ["watchProviders"],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/watch/providers/movie?language=en-US&watch_region-FI`,
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log("data in query", data);
+      /**
+       * We should provide some reasonable defaults here and store them somewhere
+       */
+      const providers = data.results.filter((provider: any) => {
+        return (
+          provider.provider_name === "Netflix" ||
+          provider.provider_name === "Disney Plus" ||
+          provider.provider_name === "Amazon Prime Video" ||
+          provider.provider_name === "HBO Max" ||
+          provider.provider_name === "SkyShowtime" ||
+          provider.provider_name === "Yle Areena"
+        );
+      });
+      return providers;
+    },
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useGetTMDBSession = (
   userId: string,
   setSessionId: (value: any) => void,
   setAccountId: (value: any) => void
 ) => {
-  const setNotification = useNotificationStore((state) => state.setNotification);
+  const setNotification = useNotificationStore(
+    (state) => state.setNotification
+  );
   const { data: session } = useSession();
-  console.log('id in session', session)
+  console.log("id in session", session);
   useEffect(() => {
     const loc = window.location.search;
-    
 
     if (loc && session?.user?.userId) {
       let locParts = loc ? loc.split("&") : "";
@@ -249,16 +288,19 @@ export const useGetTMDBSession = (
               setAccountId(accountBody.id);
 
               if (id.session_id && accountBody.id) {
-                console.log('fetching', userId)
+                console.log("fetching", userId);
                 await fetch(`/api/user/${session?.user?.userId}`, {
                   method: "PUT",
                   body: JSON.stringify({
                     sessionId: id.session_id,
                     accountId: accountBody.id,
                   }),
-                })
+                });
               }
-              setNotification("You need to log out and log back in for the changes to take effect", "success");
+              setNotification(
+                "You need to log out and log back in for the changes to take effect",
+                "success"
+              );
             }
           };
 
@@ -266,5 +308,5 @@ export const useGetTMDBSession = (
         }
       }
     }
-  }, [session] );
+  }, [session]);
 };

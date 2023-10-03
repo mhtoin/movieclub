@@ -1,15 +1,15 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useInfiniteQuery} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import FiltersModal from "./components/FiltersModal";
 import { useSession } from "next-auth/react";
 import ShortlistContainer from "./components/ShortlistContainer";
 import MovieCard from "./components/MovieCard";
-import { useShortlistQuery } from "@/lib/hooks";
+import { useGetWatchProvidersQuery, useShortlistQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
 
-export const revalidate = 5
+export const revalidate = 5;
 
 const fetchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
@@ -30,9 +30,9 @@ const fetchMovies = async (page: number, searchValue: string) => {
 
 export default function SearchPage() {
   const [searchValue, setSearchValue] = useState("");
-  const genreSelections = useFilterStore.use.genres()
-  const yearRange = useFilterStore.use.yearRange()
-  const ratingRange = useFilterStore.use.ratingRange()
+  const genreSelections = useFilterStore.use.genres();
+  const yearRange = useFilterStore.use.yearRange();
+  const ratingRange = useFilterStore.use.ratingRange();
   const [onlyNetflix, setOnlyNeflix] = useState(true);
   const [titleSearch, setTitleSearch] = useState("");
   const { data: session } = useSession();
@@ -41,10 +41,18 @@ export default function SearchPage() {
     onlyNetflix && "&watch_region=FI&with_watch_providers=8"
   }`;
   const searchBaseUrl = `search/movie?query`;
-  console.log('genres', genreSelections)
+  console.log("genres", genreSelections);
 
-  const { data: shortlist, status: shortlistStatus, fetchStatus } = useShortlistQuery(session?.user?.shortlistId)
-  
+  const {
+    data: shortlist,
+    status: shortlistStatus,
+    fetchStatus,
+  } = useShortlistQuery(session?.user?.shortlistId);
+  const { data: providers, status: providersStatus } =
+    useGetWatchProvidersQuery();
+
+  console.log("providers", providers);
+
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
       [searchValue],
@@ -85,7 +93,11 @@ export default function SearchPage() {
     //const baseUrl = `include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${onlyNetflix && '&watch_region=FI&with_watch_providers=8'}`;
     var queryStringArr = [];
     if (genreSelections.length > 0) {
-      queryStringArr.push(`with_genres=${genreSelections.map((genre: Genre) => genre.value).join("|")}`);
+      queryStringArr.push(
+        `with_genres=${genreSelections
+          .map((genre: Genre) => genre.value)
+          .join("|")}`
+      );
     }
 
     if (yearRange.min) {
@@ -122,13 +134,13 @@ export default function SearchPage() {
     );
   }
 
-  const shortlistMovieIds = shortlist ? shortlist?.movies?.map(
-    (movie: Movie) => movie.tmdbId
-  ) : [];
+  const shortlistMovieIds = shortlist
+    ? shortlist?.movies?.map((movie: Movie) => movie.tmdbId)
+    : [];
 
   return (
     <div className="flex flex-col items-center gap-5 z-10">
-     <ShortlistContainer />
+      <ShortlistContainer />
       <div className="flex flex-row gap-5 items-center">
         <input
           type="text"
@@ -150,21 +162,32 @@ export default function SearchPage() {
           Reset
         </button>
       </div>
+      <div className="flex flex-row gap-5 items-center">
+      {providers?.map((provider: any) => {
+        return (
+          <div key={provider.provider_id}>
+            <img src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} width={50}/>
+          </div>
+        );
+      })}
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 justify-center gap-10 z-30">
-        {data ? data?.pages?.map((page) => (
-          <Fragment key={page.page}>
-            {page.results.map((movie: TMDBMovie) => {
-              return (
-                <MovieCard
-                  key={movie.id}
-                  movie={movie}
-                  added={shortlistMovieIds?.includes(movie.id)}
-                />
-              );
-            })}
-          </Fragment>
-        )) : []}
+        {data
+          ? data?.pages?.map((page) => (
+              <Fragment key={page.page}>
+                {page.results.map((movie: TMDBMovie) => {
+                  return (
+                    <MovieCard
+                      key={movie.id}
+                      movie={movie}
+                      added={shortlistMovieIds?.includes(movie.id)}
+                    />
+                  );
+                })}
+              </Fragment>
+            ))
+          : []}
       </div>
       {hasNextPage && (
         <button ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
