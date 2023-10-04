@@ -1,6 +1,8 @@
 import { createSelectors } from "@/lib/createSelectors";
 import { create } from "zustand";
 
+const baseUrl =  `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc`
+
 interface FilterState {
   genres: Genre[];
   yearRange: RangeSelection;
@@ -26,8 +28,10 @@ const useNotificationStoreBase = create<FilterState>()((set, get) => ({
   //watchProviders: [],
   watchProviders: [8, 9, 323, 337, 384, 1773],
   defaultSelectAll: true,
-  searchValue: `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&with_watch_providers=`,
-  setSearchValue: (value) => set((state) => ({ searchValue: value })),
+  searchValue: `${baseUrl}&with_watch_providers=8|9|323|337|384|1773&watch_region=FI`,
+  setSearchValue: (value) => set((state) => {
+    return { searchValue: value }
+  }),
   setDefaultSelectAll: (value) => set((state) => ({ defaultSelectAll: value })),
   setWatchProviders: (watchProviders) =>
     set((state) => ({ watchProviders: watchProviders })),

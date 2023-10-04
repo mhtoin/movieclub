@@ -4,8 +4,8 @@ import {
   getShortList,
   removeMovieFromShortlist,
 } from "@/lib/shortlist";
-import { getServerSession } from "@/lib/getServerSession";
 import { revalidatePath } from "next/cache";
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   request: NextRequest,

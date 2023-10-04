@@ -1,8 +1,7 @@
-import clientPromise from "@/lib/mongo";
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { getAllShortLists } from "@/lib/shortlist";
-
+export const dynamic = 'force-dynamic'
 export async function GET(
   request: NextRequest,
 ) {
@@ -10,6 +9,7 @@ export async function GET(
     console.log('getting shortlists')
     const shortlists = await getAllShortLists();
     console.log('got response', shortlists)
+    revalidatePath("/home/shortlist");
     return NextResponse.json(shortlists, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
