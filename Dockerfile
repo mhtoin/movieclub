@@ -16,7 +16,7 @@ FROM base AS dev
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN pnpm prisma generate
+RUN pnpm prisma generate && pnpm prisma db push
 
 FROM base AS builder
 WORKDIR /app
