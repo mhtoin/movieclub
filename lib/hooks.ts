@@ -23,7 +23,7 @@ export const useShortlistQuery = (id: string) => {
   return useQuery({
     queryKey: ["shortlist", id],
     queryFn: async () => {
-      const response = await fetch(`/api/shortlist/${id}`);
+      const response = await fetch(`/api/shortlist/${id}`, { cache: 'no-store' });
       return await response.json();
     },
     enabled: !!id,
