@@ -8,6 +8,7 @@ import ShortlistContainer from "./components/ShortlistContainer";
 import MovieCard from "./components/MovieCard";
 import { useGetWatchProvidersQuery, useShortlistQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
+import ProviderButton from "./components/ProviderButton";
 
 export const revalidate = 5;
 
@@ -37,11 +38,9 @@ export default function SearchPage() {
   const [titleSearch, setTitleSearch] = useState("");
   const { data: session } = useSession();
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
-  const baseUrl = `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${
-    onlyNetflix && "&watch_region=FI&with_watch_providers=8"
-  }`;
+  const watchProviders = useFilterStore.use.watchProviders();
+
   const searchBaseUrl = `search/movie?query`;
-  console.log("genres", genreSelections);
 
   const {
     data: shortlist,
@@ -50,8 +49,14 @@ export default function SearchPage() {
   } = useShortlistQuery(session?.user?.shortlistId);
   const { data: providers, status: providersStatus } =
     useGetWatchProvidersQuery();
+  const baseUrl = `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${
+    watchProviders &&
+    `&watch_region=FI&with_watch_providers=${watchProviders
+      .map((provider: any) => provider.provider_id)
+      .join("|")})}`
+  }`;
 
-  console.log("providers", providers);
+  //console.log("providers", watchProviders);
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -165,15 +170,11 @@ export default function SearchPage() {
       <div className="flex flex-row gap-5 items-center">
         {providers?.map((provider: any) => {
           return (
-            <div
+            <ProviderButton
               key={provider.provider_id}
-              className="btn btn-square w-50 border-1 "
-            >
-              <img
-                src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
-                className="object-fill object-center rounded-md"
-              />
-            </div>
+              provider={provider}
+              isToggled={watchProviders.includes(provider.provider_id)}
+            />
           );
         })}
       </div>
@@ -183,6 +184,7 @@ export default function SearchPage() {
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
                 {page.results.map((movie: TMDBMovie) => {
+                  console.log(movie)
                   return (
                     <MovieCard
                       key={movie.id}

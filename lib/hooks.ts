@@ -230,12 +230,12 @@ export const useGetWatchProvidersQuery = () => {
        */
       const providers = data.results.filter((provider: any) => {
         return (
-          provider.provider_name === "Netflix" ||
-          provider.provider_name === "Disney Plus" ||
-          provider.provider_name === "Amazon Prime Video" ||
-          provider.provider_name === "HBO Max" ||
-          provider.provider_name === "SkyShowtime" ||
-          provider.provider_name === "Yle Areena"
+          provider.provider_id === 8 ||
+          provider.provider_id === 9 ||
+          provider.provider_id === 323 ||
+          provider.provider_id === 337 ||
+          provider.provider_id === 384 ||
+          provider.provider_id === 1773
         );
       });
       return providers;
