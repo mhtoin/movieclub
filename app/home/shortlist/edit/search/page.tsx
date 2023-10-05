@@ -86,7 +86,7 @@ export default function SearchPage() {
     : [];
 
   return (
-    <>
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 z-30">
         {data
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
@@ -108,6 +108,6 @@ export default function SearchPage() {
           Load More
         </button>
       )}
-    </>
+    </div>
   );
 }
