@@ -33,10 +33,9 @@ export default function SearchPage() {
   const { data: session } = useSession();
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
-  const {
-    data: shortlist,
-    status: shortlistStatus,
-  } = useShortlistQuery(session?.user?.shortlistId);
+  const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
+    session?.user?.shortlistId
+  );
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -74,7 +73,6 @@ export default function SearchPage() {
     };
   }, [loadMoreButtonRef.current, hasNextPage]);
 
-
   if (status === "loading" || shortlistStatus === "loading" || !shortlist) {
     return (
       <div className="flex flex-row items-center justify-center">
@@ -88,15 +86,12 @@ export default function SearchPage() {
     : [];
 
   return (
-    <div className="flex flex-col items-center gap-5 z-10">
-      <ShortlistContainer />
-      <Filters />
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 justify-center gap-10 z-30">
+    <>
         {data
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
                 {page.results.map((movie: TMDBMovie) => {
-                  console.log(movie)
+                  console.log(movie);
                   return (
                     <MovieCard
                       key={movie.id}
@@ -108,12 +103,11 @@ export default function SearchPage() {
               </Fragment>
             ))
           : []}
-      </div>
       {hasNextPage && (
         <button ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
           Load More
         </button>
       )}
-    </div>
+    </>
   );
 }
