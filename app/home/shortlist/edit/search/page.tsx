@@ -15,7 +15,7 @@ export const revalidate = 5;
 const fetchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
-    : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8`;
+    : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI`;
   const initialSearch = await fetch(
     `https://api.themoviedb.org/3/${searchQuery}`,
     {
@@ -49,12 +49,7 @@ export default function SearchPage() {
   } = useShortlistQuery(session?.user?.shortlistId);
   const { data: providers, status: providersStatus } =
     useGetWatchProvidersQuery();
-  const baseUrl = `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc${
-    watchProviders &&
-    `&watch_region=FI&with_watch_providers=${watchProviders
-      .map((provider: any) => provider.provider_id)
-      .join("|")})}`
-  }`;
+  const baseUrl = `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI`;
 
   //console.log("providers", watchProviders);
 
@@ -121,6 +116,10 @@ export default function SearchPage() {
       queryStringArr.push(`vote_average.lte=${ratingRange.max}`);
     }
 
+    if (watchProviders.length > 0) {
+      queryStringArr.push(`with_watch_providers=${watchProviders.join("|")}`)
+    }
+
     const queryString = queryStringArr.join("&");
     setSearchValue(baseUrl + "&" + queryString);
   };
@@ -174,6 +173,7 @@ export default function SearchPage() {
               key={provider.provider_id}
               provider={provider}
               isToggled={watchProviders.includes(provider.provider_id)}
+              submit={handleSearchSubmit}
             />
           );
         })}

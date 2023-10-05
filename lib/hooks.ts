@@ -231,7 +231,7 @@ export const useGetWatchProvidersQuery = () => {
       const providers = data.results.filter((provider: any) => {
         return (
           provider.provider_id === 8 ||
-          provider.provider_id === 9 ||
+          provider.provider_id === 119 ||
           provider.provider_id === 323 ||
           provider.provider_id === 337 ||
           provider.provider_id === 384 ||

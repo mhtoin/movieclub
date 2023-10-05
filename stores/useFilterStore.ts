@@ -26,9 +26,9 @@ const useNotificationStoreBase = create<FilterState>()((set, get) => ({
   yearRange: { min: "1900", max: new Date().getFullYear().toString() },
   ratingRange: { min: "0", max: "10" },
   //watchProviders: [],
-  watchProviders: [8, 9, 323, 337, 384, 1773],
+  watchProviders: [8, 119, 323, 337, 384, 1773],
   defaultSelectAll: true,
-  searchValue: `${baseUrl}&with_watch_providers=8|9|323|337|384|1773&watch_region=FI`,
+  searchValue: `${baseUrl}&with_watch_providers=8|119|323|337|384|1773&watch_region=FI`,
   setSearchValue: (value) => set((state) => {
     return { searchValue: value }
   }),

@@ -1,20 +1,25 @@
 import { useFilterStore } from "@/stores/useFilterStore";
 import { de } from "date-fns/locale";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export default function ProviderButton({
   provider,
   isToggled,
+  submit
 }: {
   provider: WatchProvider;
   isToggled: boolean;
+  submit: () => void;
 }) {
   const setDefaultSelectAll = useFilterStore.use.setDefaultSelectAll();
   const defaultSelectAll = useFilterStore.use.defaultSelectAll();
   const setWatchProviders = useFilterStore.use.setWatchProviders();
-
   const addProvider = useFilterStore((state) => state.addWatchprovider);
   const removeProvider = useFilterStore((state) => state.removeWatchprovider);
+
+  useEffect(() => {
+    submit()
+  }, [isToggled]);
 
   const handleSelect = () => {
     if (defaultSelectAll) {
