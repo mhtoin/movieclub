@@ -10,12 +10,12 @@ import { setYear } from "date-fns";
 
 interface modalProps {
   handleSearchSubmit: () => void
-  handleProviderToggle: Dispatch<SetStateAction<boolean>>
+  //handleProviderToggle: Dispatch<SetStateAction<boolean>>
 }
 
 export default function FiltersModal({
   handleSearchSubmit,
-  handleProviderToggle,
+  //handleProviderToggle,
 }: modalProps) {
   const yearRange = useFilterStore.use.yearRange()
   const ratingRange = useFilterStore.use.ratingRange()
@@ -74,7 +74,7 @@ export default function FiltersModal({
             onChange={setYearRange}
           />
           <div className="divider">Providers</div>
-          <ProviderToggle handleProviderToggle={handleProviderToggle} />
+          {/*<ProviderToggle handleProviderToggle={handleProviderToggle} />*/}
 
           <div className="modal-action">
             {/* if there is a button in form, it will close the modal */}
