@@ -1,6 +1,6 @@
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import FiltersModal from "./FiltersModal";
 import ProviderButton from "./ProviderButton";
 
@@ -60,26 +60,26 @@ export default function Filters() {
   };
 
   return (
-    <>
-      <div className="flex flex-row gap-5 items-center">
+    <div className="flex flex-col justify-center gap-5 sticky top-0 z-40 bg-black p-5 sm:w-full">
+      <div className="flex flex-row gap-5 items-center justify-center mx-5">
         <input
           type="text"
           placeholder="Search by title"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered input-sm sm:input-md"
           value={titleSearch}
           onChange={(event) => setTitleSearch(event.target.value)}
         />
-        <button className="btn" onClick={handleSearchByTitle}>
+        <button className="btn btn-sm sm:btn-md" onClick={handleSearchByTitle}>
           Search
         </button>
       </div>
-      <div className="flex flex-row gap-5 items-center">
+      <div className="flex flex-row gap-5 items-center justify-center mx-5">
         <FiltersModal handleSearchSubmit={handleSearchSubmit} />
-        <button className="btn" onClick={() => setSearchValue("")}>
+        <button className="btn btn-sm sm:btn-md" onClick={() => setSearchValue("")}>
           Reset
         </button>
       </div>
-      <div className="flex flex-row gap-5 items-center">
+      <div className="flex flex-row gap-5 m-auto justify-center">
         {providers?.map((provider: any) => {
           return (
             <ProviderButton
@@ -91,6 +91,6 @@ export default function Filters() {
           );
         })}
       </div>
-    </>
+    </div>
   );
 }

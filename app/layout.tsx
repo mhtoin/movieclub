@@ -4,10 +4,7 @@ import RaffleNotification from "./components/RaffleNotification";
 import Notification from "./components/Notification";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
-import WebNavbar from "./home/components/WebNavbar";
 import NavBar from "./home/components/NavBar";
-import Pusher from "pusher-js";
-import { PusherPovider } from "../utils/PusherProvider";
 
 export const metadata = {
   title: "movieclub",

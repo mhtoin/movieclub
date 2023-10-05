@@ -17,8 +17,7 @@ export default function MobileNavbar() {
 
     setPrevScrollPos(currentScrollPos);
     setVisible(visible);
-  }
-
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -27,9 +26,13 @@ export default function MobileNavbar() {
   }, [prevScrollPos]);
 
   return (
-    <div className={`btm-nav btm-nav-sm z-50 h-16 ${visible ? "animate-slide-in" : "animate-slide-out fill-mode-forwards"} sm:hidden`}>
+    <div
+      className={`btm-nav btm-nav-sm z-50 h-16 ${
+        visible ? "animate-slide-in" : "animate-slide-out fill-mode-forwards"
+      } sm:hidden`}
+    >
       <MobileNavbarButton pathname={pathname} destination="/home">
-      <svg
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-5 w-5"
           fill="none"
@@ -60,7 +63,7 @@ export default function MobileNavbar() {
             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
           />
         </svg>
-        <span className="btm-nav-label">Dashboard</span>
+        <span className="btm-nav-label">Stats</span>
       </MobileNavbarButton>
       <MobileNavbarButton pathname={pathname} destination="/home/shortlist">
         <svg
@@ -69,7 +72,7 @@ export default function MobileNavbar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-6 h-6"
+          className="w-5 h-5"
         >
           <path
             strokeLinecap="round"
@@ -78,7 +81,25 @@ export default function MobileNavbar() {
           />
         </svg>
 
-        <span className="btm-nav-label">Shortlist</span>
+        <span className="btm-nav-label">Lists</span>
+      </MobileNavbarButton>
+      <MobileNavbarButton pathname={pathname} destination="/home/shortlist/edit">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          className="w-5 h-5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+          />
+        </svg>
+
+        <span className="btm-nav-label">Edit</span>
       </MobileNavbarButton>
       <MobileNavbarButton pathname={pathname} destination="/tierlists">
         <svg
@@ -87,7 +108,7 @@ export default function MobileNavbar() {
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-6 h-6"
+          className="w-5 h-5"
         >
           <path
             strokeLinecap="round"

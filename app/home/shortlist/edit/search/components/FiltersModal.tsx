@@ -24,7 +24,7 @@ export default function FiltersModal({
  
   return (
     <>
-      <button className="btn" onClick={() => {
+      <button className="btn btn-sm sm:btn-md" onClick={() => {
         if (document) {
           (document.getElementById('filtersModal') as HTMLFormElement).showModal()
         }

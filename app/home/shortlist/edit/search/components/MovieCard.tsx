@@ -15,7 +15,7 @@ export default function MovieCard({
   const { data: session } = useSession();
   const addMutation = useAddToShortlistMutation();
   return (
-    <div className="indicator mx-auto border-2 rounded-md z-30">
+    <div className="indicator mx-auto border-2 rounded-md">
       <div className="indicator-item indicator-top indicator-start">
         <button
           className={`btn btn-circle btn-xs hover:bg-amber-500 ${
@@ -70,6 +70,7 @@ export default function MovieCard({
           src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
           alt={movie.title}
           width={"150"}
+          className="object-fill object-center rounded-md w-[120px] h-auto sm:w-[150px] sm:h-[210px]"
         />
       </a>
     </div>

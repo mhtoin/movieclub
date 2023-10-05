@@ -15,7 +15,7 @@ export default function Watchlist() {
   const movies = (shortlistData?.movies as Movie[]) || [];
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center mb-5">
       <div className="divider m-10">
         <div className="text-xl">Watchlist</div>
       </div>
@@ -43,7 +43,7 @@ export default function Watchlist() {
           })}
         </div>
       ) : (
-        <div className="alert alert-error w-1/2">
+        <div className="alert alert-error w-1/3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="stroke-current shrink-0 h-6 w-6"

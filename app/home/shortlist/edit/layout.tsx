@@ -1,8 +1,6 @@
 "use client";
 
 import ShortlistContainer from "./search/components/ShortlistContainer";
-import Filters from "./search/components/Filters";
-
 
 export default function SearchLayout({
   children, // will be a page or nested layout

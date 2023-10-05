@@ -2,7 +2,6 @@
 
 import { addMovie } from "../home/shortlist/edit/actions/actions";
 import { useTransition } from "react";
-import { useSession, getSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { omit } from "@/lib/utils";
 
@@ -66,6 +65,7 @@ export default function MoviePosterCard({
           src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
           alt={movie.title}
           width={"150"}
+          className="object-fill object-center rounded-md w-[120px] h-auto sm:w-[150px] sm:h-[210px]"
         />
       </a>
     </div>

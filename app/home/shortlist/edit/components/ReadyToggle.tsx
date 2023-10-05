@@ -6,10 +6,10 @@ export default function ReadyToggle({isReady, onToggle, label}: { isReady: boole
   const [toggled, setToggled] = useState(isReady);
   let [isPending, startTransition] = useTransition();
   return (
-    <div className="flex flex-co p-2 rounded-md">
-      <div className="form-control w-40">
+    <div className="flex flex-row">
+      <div className="form-control">
         <label className="cursor-pointer label">
-          <span className="label-text">{label}</span>
+          <span className="label-text p-5">{label}</span>
           <input
             type="checkbox"
             className="toggle toggle-success"
@@ -20,6 +20,7 @@ export default function ReadyToggle({isReady, onToggle, label}: { isReady: boole
             }
           />
         </label>
+        
       </div>
     </div>
   );

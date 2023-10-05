@@ -37,15 +37,16 @@ export default function ProviderButton({
   return (
     <button
       key={provider.provider_id}
-      className="btn btn-square w-50 border-1 "
+      className="btn btn-square border-1 btn-sm sm:btn-md rounded-md m-1"
       onClick={handleSelect}
     >
       <img
         src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
-        className={`object-fill object-center rounded-md ${
+        className={`object-fill object-center rounded-md  ${
           isToggled ? "opacity-100" : "opacity-10"
         }`}
         alt={provider.provider_name}
+        
       />
     </button>
   );

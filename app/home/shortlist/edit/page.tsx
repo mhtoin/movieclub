@@ -1,30 +1,24 @@
 "use client";
 import Link from "next/link";
-import Shortlist from "./components/Shortlist";
 import ReadyToggle from "./components/ReadyToggle";
-import { getServerSession } from "@/lib/getServerSession";
-import { getShortList } from "@/lib/shortlist";
-import SelectionRadio from "./components/SelectionRadio";
-import SelectionAlert from "./components/SelectionAlert";
 import {
   updateShortlistParticipation,
   updateShortlistReadyState,
 } from "./actions/actions";
 import { useShortlistQuery } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
-import ShortlistContainer from "./search/components/ShortlistContainer";
 
 export default function ShortListEdit() {
   const { data: session, status } = useSession();
-  console.log('session', session)
+  console.log("session", session);
   const { data: shortlistData, status: shortlistStatus } = useShortlistQuery(
     session?.user?.shortlistId
   );
-  console.log('shortlistData', shortlistData)
+  console.log("shortlistData", shortlistData);
 
   if (shortlistStatus === "success" && shortlistData) {
     const movies = (shortlistData?.movies as Movie[]) || [];
-    console.log('movies', movies)
+    console.log("movies", movies);
 
     return (
       <div className="flex min-w-fit flex-col items-center gap-5 overflow-hidden">
@@ -37,7 +31,7 @@ export default function ShortListEdit() {
           />
         )}*/}
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row gap-1">
           <ReadyToggle
             isReady={shortlistData.isReady}
             onToggle={updateShortlistReadyState}
@@ -50,12 +44,44 @@ export default function ShortListEdit() {
             label="Participating"
           />
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-5">
+        <div className="flex flex-row items-center gap-5">
           <Link href={"/home/shortlist/edit/watchlist"}>
-            <div className="btn">Add from watchlist</div>
+            <button className="btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                />
+              </svg>
+              Watchlist
+            </button>
           </Link>
           <Link href={"/home/shortlist/edit/search"}>
-            <div className="btn">Search</div>
+            <button className="btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
+              </svg>
+              Search
+            </button>
           </Link>
         </div>
       </div>
