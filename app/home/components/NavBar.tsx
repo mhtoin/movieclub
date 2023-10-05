@@ -96,7 +96,16 @@ export default function NavBar() {
                   </li>
                   <li>
                     <Link href={"/home/shortlist/edit"}>Edit</Link>
+                    <ul>
+                      <li>
+                        <Link href={"/home/shortlist/edit/search"}>Search</Link>
+                      </li>
+                      <li>
+                        <Link href={"/home/shortlist/edit/watchlist"}>Watchlist</Link>
+                      </li>
+                    </ul>
                   </li>
+
                 </ul>
               </details>
             </li>
