@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MobileNavbarButton from "./MobileNavbarButton";
+import { useDebounce } from "@/lib/hooks";
 
 export default function MobileNavbar() {
   const pathname = usePathname();
@@ -11,13 +12,14 @@ export default function MobileNavbar() {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  const handleScroll = () => {
+  const handleScroll = useDebounce(() => {
     const currentScrollPos = window.scrollY;
     const visible = prevScrollPos >= currentScrollPos;
+   
 
     setPrevScrollPos(currentScrollPos);
     setVisible(visible);
-  };
+  }, 30);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

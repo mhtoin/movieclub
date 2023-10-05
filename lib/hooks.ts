@@ -6,11 +6,12 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/message-types";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { produce } from "immer";
 import { getWatchlist } from "./tmdb";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useSession } from "next-auth/react";
+import { callback } from "chart.js/dist/helpers/helpers.core";
 
 export const useShortlistsQuery = () => {
   return useQuery(["shortlist"], async () => {
@@ -305,4 +306,29 @@ export const useGetTMDBSession = (
       }
     }
   }, [session]);
+};
+
+export const useDebounce = (callback: Function, delay: number) => {
+  const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => {
+    // Cleanup the previous timeout on re-render
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const debouncedCallback = (...args: any[]) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+
+  return debouncedCallback;
 };
