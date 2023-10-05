@@ -17,10 +17,6 @@ export default function Watchlist() {
   return (
     <div className="flex flex-col items-center">
       <div className="divider m-10">
-        <div className="text-xl">Shortlist</div>
-      </div>
-      <ShortlistContainer />
-      <div className="divider m-10">
         <div className="text-xl">Watchlist</div>
       </div>
       {session?.user.sessionId ? (

@@ -28,14 +28,14 @@ export default function ShortListEdit() {
 
     return (
       <div className="flex min-w-fit flex-col items-center gap-5 overflow-hidden">
-        {shortlistData.requiresSelection && <SelectionAlert />}
+        {/*{shortlistData.requiresSelection && <SelectionAlert />}
         <ShortlistContainer />
         {shortlistData.requiresSelection && (
           <SelectionRadio
             length={movies.length}
             selectedIndex={shortlistData.selectedIndex}
           />
-        )}
+        )}*/}
 
         <div className="flex flex-row gap-5">
           <ReadyToggle
