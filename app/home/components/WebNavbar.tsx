@@ -4,12 +4,8 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 export default async function WebNavbar() {
-  //const session = await getServerSession();
   const session = await getServerSession(authOptions);
   const isAuthenticated = !!session;
-
-  console.log('session is', session)
-
   return (
     <div className="min-w-screen hidden justify-center sm:flex">
       <div className="navbar rounded-box my-10 border w-9/12 bg-transparent">

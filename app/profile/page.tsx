@@ -21,7 +21,6 @@ export default function Profile() {
 
     setAccountId(session?.user.accountId);
   }, [session]);
-  console.log(session)
   useGetTMDBSession(session?.user.userId, setSessionId, setAccountId);
 
   if (status === "loading") {

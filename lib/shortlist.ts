@@ -160,7 +160,7 @@ export async function removeMovieFromShortlist(
         throw new Error(err.message)
       }
     );
-    console.log('removed', movie)
+   
     return movie;
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (e) {
@@ -211,7 +211,7 @@ export async function updateShortlistState(ready: boolean, shortlistId: string) 
     throw new Error(err.message)
   }
   );
-  console.log('updated', updated)
+  
   return updated;
 }
 

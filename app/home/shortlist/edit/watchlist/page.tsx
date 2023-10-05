@@ -1,48 +1,17 @@
-"use client"
+"use client";
 import MoviePosterCard from "@/app/components/MoviePosterCard";
 import { useGetWatchlistQuery, useShortlistQuery } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
-import ShortlistContainer from "../search/components/ShortlistContainer";
 
 export default function Watchlist() {
-  const { data: session, status } = useSession();
-  console.log('session', session)
-  const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(session?.user)
-  console.log('watchlist', watchlist)
-  const { data: shortlistData } = useShortlistQuery(
-    session?.user?.shortlistId
-  );
+  const { data: session } = useSession();
+  const { data: watchlist } = useGetWatchlistQuery(session?.user);
+  const { data: shortlistData } = useShortlistQuery(session?.user?.shortlistId);
   const movies = (shortlistData?.movies as Movie[]) || [];
 
   return (
-    <div className="flex flex-col items-center mb-5">
-      <div className="divider m-10">
-        <div className="text-xl">Watchlist</div>
-      </div>
-      {session?.user.sessionId ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-          {watchlist?.map((movie: TMDBMovie) => {
-            return (
-              <div
-                key={`container-${movie.id}`}
-                className="flex flex-col items-center gap-2"
-              >
-                <MoviePosterCard
-                  key={movie.id}
-                  movie={movie}
-                  added={
-                    movies.find(
-                      (shortlistMovie) => shortlistMovie.tmdbId === movie.id
-                    )
-                      ? true
-                      : false
-                  }
-                />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
+    <>
+      {!session?.user.userId && (
         <div className="alert alert-error w-1/3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +29,28 @@ export default function Watchlist() {
           <span>{`You haven't linked your TMDB account yet. You can do so in your profile`}</span>
         </div>
       )}
-    </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        {watchlist?.map((movie: TMDBMovie) => {
+          return (
+            <div
+              key={`container-${movie.id}`}
+              className="flex flex-col items-center gap-2"
+            >
+              <MoviePosterCard
+                key={movie.id}
+                movie={movie}
+                added={
+                  movies.find(
+                    (shortlistMovie) => shortlistMovie.tmdbId === movie.id
+                  )
+                    ? true
+                    : false
+                }
+              />
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }

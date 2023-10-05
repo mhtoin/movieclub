@@ -91,7 +91,6 @@ export default function SearchPage() {
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
                 {page.results.map((movie: TMDBMovie) => {
-                  console.log(movie);
                   return (
                     <MovieCard
                       key={movie.id}

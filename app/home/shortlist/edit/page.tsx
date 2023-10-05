@@ -10,15 +10,12 @@ import { useSession } from "next-auth/react";
 
 export default function ShortListEdit() {
   const { data: session, status } = useSession();
-  console.log("session", session);
   const { data: shortlistData, status: shortlistStatus } = useShortlistQuery(
     session?.user?.shortlistId
   );
-  console.log("shortlistData", shortlistData);
 
   if (shortlistStatus === "success" && shortlistData) {
     const movies = (shortlistData?.movies as Movie[]) || [];
-    console.log("movies", movies);
 
     return (
       <div className="flex min-w-fit flex-col items-center gap-5 overflow-hidden">

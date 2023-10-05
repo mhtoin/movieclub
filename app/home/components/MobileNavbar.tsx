@@ -13,7 +13,7 @@ export default function MobileNavbar() {
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;
-    const visible = prevScrollPos > currentScrollPos;
+    const visible = prevScrollPos >= currentScrollPos;
 
     setPrevScrollPos(currentScrollPos);
     setVisible(visible);

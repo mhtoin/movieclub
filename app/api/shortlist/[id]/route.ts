@@ -13,9 +13,7 @@ export async function GET(
 ) {
   try {
     const id = params.id;
-    console.log('getting shortlist', id)
     let shortlist = await getShortList(id);
-    console.log('got shortlist', shortlist)
     return NextResponse.json(shortlist, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {

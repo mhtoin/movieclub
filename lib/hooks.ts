@@ -159,7 +159,6 @@ export const usePusher = (channelName: string, eventName: string) => {
   useEffect(() => {
     const channel = pusher.subscribe(channelName);
     channel.bind(eventName, (data: PusherMessage) => {
-      console.log("bound to", eventName, data);
       handleMessage(eventName, channelName, data, queryClient);
     });
 
@@ -224,7 +223,6 @@ export const useGetWatchProvidersQuery = () => {
         }
       );
       const data = await response.json();
-      console.log("data in query", data);
       /**
        * We should provide some reasonable defaults here and store them somewhere
        */
@@ -256,7 +254,6 @@ export const useGetTMDBSession = (
     (state) => state.setNotification
   );
   const { data: session } = useSession();
-  console.log("id in session", session);
   useEffect(() => {
     const loc = window.location.search;
 
@@ -288,7 +285,6 @@ export const useGetTMDBSession = (
               setAccountId(accountBody.id);
 
               if (id.session_id && accountBody.id) {
-                console.log("fetching", userId);
                 await fetch(`/api/user/${session?.user?.userId}`, {
                   method: "PUT",
                   body: JSON.stringify({

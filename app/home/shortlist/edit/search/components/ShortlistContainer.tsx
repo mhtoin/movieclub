@@ -9,7 +9,6 @@ export default function ShortlistContainer() {
   const { data: shortlist, status: shortlistStatus } = useQuery({
     queryKey: ["shortlist", session?.user?.shortlistId],
     queryFn: async () => {
-      console.log('fetching', session?.user?.shortlistId)
       let res = await fetch(`/api/shortlist/${session?.user.shortlistId}`, {});
       return await res.json();
     },

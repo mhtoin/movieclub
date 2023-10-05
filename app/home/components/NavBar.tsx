@@ -1,15 +1,11 @@
 "use client";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function NavBar() {
-  //const session = await getServerSession();
   const { data: session } = useSession();
   const isAuthenticated = !!session;
 
-  console.log('session is', session)
 
   return (
     <div className="min-w-screen hidden justify-center sm:flex">
