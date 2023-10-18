@@ -5,6 +5,8 @@ import ShortListItem from "./edit/components/ShortListItem";
 import { RaffleClient } from "../components/RaffleClient";
 import { usePusher, useShortlistsQuery } from "@/lib/hooks";
 import { Fragment } from "react";
+import SearchButton from "./edit/components/SearchButton";
+import WatchlistButton from "./edit/components/WatchlistButton";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
@@ -20,22 +22,15 @@ export default function ShortList() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-12 overflow-hidden">
-      <div className="flex flex-row items-center justify-evenly gap-5">
-        <Link href={"/home/shortlist/edit"}>
-          {" "}
-          <button className="btn btn-outline">Edit</button>
-        </Link>
-        <RaffleClient />
-      </div>
       <div className="flex flex-col place-items-center m-5 gap-5">
-        {allShortlists?.map((shortlist: Shortlist) => {
+        {allShortlists?.map((shortlist: Shortlist, index: number) => {
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
                 className="flex flex-row justify-center place-items-center"
                 key={`name-container-${shortlist.id}`}
               >
-                <div className="avatar" key={`avatar-${shortlist.userId}`}>
+                <div className="avatar mr-5" key={`avatar-${shortlist.userId}`}>
                   <div
                     className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
                       shortlist.isReady ? "ring-success" : "ring-error"
@@ -49,10 +44,19 @@ export default function ShortList() {
                     />
                   </div>
                 </div>
-                <h1 key={shortlist.id + "-title"} className="text-xl m-5">
-                  {shortlist.user.name}
-                </h1>
+                {index > 0 && (
+                  <h1 key={shortlist.id + "-title"} className="text-xl">
+                    {shortlist.user.name}
+                  </h1>
+                )}
+                {index === 0 && (
+                  <>
+                    <SearchButton />
+                    <WatchlistButton />
+                  </>
+                )}
               </div>
+
               <div
                 key={shortlist.id + "-container"}
                 className="flex flex-row gap-5 w-2/3 sm:w-auto"
