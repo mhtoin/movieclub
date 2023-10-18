@@ -5,19 +5,29 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/message-types";
 import { useContext, useEffect, useRef } from "react";
 import { produce } from "immer";
-import { getWatchlist } from "./tmdb";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useSession } from "next-auth/react";
-import { callback } from "chart.js/dist/helpers/helpers.core";
 
 export const useShortlistsQuery = () => {
+  const { data: session } = useSession();
+  //console.log('session user is', session)
   return useQuery(["shortlist"], async () => {
     const response = await fetch(`/api/shortlist`);
-    return await response.json();
-  });
+    const data = await response.json()
+    data.sort((a: Shortlist, b: Shortlist) => {
+      if (a.id === session?.user?.shortlistId) {
+        return 1
+      } else if (b.id === session?.user?.shortlistId) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+
+    return data
+  }, { enabled: !!session?.user?.shortlistId });
 };
 
 export const useShortlistQuery = (id: string) => {
