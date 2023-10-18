@@ -41,6 +41,32 @@ export const useShortlistQuery = (id: string) => {
   });
 };
 
+export const useUpdateReadyStateMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      shortlistId,
+      isReady,
+    }: {
+      shortlistId: string;
+      isReady: boolean;
+    }) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}`, {
+        method: "PUT",
+        body: JSON.stringify({ isReady }),
+      });
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["shortlist"],
+      });
+    },
+  });
+}
+
 export const useUpdateShortlistMutation = (method: string) => {
   const queryClient = useQueryClient();
   return useMutation({

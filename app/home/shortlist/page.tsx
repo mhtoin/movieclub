@@ -4,12 +4,18 @@ import Link from "next/link";
 import ShortListItem from "./edit/components/ShortListItem";
 import { RaffleClient } from "../components/RaffleClient";
 import { usePusher, useShortlistsQuery } from "@/lib/hooks";
-import { Fragment } from "react";
+import { Fragment, useTransition } from "react";
 import SearchButton from "./edit/components/SearchButton";
 import WatchlistButton from "./edit/components/WatchlistButton";
+import { updateShortlistReadyState } from "./edit/actions/actions";
+import { useSession } from "next-auth/react";
+import SelectionAlert from "./edit/components/SelectionAlert";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
+  const { data: session } = useSession();
+  let [isPending, startTransition] = useTransition();
+
   usePusher("movieclub-shortlist", "shortlist-update");
 
   if (isLoading && !allShortlists) {
@@ -21,27 +27,48 @@ export default function ShortList() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-12 overflow-hidden">
+    <main className="flex max-h-screen flex-col items-center p-12 overflow-hidden">
       <div className="flex flex-col place-items-center m-5 gap-5">
         {allShortlists?.map((shortlist: Shortlist, index: number) => {
+          const isOwner = session?.user?.shortlistId === shortlist.id;
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
+              {isOwner &&
+                shortlist.requiresSelection &&
+                !shortlist.selectedIndex && <SelectionAlert />}
               <div
                 className="flex flex-row justify-center place-items-center"
                 key={`name-container-${shortlist.id}`}
               >
-                <div className="avatar mr-5" key={`avatar-${shortlist.userId}`}>
+                <div
+                  className={`avatar mr-5 flex justify-center ${
+                    isOwner && "hover:opacity-70"
+                  }`}
+                  key={`avatar-${shortlist.userId}`}
+                  onClick={() => {
+                    if (isOwner) {
+                      startTransition(() => {
+                        updateShortlistReadyState(!shortlist.isReady);
+                        //shortlist.isReady = !shortlist.isReady;
+                      });
+                    }
+                  }}
+                >
                   <div
                     className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
                       shortlist.isReady ? "ring-success" : "ring-error"
-                    }`}
+                    } `}
                     key={`avatar-ring ${shortlist.userId}`}
                   >
-                    <img
-                      src={shortlist?.user?.image}
-                      alt=""
-                      key={`profile-img-${shortlist.userId}`}
-                    />
+                    {isOwner && isPending ? (
+                      <span className="loading loading-spinner m-3"></span>
+                    ) : (
+                      <img
+                        src={shortlist?.user?.image}
+                        alt=""
+                        key={`profile-img-${shortlist.userId}`}
+                      />
+                    )}
                   </div>
                 </div>
                 {index > 0 && (
@@ -73,6 +100,9 @@ export default function ShortList() {
                           ? true
                           : false
                       }
+                      requiresSelection={shortlist.requiresSelection}
+                      removeFromShortList={isOwner}
+                      index={index}
                     />
                   );
                 })}
