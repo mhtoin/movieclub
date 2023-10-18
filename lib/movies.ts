@@ -154,10 +154,11 @@ export async function simulateRaffle(repetitions: number) {
 
 export async function chooseMovieOfTheWeek() {
   // get an array of all the movies and the user - Array<{user, movie}>
-  const shortlists = await getAllShortLists();
-  
+  let shortlists = await getAllShortLists();
+  shortlists = shortlists.filter((shortlist) => shortlist.participating);
+
   const selectionRequired = shortlists.filter((shortlist) =>
-    shortlist.requiresSelection && shortlist.participating? true : false
+    shortlist.requiresSelection ? true : false
   );
 
   if (selectionRequired.length > 0) {
@@ -172,7 +173,8 @@ export async function chooseMovieOfTheWeek() {
       }
     }
   }
-  const notReady = shortlists.filter((shortlist) => !shortlist.isReady && shortlist.participating);
+  
+  const notReady = shortlists.filter((shortlist) => !shortlist.isReady);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
 
   if (notReady.length > 0) {

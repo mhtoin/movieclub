@@ -145,7 +145,7 @@ declare global {
     isReady: boolean;
     movieIds: Array<string>;
     movies: Array<Movie>;
-    participation: boolean;
+    participating: boolean;
     requiresSelection: boolean;
     selectedIndex?: number;
     user: User;

@@ -29,6 +29,7 @@ export default function ShortList() {
       </div>
       <div className="flex flex-col place-items-center m-5 gap-5">
         {allShortlists?.map((shortlist: Shortlist) => {
+          console.log(shortlist)
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
@@ -38,7 +39,8 @@ export default function ShortList() {
                 <div className="avatar" key={`avatar-${shortlist.userId}`}>
                   <div
                     className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
-                      shortlist.isReady ? "ring-success" : "ring-error"
+                      !shortlist.participating ? "ring-neutral-600" 
+                      : shortlist.isReady ? "ring-success" : "ring-error"
                     }`}
                     key={`avatar-ring ${shortlist.userId}`}
                   >
@@ -46,6 +48,7 @@ export default function ShortList() {
                       src={shortlist?.user?.image}
                       alt=""
                       key={`profile-img-${shortlist.userId}`}
+                      className={`${shortlist.participating ? "opacity-100" : "opacity-20"} rounded-full`}
                     />
                   </div>
                 </div>
