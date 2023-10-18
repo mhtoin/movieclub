@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import ShortlistMovieItem from "./ShortlistMovieItem";
 import ItemSkeleton from "../../components/ItemSkeleton";
+import SelectionAlert from "../../components/SelectionAlert";
+import SelectionRadio from "../../components/SelectionRadio";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
@@ -34,19 +36,30 @@ export default function ShortlistContainer() {
       : [];
 
   return (
-    <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
-      {shortlist ? shortlist?.movies?.map((movie: Movie) => {
-        return (
-          <ShortlistMovieItem
-            key={movie.tmdbId}
-            movie={movie}
-            shortlistId={session?.user.shortlistId}
-          />
-        );
-      }) : []}
-      {skeletons.map((skeleton) => {
+    <>
+      <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
+        {shortlist
+          ? shortlist?.movies?.map((movie: Movie) => {
+              return (
+                <ShortlistMovieItem
+                  key={movie.tmdbId}
+                  movie={movie}
+                  shortlistId={session?.user.shortlistId}
+                />
+              );
+            })
+          : []}
+        {skeletons.map((skeleton) => {
           return skeleton;
-        })} 
-    </div>
+        })}
+      </div>
+      {shortlist.requiresSelection && !shortlist.selectedIndex && <SelectionAlert />}
+      {shortlist.requiresSelection && (
+        <SelectionRadio
+          length={movies.length}
+          selectedIndex={shortlist.selectedIndex}
+        />
+      )}
+    </>
   );
 }

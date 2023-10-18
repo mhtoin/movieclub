@@ -9,25 +9,14 @@ import { useShortlistQuery } from "@/lib/hooks";
 import { useSession } from "next-auth/react";
 
 export default function ShortListEdit() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const { data: shortlistData, status: shortlistStatus } = useShortlistQuery(
     session?.user?.shortlistId
   );
 
   if (shortlistStatus === "success" && shortlistData) {
-    const movies = (shortlistData?.movies as Movie[]) || [];
-
     return (
       <div className="flex min-w-fit flex-col items-center gap-5 overflow-hidden">
-        {/*{shortlistData.requiresSelection && <SelectionAlert />}
-        <ShortlistContainer />
-        {shortlistData.requiresSelection && (
-          <SelectionRadio
-            length={movies.length}
-            selectedIndex={shortlistData.selectedIndex}
-          />
-        )}*/}
-
         <div className="flex flex-row gap-1">
           <ReadyToggle
             isReady={shortlistData.isReady}
