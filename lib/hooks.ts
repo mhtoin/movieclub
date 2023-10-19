@@ -13,28 +13,27 @@ import { useSession } from "next-auth/react";
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
   //console.log('session user is', session)
-  return useQuery(["shortlist"], async () => {
-    const response = await fetch(`/api/shortlist`);
-    const data = await response.json()
-    data.sort((a: Shortlist, b: Shortlist) => {
-      if (a.id === session?.user?.shortlistId) {
-        return 1
-      } else if (b.id === session?.user?.shortlistId) {
-        return 1
-      } else {
-        return 0
-      }
-    })
+  return useQuery(
+    ["shortlist"],
+    async () => {
+      const response = await fetch(`/api/shortlist`);
+      const data = await response.json();
 
-    return data
-  }, { enabled: !!session?.user?.shortlistId });
+      return data.filter((shortlist: Shortlist) => {
+        return shortlist.id !== session?.user?.shortlistId;
+      });
+    },
+    { enabled: !!session?.user?.shortlistId }
+  );
 };
 
 export const useShortlistQuery = (id: string) => {
   return useQuery({
     queryKey: ["shortlist", id],
     queryFn: async () => {
-      const response = await fetch(`/api/shortlist/${id}`, { cache: 'no-store' });
+      const response = await fetch(`/api/shortlist/${id}`, {
+        cache: "no-store",
+      });
       return await response.json();
     },
     enabled: !!id,
@@ -65,7 +64,7 @@ export const useUpdateReadyStateMutation = () => {
       });
     },
   });
-}
+};
 
 export const useUpdateShortlistMutation = (method: string) => {
   const queryClient = useQueryClient();

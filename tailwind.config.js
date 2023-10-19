@@ -46,7 +46,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui"), require("tailwindcss-animate")],
+  plugins: [require("@tailwindcss/typography"), require("daisyui"), require("tailwindcss-animate"), require("tailwind-gradient-mask-image")],
   daisyui: {
     themes: ["dark"],
     base: false,

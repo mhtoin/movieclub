@@ -29,7 +29,7 @@ export default function ShortListItem({
 
   return (
     <div
-      className={`relative indicator mx-auto border-2 rounded-sm ${
+      className={`relative indicator mx-auto border-1 rounded-md  ${
         highlight && "border-green-700 ring-2 ring-green-500"
       } transition ease-in-out delay-50 hover:scale-110 hover:-translate-y-1
       ${
@@ -41,8 +41,10 @@ export default function ShortListItem({
       onPointerEnter={() => setIsHovering(true)}
       onPointerLeave={() => setIsHovering(false)}
       onClick={() => {
+        console.log("clicked", requiresSelection, index);
         if (requiresSelection && index) {
           startTransition(() => {
+            console.log("updating selection")
             updateSelection(index);
           });
         }
@@ -77,7 +79,7 @@ export default function ShortListItem({
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
         width={"150"}
-        className={`${isHovering && "opacity-70"}`}
+        className={`${isHovering && "opacity-50"} rounded-md relative -z-10 gradient-mask-b-80`}
       />
       {isHovering && (
         <button className="btn btn-ghost btn-xs p-0 absolute top-0 left-0 bottom-0 right-0 m-auto">
