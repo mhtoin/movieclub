@@ -5,9 +5,9 @@ This is an app used to host a remote movie club. It allows each user to maintain
 Users can search for movies in the app, or add them from an external watchlist. Currently only The MovieDB integration is included.
 
 ## Getting Started
-To run the current version of the app, you will need these things:
+To run the current version of the app, you will need the following :
 
-- A MonggoDB database. You can run one loaclly or, for example, use [MongoDB Atlas](https://www.mongodb.com/atlas/database)
+- A MongoDB database. You can run one locally or, for example, use [MongoDB Atlas](https://www.mongodb.com/atlas/database)
 - A Discord Application to use for authentication. You can create one [here](https://discord.com/developers)
 - Access to TMDB API. You can read how to get one [here](https://developer.themoviedb.org/docs)
 
