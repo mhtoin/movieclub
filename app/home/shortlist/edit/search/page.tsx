@@ -5,9 +5,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import ShortlistContainer from "./components/ShortlistContainer";
 import MovieCard from "./components/MovieCard";
-import { useShortlistQuery } from "@/lib/hooks";
+import { useGetWatchlistQuery, useShortlistQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
 import Filters from "./components/Filters";
+import { range } from "@/lib/utils";
+import ItemSkeleton from "../components/ItemSkeleton";
 
 export const revalidate = 5;
 
@@ -36,6 +38,7 @@ export default function SearchPage() {
   const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
     session?.user?.shortlistId
   );
+  const { data: watchlist } = useGetWatchlistQuery(session?.user);
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -73,10 +76,12 @@ export default function SearchPage() {
     };
   }, [loadMoreButtonRef.current, hasNextPage]);
 
-  if (status === "loading" || shortlistStatus === "loading" || !shortlist) {
+  if (status === "loading" || shortlistStatus === "loading" || !shortlist || !watchlist) {
     return (
-      <div className="flex flex-row items-center justify-center">
-        <span className="loading loading-ring loading-lg"></span>
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        {range(10).map((index) => {
+          return <ItemSkeleton key={index} />
+        })}
       </div>
     );
   }
@@ -85,8 +90,12 @@ export default function SearchPage() {
     ? shortlist?.movies?.map((movie: Movie) => movie.tmdbId)
     : [];
 
+  const watchlistMovieIds = watchlist
+    ? watchlist?.map((movie: TMDBMovie) => movie.id)
+    : [];
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+    <div className="flex flex-col p-10 ">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 p-10">
         {data
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
@@ -96,14 +105,16 @@ export default function SearchPage() {
                       key={movie.id}
                       movie={movie}
                       added={shortlistMovieIds?.includes(movie.id)}
+                      inWatchlist={watchlistMovieIds?.includes(movie.id)}
                     />
                   );
                 })}
               </Fragment>
             ))
           : []}
-      {hasNextPage && (
-        <button ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
+    </div>
+    {hasNextPage && (
+        <button className="btn max-w-sm m-auto" ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
           Load More
         </button>
       )}

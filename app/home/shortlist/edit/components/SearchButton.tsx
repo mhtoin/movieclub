@@ -5,7 +5,7 @@ export default function SearchButton() {
     <>
     <div className="tooltip tooltip-top" data-tip="hello"></div>
     <button className="btn btn-circle btn-sm btn-ghost">
-        <Link href='shortlist/edit/search'>
+        <Link href='/home/shortlist/edit/search'>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

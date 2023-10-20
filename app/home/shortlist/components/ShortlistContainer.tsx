@@ -2,14 +2,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import ItemSkeleton from "../edit/components/ItemSkeleton";
-import ShortlistMovieItem from "../edit/search/components/ShortlistMovieItem";
 import SelectionAlert from "../edit/components/SelectionAlert";
-import SelectionRadio from "../edit/components/SelectionRadio";
 import { Fragment, useTransition } from "react";
-import { updateShortlistReadyState } from "../edit/actions/actions";
 import SearchButton from "../edit/components/SearchButton";
 import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
+import { useUpdateReadyStateMutation } from "@/lib/hooks";
+import { RaffleClient } from "../../components/RaffleClient";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
@@ -21,6 +20,8 @@ export default function ShortlistContainer() {
     },
     enabled: !!session,
   });
+
+  const readyStateMutation = useUpdateReadyStateMutation();
   const [isPending, startTransition] = useTransition();
 
   if (shortlistStatus === "loading" && !shortlist) {
@@ -40,11 +41,10 @@ export default function ShortlistContainer() {
           <ItemSkeleton key={index} />
         ))
       : [];
-  console.log("layout", session);
-  console.log('shortlist', shortlist)
+
   return (
     <Fragment key={`fragment-${shortlist.id}`}>
-      {shortlist.requiresSelection && !shortlist.selectedIndex && (
+      {shortlist.requiresSelection && (shortlist.selectedIndex === null && shortlist.selectedIndex !== 0) && (
         <SelectionAlert />
       )}
       <div
@@ -55,9 +55,9 @@ export default function ShortlistContainer() {
           className={`avatar mr-5 flex justify-center ${"hover:opacity-70"}`}
           key={`avatar-${shortlist.userId}`}
           onClick={() => {
-            startTransition(() => {
-              updateShortlistReadyState(!shortlist.isReady);
-              //shortlist.isReady = !shortlist.isReady;
+            readyStateMutation.mutate({
+              shortlistId: shortlist.id,
+              isReady: !shortlist.isReady,
             });
           }}
         >
@@ -67,7 +67,7 @@ export default function ShortlistContainer() {
             } `}
             key={`avatar-ring ${shortlist.userId}`}
           >
-            {isPending ? (
+            {readyStateMutation.isLoading ? (
               <span className="loading loading-spinner m-3"></span>
             ) : (
               <img
@@ -82,6 +82,7 @@ export default function ShortlistContainer() {
         <>
           <SearchButton />
           <WatchlistButton />
+          <RaffleClient />
         </>
       </div>
 

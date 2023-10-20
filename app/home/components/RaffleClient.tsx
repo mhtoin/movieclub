@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useMutation } from "@tanstack/react-query";
 import RaffleResultModal from "./RaffleResultModal";
 import RaffleResultCard from "./RaffleResultCard";
+import { Icon } from "@iconify/react";
 
 const initiateRaffle = async () => {
   let res = await fetch("/api/raffle", {
@@ -33,14 +34,14 @@ export function RaffleClient() {
   });
 
   return (
-    <>
+    <div className="fixed z-90 bottom-10 right-8">
       <button
-        className="btn btn-outline"
+        className="btn btn-active btn-circle btn-lg"
         onClick={() => {
           raffle.mutate();
         }}
       >
-        Raffle
+       <Icon icon="game-icons:card-random" style={{ fontSize: '46px' }}/>
       </button>
       <RaffleResultModal open={open}>
         {chosenMovie ? (
@@ -57,6 +58,6 @@ export function RaffleClient() {
           </button>
         </div>
       </RaffleResultModal>
-    </>
+    </div>
   );
 }

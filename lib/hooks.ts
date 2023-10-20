@@ -18,7 +18,11 @@ export const useShortlistsQuery = () => {
     async () => {
       const response = await fetch(`/api/shortlist`);
       const data = await response.json();
-
+      /** !TODO
+       * Would make sense to just have an endpoint to return everyone else's
+       * shortlist
+       * Or then prefetch all and seed different queries
+       */
       return data.filter((shortlist: Shortlist) => {
         return shortlist.id !== session?.user?.shortlistId;
       });
@@ -42,7 +46,6 @@ export const useShortlistQuery = (id: string) => {
 
 export const useUpdateReadyStateMutation = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async ({
       shortlistId,
@@ -51,7 +54,7 @@ export const useUpdateReadyStateMutation = () => {
       shortlistId: string;
       isReady: boolean;
     }) => {
-      const response = await fetch(`/api/shortlist/${shortlistId}`, {
+      const response = await fetch(`/api/shortlist/${shortlistId}/ready`, {
         method: "PUT",
         body: JSON.stringify({ isReady }),
       });
@@ -62,6 +65,60 @@ export const useUpdateReadyStateMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ["shortlist"],
       });
+    },
+  });
+};
+
+export const useUpdateSelectionMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      shortlistId,
+      selectedIndex,
+    }: {
+      shortlistId: string;
+      selectedIndex: number;
+    }) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}/selection`, {
+        method: "PUT",
+        body: JSON.stringify({ selectedIndex }),
+      });
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["shortlist"],
+      });
+    },
+  });
+};
+
+export const useAddToWatchlistMutation = () => {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  return useMutation({
+    mutationFn: async ({ movieId }: { movieId: number }) => {
+      const requestBody = JSON.stringify({
+        "media_type": "movie",
+        "media_id": movieId,
+        "watchlist": true
+      })
+      console.log('request', requestBody)
+      const response = await fetch(
+        `https://api.themoviedb.org/3/account/${session?.user?.accountId}/watchlist?session_id=${session?.user?.sessionId}`,
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            'content-type': 'application/json',
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+          },
+          body: requestBody,
+        }
+      );
+
+      return await response.json();
     },
   });
 };
@@ -138,7 +195,7 @@ export const useAddToShortlistMutation = () => {
         ["shortlist", variables.shortlistId],
         (oldData: any) => {
           return produce(oldData, (draft: Shortlist) => {
-            draft.movies.push(variables.movie);
+            draft.movies = data.movies;
           });
         }
       );

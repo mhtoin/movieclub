@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function WatchlistButton() {
   return (
     <button className="btn btn-circle btn-sm btn-ghost">
-      <Link href="shortlist/edit/watchlist">
+      <Link href="/home/shortlist/edit/watchlist">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

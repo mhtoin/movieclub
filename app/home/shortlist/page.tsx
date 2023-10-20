@@ -10,6 +10,8 @@ import WatchlistButton from "./edit/components/WatchlistButton";
 import { updateShortlistReadyState } from "./edit/actions/actions";
 import { useSession } from "next-auth/react";
 import SelectionAlert from "./edit/components/SelectionAlert";
+import { range } from "@/lib/utils";
+import ShortlistSkeleton from "./components/ShortlistSkeleton";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
@@ -20,9 +22,13 @@ export default function ShortList() {
 
   if (isLoading && !allShortlists) {
     return (
-      <div className="flex flex-col items-center justify-center align-middle min-h-screen min-w-full">
-        <span className="loading loading-ring loading-lg"></span>
+      <div className="flex max-h-screen flex-col items-center overflow-hidden">
+      <div className="flex flex-col place-items-center m-5 p-5 gap-5 overflow-scroll max-h-[calc(100% - 100px)]">
+        {range(3).map((index) => {
+            return <ShortlistSkeleton key={index} index={index} />;
+        })}
       </div>
+    </div>
     );
   }
 
