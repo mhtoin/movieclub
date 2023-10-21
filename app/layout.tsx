@@ -5,6 +5,7 @@ import Notification from "./components/Notification";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
 import NavBar from "./home/components/NavBar";
+import RaffleDialog from "./components/RaffleDialog";
 
 export const metadata = {
   title: "movieclub",
@@ -16,7 +17,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-black">
@@ -25,8 +25,10 @@ export default function RootLayout({
           <NavBar />
 
           <RaffleNotification />
-
-          <Providers>{children}</Providers>
+          <Providers>
+            <RaffleDialog />
+            {children}
+          </Providers>
 
           <MobileNavbar />
         </NextAuthProvider>

@@ -5,6 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 import RaffleResultModal from "./RaffleResultModal";
 import RaffleResultCard from "./RaffleResultCard";
 import { Icon } from "@iconify/react";
+import RaffleDialog from "../../components/RaffleDialog";
+import { useRaffleStore } from "@/stores/useRaffleStore";
 
 const initiateRaffle = async () => {
   let res = await fetch("/api/raffle", {
@@ -19,6 +21,8 @@ export function RaffleClient() {
   const [open, setOpen] = useState(false);
   const [chosenMovie, setChosenMovie] = useState<MovieOfTheWeek>();
   const [notification, setNotification] = useState();
+  const isOpen = useRaffleStore.use.isOpen();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
   //const allShortlists = await getAllShortLists()
   const raffle = useMutation({
     mutationFn: initiateRaffle,
@@ -35,29 +39,16 @@ export function RaffleClient() {
 
   return (
     <div className="fixed z-90 bottom-10 right-8">
-      <button
-        className="btn btn-active btn-circle btn-lg"
-        onClick={() => {
-          raffle.mutate();
-        }}
-      >
-       <Icon icon="game-icons:card-random" style={{ fontSize: '46px' }}/>
-      </button>
-      <RaffleResultModal open={open}>
-        {chosenMovie ? (
-          <RaffleResultCard chosenMovie={chosenMovie!} />
-        ) : (
-          <div>
-            <p>{notification}</p>
-          </div>
-        )}
-        <div className="modal-action">
-          {/* closes the modal */}
-          <button className="btn btn-primary" onClick={() => setOpen(!open)}>
-            Close
-          </button>
-        </div>
-      </RaffleResultModal>
+       <button
+          className="btn btn-active btn-circle btn-lg"
+          onClick={() => {
+            //console.log("clicked");
+            setIsOpen(true);
+            //raffle.mutate();
+          }}
+        >
+          <Icon icon="game-icons:card-random" style={{ fontSize: "46px" }} />
+        </button>
     </div>
   );
 }

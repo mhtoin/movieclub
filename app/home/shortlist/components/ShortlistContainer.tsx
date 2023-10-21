@@ -9,6 +9,7 @@ import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
 import { useUpdateReadyStateMutation } from "@/lib/hooks";
 import { RaffleClient } from "../../components/RaffleClient";
+import RaffleDialog from "../../../components/RaffleDialog";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
