@@ -65,7 +65,7 @@ export default function ShortlistMovieItem({
           </svg>
         </button>
       </div>
-      {deleteMutation.isLoading || isDeleting ? (
+      {deleteMutation.isPending || isDeleting ? (
         <div className="w-[150px] h-[210px] flex flex-col items-center justify-center">
           <span className="loading loading-ring loading-lg"></span>
         </div>

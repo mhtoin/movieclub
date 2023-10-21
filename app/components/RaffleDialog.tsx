@@ -35,7 +35,7 @@ export default function RaffleDialog({ children }: PropsWithChildren) {
     },
   });
 
-  if (raffle.isLoading) {
+  if (raffle.isPending) {
     return (
       <Dialog.Root open={isOpen}>
       <Dialog.Portal>
@@ -49,7 +49,7 @@ export default function RaffleDialog({ children }: PropsWithChildren) {
           </Dialog.Title>
           <Dialog.Description />
           <div className="flex justify-center">
-            {raffle.isLoading && <span className="loading loading-circle loading-lg" />}
+            {raffle.isPending && <span className="loading loading-circle loading-lg" />}
           </div>
         </Dialog.Content>
       </Dialog.Portal>

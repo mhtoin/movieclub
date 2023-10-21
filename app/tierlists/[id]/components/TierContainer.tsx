@@ -178,7 +178,7 @@ export default function DnDTierContainer({
         onClick={handleSave}
         disabled={!authorized}
       >
-        {saveMutation.isLoading ? (
+        {saveMutation.isPending ? (
           <span className="loading loading-spinner"></span>
         ) : (
           <span>Save</span>
@@ -197,7 +197,7 @@ export default function DnDTierContainer({
         }}
         disabled={!authorized}
       >
-        {deleteMutation.isLoading ? (
+        {deleteMutation.isPending ? (
           <span className="loading loading-spinner"></span>
         ) : (
           <span>{movieMatrix.length > 1 ? 'Reset' : 'Create'}</span>

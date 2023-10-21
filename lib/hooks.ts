@@ -1,6 +1,7 @@
 import { PusherContext } from "@/utils/PusherProvider";
 import {
   QueryClient,
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -9,13 +10,15 @@ import { useContext, useEffect, useRef } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useSession } from "next-auth/react";
+import { useFilterStore } from "@/stores/useFilterStore";
+import { searchMovies } from "./utils";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
   //console.log('session user is', session)
-  return useQuery(
-    ["shortlist"],
-    async () => {
+  return useQuery({
+    queryKey: ["shortlist"],
+    queryFn: async () => {
       const response = await fetch(`/api/shortlist`);
       const data = await response.json();
       /** !TODO
@@ -27,8 +30,8 @@ export const useShortlistsQuery = () => {
         return shortlist.id !== session?.user?.shortlistId;
       });
     },
-    { enabled: !!session?.user?.shortlistId }
-  );
+    enabled: !!session?.user?.shortlistId,
+  });
 };
 
 export const useShortlistQuery = (id: string) => {
@@ -44,6 +47,39 @@ export const useShortlistQuery = (id: string) => {
   });
 };
 
+export const useSearchInfiniteQuery = () => {
+  const searchValue = useFilterStore.use.searchValue();
+  return useInfiniteQuery({
+    queryKey: ["search", searchValue],
+    queryFn: async ({ pageParam}) => searchMovies(pageParam, searchValue),
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages: totalPages } = lastPage;
+      return page < totalPages ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+  });
+};
+
+export const useRaffleMutation = () => {
+  return useMutation({
+    mutationFn: async () => {
+      let res = await fetch("/api/raffle", {
+        method: "POST",
+      });
+    
+      return await res.json()
+    },
+    onSuccess: (data) => {
+      if (data.ok) {
+      } else {
+        if (data.message) {
+          //setNotification(data.message);
+        }
+        //setOpen(true);
+      }
+    },
+  });
+};
 export const useUpdateReadyStateMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -95,23 +131,22 @@ export const useUpdateSelectionMutation = () => {
 };
 
 export const useAddToWatchlistMutation = () => {
-  const queryClient = useQueryClient();
   const { data: session } = useSession();
   return useMutation({
     mutationFn: async ({ movieId }: { movieId: number }) => {
       const requestBody = JSON.stringify({
-        "media_type": "movie",
-        "media_id": movieId,
-        "watchlist": true
-      })
-      console.log('request', requestBody)
+        media_type: "movie",
+        media_id: movieId,
+        watchlist: true,
+      });
+      console.log("request", requestBody);
       const response = await fetch(
         `https://api.themoviedb.org/3/account/${session?.user?.accountId}/watchlist?session_id=${session?.user?.sessionId}`,
         {
           method: "POST",
           headers: {
             accept: "application/json",
-            'content-type': 'application/json',
+            "content-type": "application/json",
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
           },
           body: requestBody,
@@ -332,7 +367,7 @@ export const useGetWatchProvidersQuery = () => {
       return providers;
     },
     staleTime: Infinity,
-    cacheTime: Infinity,
+    gcTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });

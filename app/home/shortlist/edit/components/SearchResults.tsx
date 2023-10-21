@@ -58,7 +58,7 @@ export default function SearchResults({
     enabled: shouldFetch,
   });
 
-  if (status === "loading") {
+  if (status === "pending") {
     if (fetchStatus !== "idle") {
       return <span className="loading loading-spinner"></span>;
     }

@@ -17,7 +17,7 @@ export default function ShortlistContainer() {
     enabled: !!session,
   });
 
-  if (shortlistStatus === "loading" && !shortlist) {
+  if (shortlistStatus === "pending" && !shortlist) {
     return (
       <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
         <ItemSkeleton />

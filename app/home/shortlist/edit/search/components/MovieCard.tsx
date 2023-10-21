@@ -39,7 +39,7 @@ export default function MovieCard({
           isHovering && "opacity-50"
         } object-fill object-center rounded-md w-[120px] h-auto sm:w-[150px] sm:h-[210px] relative -z-10 gradient-mask-b-80`}
       />
-      {addMutation.isLoading && (
+      {addMutation.isPending && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
       )}
       <MovieCardButton

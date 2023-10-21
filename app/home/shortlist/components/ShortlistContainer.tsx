@@ -7,25 +7,17 @@ import { Fragment, useTransition } from "react";
 import SearchButton from "../edit/components/SearchButton";
 import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
-import { useUpdateReadyStateMutation } from "@/lib/hooks";
+import { useShortlistQuery, useUpdateReadyStateMutation } from "@/lib/hooks";
 import { RaffleClient } from "../../components/RaffleClient";
 import RaffleDialog from "../../../components/RaffleDialog";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
-  const { data: shortlist, status: shortlistStatus } = useQuery({
-    queryKey: ["shortlist", session?.user?.shortlistId],
-    queryFn: async () => {
-      let res = await fetch(`/api/shortlist/${session?.user.shortlistId}`, {});
-      return await res.json();
-    },
-    enabled: !!session,
-  });
-
+  const { data: shortlist, status: shortlistStatus } = useShortlistQuery(session?.user?.shortlistId)
   const readyStateMutation = useUpdateReadyStateMutation();
   const [isPending, startTransition] = useTransition();
 
-  if (shortlistStatus === "loading" && !shortlist) {
+  if (shortlistStatus === "pending" && !shortlist) {
     return (
       <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto">
         <ItemSkeleton />
@@ -68,7 +60,7 @@ export default function ShortlistContainer() {
             } `}
             key={`avatar-ring ${shortlist.userId}`}
           >
-            {readyStateMutation.isLoading ? (
+            {readyStateMutation.isPending ? (
               <span className="loading loading-spinner m-3"></span>
             ) : (
               <img

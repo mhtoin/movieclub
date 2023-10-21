@@ -62,7 +62,7 @@ export default function ShortListItem({
           isHovering && "opacity-50"
         } rounded-md relative -z-10 gradient-mask-b-80`}
       />
-      {(selectionMutation.isLoading || removeMutation.isLoading) && (
+      {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
       )}
       {isHovering && (

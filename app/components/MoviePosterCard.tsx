@@ -24,7 +24,9 @@ export default function MoviePosterCard({
           onClick={() => {
             const movieObj = { ...omit(movie, ["id"]), tmdbId: movie.id } as Movie;
             startTransition(() => addMovie(movieObj));
-            queryClient.invalidateQueries(['shortlist'])
+            queryClient.invalidateQueries({
+              queryKey: ['shortlist']
+            })
           }}
         >
           {added ? (
