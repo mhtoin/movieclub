@@ -87,7 +87,7 @@ export default function ShortListItem({
       )}
       {removeFromShortList && (
         <button
-          className="btn btn-circle btn-ghost btn-xs absolute top-0 right-0 m-auto"
+          className="btn btn-circle btn-xs absolute top-0 right-0 p-0"
           onClick={(event) => {
             removeMutation.mutate({ movieId: movie.id!, shortlistId });
             event.stopPropagation();

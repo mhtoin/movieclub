@@ -9,6 +9,7 @@ import AddButton from "./AddButton";
 import Link from "next/link";
 import MovieCardButton from "./MovieCardButton";
 import CheckMark from "./CheckMark";
+import { set } from "date-fns";
 
 export default function MovieCard({
   movie,
@@ -28,8 +29,9 @@ export default function MovieCard({
       className="relative indicator mx-auto rounded-md transition ease-in-out delay-50 hover:scale-110 hover:-translate-y-1"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onPointerEnter={() => setIsHovering(true)}
+      onTouchStart={() => setIsHovering(true)}
       onPointerLeave={() => setIsHovering(false)}
+      //onClick={() => setIsHovering(!isHovering)}
     >
       <img
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
@@ -78,13 +80,16 @@ export default function MovieCard({
           target="_blank"
           rel="noopener noreferrer"
         >
+          <button className="btn btn-ghost absolute top-0 left-0 bottom-0 right-0 m-auto" onClick={(event) => {
+            event.stopPropagation();
+          }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6 p-0 absolute top-0 left-0 bottom-0 right-0 m-auto"
+            className="w-6 h-6 p-0 "
           >
             <path
               strokeLinecap="round"
@@ -92,6 +97,7 @@ export default function MovieCard({
               d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
             />
           </svg>
+          </button>
         </Link>
       )}
     </div>
