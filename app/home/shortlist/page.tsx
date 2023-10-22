@@ -22,12 +22,11 @@ export default function ShortList() {
     );
   }
 
-  let doubled = allShortlists ? [...allShortlists, ...allShortlists] : [];
 
   return (
     <main className="flex flex-col items-center m-5 overflow-hidden">
       <div className="flex flex-col place-items-center gap-2 overflow-hidden">
-        {doubled?.map((shortlist: Shortlist, index: number) => {
+        {allShortlists?.map((shortlist: Shortlist, index: number) => {
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
