@@ -121,7 +121,10 @@ export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
 
     await pusher.trigger("movieclub-shortlist", "shortlist-update", {
       message: `movies`,
-      data: updatedShortlist
+      data: {
+        userId: updatedShortlist.userId,
+        payload: updatedShortlist
+      }
       }).catch((err) => {
         throw new Error(err.message)
       }
@@ -139,7 +142,7 @@ export async function removeMovieFromShortlist(
 ) {
   
   try {
-    const movie = await prisma.shortlist.update({
+    const updatedShortlist = await prisma.shortlist.update({
       where: {
         id: shortlistId,
       },
@@ -155,13 +158,16 @@ export async function removeMovieFromShortlist(
 
     await pusher.trigger("movieclub-shortlist", "shortlist-update", {
       message: `movies`,
-      data: movie
+      data: {
+        userId: updatedShortlist.userId,
+        payload: updatedShortlist
+      }
       }).catch((err) => {
         throw new Error(err.message)
       }
     );
    
-    return movie;
+    return updatedShortlist;
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (e) {
     return NextResponse.json({ message: "Something went wrong" }), { status: 500 };
@@ -206,7 +212,10 @@ export async function updateShortlistState(ready: boolean, shortlistId: string) 
 
   await pusher.trigger("movieclub-shortlist", "shortlist-update", {
     message: `ready`,
-    data: updated
+    data: {
+      userId: updated.userId,
+      payload: updated
+    }
   }).catch((err) => {
     throw new Error(err.message)
   }
@@ -238,7 +247,10 @@ export async function updateShortlistSelection(index: number, shortlistId: strin
 
   await pusher.trigger("movieclub-shortlist", "shortlist-update", {
     message: `selection`,
-    data: updated
+    data: {
+      userId: updated.userId,
+      payload: updated
+    }
   }).catch((err) => {
     throw new Error(err.message)
   }
@@ -259,7 +271,10 @@ export async function updateShortlistSelectionStatus(status: boolean, shortlistI
 
   await pusher.trigger("movieclub-shortlist", "shortlist-update", {
     message: `selection`,
-    data: updated
+    data: {
+      userId: updated.userId,
+      payload: updated
+    }
   }).catch((err) => {
     throw new Error(err.message)
   }

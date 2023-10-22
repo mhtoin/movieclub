@@ -25,7 +25,6 @@ export default function MobileNavbarButton({
         router.push(destination);
       }}
       onAnimationEnd={() => {
-        console.log("animation ended");
         setEffect(false);
       }}
     >

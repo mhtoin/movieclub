@@ -8,6 +8,8 @@ interface RaffleState {
     setIsLoading: (value: boolean) => void;
     result: MovieOfTheWeek | null;
     setResult: (value: MovieOfTheWeek | null) => void;
+    senderIsCurrentUser: boolean;
+    setSenderIsCurrentUser: (value: boolean) => void;
 }
 
 const useRaffleStoreBase = create<RaffleState>()((set, get) => ({
@@ -17,6 +19,8 @@ const useRaffleStoreBase = create<RaffleState>()((set, get) => ({
     setIsLoading: (value) => set((state) => ({ isLoading: value })),
     result: null,
     setResult: (value) => set((state) => ({ result: value })),
+    senderIsCurrentUser: false,
+    setSenderIsCurrentUser: (value) => set((state) => ({ senderIsCurrentUser: value })),
 }));
 
 export const useRaffleStore = createSelectors(useRaffleStoreBase);

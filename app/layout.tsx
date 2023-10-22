@@ -54,9 +54,10 @@ export default function RootLayout({
           <Providers>
             <RaffleDialog />
             {children}
+            <MobileNavbar />
           </Providers>
 
-          <MobileNavbar />
+         
         </NextAuthProvider>
       </body>
     </html>

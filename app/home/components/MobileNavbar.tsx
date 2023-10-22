@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MobileNavbarButton from "./MobileNavbarButton";
 import { useDebounce } from "@/lib/hooks";
+import { MobileRaffleButton } from "@/app/components/MobileRaffleButton";
 
 export default function MobileNavbar() {
   const pathname = usePathname();
@@ -103,6 +104,8 @@ export default function MobileNavbar() {
 
         <span className="btm-nav-label">Tierlists</span>
       </MobileNavbarButton>
+      <MobileRaffleButton />
+      
       <button
         className={`transform active:scale-75 transition-transform btn-circle avatar ${
           pathname == "/profile" ? "active" : ""

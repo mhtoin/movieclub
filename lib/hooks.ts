@@ -10,7 +10,7 @@ import {
 import { useContext, useEffect, useRef } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { searchMovies } from "./utils";
 import toast from "react-hot-toast";
@@ -71,8 +71,6 @@ export const useRaffleMutation = () => {
   const setIsLoading = useRaffleStore.use.setIsLoading();
   const setResult = useRaffleStore.use.setResult();
   const isOpen = useRaffleStore.use.isOpen();
-
-  console.log("sending", session?.user?.userId);
   return useMutation({
     mutationKey: ["raffle"],
     mutationFn: async () => {
@@ -97,8 +95,9 @@ export const useRaffleMutation = () => {
       }
     },
     onError: (error) => {
-      toast.error(error.message);
       setIsOpen(false);
+      setIsLoading(false);
+      toast.error(error.message);
     },
   });
 };
@@ -278,12 +277,13 @@ const handleShortlistMessage = (
   data: PusherMessage,
   queryClient: QueryClient
 ) => {
-  let messageData = data.data as Shortlist;
+  let messageData = data.data.payload as Shortlist;
   let messageType = data.message;
+  console.log('handling shortlist message', messageType, data, messageData)
   queryClient.setQueryData(["shortlist"], (oldData: any) => {
     return produce(oldData, (draft: Array<Shortlist>) => {
       let targetShortlist = draft.find(
-        (shortlist) => shortlist.id === data.data.id
+        (shortlist) => shortlist.id === messageData.id
       );
 
       switch (messageType) {
@@ -297,34 +297,14 @@ const handleShortlistMessage = (
             targetShortlist.movies = messageData.movies;
           }
           break;
+        case "selection":
+          if (targetShortlist) {
+            targetShortlist.selectedIndex = messageData.selectedIndex;
+          }
+          break;
       }
     });
   });
-};
-
-const handleRaffleMessage = (
-  eventName: string,
-  data: PusherMessage,
-  queryClient: QueryClient
-) => {
-  const isOpen = useRaffleStore.use.isOpen();
-  const setIsOpen = useRaffleStore.use.setIsOpen();
-  const result = useRaffleStore.use.result();
-  const setResult = useRaffleStore.use.setResult();
-  const setIsLoading = useRaffleStore.use.setIsLoading();
-  let messageData = data as RaffleNotification;
-  let messageType = data.message;
-
-  if (messageData.data) {
-    if (result === null) {
-      setResult(messageData.data);
-      setIsLoading(false);
-    }
-
-    if (!isOpen) {
-      setIsOpen(true);
-    }
-  }
 };
 
 const handleMessage = (
@@ -337,56 +317,75 @@ const handleMessage = (
     case "movieclub-shortlist":
       handleShortlistMessage(eventName, data, queryClient);
       break;
-    case "movieclub-raffle":
-      //handleRaffleMessage(eventName, data, queryClient);
-      break;
   }
 };
 
-export const usePusher = (channelName: string, eventName: string) => {
+export const usePusher = (
+  channelName: string,
+  eventName: string,
+  userId?: string
+) => {
   const pusher = useContext(PusherContext);
   const isOpen = useRaffleStore.use.isOpen();
   const setIsOpen = useRaffleStore.use.setIsOpen();
-  const result = useRaffleStore.use.result();
   const setResult = useRaffleStore.use.setResult();
   const isLoading = useRaffleStore.use.isLoading();
   const setIsLoading = useRaffleStore.use.setIsLoading();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const channel = pusher.subscribe(channelName);
-    channel.bind(eventName, (data: PusherMessage) => {
-      if (channelName === "movieclub-raffle") {
-        const messageType = data.message;
-        console.log('received', messageType)
-        if (messageType === "result") {
-          const messageData = data as RaffleNotification;
+    const bindPusher = async () => {
+      const session = await getSession();
+      console.log('session is', session)
+      const channel = pusher.subscribe(channelName);
+      channel.bind(eventName, (data: PusherMessage) => {
+        if (channelName === "movieclub-raffle") {
+          console.log('received', data)
+          const messageType = data.message;
+          const messageData = data.data as PusherPayload;
+          if (messageData.userId !== session?.user?.userId) {
+          console.log("handling message", messageType, messageData, session?.user?.userId);
+            
+            if (messageType === "result") {
+              const payload = messageData.payload as MovieOfTheWeek;
 
-          if (messageData.data) {
-            setResult(messageData.data);
-            setIsLoading(false);
+              if (payload) {
+                setResult(payload);
+                setIsLoading(false);
 
-            if (!isOpen) {
-              setIsOpen(true);
+                if (!isOpen) {
+                  setIsOpen(true);
+                }
+              }
+            } else if (messageType === "request") {
+              if (!isOpen) {
+                //setIsOpen(!isOpen);
+              }
+
+              if (!isLoading) {
+                //setIsLoading(!isLoading);
+              }
+            } else if (messageType === "error") {
+              let errorData = messageData.payload as string;
+              console.log("error", errorData, messageData);
+              setIsOpen(false);
+              setIsLoading(false);
+
+              if (errorData) {
+                toast.error(errorData);
+              }
             }
           }
-        } else if (messageType === "request") {
-          if (!isOpen) {
-            setIsOpen(true);
-          }
-
-          if (!isLoading) {
-            setIsLoading(true);
-          }
+        } else {
+          handleMessage(eventName, channelName, data, queryClient);
         }
-      } else {
-        handleMessage(eventName, channelName, data, queryClient);
-      }
-    });
+      });
 
-    return () => {
-      pusher.unsubscribe(channelName);
+      return () => {
+        pusher.unsubscribe(channelName);
+      };
     };
+    bindPusher();
   }, []);
 };
 

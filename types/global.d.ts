@@ -137,7 +137,12 @@ declare global {
 
   interface PusherMessage {
     message: string;
-    data: Shortlist | Movie | MovieOfTheWeek;
+    data: PusherPayload;
+  }
+
+  interface PusherPayload {
+    userId: string;
+    payload: Shortlist | Movie | MovieOfTheWeek | string;
   }
 
   interface Shortlist {

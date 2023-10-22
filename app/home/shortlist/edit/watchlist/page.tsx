@@ -1,14 +1,33 @@
 "use client";
 import MoviePosterCard from "@/app/components/MoviePosterCard";
 import { useGetWatchlistQuery, useShortlistQuery } from "@/lib/hooks";
+import { range } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import ItemSkeleton from "../components/ItemSkeleton";
+import MovieCard from "../search/components/MovieCard";
 
 export default function Watchlist() {
   const { data: session } = useSession();
-  const { data: watchlist } = useGetWatchlistQuery(session?.user);
+  const { data: watchlist, status } = useGetWatchlistQuery(session?.user);
   const { data: shortlistData } = useShortlistQuery(session?.user?.shortlistId);
-  const movies = (shortlistData?.movies as Movie[]) || [];
 
+  if (status === "pending" && !watchlist) {
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        {range(10).map((index) => {
+          return <ItemSkeleton key={index} />
+        })}
+      </div>
+    )
+  }
+
+  const shortlistMovieIds = shortlistData
+    ? shortlistData?.movies?.map((movie: Movie) => movie.tmdbId)
+    : [];
+
+  const watchlistMovieIds = watchlist
+    ? watchlist?.map((movie: TMDBMovie) => movie.id)
+    : [];
   return (
     <>
       {!session?.user.userId && (
@@ -36,17 +55,12 @@ export default function Watchlist() {
               key={`container-${movie.id}`}
               className="flex flex-col items-center gap-2"
             >
-              <MoviePosterCard
-                key={movie.id}
-                movie={movie}
-                added={
-                  movies.find(
-                    (shortlistMovie) => shortlistMovie.tmdbId === movie.id
-                  )
-                    ? true
-                    : false
-                }
-              />
+              <MovieCard
+                      key={movie.id}
+                      movie={movie}
+                      added={shortlistMovieIds?.includes(movie.id)}
+                      inWatchlist={watchlistMovieIds?.includes(movie.id)}
+                    />
             </div>
           );
         })}

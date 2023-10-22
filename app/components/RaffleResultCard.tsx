@@ -4,7 +4,7 @@ export default function RaffleResultCard({
   chosenMovie: MovieOfTheWeek;
 }) {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl image-full">
+    <div className="card bg-base-100 shadow-xl image-full">
       <figure>
         <img
           src={`http://image.tmdb.org/t/p/original${chosenMovie?.["poster_path"]}`}
@@ -18,7 +18,7 @@ export default function RaffleResultCard({
             <img src={chosenMovie?.user?.image} alt={"user"} />
           </div>
         </div>
-        <p className="text-white">{chosenMovie?.overview}</p>
+        <p className="text-white overflow-scroll h-[50px]">{chosenMovie?.overview}</p>
         <div className="card-actions justify-end">
           {chosenMovie?.trailers?.map((trailer) => {
             return (
