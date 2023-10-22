@@ -48,10 +48,6 @@ export default function NavBar() {
                     <Link href={"/home/shortlist"}>View all</Link>
                   </li>
                   <li>
-                    <label tabIndex={0}>
-                      {" "}
-                      <Link href={"/home/shortlist/edit"}>Edit</Link>
-                    </label>
                     <ul tabIndex={0} className="p-2">
                       <li>
                         <Link href={"/home/shortlist/edit/search"}>Search</Link>
@@ -95,7 +91,6 @@ export default function NavBar() {
                     <Link href={"/home/shortlist"}>All</Link>
                   </li>
                   <li>
-                    <Link href={"/home/shortlist/edit"}>Edit</Link>
                     <ul>
                       <li>
                         <Link href={"/home/shortlist/edit/search"}>Search</Link>
