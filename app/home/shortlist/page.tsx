@@ -1,23 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import ShortListItem from "./edit/components/ShortListItem";
-import { RaffleClient } from "../components/RaffleClient";
 import { usePusher, useShortlistsQuery } from "@/lib/hooks";
-import { Fragment, useTransition } from "react";
-import SearchButton from "./edit/components/SearchButton";
-import WatchlistButton from "./edit/components/WatchlistButton";
-import { updateShortlistReadyState } from "./edit/actions/actions";
-import { useSession } from "next-auth/react";
-import SelectionAlert from "./edit/components/SelectionAlert";
+import { Fragment } from "react";
 import { range } from "@/lib/utils";
 import ShortlistSkeleton from "./components/ShortlistSkeleton";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
-  const { data: session } = useSession();
-  let [isPending, startTransition] = useTransition();
-
   usePusher("movieclub-shortlist", "shortlist-update");
 
   if (isLoading && !allShortlists) {
@@ -43,7 +33,7 @@ export default function ShortList() {
                 key={`name-container-${shortlist.id}`}
               >
                 <div
-                  className={`avatar mr-5 flex justify-center`}
+                  className={`avatar mr-5 flex justify-center w-8 2xl:w-10`}
                   key={`avatar-${shortlist.userId}`}
                 >
                   <div

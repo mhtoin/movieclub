@@ -1,7 +1,6 @@
 "use client";
 import { useState, useTransition } from "react";
 import { createReviewAction } from "../actions/actions";
-import { Prisma } from "@prisma/client";
 
 export default function Review({
   movie,

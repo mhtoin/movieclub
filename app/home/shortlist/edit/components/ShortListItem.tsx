@@ -7,7 +7,6 @@ import {
 } from "@/lib/hooks";
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { updateSelection } from "../actions/actions";
 
 interface SearchResultCardProps {
   movie: Movie;
@@ -26,7 +25,6 @@ export default function ShortListItem({
   requiresSelection,
   index,
 }: SearchResultCardProps) {
-  let [isPending, startTransition] = useTransition();
   const [isHovering, setIsHovering] = useState(false);
   const removeMutation = useRemoveFromShortlistMutation();
   const selectionMutation = useUpdateSelectionMutation();
@@ -43,9 +41,7 @@ export default function ShortListItem({
       onPointerEnter={() => setIsHovering(true)}
       onPointerLeave={() => setIsHovering(false)}
       onClick={(event) => {
-        console.log("changing selection");
         if (requiresSelection && index !== undefined) {
-          console.log("changing selection");
           selectionMutation.mutate({
             shortlistId,
             selectedIndex: index,
@@ -60,7 +56,7 @@ export default function ShortListItem({
         width={"150"}
         className={`${
           isHovering && "opacity-50"
-        } rounded-md relative -z-10 gradient-mask-b-80`}
+        } rounded-md relative -z-10 gradient-mask-b-80 object-fill object-center w-[120px] h-auto 2xl:w-[150px]`}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>

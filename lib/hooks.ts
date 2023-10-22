@@ -3,6 +3,7 @@ import {
   QueryClient,
   useInfiniteQuery,
   useMutation,
+  useMutationState,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
@@ -12,6 +13,10 @@ import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { searchMovies } from "./utils";
+import toast from "react-hot-toast";
+import { useRaffleStore } from "@/stores/useRaffleStore";
+import { ca } from "date-fns/locale";
+import { set } from "date-fns";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -51,7 +56,7 @@ export const useSearchInfiniteQuery = () => {
   const searchValue = useFilterStore.use.searchValue();
   return useInfiniteQuery({
     queryKey: ["search", searchValue],
-    queryFn: async ({ pageParam}) => searchMovies(pageParam, searchValue),
+    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
       return page < totalPages ? page + 1 : undefined;
@@ -61,24 +66,54 @@ export const useSearchInfiniteQuery = () => {
 };
 
 export const useRaffleMutation = () => {
+  const { data: session } = useSession();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
+  const setIsLoading = useRaffleStore.use.setIsLoading();
+  const setResult = useRaffleStore.use.setResult();
+  const isOpen = useRaffleStore.use.isOpen();
+
+  console.log("sending", session?.user?.userId);
   return useMutation({
+    mutationKey: ["raffle"],
     mutationFn: async () => {
-      let res = await fetch("/api/raffle", {
+      const res = await fetch("/api/raffle", {
         method: "POST",
+        body: JSON.stringify({ userId: session?.user?.userId }),
       });
-    
-      return await res.json()
+      const data = await res.json();
+      console.log("data is", data);
+      if (!data.ok) {
+        console.log("not ok", data);
+        throw new Error(data.message);
+      }
+      return data;
     },
     onSuccess: (data) => {
-      if (data.ok) {
-      } else {
-        if (data.message) {
-          //setNotification(data.message);
-        }
-        //setOpen(true);
+      console.log("success", data);
+      setResult(data.movie);
+      setIsLoading(false);
+      if (!isOpen) {
+        setIsOpen(true);
       }
     },
+    onError: (error) => {
+      toast.error(error.message);
+      setIsOpen(false);
+    },
   });
+};
+
+export const useGetLatestMutationState = (key: string[]) => {
+  return useMutationState({
+    filters: {
+      mutationKey: key,
+    },
+    select: (mutation) => {
+      return mutation.state;
+    },
+  });
+
+  //return mutationState ? mutationState[mutationState.length - 1] : [];
 };
 export const useUpdateReadyStateMutation = () => {
   const queryClient = useQueryClient();
@@ -267,6 +302,31 @@ const handleShortlistMessage = (
   });
 };
 
+const handleRaffleMessage = (
+  eventName: string,
+  data: PusherMessage,
+  queryClient: QueryClient
+) => {
+  const isOpen = useRaffleStore.use.isOpen();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
+  const result = useRaffleStore.use.result();
+  const setResult = useRaffleStore.use.setResult();
+  const setIsLoading = useRaffleStore.use.setIsLoading();
+  let messageData = data as RaffleNotification;
+  let messageType = data.message;
+
+  if (messageData.data) {
+    if (result === null) {
+      setResult(messageData.data);
+      setIsLoading(false);
+    }
+
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  }
+};
+
 const handleMessage = (
   eventName: string,
   channelName: string,
@@ -277,17 +337,51 @@ const handleMessage = (
     case "movieclub-shortlist":
       handleShortlistMessage(eventName, data, queryClient);
       break;
+    case "movieclub-raffle":
+      //handleRaffleMessage(eventName, data, queryClient);
+      break;
   }
 };
 
 export const usePusher = (channelName: string, eventName: string) => {
   const pusher = useContext(PusherContext);
+  const isOpen = useRaffleStore.use.isOpen();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
+  const result = useRaffleStore.use.result();
+  const setResult = useRaffleStore.use.setResult();
+  const isLoading = useRaffleStore.use.isLoading();
+  const setIsLoading = useRaffleStore.use.setIsLoading();
   const queryClient = useQueryClient();
 
   useEffect(() => {
     const channel = pusher.subscribe(channelName);
     channel.bind(eventName, (data: PusherMessage) => {
-      handleMessage(eventName, channelName, data, queryClient);
+      if (channelName === "movieclub-raffle") {
+        const messageType = data.message;
+        console.log('received', messageType)
+        if (messageType === "result") {
+          const messageData = data as RaffleNotification;
+
+          if (messageData.data) {
+            setResult(messageData.data);
+            setIsLoading(false);
+
+            if (!isOpen) {
+              setIsOpen(true);
+            }
+          }
+        } else if (messageType === "request") {
+          if (!isOpen) {
+            setIsOpen(true);
+          }
+
+          if (!isLoading) {
+            setIsLoading(true);
+          }
+        }
+      } else {
+        handleMessage(eventName, channelName, data, queryClient);
+      }
     });
 
     return () => {

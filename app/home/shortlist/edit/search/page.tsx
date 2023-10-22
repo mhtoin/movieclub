@@ -62,8 +62,8 @@ export default function SearchPage() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
   return (
-    <div className="flex flex-col p-10 ">
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 p-10">
+    <div className="flex flex-col">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
         {data
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>

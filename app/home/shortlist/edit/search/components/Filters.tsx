@@ -60,22 +60,22 @@ export default function Filters() {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-5 sticky top-0 z-40 bg-black p-5 sm:w-full">
+    <div className="flex flex-col justify-center gap-5 sticky top-0 z-40 bg-black p-2 sm:w-full">
       <div className="flex flex-row gap-5 items-center justify-center mx-5">
         <input
           type="text"
           placeholder="Search by title"
-          className="input input-bordered input-sm sm:input-md"
+          className="input input-bordered p-3 input-sm 2xl:input-md"
           value={titleSearch}
           onChange={(event) => setTitleSearch(event.target.value)}
         />
-        <button className="btn btn-sm sm:btn-md" onClick={handleSearchByTitle}>
+        <button className="btn btn-sm 2xl:btn-md" onClick={handleSearchByTitle}>
           Search
         </button>
       </div>
       <div className="flex flex-row gap-5 items-center justify-center mx-5">
         <FiltersModal handleSearchSubmit={handleSearchSubmit} />
-        <button className="btn btn-sm sm:btn-md" onClick={() => setSearchValue("")}>
+        <button className="btn btn-sm 2xl:btn-md" onClick={() => setSearchValue("")}>
           Reset
         </button>
       </div>

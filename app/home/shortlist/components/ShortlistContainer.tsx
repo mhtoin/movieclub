@@ -1,5 +1,4 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import ItemSkeleton from "../edit/components/ItemSkeleton";
 import SelectionAlert from "../edit/components/SelectionAlert";
@@ -8,14 +7,12 @@ import SearchButton from "../edit/components/SearchButton";
 import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
 import { useShortlistQuery, useUpdateReadyStateMutation } from "@/lib/hooks";
-import { RaffleClient } from "../../components/RaffleClient";
-import RaffleDialog from "../../../components/RaffleDialog";
+import { RaffleClient } from "../../../components/RaffleClient";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
   const { data: shortlist, status: shortlistStatus } = useShortlistQuery(session?.user?.shortlistId)
   const readyStateMutation = useUpdateReadyStateMutation();
-  const [isPending, startTransition] = useTransition();
 
   if (shortlistStatus === "pending" && !shortlist) {
     return (
@@ -41,11 +38,11 @@ export default function ShortlistContainer() {
         <SelectionAlert />
       )}
       <div
-        className="flex flex-row justify-center place-items-center"
+        className="flex flex-row justify-center place-items-center m-5"
         key={`name-container-${shortlist.id}`}
       >
         <div
-          className={`avatar mr-5 flex justify-center ${"hover:opacity-70"}`}
+          className={`avatar mr-5 flex justify-center ${"hover:opacity-70"} w-8 2xl:w-10`}
           key={`avatar-${shortlist.userId}`}
           onClick={() => {
             readyStateMutation.mutate({
@@ -55,7 +52,7 @@ export default function ShortlistContainer() {
           }}
         >
           <div
-            className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
+            className={`w-10 2xl:w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
               shortlist.isReady ? "ring-success" : "ring-error"
             } `}
             key={`avatar-ring ${shortlist.userId}`}

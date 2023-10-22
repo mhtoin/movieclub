@@ -1,7 +1,6 @@
 "use client";
-import { prominent, average } from "color.js";
+import { prominent } from "color.js";
 import { useEffect, useState } from "react";
-import Rating from "./Rating";
 import Link from "next/link";
 
 export function MovieHero({
