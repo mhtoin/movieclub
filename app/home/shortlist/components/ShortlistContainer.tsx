@@ -42,7 +42,7 @@ export default function ShortlistContainer() {
         key={`name-container-${shortlist.id}`}
       >
         <div
-          className={`avatar mr-5 flex justify-center ${"hover:opacity-70"} w-8 2xl:w-10`}
+          className={`avatar mr-5 flex justify-center ${"hover:opacity-70"} w-8 2xl:w-12`}
           key={`avatar-${shortlist.userId}`}
           onClick={() => {
             readyStateMutation.mutate({
@@ -58,7 +58,7 @@ export default function ShortlistContainer() {
             key={`avatar-ring ${shortlist.userId}`}
           >
             {readyStateMutation.isPending ? (
-              <span className="loading loading-spinner m-3"></span>
+              <span className="loading loading-spinner m-1 2xl:m-3"></span>
             ) : (
               <img
                 src={session?.user?.image}
