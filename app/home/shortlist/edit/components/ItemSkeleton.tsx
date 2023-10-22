@@ -1,6 +1,6 @@
 export default function ItemSkeleton() {
   return (
-    <div className="mx-auto border rounded-md w-[100px] h-[150px] 2xl:w-[130px]">
+    <div className="mx-auto border rounded-md w-[90px] h-[110px] 2xl:w-[130px] 2xl:h-[150px]">
       <div className="flex flex-col items-center justify-center h-full space-y-5 animate-pulse">
         <div className="w-10 h-10 bg-gray-300 rounded-full "></div>
         <div className="flex flex-col space-y-3 justify-center">
