@@ -30,7 +30,6 @@ export default function MovieCard({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       onTouchStart={() => setIsHovering(true)}
-      onPointerLeave={() => setIsHovering(false)}
       //onClick={() => setIsHovering(!isHovering)}
     >
       <img
