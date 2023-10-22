@@ -38,8 +38,7 @@ export default function ShortListItem({
       ${requiresSelection && "hover:shadow-[inset_0px_0px_10px_0px_#2f855a]"} `}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onPointerEnter={() => setIsHovering(true)}
-      onPointerLeave={() => setIsHovering(false)}
+      onTouchStart={() => setIsHovering(true)}
       onClick={(event) => {
         if (requiresSelection && index !== undefined) {
           selectionMutation.mutate({
