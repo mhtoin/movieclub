@@ -22,12 +22,12 @@ export default function ShortList() {
     );
   }
 
-
+  let doubled = allShortlists ? [...allShortlists, ...allShortlists] : [];
 
   return (
-    <main className="flex max-h-screen max-w-screen flex-col items-center overflow-hidden">
-      <div className="flex flex-col place-items-center gap-5 m-5 overflow-hidden">
-        {allShortlists?.map((shortlist: Shortlist, index: number) => {
+    <main className="flex flex-col items-center m-5 overflow-hidden">
+      <div className="flex flex-col place-items-center gap-2 overflow-hidden">
+        {doubled?.map((shortlist: Shortlist, index: number) => {
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
@@ -58,7 +58,7 @@ export default function ShortList() {
               </div>
               <div
                 key={shortlist.id + "-container"}
-                className="flex flex-row gap-5 w-2/3 sm:w-auto"
+                className="flex flex-row gap-5 w-2/3 sm:w-auto items-center"
               >
                 {shortlist.movies.map((movie, index) => {
                   return (

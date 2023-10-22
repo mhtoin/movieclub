@@ -72,7 +72,7 @@ export default function ShortlistContainer() {
         <>
           <SearchButton />
           <WatchlistButton />
-          <RaffleClient />
+        
         </>
       </div>
       <div
