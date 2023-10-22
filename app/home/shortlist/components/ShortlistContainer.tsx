@@ -75,7 +75,6 @@ export default function ShortlistContainer() {
           <RaffleClient />
         </>
       </div>
-
       <div
         key={shortlist.id + "-container"}
         className="flex flex-row gap-5 w-2/3 sm:w-auto items-center"

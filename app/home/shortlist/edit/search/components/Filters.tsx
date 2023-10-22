@@ -65,7 +65,7 @@ export default function Filters() {
         <input
           type="text"
           placeholder="Search by title"
-          className="input input-bordered p-3 input-sm 2xl:input-md max-w-xs"
+          className="input input-bordered p-3 input-sm 2xl:input-md"
           value={titleSearch}
           onChange={(event) => setTitleSearch(event.target.value)}
         />

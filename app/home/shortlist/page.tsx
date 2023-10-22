@@ -22,14 +22,16 @@ export default function ShortList() {
     );
   }
 
+
+
   return (
-    <main className="flex max-h-screen flex-col items-center overflow-hidden">
-      <div className="flex flex-col place-items-center m-5 p-5 gap-5 overflow-scroll max-h-[calc(100% - 100px)]">
+    <main className="flex max-h-screen max-w-screen flex-col items-center overflow-hidden">
+      <div className="flex flex-col place-items-center gap-5 m-5 overflow-hidden">
         {allShortlists?.map((shortlist: Shortlist, index: number) => {
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
-                className="flex flex-row justify-center place-items-center"
+                className="flex flex-row justify-center place-items-center m-2"
                 key={`name-container-${shortlist.id}`}
               >
                 <div
