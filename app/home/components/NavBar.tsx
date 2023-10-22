@@ -127,7 +127,7 @@ export default function NavBar() {
         {
           <div className="navbar-end">
             {isAuthenticated ? (
-              <div tabIndex={0} className="dropdown dropdown-end z-40">
+              <div tabIndex={0} className="dropdown dropdown-end z-30">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                   <div className="w-10 rounded-full">
                     <img src={session?.user?.image} alt="P" />

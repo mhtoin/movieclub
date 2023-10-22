@@ -21,7 +21,7 @@ interface FilterState {
   addGenre: (genre: Genre) => void;
 }
 
-const useNotificationStoreBase = create<FilterState>()((set, get) => ({
+const useFilterStoreBase = create<FilterState>()((set, get) => ({
   genres: [],
   yearRange: { min: "1900", max: new Date().getFullYear().toString() },
   ratingRange: { min: "0", max: "10" },
@@ -51,4 +51,4 @@ const useNotificationStoreBase = create<FilterState>()((set, get) => ({
   addGenre: (genre) => set((state) => ({ genres: [...state.genres, genre] })),
 }));
 
-export const useFilterStore = createSelectors(useNotificationStoreBase);
+export const useFilterStore = createSelectors(useFilterStoreBase);

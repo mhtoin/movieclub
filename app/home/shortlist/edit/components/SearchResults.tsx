@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import SearchResultCard from "./SearchResultCard";
 
 import 'dotenv/config'
@@ -58,7 +58,7 @@ export default function SearchResults({
     enabled: shouldFetch,
   });
 
-  if (status === "loading") {
+  if (status === "pending") {
     if (fetchStatus !== "idle") {
       return <span className="loading loading-spinner"></span>;
     }

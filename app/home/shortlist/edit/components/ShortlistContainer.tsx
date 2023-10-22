@@ -1,6 +1,5 @@
 import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
-import { removeFromShortList } from "../actions/actions";
 
 export default function ShortlistContainer({ shortlist}: { shortlist: Shortlist }) {
   const movies = (shortlist?.movies as Movie[]) || [];

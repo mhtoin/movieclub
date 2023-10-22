@@ -209,7 +209,6 @@ export async function chooseMovieOfTheWeek() {
     })
     .flat();
   // shuffle a few times
- 
   let shuffledMovies = shuffle(movies);
   let chosen = sample(shuffledMovies, true);
 

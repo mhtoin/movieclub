@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import ShortListItem from "./edit/components/ShortListItem";
-import { RaffleClient } from "../components/RaffleClient";
 import { usePusher, useShortlistsQuery } from "@/lib/hooks";
 import { Fragment } from "react";
+import { range } from "@/lib/utils";
+import ShortlistSkeleton from "./components/ShortlistSkeleton";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
@@ -12,36 +12,34 @@ export default function ShortList() {
 
   if (isLoading && !allShortlists) {
     return (
-      <div className="flex flex-col items-center justify-center align-middle min-h-screen min-w-full">
-        <span className="loading loading-ring loading-lg"></span>
+      <div className="flex max-h-screen flex-col items-center overflow-hidden">
+      <div className="flex flex-col place-items-center m-5 p-5 gap-5 overflow-scroll max-h-[calc(100% - 100px)]">
+        {range(3).map((index) => {
+            return <ShortlistSkeleton key={index} index={index} />;
+        })}
       </div>
+    </div>
     );
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-12 overflow-hidden">
-      <div className="flex flex-row items-center justify-evenly gap-5">
-        <Link href={"/home/shortlist/edit"}>
-          {" "}
-          <button className="btn btn-outline">Edit</button>
-        </Link>
-        <RaffleClient />
-      </div>
-      <div className="flex flex-col place-items-center m-5 gap-5">
-        {allShortlists?.map((shortlist: Shortlist) => {
-          console.log(shortlist)
+    <main className="flex max-h-screen flex-col items-center overflow-hidden">
+      <div className="flex flex-col place-items-center m-5 p-5 gap-5 overflow-scroll max-h-[calc(100% - 100px)]">
+        {allShortlists?.map((shortlist: Shortlist, index: number) => {
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
                 className="flex flex-row justify-center place-items-center"
                 key={`name-container-${shortlist.id}`}
               >
-                <div className="avatar" key={`avatar-${shortlist.userId}`}>
+                <div
+                  className={`avatar mr-5 flex justify-center w-8 2xl:w-10`}
+                  key={`avatar-${shortlist.userId}`}
+                >
                   <div
                     className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
-                      !shortlist.participating ? "ring-neutral-600" 
-                      : shortlist.isReady ? "ring-success" : "ring-error"
-                    }`}
+                      shortlist.isReady ? "ring-success" : "ring-error"
+                    } `}
                     key={`avatar-ring ${shortlist.userId}`}
                   >
                     <img
@@ -52,9 +50,9 @@ export default function ShortList() {
                     />
                   </div>
                 </div>
-                <h1 key={shortlist.id + "-title"} className="text-xl m-5">
-                  {shortlist.user.name}
-                </h1>
+                  <h1 key={shortlist.id + "-title"} className="text-xl">
+                    {shortlist.user.name}
+                  </h1>
               </div>
               <div
                 key={shortlist.id + "-container"}
@@ -72,6 +70,9 @@ export default function ShortList() {
                           ? true
                           : false
                       }
+                      requiresSelection={false}
+                      removeFromShortList={false}
+                      index={index}
                     />
                   );
                 })}

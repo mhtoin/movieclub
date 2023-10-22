@@ -1,9 +1,7 @@
 import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
-import { removeFromShortList } from "../actions/actions";
 import { getShortList } from "@/lib/shortlist";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "@/lib/getServerSession";
 
 export default async function Shortlist() {

@@ -1,7 +1,6 @@
 "use client";
-import { prominent, average } from "color.js";
+import { prominent } from "color.js";
 import { useEffect, useState } from "react";
-import Rating from "./Rating";
 import Review from "./Review";
 import TierlistFormModal from "./TierlistFormModal";
 import { format } from "date-fns";
@@ -16,9 +15,6 @@ export default function MovieCard({
   user: User;
 }) {
   const [colorPalette, setColorPalette] = useState<any>([]);
-  const tierlistMovieIds = tierlist.tiers.flatMap((tier) =>
-    tier.movies.map((movie) => movie.id)
-  );
   const movieInTierlist = tierlist.tiers.find((tier) => {
     return tier.movies.find((movieItem) => movieItem.id === movie.id);
   });

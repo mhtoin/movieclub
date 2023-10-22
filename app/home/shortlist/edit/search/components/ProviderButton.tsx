@@ -37,7 +37,7 @@ export default function ProviderButton({
   return (
     <button
       key={provider.provider_id}
-      className="btn btn-square border-1 btn-sm sm:btn-md rounded-md m-1"
+      className="btn btn-square border-1 btn-sm 2xl:btn-md rounded-md m-1 hover:scale-110"
       onClick={handleSelect}
     >
       <img

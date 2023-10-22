@@ -1,7 +1,6 @@
 'use client'
 import { useTransition } from "react";
 import { addMovie } from "../actions/actions";
-import { useSession, getSession } from "next-auth/react"
 
 interface SearchResultCardProps {
   movie: Movie

@@ -56,3 +56,20 @@ export const countByKey = (arr: any[], cb: ArgValCallback<any>) => {
         return r;
     }, {});
 }
+
+export const searchMovies = async (page: number, searchValue: string) => {
+  const searchQuery = searchValue
+    ? searchValue + `&page=${page}`
+    : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI`;
+  const initialSearch = await fetch(
+    `https://api.themoviedb.org/3/${searchQuery}`,
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+      },
+    }
+  );
+  return initialSearch.json();
+};

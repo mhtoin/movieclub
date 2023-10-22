@@ -12,8 +12,8 @@ const RaffleResultModal = ({ children, open }: Props) => {
     "modal-open": open,
   });
   return (
-    <div className={modalClass}>
-      <div className="modal-box flex flex-col items-center">{children}</div>
+    <div className={`${modalClass} z-50`}>
+      <div className="modal-box flex flex-col items-center z-60">{children}</div>
     </div>
   );
 };

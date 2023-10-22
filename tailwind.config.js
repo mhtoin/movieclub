@@ -1,3 +1,5 @@
+const { violet, blackA, mauve, green, gray, slate } = require('@radix-ui/colors');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
@@ -8,6 +10,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        ...mauve,
+        ...gray,
+        ...slate,
+        ...violet,
+        ...green,
+        ...blackA,
+      },
       keyframes: {
         "slide-up": {
           "0%": { transform: "translateY(100%)" },
@@ -26,12 +36,24 @@ module.exports = {
           "50%": { transform: "scale(0.95)" },
           "100%": { transform: "scale(0.9)" },
         },
+        overlayShow: {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
+        contentShow: {
+          from: { opacity: 0, transform: 'translate(-50%, -48%) scale(0.96)' },
+          to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+        },
+
       },
       animation: {
         "slide-up": "slide-up 0.5s ease-out",
         "slide-in": "slide-in 0.5s ease-out",
         "slide-out": "slide-out 0.5s ease-out",
         "button-press": "button-press 0.2s ease-in",
+        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -46,7 +68,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("daisyui"), require("tailwindcss-animate")],
+  plugins: [require("@tailwindcss/typography"), require("daisyui"), require("tailwindcss-animate"), require("tailwind-gradient-mask-image")],
   daisyui: {
     themes: ["dark"],
     base: false,

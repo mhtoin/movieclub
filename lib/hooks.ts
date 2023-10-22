@@ -1,22 +1,41 @@
 import { PusherContext } from "@/utils/PusherProvider";
 import {
   QueryClient,
+  useInfiniteQuery,
   useMutation,
+  useMutationState,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { PusherEvent } from "pusher-js/types/src/core/connection/protocol/message-types";
 import { useContext, useEffect, useRef } from "react";
 import { produce } from "immer";
-import { getWatchlist } from "./tmdb";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useSession } from "next-auth/react";
-import { callback } from "chart.js/dist/helpers/helpers.core";
+import { useFilterStore } from "@/stores/useFilterStore";
+import { searchMovies } from "./utils";
+import toast from "react-hot-toast";
+import { useRaffleStore } from "@/stores/useRaffleStore";
+import { ca } from "date-fns/locale";
+import { set } from "date-fns";
 
 export const useShortlistsQuery = () => {
-  return useQuery(["shortlist"], async () => {
-    const response = await fetch(`/api/shortlist`);
-    return await response.json();
+  const { data: session } = useSession();
+  //console.log('session user is', session)
+  return useQuery({
+    queryKey: ["shortlist"],
+    queryFn: async () => {
+      const response = await fetch(`/api/shortlist`);
+      const data = await response.json();
+      /** !TODO
+       * Would make sense to just have an endpoint to return everyone else's
+       * shortlist
+       * Or then prefetch all and seed different queries
+       */
+      return data.filter((shortlist: Shortlist) => {
+        return shortlist.id !== session?.user?.shortlistId;
+      });
+    },
+    enabled: !!session?.user?.shortlistId,
   });
 };
 
@@ -24,10 +43,153 @@ export const useShortlistQuery = (id: string) => {
   return useQuery({
     queryKey: ["shortlist", id],
     queryFn: async () => {
-      const response = await fetch(`/api/shortlist/${id}`, { cache: 'no-store' });
+      const response = await fetch(`/api/shortlist/${id}`, {
+        cache: "no-store",
+      });
       return await response.json();
     },
     enabled: !!id,
+  });
+};
+
+export const useSearchInfiniteQuery = () => {
+  const searchValue = useFilterStore.use.searchValue();
+  return useInfiniteQuery({
+    queryKey: ["search", searchValue],
+    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages: totalPages } = lastPage;
+      return page < totalPages ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+  });
+};
+
+export const useRaffleMutation = () => {
+  const { data: session } = useSession();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
+  const setIsLoading = useRaffleStore.use.setIsLoading();
+  const setResult = useRaffleStore.use.setResult();
+  const isOpen = useRaffleStore.use.isOpen();
+
+  console.log("sending", session?.user?.userId);
+  return useMutation({
+    mutationKey: ["raffle"],
+    mutationFn: async () => {
+      const res = await fetch("/api/raffle", {
+        method: "POST",
+        body: JSON.stringify({ userId: session?.user?.userId }),
+      });
+      const data = await res.json();
+      console.log("data is", data);
+      if (!data.ok) {
+        console.log("not ok", data);
+        throw new Error(data.message);
+      }
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log("success", data);
+      setResult(data.movie);
+      setIsLoading(false);
+      if (!isOpen) {
+        setIsOpen(true);
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+      setIsOpen(false);
+    },
+  });
+};
+
+export const useGetLatestMutationState = (key: string[]) => {
+  return useMutationState({
+    filters: {
+      mutationKey: key,
+    },
+    select: (mutation) => {
+      return mutation.state;
+    },
+  });
+
+  //return mutationState ? mutationState[mutationState.length - 1] : [];
+};
+export const useUpdateReadyStateMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      shortlistId,
+      isReady,
+    }: {
+      shortlistId: string;
+      isReady: boolean;
+    }) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}/ready`, {
+        method: "PUT",
+        body: JSON.stringify({ isReady }),
+      });
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["shortlist"],
+      });
+    },
+  });
+};
+
+export const useUpdateSelectionMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      shortlistId,
+      selectedIndex,
+    }: {
+      shortlistId: string;
+      selectedIndex: number;
+    }) => {
+      const response = await fetch(`/api/shortlist/${shortlistId}/selection`, {
+        method: "PUT",
+        body: JSON.stringify({ selectedIndex }),
+      });
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["shortlist"],
+      });
+    },
+  });
+};
+
+export const useAddToWatchlistMutation = () => {
+  const { data: session } = useSession();
+  return useMutation({
+    mutationFn: async ({ movieId }: { movieId: number }) => {
+      const requestBody = JSON.stringify({
+        media_type: "movie",
+        media_id: movieId,
+        watchlist: true,
+      });
+      console.log("request", requestBody);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/account/${session?.user?.accountId}/watchlist?session_id=${session?.user?.sessionId}`,
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+          },
+          body: requestBody,
+        }
+      );
+
+      return await response.json();
+    },
   });
 };
 
@@ -103,7 +265,7 @@ export const useAddToShortlistMutation = () => {
         ["shortlist", variables.shortlistId],
         (oldData: any) => {
           return produce(oldData, (draft: Shortlist) => {
-            draft.movies.push(variables.movie);
+            draft.movies = data.movies;
           });
         }
       );
@@ -140,6 +302,31 @@ const handleShortlistMessage = (
   });
 };
 
+const handleRaffleMessage = (
+  eventName: string,
+  data: PusherMessage,
+  queryClient: QueryClient
+) => {
+  const isOpen = useRaffleStore.use.isOpen();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
+  const result = useRaffleStore.use.result();
+  const setResult = useRaffleStore.use.setResult();
+  const setIsLoading = useRaffleStore.use.setIsLoading();
+  let messageData = data as RaffleNotification;
+  let messageType = data.message;
+
+  if (messageData.data) {
+    if (result === null) {
+      setResult(messageData.data);
+      setIsLoading(false);
+    }
+
+    if (!isOpen) {
+      setIsOpen(true);
+    }
+  }
+};
+
 const handleMessage = (
   eventName: string,
   channelName: string,
@@ -150,17 +337,51 @@ const handleMessage = (
     case "movieclub-shortlist":
       handleShortlistMessage(eventName, data, queryClient);
       break;
+    case "movieclub-raffle":
+      //handleRaffleMessage(eventName, data, queryClient);
+      break;
   }
 };
 
 export const usePusher = (channelName: string, eventName: string) => {
   const pusher = useContext(PusherContext);
+  const isOpen = useRaffleStore.use.isOpen();
+  const setIsOpen = useRaffleStore.use.setIsOpen();
+  const result = useRaffleStore.use.result();
+  const setResult = useRaffleStore.use.setResult();
+  const isLoading = useRaffleStore.use.isLoading();
+  const setIsLoading = useRaffleStore.use.setIsLoading();
   const queryClient = useQueryClient();
 
   useEffect(() => {
     const channel = pusher.subscribe(channelName);
     channel.bind(eventName, (data: PusherMessage) => {
-      handleMessage(eventName, channelName, data, queryClient);
+      if (channelName === "movieclub-raffle") {
+        const messageType = data.message;
+        console.log('received', messageType)
+        if (messageType === "result") {
+          const messageData = data as RaffleNotification;
+
+          if (messageData.data) {
+            setResult(messageData.data);
+            setIsLoading(false);
+
+            if (!isOpen) {
+              setIsOpen(true);
+            }
+          }
+        } else if (messageType === "request") {
+          if (!isOpen) {
+            setIsOpen(true);
+          }
+
+          if (!isLoading) {
+            setIsLoading(true);
+          }
+        }
+      } else {
+        handleMessage(eventName, channelName, data, queryClient);
+      }
     });
 
     return () => {
@@ -240,7 +461,7 @@ export const useGetWatchProvidersQuery = () => {
       return providers;
     },
     staleTime: Infinity,
-    cacheTime: Infinity,
+    gcTime: Infinity,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });

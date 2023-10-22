@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function WebNavbar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const isAuthenticated = !!session;
 
   return (
