@@ -16,10 +16,12 @@ export default function ShortlistContainer() {
 
   if (shortlistStatus === "pending" && !shortlist) {
     return (
-      <div className="flex flex-row gap-3 p-5 flex-wrap items-center sm:w-auto align-middle">
+      <div className="flex flex-col justify-center place-items-center">
+        <div className="flex flex-row gap-5 w-2/3 sm:w-auto items-center">
         <ItemSkeleton />
         <ItemSkeleton />
         <ItemSkeleton />
+      </div>
       </div>
     );
   }
