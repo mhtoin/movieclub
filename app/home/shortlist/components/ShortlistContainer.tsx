@@ -33,7 +33,7 @@ export default function ShortlistContainer() {
       : [];
 
   return (
-    <Fragment key={`fragment-${shortlist.id}`}>
+    <div key={`fragment-${shortlist.id}`} className="flex flex-col justify-center place-items-center">
       {shortlist.requiresSelection && (shortlist.selectedIndex === null && shortlist.selectedIndex !== 0) && (
         <SelectionAlert />
       )}
@@ -70,8 +70,10 @@ export default function ShortlistContainer() {
         </div>
 
         <>
+        <div className="max-w-[40px] flex">
           <SearchButton />
           <WatchlistButton />
+        </div>
           <RaffleClient />
         </>
       </div>
@@ -100,6 +102,6 @@ export default function ShortlistContainer() {
           return skeleton;
         })}
       </div>
-    </Fragment>
+    </div>
   );
 }

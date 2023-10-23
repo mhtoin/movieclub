@@ -1,7 +1,7 @@
 export default function SelectionAlert() {
   return (
     
-      <div className="alert alert-warning max-w-md">
+      <div className="alert alert-warning max-w-xs">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="stroke-current shrink-0 h-6 w-6"

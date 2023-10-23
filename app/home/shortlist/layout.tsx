@@ -10,7 +10,7 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center gap-5 z-10">
+    <div className="">
       <ShortlistContainer />
       {children}
     </div>

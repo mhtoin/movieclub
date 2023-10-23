@@ -5,6 +5,8 @@ import { usePusher, useShortlistsQuery } from "@/lib/hooks";
 import { Fragment } from "react";
 import { range } from "@/lib/utils";
 import ShortlistSkeleton from "./components/ShortlistSkeleton";
+import ItemSkeleton from "./edit/components/ItemSkeleton";
+import { all } from "underscore";
 
 export default function ShortList() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
@@ -13,28 +15,33 @@ export default function ShortList() {
   if (isLoading && !allShortlists) {
     return (
       <div className="flex max-h-screen flex-col items-center overflow-hidden">
-      <div className="flex flex-col place-items-center m-5 p-5 gap-5 overflow-scroll max-h-[calc(100% - 100px)]">
-        {range(3).map((index) => {
+        <div className="flex flex-col place-items-center m-5 p-5 gap-5 overflow-scroll max-h-[calc(100% - 100px)]">
+          {range(3).map((index) => {
             return <ShortlistSkeleton key={index} index={index} />;
-        })}
+          })}
+        </div>
       </div>
-    </div>
     );
   }
-
-
   return (
     <main className="flex flex-col items-center m-5 overflow-hidden">
       <div className="flex flex-col place-items-center gap-2 overflow-hidden">
         {allShortlists?.map((shortlist: Shortlist, index: number) => {
+          const movies = (shortlist?.movies as Movie[]) || [];
+          const skeletons =
+            movies?.length < 3
+              ? [...new Array(3 - movies.length)].map((element, index) => (
+                  <ItemSkeleton key={index} />
+                ))
+              : [];
           return (
             <Fragment key={`fragment-${shortlist.id}`}>
               <div
-                className="flex flex-row justify-center place-items-center m-2"
+                className="flex flex-row m-2 justify-center place-items-center "
                 key={`name-container-${shortlist.id}`}
               >
                 <div
-                  className={`avatar mr-5 flex justify-center w-8 2xl:w-10`}
+                  className={`avatar mr-5 flex justify-center w-8 2xl:w-12`}
                   key={`avatar-${shortlist.userId}`}
                 >
                   <div
@@ -47,13 +54,20 @@ export default function ShortList() {
                       src={shortlist?.user?.image}
                       alt=""
                       key={`profile-img-${shortlist.userId}`}
-                      className={`${shortlist.participating ? "opacity-100" : "opacity-20"} rounded-full`}
+                      className={`${
+                        shortlist.participating ? "opacity-100" : "opacity-20"
+                      } rounded-full`}
                     />
                   </div>
                 </div>
-                  <h1 key={shortlist.id + "-title"} className="text-xl">
-                    {shortlist.user.name}
-                  </h1>
+                <h1
+                  key={shortlist.id + "-title"}
+                  className="text-xl max-w-[40px]"
+                >
+                  {index == 0
+                    ? shortlist.user.name + "burner"
+                    : shortlist.user.name}
+                </h1>
               </div>
               <div
                 key={shortlist.id + "-container"}
@@ -76,6 +90,9 @@ export default function ShortList() {
                       index={index}
                     />
                   );
+                })}
+                {skeletons.map((skeleton) => {
+                  return skeleton;
                 })}
               </div>
             </Fragment>
