@@ -15,9 +15,6 @@ import { useFilterStore } from "@/stores/useFilterStore";
 import { getWatchProviders, getWatchlist, searchMovies } from "./utils";
 import toast from "react-hot-toast";
 import { useRaffleStore } from "@/stores/useRaffleStore";
-import { ca } from "date-fns/locale";
-import { set } from "date-fns";
-import getQueryClient from "./getQueryClient";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -60,6 +57,7 @@ export const useSearchInfiniteQuery = () => {
     queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
+      console.log("last page is", lastPage)
       return page < totalPages ? page + 1 : undefined;
     },
     initialPageParam: 1,

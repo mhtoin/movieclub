@@ -64,7 +64,7 @@ export async function getWatchlist() {
 
     let pages = data && data.total_pages ? data.total_pages : "";
     
-    if (pages >= page) {
+    if (pages && pages >= page) {
       page++;
     } else {
       pagesLeft = false;

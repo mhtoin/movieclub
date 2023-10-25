@@ -63,6 +63,8 @@ export default function SearchPage() {
   const watchlistMovieIds = watchlist
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
+
+  console.log('search data', data)
   return (
     <div className="flex flex-col justify-center m-5 p-10 place-items-center">
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
