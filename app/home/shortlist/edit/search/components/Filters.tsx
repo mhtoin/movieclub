@@ -1,6 +1,7 @@
+"use client"
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import FiltersModal from "./FiltersModal";
 import ProviderButton from "./ProviderButton";
 

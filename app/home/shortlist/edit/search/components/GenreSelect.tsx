@@ -1,29 +1,9 @@
+import { getFilters } from "@/lib/utils";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { useQuery } from "@tanstack/react-query";
 import { add, set } from "date-fns";
 import { useState } from "react";
 import Select from "react-select";
-
-async function getFilters() {
-  let res = await fetch(
-    "https://api.themoviedb.org/3/genre/movie/list?language=en",
-    {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
-      },
-    }
-  );
-
-  let responseBody = await res.json();
-
-  if (responseBody.genres) {
-    return responseBody.genres.map((genre: { name: string; id: number }) => {
-      return { label: genre.name, value: genre.id };
-    }) as Array<{ label: string, value: number}>;
-  }
-}
 
 export default function GenreSelect() {
   const genres = useFilterStore.use.genres()

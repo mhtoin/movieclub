@@ -8,7 +8,7 @@ import { useState } from "react";
 
 function Providers({ children }: React.PropsWithChildren) {
   const [client] = useState(
-    new QueryClient({ defaultOptions: { queries: { staleTime: 0, gcTime: 0 } } })
+    new QueryClient({ defaultOptions: { queries: { staleTime: 60 * 1000, gcTime: 0 } } })
   );
 
   const [pusher] = useState(

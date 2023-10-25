@@ -1,5 +1,3 @@
-"use client";
-
 export default function HomeLayout({
   children, // will be a page or nested layout
 }: {

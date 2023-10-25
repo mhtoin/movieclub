@@ -46,10 +46,12 @@ export default function SearchPage() {
 
   if (status === "pending" || shortlistStatus === "pending" || !shortlist || !watchlist) {
     return (
+      <div className="flex flex-col justify-center m-5 p-10 place-items-center">
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-        {range(10).map((index) => {
+        {range(30).map((index) => {
           return <ItemSkeleton key={index} />
         })}
+      </div>
       </div>
     );
   }
@@ -62,7 +64,7 @@ export default function SearchPage() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col justify-center m-5 p-10 place-items-center">
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
         {data
           ? data?.pages?.map((page) => (

@@ -12,17 +12,18 @@ import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
-import { searchMovies } from "./utils";
+import { getWatchProviders, getWatchlist, searchMovies } from "./utils";
 import toast from "react-hot-toast";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 import { ca } from "date-fns/locale";
 import { set } from "date-fns";
+import getQueryClient from "./getQueryClient";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
   //console.log('session user is', session)
   return useQuery({
-    queryKey: ["shortlist"],
+    queryKey: ["otherShortlists"],
     queryFn: async () => {
       const response = await fetch(`/api/shortlist`);
       const data = await response.json();
@@ -280,9 +281,12 @@ const handleShortlistMessage = (
   let messageData = data.data.payload as Shortlist;
   let messageType = data.message;
   console.log('handling shortlist message', messageType, data, messageData)
-  queryClient.setQueryData(["shortlist"], (oldData: any) => {
+  console.log('query client is', queryClient)
+  queryClient.setQueryData(["otherShortlists"], (oldData: any) => {
+    console.log('old data is', oldData)
     return produce(oldData, (draft: Array<Shortlist>) => {
-      let targetShortlist = draft.find(
+      //console.log('draft is', JSON.parse(JSON.stringify(draft)))
+      let targetShortlist = draft?.find(
         (shortlist) => shortlist.id === messageData.id
       );
 
@@ -392,39 +396,7 @@ export const usePusher = (
 export const useGetWatchlistQuery = (user: User) => {
   return useQuery({
     queryKey: ["watchlist"],
-    queryFn: async () => {
-      let pagesLeft = true;
-      let page = 1;
-      const movies = [];
-
-      do {
-        let watchlist = await fetch(
-          `https://api.themoviedb.org/3/account/${user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.sessionId}&sort_by=created_at.asc`,
-          {
-            method: "GET",
-            headers: {
-              accept: "application/json",
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
-            },
-            cache: "no-store",
-          }
-        );
-
-        let data = await watchlist.json();
-        let results = data && data.results ? data.results : [];
-        movies.push(results);
-
-        let pages = data && data.total_pages ? data.total_pages : "";
-
-        if (pages >= page) {
-          page++;
-        } else {
-          pagesLeft = false;
-        }
-      } while (pagesLeft);
-
-      return movies.flat();
-    },
+    queryFn: async () => getWatchlist(user),
     enabled: !!user && !!user.sessionId && !!user.accountId,
   });
 };
@@ -432,33 +404,7 @@ export const useGetWatchlistQuery = (user: User) => {
 export const useGetWatchProvidersQuery = () => {
   return useQuery({
     queryKey: ["watchProviders"],
-    queryFn: async () => {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/watch/providers/movie?language=en-US&watch_region-FI`,
-        {
-          method: "GET",
-          headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
-          },
-        }
-      );
-      const data = await response.json();
-      /**
-       * We should provide some reasonable defaults here and store them somewhere
-       */
-      const providers = data.results.filter((provider: any) => {
-        return (
-          provider.provider_id === 8 ||
-          provider.provider_id === 119 ||
-          provider.provider_id === 323 ||
-          provider.provider_id === 337 ||
-          provider.provider_id === 384 ||
-          provider.provider_id === 1773
-        );
-      });
-      return providers;
-    },
+    queryFn: async () => getWatchProviders(),
     staleTime: Infinity,
     gcTime: Infinity,
     refetchOnMount: false,
