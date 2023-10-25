@@ -1,6 +1,7 @@
 import getQueryClient from "@/lib/getQueryClient";
 import Filters from "./components/Filters";
 import { getFilters, getWatchProviders, searchMovies } from "@/lib/utils";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
 export default async function SearchLayout({
   children, // will be a page or nested layout
@@ -28,8 +29,10 @@ export default async function SearchLayout({
 
   return (
     <>
+    <HydrationBoundary state={dehydrate(queryClient)} >
       <Filters />
       {children}
+      </HydrationBoundary>
     </>
   );
 }

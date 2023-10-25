@@ -3,10 +3,8 @@ import ShortlistContainer from "./components/ShortlistContainer";
 import {
   dehydrate,
   HydrationBoundary,
-  QueryClient,
 } from "@tanstack/react-query";
 import { getUserShortlist } from "@/lib/utils";
-import { get } from "underscore";
 import getQueryClient from "@/lib/getQueryClient";
 export default async function ShortlistLayout({
   children, // will be a page or nested layout
