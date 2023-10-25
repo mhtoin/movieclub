@@ -39,7 +39,7 @@ export function MovieHero({
           <img
             src={backgroundPath}
             alt="Album"
-            className="rounded-2xl md:w-8/12 lg:w-9/12 object-cover"
+            className="rounded-2xl md:w-8/12 lg:w-9/12 object-cover gradient-mask-b-90"
           />
         </figure>
         <div className="card-body">

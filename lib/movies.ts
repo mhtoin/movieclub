@@ -18,9 +18,10 @@ export async function getAllMoviesOfTheWeek() {
   });
 
   const now = isWednesday(new Date())
-    ? set(new Date(), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 })
+    ? set(new Date(), { hours: 19, minutes: 0, seconds: 0, milliseconds: 0 })
     : nextMovieDate;
 
+    console.log('now', now)
   const movies = await prisma.movie.findMany({
     where: {
       movieOfTheWeek: {
