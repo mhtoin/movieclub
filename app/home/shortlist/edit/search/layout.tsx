@@ -14,12 +14,13 @@ export default async function SearchLayout({
     queryFn: async () => getWatchProviders(),
   });
 
-  await queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: [
       "search",
       "discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773",
     ],
     queryFn: async () => searchMovies(1, ""),
+    initialPageParam: 1,
   });
 
   await queryClient.prefetchQuery({
