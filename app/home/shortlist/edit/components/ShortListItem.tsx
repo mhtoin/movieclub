@@ -33,7 +33,7 @@ export default function ShortListItem({
     <div
       className={`relative indicator mx-auto rounded-md ${
         highlight &&
-        "border-green-700 ring-green-500 shadow-[inset_0px_0px_5px_0px_#2f855a]"
+        "border-green-700 shadow-[inset_2px_2px_10px_0px_#2f855a]"
       } transition ease-in-out delay-50 hover:scale-110 hover:-translate-y-1
       ${requiresSelection && "hover:shadow-[inset_0px_0px_10px_0px_#2f855a]"} `}
       onMouseEnter={() => setIsHovering(true)}
