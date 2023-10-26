@@ -71,7 +71,9 @@ export const searchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
     : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI`;
-  const initialSearch = await fetch(
+  
+    console.log('searching for', searchQuery)
+    const initialSearch = await fetch(
     `https://api.themoviedb.org/3/${searchQuery}`,
     {
       method: "GET",
