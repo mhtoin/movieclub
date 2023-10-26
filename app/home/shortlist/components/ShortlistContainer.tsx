@@ -35,7 +35,7 @@ export default function ShortlistContainer() {
       : [];
 
   return (
-    <div key={`fragment-${shortlist.id}`} className="flex flex-col justify-center place-items-center">
+    <div key={`fragment-${shortlist.id}`} className="flex flex-col justify-center place-items-center m-2">
       {shortlist.requiresSelection && (shortlist.selectedIndex === null && shortlist.selectedIndex !== 0) && (
         <SelectionAlert />
       )}
