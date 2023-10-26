@@ -1,4 +1,6 @@
-import { isWednesday } from "date-fns";
+import { getAllMoviesOfTheWeek } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { format, isWednesday, parse } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -9,18 +11,25 @@ export const MovieDatePicker = ({
   selected: Date;
   setSelected: any;
 }) => {
+  const { data } = useQuery({
+    queryKey: ["movieOfTheWeek"],
+    queryFn: getAllMoviesOfTheWeek,
+  });
+  
   const isDateMovieDate = (date: Date) => {
     return isWednesday(date);
   };
 
+  const highletedDates = data ? Object.values<MovieOfTheWeek>(data).map((movie: MovieOfTheWeek) => new Date(movie.movieOfTheWeek!)) : [];
   return (
     <DatePicker
       showIcon
-      selected={new Date(selected)}
+      selected={selected}
       onChange={(date: Date) => setSelected(date)}
       filterDate={isDateMovieDate}
       dateFormat="dd.MM.yyyy"
-      className="input w-full text-center max-w-[200px] m-auto text-lg font-bold rounded-md"
+      className="input w-full text-center max-w-[300px] m-auto text-md font-bold rounded-md"
+      highlightDates={highletedDates}
       icon={
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +39,7 @@ export const MovieDatePicker = ({
           width={28}
           height={28}
           stroke="currentColor"
-          className="w-9 h-9 cursor-pointer text-3xl "
+          className="w-9 h-9 cursor-pointer text-3xl"
         >
           <path
             strokeLinecap="round"

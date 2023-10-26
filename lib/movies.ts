@@ -31,6 +31,7 @@ export async function getAllMoviesOfTheWeek() {
     include: {
       reviews: true,
       ratings: true,
+      user: true,
     },
   });
 

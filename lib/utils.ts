@@ -45,6 +45,14 @@ export const groupBy = (arr: any[], cb: (arg0: unknown) => any) => {
   }, {});
 };
 
+export const keyBy = (arr: any[], cb: (arg0: unknown) => any) => {
+  return arr.reduce((r, a) => {
+    let key = cb(a);
+    //r[key] = {...(r[key] || {}), a};
+    return {...r, [key]: a};
+  }, {});
+};
+
 /**
  * Sorts collection into groups and returns  collection with the count of items of each group
  * @param arr collection to sort
@@ -173,7 +181,7 @@ export const getAllMoviesOfTheWeek = async () => {
 
   const data = await response.json();
   //console.log('data before', data)
-  const groupedData = groupBy(data, (movie: any) => format(new Date(movie.movieOfTheWeek),'dd.MM.yyyy'))
+  const groupedData = keyBy(data, (movie: any) => format(new Date(movie.movieOfTheWeek),'dd.MM.yyyy'))
   //console.log('grouped', groupedData)
   return groupedData;
 }
