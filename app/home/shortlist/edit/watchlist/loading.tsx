@@ -1,5 +1,5 @@
 import ListSkeleton from "../components/ListSkeleton";
 
-export default function SearchLoading() {
+export default function WatchlistLoading() {
     return <ListSkeleton />
 }

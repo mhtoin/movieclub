@@ -2,6 +2,7 @@ import { cookies, headers } from "next/headers";
 import { getServerSession as originalGetServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+
 export const getServerSession = async () => {
   const req = {
     headers: Object.fromEntries(headers() as Headers),

@@ -57,7 +57,7 @@ export const useSearchInfiniteQuery = () => {
     queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
-      console.log("last page is", lastPage)
+      
       return page < totalPages ? page + 1 : undefined;
     },
     initialPageParam: 1,
@@ -78,15 +78,15 @@ export const useRaffleMutation = () => {
         body: JSON.stringify({ userId: session?.user?.userId }),
       });
       const data = await res.json();
-      console.log("data is", data);
+      
       if (!data.ok) {
-        console.log("not ok", data);
+       
         throw new Error(data.message);
       }
       return data;
     },
     onSuccess: (data) => {
-      console.log("success", data);
+      
       setResult(data.movie);
       setIsLoading(false);
       if (!isOpen) {
@@ -172,7 +172,7 @@ export const useAddToWatchlistMutation = () => {
         media_id: movieId,
         watchlist: true,
       });
-      console.log("request", requestBody);
+      
       const response = await fetch(
         `https://api.themoviedb.org/3/account/${session?.user?.accountId}/watchlist?session_id=${session?.user?.sessionId}`,
         {
@@ -278,10 +278,9 @@ const handleShortlistMessage = (
 ) => {
   let messageData = data.data.payload as Shortlist;
   let messageType = data.message;
-  console.log('handling shortlist message', messageType, data, messageData)
-  console.log('query client is', queryClient)
+  
   queryClient.setQueryData(["otherShortlists"], (oldData: any) => {
-    console.log('old data is', oldData)
+    
     return produce(oldData, (draft: Array<Shortlist>) => {
       //console.log('draft is', JSON.parse(JSON.stringify(draft)))
       let targetShortlist = draft?.find(
@@ -338,15 +337,15 @@ export const usePusher = (
   useEffect(() => {
     const bindPusher = async () => {
       const session = await getSession();
-      console.log('session is', session)
+     
       const channel = pusher.subscribe(channelName);
       channel.bind(eventName, (data: PusherMessage) => {
         if (channelName === "movieclub-raffle") {
-          console.log('received', data)
+          
           const messageType = data.message;
           const messageData = data.data as PusherPayload;
           if (messageData.userId !== session?.user?.userId) {
-          console.log("handling message", messageType, messageData, session?.user?.userId);
+          
             
             if (messageType === "result") {
               const payload = messageData.payload as MovieOfTheWeek;
@@ -369,7 +368,7 @@ export const usePusher = (
               }
             } else if (messageType === "error") {
               let errorData = messageData.payload as string;
-              console.log("error", errorData, messageData);
+              
               setIsOpen(false);
               setIsLoading(false);
 

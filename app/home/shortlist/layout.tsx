@@ -6,13 +6,14 @@ import {
 } from "@tanstack/react-query";
 import { getUserShortlist } from "@/lib/utils";
 import getQueryClient from "@/lib/getQueryClient";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export default async function ShortlistLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
 }) {
   const queryClient = getQueryClient();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   await queryClient.prefetchQuery({
     queryKey: ["shortlist", session?.user?.shortlistId],
     queryFn: async () => {

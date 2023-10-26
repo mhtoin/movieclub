@@ -1,11 +1,13 @@
+import { getServerSession } from "next-auth";
 import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
 import { getShortList } from "@/lib/shortlist";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-import { getServerSession } from "@/lib/getServerSession";
+//import { getServerSession } from "@/lib/deprecated_getServerSession";
 
 export default async function Shortlist() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const shortlistData = (await getShortList(session?.user.userId)) ?? [];
   const movies = (shortlistData?.movies as Movie[]) || [];
   const skeletons =

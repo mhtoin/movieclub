@@ -1,7 +1,9 @@
 import { getAllMoviesOfTheWeek, getMovie } from "@/lib/movies";
 import MovieCard from "../components/MovieCard";
-import { getServerSession } from "@/lib/getServerSession";
+//import { getServerSession } from "@/lib/deprecated_getServerSession";
 import { getTierlist } from "@/lib/tierlists";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 
 async function staticParams() {
@@ -21,7 +23,7 @@ async function staticParams() {
 
 export default async function MoviePage({ params }: { params: { id: string } }) {
     const movie = await getMovie(params.id)
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     const tierlist = await getTierlist(session?.user.userId)
     
     if (movie) {

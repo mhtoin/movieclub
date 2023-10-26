@@ -1,9 +1,7 @@
+import { getServerSession } from "next-auth";
 import prisma from "./prisma";
-import { ObjectId, OptionalId } from "mongodb";
-import { Prisma, Tierlists, TierlistsTier } from "@prisma/client";
-import { getAdditionalInfo } from "./tmdb";
-import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
-import { getServerSession } from "./getServerSession";
+import { TierlistsTier } from "@prisma/client";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const revalidate = 10;
 
@@ -51,7 +49,7 @@ export async function getTierlist(id: string) {
 }
 
 export async function createTierlist(formData: FormData) {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     
     const userId = session?.user?.userId
 
@@ -94,7 +92,7 @@ export async function updateTierlist(id: string, tiers: Array<TierlistsTier>) {
 }
 
 export async function modifyTierlist(formData: FormData) {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     
     const userId = session?.user?.userId
     const tierlistTiers = parseTiers(formData)

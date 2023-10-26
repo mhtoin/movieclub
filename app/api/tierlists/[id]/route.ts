@@ -1,7 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import { addMovieToShortlist, getShortList, removeMovieFromShortlist } from "@/lib/shortlist";
-import { getServerSession } from "@/lib/getServerSession";
-import { revalidatePath } from "next/cache";
+import {  NextResponse } from "next/server";
 import { updateTierlist } from "@/lib/tierlists";
 import { TierlistsTier } from "@prisma/client";
 

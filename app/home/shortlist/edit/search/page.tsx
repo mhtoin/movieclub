@@ -16,7 +16,7 @@ export default function SearchPage() {
   const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
     session?.user?.shortlistId
   );
-  const { data: watchlist } = useGetWatchlistQuery(session?.user);
+  const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(session?.user);
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } = useSearchInfiniteQuery()
 
@@ -44,7 +44,8 @@ export default function SearchPage() {
     };
   }, [loadMoreButtonRef.current, hasNextPage]);
 
-  if (status === "pending" || shortlistStatus === "pending" || !shortlist || !watchlist) {
+  /*
+  if (status === "pending" || shortlistStatus === "pending" || (session?.user.accountId && watchlistStatus === "pending")) {
     return (
       <div className="flex flex-col justify-center m-5 p-10 place-items-center">
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
@@ -54,7 +55,7 @@ export default function SearchPage() {
       </div>
       </div>
     );
-  }
+  }*/
 
   const shortlistMovieIds = shortlist
     ? shortlist?.movies?.map((movie: Movie) => movie.tmdbId)
@@ -64,7 +65,7 @@ export default function SearchPage() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
 
-  console.log('search data', data)
+  
   return (
     <div className="flex flex-col justify-center m-5 p-10 place-items-center">
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">

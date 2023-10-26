@@ -1,9 +1,7 @@
+import 'dotenv/config'
 import NextAuth, { NextAuthOptions } from "next-auth"
 import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-
-import 'dotenv/config'
-import clientPromise from "@/lib/mongo";
 import prisma from "@/lib/prisma";
 import { Adapter } from "next-auth/adapters";
 import { findOrCreateShortList } from "@/lib/shortlist";

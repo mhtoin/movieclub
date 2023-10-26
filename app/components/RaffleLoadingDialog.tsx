@@ -33,7 +33,7 @@ export default function RaffleLoadingDialog({ children }: PropsWithChildren) {
       }
     },
   });
-  console.log("notification", notification);
+  
   return (
     <Dialog.Root open={isOpen}>
       <Dialog.Portal>

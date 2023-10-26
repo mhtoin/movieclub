@@ -1,7 +1,9 @@
 import { getTierlist, getTierlists } from "@/lib/tierlists";
 import { getAllMoviesOfTheWeek } from "@/lib/movies";
-import { getServerSession } from "@/lib/getServerSession";
+//import { getServerSession } from "@/lib/getServerSession";
 import TierContainer from "./components/TierContainer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 async function staticParams() {
   const tierlists = await getTierlists();
@@ -18,7 +20,7 @@ export const dynamic =
   process.env.NODE_ENV === "production" ? "auto" : "force-dynamic";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const tierlist = await getTierlist(params.id);
   const moviesOfTheWeek = await getAllMoviesOfTheWeek();
 

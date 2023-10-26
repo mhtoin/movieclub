@@ -1,4 +1,5 @@
-import { getServerSession } from "./getServerSession";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
 export const revalidate = 10;
 
@@ -39,7 +40,7 @@ export async function getAdditionalInfo(tmdbId: number) {
 }
 
 export async function getWatchlist() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   let pagesLeft = true;
   let page = 1;

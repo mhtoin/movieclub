@@ -49,7 +49,6 @@ export async function POST(
         );
       } catch (e) {
         if (e instanceof Error) {
-          console.log("error when choosing, throwing", e.message);
           pusher.trigger("movieclub-raffle", "result", {
             message: "error",
             data: {

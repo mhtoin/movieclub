@@ -6,7 +6,7 @@ export async function PUT(
     request: Request,
     { params }: { params: { id: string } }
   ) {
-    console.log(params)
+  
     let { isReady } = await request.json();
     let res = await updateShortlistState(isReady, params.id);
     //const movieId = body.movieId;

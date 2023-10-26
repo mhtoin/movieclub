@@ -1,9 +1,11 @@
-import { getServerSession } from "@/lib/getServerSession";
+//import { getServerSession } from "@/lib/deprecated_getServerSession";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 
 export default async function Home() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const isAuthenticated = !!session;
 
   if (isAuthenticated) {

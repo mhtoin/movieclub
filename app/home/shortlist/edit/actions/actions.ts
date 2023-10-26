@@ -1,6 +1,6 @@
 "use server";
 
-import { getServerSession } from "@/lib/getServerSession";
+//import { getServerSession } from "@/lib/deprecated_getServerSession";
 import {
   addMovieToShortlist,
   removeMovieFromShortlist,
@@ -13,9 +13,11 @@ import { Shortlist, User, Prisma } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import "dotenv/config";
 import { sample } from "@/lib/utils";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function addMovie(movie: Movie) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   
   if (session && session.user && session.user.userId) {
     let res = await addMovieToShortlist(
@@ -71,16 +73,16 @@ export async function getColours(img: string) {
 }
 
 export async function updateShortlistReadyState(ready: boolean) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   await updateShortlistState(ready, session?.user.shortlistId)
 }
 
 export async function updateShortlistParticipation(ready: boolean) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   await updateShortlistParticipationState(ready, session?.user.shortlistId)
 }
 
 export async function updateSelection(index: number) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   await updateShortlistSelection(index, session?.user.shortlistId)
 }

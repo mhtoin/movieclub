@@ -1,7 +1,9 @@
-import { getServerSession } from "@/lib/getServerSession";
+
 import { getTierlists } from "@/lib/tierlists";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 async function createNew() {
   "use server";
@@ -11,7 +13,7 @@ async function createNew() {
 export default async function Tierlists() {
   const allTierlists = await getTierlists();
   const usersWithTierlist = allTierlists.map((tierlist) => tierlist.userId);
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="flex flex-col items-center gap-5">

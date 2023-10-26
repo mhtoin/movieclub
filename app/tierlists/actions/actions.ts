@@ -1,12 +1,13 @@
 "use server";
 
-import { getServerSession } from "@/lib/getServerSession";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import {
   createTierlist,
   modifyTierlist,
   updateTierlist,
 } from "@/lib/tierlists";
 import { TierlistsTier } from "@prisma/client";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -36,7 +37,7 @@ export async function saveTierlist(tierlist: Tierlist) {
 }
 
 export async function recreateTierlist(formData: FormData) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   const userId = session?.user?.userId;
   const modified = await modifyTierlist(formData);
