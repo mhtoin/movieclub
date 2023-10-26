@@ -52,7 +52,7 @@ export const useShortlistQuery = (id: string) => {
 
 export const useSearchInfiniteQuery = () => {
   const searchValue = useFilterStore.use.searchValue();
-  console.log('search value is', searchValue)
+  //console.log('search value is', searchValue)
   return useInfiniteQuery({
     queryKey: ["search", searchValue],
     queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),

@@ -70,9 +70,9 @@ export const countByKey = (arr: any[], cb: ArgValCallback<any>) => {
 export const searchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
-    : `discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&watch_region=FI`;
+    : `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773`;
   
-    console.log('searching for', searchQuery)
+    //console.log('searching for', searchQuery)
     const initialSearch = await fetch(
     `https://api.themoviedb.org/3/${searchQuery}`,
     {
