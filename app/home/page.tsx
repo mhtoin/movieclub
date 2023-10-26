@@ -1,14 +1,20 @@
 import { getChosenMovie } from "@/lib/shortlist";
 import { MovieHero } from "./components/MovieHero";
+import DateView from "./components/DateView";
+import getQueryClient from "@/lib/getQueryClient";
+import { getAllMoviesOfTheWeek } from "@/lib/movies";
+import { MovieContainer } from "./components/MovieContainer";
 
 export default async function HomePage() {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["moviesOfTheWeek"],
+    queryFn: async () => getAllMoviesOfTheWeek(),
+  });
   const movieOfTheWeek = await getChosenMovie();
   
   
   return (
-    <div className="flex flex-col items-center justify-normal p-10 gap-10">
-      {/* @ts-expect-error Server Component */}
-      <MovieHero movieOfTheWeek={movieOfTheWeek} />
-    </div>
+    <MovieContainer />
   );
 }

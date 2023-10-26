@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { getShortList } from "./shortlist";
 
 type ArgValCallback<T> = (arg0: T) => any;
@@ -41,6 +42,14 @@ export const groupBy = (arr: any[], cb: (arg0: unknown) => any) => {
     let key = cb(a);
     r[key] = [...(r[key] || []), a];
     return r;
+  }, {});
+};
+
+export const keyBy = (arr: any[], cb: (arg0: unknown) => any) => {
+  return arr.reduce((r, a) => {
+    let key = cb(a);
+    //r[key] = {...(r[key] || {}), a};
+    return {...r, [key]: a};
   }, {});
 };
 
@@ -165,4 +174,14 @@ export const getFilters = async () => {
       return { label: genre.name, value: genre.id };
     }) as Array<{ label: string, value: number}>;
   }
+}
+
+export const getAllMoviesOfTheWeek = async () => {
+  const response = await fetch('/api/movies');
+
+  const data = await response.json();
+  //console.log('data before', data)
+  const groupedData = keyBy(data, (movie: any) => format(new Date(movie.movieOfTheWeek),'dd.MM.yyyy'))
+  //console.log('grouped', groupedData)
+  return groupedData;
 }
