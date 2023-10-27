@@ -21,5 +21,6 @@ declare module "next-auth" {
   interface Profile {
     id: string
     global_name: string
+    image_url: string
   } 
 }
