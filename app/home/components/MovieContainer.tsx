@@ -11,6 +11,29 @@ export const MovieContainer = () => {
   const [movieDate, setMovieDate] = useState<Date>(
     isWednesday(new Date()) ? new Date() : nextWednesday(new Date())
   );
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50 
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+        nextDate();
+    }
+    if (isRightSwipe) {
+        prevDate();
+    }
+  };
 
   const { data } = useQuery({
     queryKey: ["movieOfTheWeek"],
@@ -28,7 +51,7 @@ export const MovieContainer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-normal p-10 gap-10">
+    <div className="flex flex-col items-center justify-normal p-10 gap-10" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
       <div className="flex flex-col justify-center place-items-center gap-5">
         <h1 className="text-4xl font-bold text-center">
           Welcome to the Movie Club
@@ -78,7 +101,11 @@ export const MovieContainer = () => {
           </button>
         </div>
       </div>
-      {movieOfTheWeek ? <MovieHero movieOfTheWeek={movieOfTheWeek} /> : <p>No movie chosen yet!</p>}
+      {movieOfTheWeek ? (
+        <MovieHero movieOfTheWeek={movieOfTheWeek} />
+      ) : (
+        <p>No movie chosen yet!</p>
+      )}
     </div>
   );
 };

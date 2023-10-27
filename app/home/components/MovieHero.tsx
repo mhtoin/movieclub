@@ -2,6 +2,7 @@
 import { prominent } from "color.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function MovieHero({
   movieOfTheWeek,
@@ -25,7 +26,7 @@ export function MovieHero({
 
   if (movieOfTheWeek) {
     return (
-      <div className="card w-11/12 md:w-11/12 lg:w-8/12 xl:w-6/12 2xl:w-6/12 sm:card-side">
+      <div className="card md:card-side w-11/12 lg:w-[780px]">
         <figure
           className="shadow-xl"
           style={{
@@ -36,13 +37,15 @@ export function MovieHero({
             )}, 0.1))`,
           }}
         >
-          <img
+          <Image
             src={backgroundPath}
+            width={700}
+            height={1000}
             alt="Album"
-            className="rounded-2xl md:w-8/12 lg:w-9/12 object-cover gradient-mask-b-90"
+            className="rounded-2xl  object-cover gradient-mask-b-90"
           />
         </figure>
-        <div className="card-body">
+        <div className="card-body sm:w-1/2">
           <h2 className="card-title text-2xl">
             {movieOfTheWeek?.original_title}
           </h2>
@@ -68,7 +71,7 @@ export function MovieHero({
               </g>
             </svg>
           </Link>
-          <p className="text-xs xl:text-lg my-2">{movieOfTheWeek?.overview}</p>
+          <p className="text-sm lg:text-md my-2 max-h-[400px] overflow-scroll ">{movieOfTheWeek?.overview}</p>
           <div className="card-actions"></div>
           <div className="card-actions justify-end">
             {movieOfTheWeek?.trailers?.map((trailer) => {
