@@ -1,5 +1,6 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
+import { inter } from '@/app/fonts';
 import Notification from "./components/Notification";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-black">
+      <body className={`${inter.className} antialiased min-h-screen bg-black`}>
         <Notification />
         <NextAuthProvider>
           <NavBar />
