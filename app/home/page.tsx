@@ -11,8 +11,6 @@ export default async function HomePage() {
     queryKey: ["moviesOfTheWeek"],
     queryFn: async () => getAllMoviesOfTheWeek(),
   });
-  const movieOfTheWeek = await getChosenMovie();
-  
   
   return (
     <MovieContainer />

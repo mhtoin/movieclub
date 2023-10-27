@@ -6,6 +6,8 @@ import { useState } from "react";
 import DateView from "./DateView";
 import { MovieHero } from "./MovieHero";
 import { MovieDatePicker } from "./MovieDatePicker";
+import { CardSkeleton } from "./CardSkeleton";
+import ChosenMovieCard from "./ChosenMovieCard";
 
 export const MovieContainer = () => {
   const [movieDate, setMovieDate] = useState<Date>(
@@ -14,13 +16,14 @@ export const MovieContainer = () => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  const minSwipeDistance = 50 
+  const minSwipeDistance = 50;
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
     setTouchStart(e.targetTouches[0].clientX);
   };
 
-  const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+  const onTouchMove = (e: React.TouchEvent) =>
+    setTouchEnd(e.targetTouches[0].clientX);
 
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
@@ -28,14 +31,14 @@ export const MovieContainer = () => {
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
     if (isLeftSwipe) {
-        nextDate();
+      nextDate();
     }
     if (isRightSwipe) {
-        prevDate();
+      prevDate();
     }
   };
 
-  const { data } = useQuery({
+  const { data, status } = useQuery({
     queryKey: ["movieOfTheWeek"],
     queryFn: getAllMoviesOfTheWeek,
   });
@@ -51,7 +54,12 @@ export const MovieContainer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-normal p-10 gap-10" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+    <div
+      className="flex flex-col items-center justify-normal p-10 gap-10"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       <div className="flex flex-col justify-center place-items-center gap-5">
         <h1 className="text-4xl font-bold text-center">
           Welcome to the Movie Club
@@ -101,11 +109,8 @@ export const MovieContainer = () => {
           </button>
         </div>
       </div>
-      {movieOfTheWeek ? (
-        <MovieHero movieOfTheWeek={movieOfTheWeek} />
-      ) : (
-        <p>No movie chosen yet!</p>
-      )}
+      {<MovieHero movieOfTheWeek={movieOfTheWeek} />}
+      {/*<ChosenMovieCard chosenMovie={movieOfTheWeek} />*/}
     </div>
   );
 };

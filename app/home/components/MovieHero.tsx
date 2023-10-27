@@ -55,7 +55,7 @@ export function MovieHero({
             </div>
           </div>
           <h3 className="text-sm italic">{movieOfTheWeek?.release_date}</h3>
-          <Link href={`/home/movies/${movieOfTheWeek.id}`}>
+          <Link href={`/home/movies/${movieOfTheWeek?.id}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -71,7 +71,9 @@ export function MovieHero({
               </g>
             </svg>
           </Link>
-          <p className="text-sm lg:text-md my-2 max-h-[400px] overflow-scroll ">{movieOfTheWeek?.overview}</p>
+          <p className="text-sm lg:text-md my-2 max-h-[400px] overflow-scroll ">
+            {movieOfTheWeek?.overview}
+          </p>
           <div className="card-actions"></div>
           <div className="card-actions justify-end">
             {movieOfTheWeek?.trailers?.map((trailer) => {
@@ -136,7 +138,5 @@ export function MovieHero({
         </div>
       </div>
     );
-  } else {
-    return <div>No movie for next week</div>;
   }
 }
