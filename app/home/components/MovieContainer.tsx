@@ -5,7 +5,6 @@ import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { useState } from "react";
 import { MovieHero } from "./MovieHero";
 import { MovieDatePicker } from "./MovieDatePicker";
-import { motion, AnimatePresence } from "framer-motion";
 
 export const MovieContainer = () => {
   const [movieDate, setMovieDate] = useState<Date>(
@@ -107,9 +106,9 @@ export const MovieContainer = () => {
           </button>
         </div>
       </div>
-      <AnimatePresence>
+      
       <MovieHero movieOfTheWeek={movieOfTheWeek} />
-      </AnimatePresence>
+      
       {/*<ChosenMovieCard chosenMovie={movieOfTheWeek} />*/}
     </div>
   );
