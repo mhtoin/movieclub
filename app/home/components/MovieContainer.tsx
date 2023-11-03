@@ -3,11 +3,9 @@ import { getAllMoviesOfTheWeek } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { useState } from "react";
-import DateView from "./DateView";
 import { MovieHero } from "./MovieHero";
 import { MovieDatePicker } from "./MovieDatePicker";
-import { CardSkeleton } from "./CardSkeleton";
-import ChosenMovieCard from "./ChosenMovieCard";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const MovieContainer = () => {
   const [movieDate, setMovieDate] = useState<Date>(
@@ -109,7 +107,9 @@ export const MovieContainer = () => {
           </button>
         </div>
       </div>
-      {<MovieHero movieOfTheWeek={movieOfTheWeek} />}
+      <AnimatePresence>
+      <MovieHero movieOfTheWeek={movieOfTheWeek} />
+      </AnimatePresence>
       {/*<ChosenMovieCard chosenMovie={movieOfTheWeek} />*/}
     </div>
   );

@@ -179,11 +179,13 @@ export const getFilters = async () => {
 }
 
 export const getAllMoviesOfTheWeek = async () => {
-  const response = await fetch('/api/movies');
+  const response = await fetch('/api/movies', { next: {
+    revalidate: 6000,
+  }});
 
   const data = await response.json();
   //console.log('data before', data)
   const groupedData = keyBy(data, (movie: any) => format(new Date(movie.movieOfTheWeek),'dd.MM.yyyy'))
-  //console.log('grouped', groupedData)
+  console.log('grouped', groupedData)
   return groupedData;
 }
