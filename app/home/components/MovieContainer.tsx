@@ -13,6 +13,7 @@ export const MovieContainer = () => {
   );
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [direction, setDirection] = useState<number>(-300);
 
   const minSwipeDistance = 50;
   const onTouchStart = (e: React.TouchEvent) => {
@@ -45,10 +46,12 @@ export const MovieContainer = () => {
 
   const nextDate = () => {
     setMovieDate((prev) => set(prev, { date: prev.getDate() + 7 }));
+    setDirection(300);
   };
 
   const prevDate = () => {
     setMovieDate((prev) => set(prev, { date: prev.getDate() - 7 }));
+    setDirection(-300);
   };
 
   return (
@@ -107,8 +110,8 @@ export const MovieContainer = () => {
           </button>
         </div>
       </div>
-      <AnimatePresence>
-      <MovieHero movieOfTheWeek={movieOfTheWeek} />
+      <AnimatePresence mode="popLayout">
+      <MovieHero movieOfTheWeek={movieOfTheWeek} direction={direction}/>
       </AnimatePresence>
       {/*<ChosenMovieCard chosenMovie={movieOfTheWeek} />*/}
     </div>
