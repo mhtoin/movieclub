@@ -5,6 +5,7 @@ import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { useState } from "react";
 import { MovieHero } from "./MovieHero";
 import { MovieDatePicker } from "./MovieDatePicker";
+import { AnimatePresence } from "framer-motion";
 
 export const MovieContainer = () => {
   const [movieDate, setMovieDate] = useState<Date>(
