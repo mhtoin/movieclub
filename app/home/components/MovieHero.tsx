@@ -35,7 +35,7 @@ export function MovieHero({
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: direction, opacity: 0 }}
       >
-        <div className="card md:card-side w-11/12 lg:w-[780px]">
+        <div className="card md:card-side lg:w-[780px]">
           <figure
             className="shadow-xl"
             style={{
