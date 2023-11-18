@@ -3,7 +3,7 @@ import getQueryClient from "@/lib/getQueryClient";
 import { getServerSession } from "next-auth";
 import { getUserShortlist, getWatchlist } from "@/lib/utils";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 export default async function Watchlist() {
   

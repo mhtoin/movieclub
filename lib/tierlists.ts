@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import prisma from "./prisma";
 import { TierlistsTier } from "@prisma/client";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 export const revalidate = 10;
 

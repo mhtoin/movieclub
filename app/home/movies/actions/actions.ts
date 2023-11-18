@@ -1,6 +1,6 @@
 "use server"
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth"
 //import { getServerSession } from "@/lib/deprecated_getServerSession"
 import { createReview } from "@/lib/movies"
 import { getServerSession } from "next-auth"

@@ -1,6 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { getServerSession as originalGetServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 
 export const getServerSession = async () => {

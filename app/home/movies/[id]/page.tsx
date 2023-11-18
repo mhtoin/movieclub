@@ -3,7 +3,7 @@ import MovieCard from "../components/MovieCard";
 //import { getServerSession } from "@/lib/deprecated_getServerSession";
 import { getTierlist } from "@/lib/tierlists";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 
 async function staticParams() {

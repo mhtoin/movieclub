@@ -3,7 +3,7 @@ import { getTierlists } from "@/lib/tierlists";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/auth";
 
 async function createNew() {
   "use server";

@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import ItemSkeleton from "./ItemSkeleton";
 import ShortListItem from "./ShortListItem";
 import { getShortList } from "@/lib/shortlist";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 //import { getServerSession } from "@/lib/deprecated_getServerSession";
 

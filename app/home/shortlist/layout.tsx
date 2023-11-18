@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { getUserShortlist } from "@/lib/utils";
 import getQueryClient from "@/lib/getQueryClient";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 export default async function ShortlistLayout({
   children, // will be a page or nested layout
 }: {

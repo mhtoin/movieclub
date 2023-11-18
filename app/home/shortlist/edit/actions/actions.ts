@@ -14,7 +14,7 @@ import { revalidateTag } from "next/cache";
 import "dotenv/config";
 import { sample } from "@/lib/utils";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 export async function addMovie(movie: Movie) {
   const session = await getServerSession(authOptions);

@@ -3,7 +3,7 @@ import { getAllMoviesOfTheWeek } from "@/lib/movies";
 //import { getServerSession } from "@/lib/getServerSession";
 import TierContainer from "./components/TierContainer";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 async function staticParams() {
   const tierlists = await getTierlists();
