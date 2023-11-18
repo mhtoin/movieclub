@@ -10,7 +10,7 @@ import { range } from "@/lib/utils";
 export default function AllShortlistsContainer() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
   usePusher("movieclub-shortlist", "shortlist-update");
-    
+
   if (isLoading && !allShortlists) {
     return (
       <div className="flex max-h-screen flex-col items-center overflow-hidden">
@@ -36,7 +36,7 @@ export default function AllShortlistsContainer() {
         return (
           <Fragment key={`fragment-${shortlist.id}`}>
             <div
-              className="flex flex-row m-2 justify-center place-items-center "
+              className="flex flex-row m-2 mb-5 justify-center place-items-center "
               key={`name-container-${shortlist.id}`}
             >
               <div
