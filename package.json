@@ -31,6 +31,7 @@
     "chart.js": "^4.3.0",
     "classnames": "^2.3.2",
     "color.js": "^1.2.0",
+    "daisyui": "^4.4.2",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "dnd-core": "^16.0.1",
@@ -42,8 +43,8 @@
     "immer": "^10.0.2",
     "immutability-helper": "^3.1.1",
     "mongodb": "^5.6.0",
-    "next": "^13.5.6",
-    "next-auth": "^4.22.1",
+    "next": "^14.0.3",
+    "next-auth": "^4.24.5",
     "postcss": "8.4.24",
     "prettier": "^2.8.8",
     "prisma": "^4.15.0",
@@ -52,6 +53,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^4.21.0",
+    "react-dialog\n": "link:@radix-ui/react-dialog\n",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
@@ -69,7 +71,6 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
     "@types/react-datepicker": "^4.19.1",
-    "daisyui": "^3.0.3",
     "eslint-config-prettier": "^8.8.0"
   }
 }
