@@ -98,58 +98,54 @@ export async function findOrCreateShortList(userId: string) {
 }
 
 export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
-  try {
-    // check if user has shortlist, create if absent
+  // check if user has shortlist, create if absent
 
-    // also check if the movie has already been chosen in the past
-    const movieChosen = await prisma.movie.findFirst({
-      where: {
-        tmdbId: movie.tmdbId,
-        movieOfTheWeek: {
-          not: null,
-        },
+  // also check if the movie has already been chosen in the past
+  const movieChosen = await prisma.movie.findFirst({
+    where: {
+      tmdbId: movie.tmdbId,
+      movieOfTheWeek: {
+        not: null,
       },
-    });
-
-    if (movieChosen) {
-      throw new Error("Movie has already been chosen in the past");
-    }
-
-    const updatedShortlist = await prisma.shortlist.update({
-      where: {
-        id: shortlistId,
-      },
-      data: {
-        movies: {
-          connectOrCreate: {
-            where: {
-              tmdbId: movie.tmdbId,
-            },
-            create: movie,
-          },
-        },
-      },
-      include: {
-        movies: true,
-      },
-    });
-
-    await pusher
-      .trigger("movieclub-shortlist", "shortlist-update", {
-        message: `movies`,
-        data: {
-          userId: updatedShortlist.userId,
-          payload: updatedShortlist,
-        },
-      })
-      .catch((err) => {
-        throw new Error(err.message);
-      });
-
-    return updatedShortlist;
-  } catch (e) {
-    console.error(e);
+    },
+  });
+  console.log("movieChosen", movieChosen);
+  if (movieChosen) {
+    throw new Error("Movie has already been chosen in the past, cannot add");
   }
+
+  const updatedShortlist = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      movies: {
+        connectOrCreate: {
+          where: {
+            tmdbId: movie.tmdbId,
+          },
+          create: movie,
+        },
+      },
+    },
+    include: {
+      movies: true,
+    },
+  });
+
+  await pusher
+    .trigger("movieclub-shortlist", "shortlist-update", {
+      message: `movies`,
+      data: {
+        userId: updatedShortlist.userId,
+        payload: updatedShortlist,
+      },
+    })
+    .catch((err) => {
+      throw new Error(err.message);
+    });
+
+  return updatedShortlist;
 }
 
 export async function removeMovieFromShortlist(

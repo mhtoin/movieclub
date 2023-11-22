@@ -9,6 +9,7 @@ import {
 } from "./shortlist";
 import type { User } from "@prisma/client";
 import { countByKey, sample, shuffle } from "./utils";
+import { revalidatePath } from "next/cache";
 
 export async function getAllMoviesOfTheWeek() {
   const nextMovieDate = set(nextWednesday(new Date()), {
@@ -40,6 +41,7 @@ export async function getAllMoviesOfTheWeek() {
 }
 
 export async function getMoviesOfTheWeek() {
+  revalidatePath("/home/");
   return await prisma.movie.findMany({
     where: {
       movieOfTheWeek: {

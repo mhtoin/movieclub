@@ -260,8 +260,15 @@ export const useAddToShortlistMutation = () => {
         method: "POST",
         body: JSON.stringify({ movie }),
       });
+      console.log("response is", response);
 
-      return await response.json();
+      if (!response.ok) {
+        let { message } = await response.json();
+        throw new Error(message);
+      }
+      const data = await response.json();
+      console.log("data is", data);
+      return data;
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
@@ -272,6 +279,9 @@ export const useAddToShortlistMutation = () => {
           });
         }
       );
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 };

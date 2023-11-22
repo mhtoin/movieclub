@@ -5,7 +5,7 @@ import {
   removeMovieFromShortlist,
 } from "@/lib/shortlist";
 import { revalidatePath } from "next/cache";
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +24,10 @@ export async function GET(
     }
   }
 
-  return NextResponse.json({ ok: false, message: "Something went wrong!" }, { status: 500 });
+  return NextResponse.json(
+    { ok: false, message: "Something went wrong!" },
+    { status: 500 }
+  );
 }
 
 export async function POST(
@@ -34,12 +37,19 @@ export async function POST(
   try {
     const id = params.id;
     let body = await request.json();
-    let updatedShortlist = await addMovieToShortlist(body.movie, id);
+    let updatedShortlist = await addMovieToShortlist(body.movie, id).catch(
+      (e) => {
+        console.log("e is", e);
+        throw new Error(e.message);
+      }
+    );
 
+    console.log("updatedShortlist", updatedShortlist);
     revalidatePath("/home/shortlist");
     return NextResponse.json(updatedShortlist);
   } catch (e) {
     if (e instanceof Error) {
+      console.log("caught error", e.message);
       return NextResponse.json(
         { ok: false, message: e.message },
         { status: 401 }
@@ -47,7 +57,10 @@ export async function POST(
     }
   }
 
-  return NextResponse.json({ ok: false, message: "Something went wrong!" }, { status: 500 });
+  return NextResponse.json(
+    { ok: false, message: "Something went wrong!" },
+    { status: 500 }
+  );
 }
 
 export async function PUT(

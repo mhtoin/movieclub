@@ -88,7 +88,7 @@ export default function ShortlistContainer() {
         key={shortlist.id + "-container"}
         className="flex flex-row gap-5 w-2/3 sm:w-auto items-center"
       >
-        {shortlist.movies.map((movie: Movie, index: number) => {
+        {shortlist?.movies?.map((movie: Movie, index: number) => {
           return (
             <ShortListItem
               key={shortlist.id + movie.id}
