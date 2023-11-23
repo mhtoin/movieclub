@@ -28,13 +28,6 @@ export const CardSkeleton = () => {
             />
           </g>
         </svg>
-        <p className="text-sm lg:text-md my-2 max-h-[400px] overflow-scroll flex flex-col gap-3">
-        <div className="h-1 w-full bg-gray-300 rounded-md"></div>
-        <div className="h-1 w-full bg-gray-300 rounded-md"></div>
-        <div className="h-1 w-full bg-gray-300 rounded-md"></div>
-        <div className="h-1 w-full bg-gray-300 rounded-md"></div>
-        <div className="h-1 w-full bg-gray-300 rounded-md"></div>
-        </p>
       </div>
     </div>
   );

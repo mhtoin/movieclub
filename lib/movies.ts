@@ -21,7 +21,7 @@ export async function getAllMoviesOfTheWeek() {
     ? set(new Date(), { hours: 19, minutes: 0, seconds: 0, milliseconds: 0 })
     : nextMovieDate;
 
-    console.log('now', now)
+  console.log("now", now);
   const movies = await prisma.movie.findMany({
     where: {
       movieOfTheWeek: {
@@ -36,6 +36,21 @@ export async function getAllMoviesOfTheWeek() {
   });
 
   return movies;
+}
+
+export async function getMoviesOfTheWeek() {
+  return await prisma.movie.findMany({
+    where: {
+      movieOfTheWeek: {
+        not: null,
+      },
+    },
+    include: {
+      reviews: true,
+      ratings: true,
+      user: true,
+    },
+  });
 }
 
 export async function getMovie(id: string) {
@@ -90,7 +105,7 @@ export async function simulateRaffle(repetitions: number) {
   for (let i = 0; i < repetitions; i++) {
     const movies = shortlists
       .map((shortlist) => {
-        if (i >15 && shortlist.user.id === lastChosen?.id) {
+        if (i > 15 && shortlist.user.id === lastChosen?.id) {
           return {
             user: shortlist.user,
             shortlistId: shortlist.id,
@@ -135,21 +150,21 @@ export async function simulateRaffle(repetitions: number) {
     resultArr.push(chosen);
     lastChosen = chosen?.user!;
   }
- 
+
   let moviesByUser = countByKey(resultArr, (movie: ChosenMovie) => {
     return movie?.user?.name!;
   });
 
   let dataObj = {
     label: "Movies by user",
-    data: []
-  } as UserChartData
-  
+    data: [],
+  } as UserChartData;
+
   for (let user in moviesByUser) {
     dataObj.data.push({
       user: user,
-      movies: moviesByUser[user]
-    })
+      movies: moviesByUser[user],
+    });
   }
   return dataObj;
 }
@@ -175,7 +190,7 @@ export async function chooseMovieOfTheWeek() {
       }
     }
   }
-  
+
   const notReady = shortlists.filter((shortlist) => !shortlist.isReady);
   //const allReady = every(shortlists, (shortlist) => shortlist.isReady)
 
@@ -189,7 +204,6 @@ export async function chooseMovieOfTheWeek() {
 
   const movies = shortlists
     .map((shortlist) => {
-      
       if (shortlist.requiresSelection) {
         return {
           user: shortlist.user,
@@ -197,7 +211,7 @@ export async function chooseMovieOfTheWeek() {
           movie: shortlist.movies[shortlist.selectedIndex!],
         };
       }
-      
+
       return shortlist.movies.map((movie) =>
         Object.assign(
           {},
@@ -227,14 +241,13 @@ export async function chooseMovieOfTheWeek() {
       user: chosen?.user,
     } as MovieOfTheWeek;
   }
- 
+
   // update movie with the date
   // reset selection state for the current week's winner
   // set restrictions to new winner
 
   await updateChosenMovie(movieObject!, chosen!.user.id);
-  
-  
+
   for (let item of shortlists) {
     await updateShortlistState(false, item.id);
 
@@ -294,7 +307,6 @@ export async function connectChosenMovies(movies: any[]) {
           tmdbId: movie.tmdbId!,
         },
       });
-    
 
       if (!movieData?.userId) {
         let res = await prisma.movie.update({
@@ -332,19 +344,19 @@ export async function getStatistics() {
     return movie.user?.name!;
   });
 
-  let dataArr = []
+  let dataArr = [];
   let dataObj = {
     label: "Movies by user",
-    data: []
-  } as UserChartData
-  
+    data: [],
+  } as UserChartData;
+
   for (let user in moviesByUser) {
     dataObj.data.push({
       user: user,
-      movies: moviesByUser[user]
-    })
+      movies: moviesByUser[user],
+    });
   }
-  dataArr.push(dataObj)
+  dataArr.push(dataObj);
   return dataObj;
 }
 

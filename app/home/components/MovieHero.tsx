@@ -31,7 +31,7 @@ export function MovieHero({
     return (
       <motion.div
         key={movieOfTheWeek?.id}
-        initial={{ x: direction, opacity: 1, scale: 0.5 }}
+        initial={{ x: direction, opacity: 0, scale: 0.5 }}
         animate={{ x: 0, opacity: 1, scale: 1 }}
         exit={{ x: direction, opacity: 1, scale: 0.5 }}
       >
@@ -81,7 +81,7 @@ export function MovieHero({
     return (
       <motion.div
         key={"no-movie"}
-        initial={{ x: direction, opacity: 0 }}
+        initial={{ opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: direction, opacity: 0 }}
       >

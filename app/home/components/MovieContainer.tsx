@@ -40,6 +40,8 @@ export const MovieContainer = () => {
   const { data, status } = useQuery({
     queryKey: ["movieOfTheWeek"],
     queryFn: getAllMoviesOfTheWeek,
+    refetchInterval: 1000,
+    refetchIntervalInBackground: true,
   });
 
   const movieOfTheWeek = data ? data[format(movieDate, "dd.MM.yyyy")] : null;
@@ -110,8 +112,8 @@ export const MovieContainer = () => {
           </button>
         </div>
       </div>
-      <AnimatePresence mode="popLayout">
-      <MovieHero movieOfTheWeek={movieOfTheWeek} direction={direction}/>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <MovieHero movieOfTheWeek={movieOfTheWeek} direction={direction} />
       </AnimatePresence>
       {/*<ChosenMovieCard chosenMovie={movieOfTheWeek} />*/}
     </div>
