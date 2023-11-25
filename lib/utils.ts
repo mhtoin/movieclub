@@ -1,5 +1,7 @@
 import { format } from "date-fns";
 import { getShortList } from "./shortlist";
+import { QueryClient } from "@tanstack/react-query";
+import { produce } from "immer";
 
 type ArgValCallback<T> = (arg0: T) => any;
 
@@ -206,3 +208,20 @@ export const getAllShortlistsGroupedById =
     const groupedData = keyBy(data, (shortlist: any) => shortlist.id);
     return groupedData;
   };
+
+export const setShortlistQueryData = (
+  queryClient: QueryClient,
+  key: string,
+  id: string,
+  data: any
+) => {
+  queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+    return produce(oldData, (draft) => {
+      let target = draft[id];
+      // typecheck here, check https://stackoverflow.com/questions/56568423/typescript-no-index-signature-with-a-parameter-of-type-string-was-found-on-ty
+      if (target && target.hasOwnProperty(key)) {
+        //target[key] = data;
+      }
+    });
+  });
+};

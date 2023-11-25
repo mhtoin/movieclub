@@ -124,8 +124,14 @@ export const useUpdateReadyStateMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
+      /*
       queryClient.invalidateQueries({
-        queryKey: ["shortlist"],
+        queryKey: ["shortlists"],
+      });*/
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].isReady = data.isReady;
+        });
       });
     },
   });
@@ -149,9 +155,15 @@ export const useUpdateSelectionMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].selectedIndex = data.selectedIndex;
+        });
+      });
+      /*
       queryClient.invalidateQueries({
         queryKey: ["shortlist"],
-      });
+      });*/
     },
   });
 };
@@ -202,9 +214,15 @@ export const useUpdateShortlistMutation = (method: string) => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].movies = data.movies;
+        });
+      });
+      /*
       queryClient.invalidateQueries({
         queryKey: ["shortlist"],
-      });
+      });*/
     },
   });
 };
@@ -227,9 +245,15 @@ export const useRemoveFromShortlistMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].movies = data.movies;
+        });
+      });
+      /*
       queryClient.invalidateQueries({
         queryKey: ["shortlist"],
-      });
+      });*/
     },
   });
 };
@@ -252,14 +276,11 @@ export const useAddToShortlistMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        ["shortlist", variables.shortlistId],
-        (oldData: any) => {
-          return produce(oldData, (draft: Shortlist) => {
-            draft.movies = data.movies;
-          });
-        }
-      );
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].movies = data.movies;
+        });
+      });
     },
   });
 };
@@ -272,12 +293,10 @@ const handleShortlistMessage = (
   let messageData = data.data.payload as Shortlist;
   let messageType = data.message;
 
-  queryClient.setQueryData(["otherShortlists"], (oldData: any) => {
-    return produce(oldData, (draft: Array<Shortlist>) => {
+  queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+    return produce(oldData, (draft) => {
       //console.log('draft is', JSON.parse(JSON.stringify(draft)))
-      let targetShortlist = draft?.find(
-        (shortlist) => shortlist.id === messageData.id
-      );
+      let targetShortlist = draft[messageData.id];
 
       switch (messageType) {
         case "ready":
