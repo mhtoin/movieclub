@@ -49,7 +49,7 @@ export const keyBy = (arr: any[], cb: (arg0: unknown) => any) => {
   return arr.reduce((r, a) => {
     let key = cb(a);
     //r[key] = {...(r[key] || {}), a};
-    return {...r, [key]: a};
+    return { ...r, [key]: a };
   }, {});
 };
 
@@ -71,9 +71,9 @@ export const searchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
     ? searchValue + `&page=${page}`
     : `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773`;
-  
-    //console.log('searching for', searchQuery)
-    const initialSearch = await fetch(
+
+  //console.log('searching for', searchQuery)
+  const initialSearch = await fetch(
     `https://api.themoviedb.org/3/${searchQuery}`,
     {
       method: "GET",
@@ -155,7 +155,7 @@ export const getWatchProviders = async () => {
     );
   });
   return providers;
-}
+};
 
 export const getFilters = async () => {
   let res = await fetch(
@@ -174,18 +174,35 @@ export const getFilters = async () => {
   if (responseBody.genres) {
     return responseBody.genres.map((genre: { name: string; id: number }) => {
       return { label: genre.name, value: genre.id };
-    }) as Array<{ label: string, value: number}>;
+    }) as Array<{ label: string; value: number }>;
   }
-}
+};
 
 export const getAllMoviesOfTheWeek = async () => {
-  const response = await fetch('/api/movies', { next: {
-    revalidate: 6000,
-  }});
+  const response = await fetch("/api/movies", {
+    next: {
+      revalidate: 6000,
+    },
+  });
 
   const data = await response.json();
   //console.log('data before', data)
-  const groupedData = keyBy(data, (movie: any) => format(new Date(movie.movieOfTheWeek),'dd.MM.yyyy'))
-  console.log('grouped', groupedData)
+  const groupedData = keyBy(data, (movie: any) =>
+    format(new Date(movie.movieOfTheWeek), "dd.MM.yyyy")
+  );
+  console.log("grouped", groupedData);
   return groupedData;
-}
+};
+
+export const getAllShortlistsGroupedById =
+  async (): Promise<ShortlistsById> => {
+    const response = await fetch("/api/shortlist", {
+      next: {
+        revalidate: 6000,
+      },
+    });
+
+    const data = await response.json();
+    const groupedData = keyBy(data, (shortlist: any) => shortlist.id);
+    return groupedData;
+  };

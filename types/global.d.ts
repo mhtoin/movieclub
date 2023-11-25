@@ -163,7 +163,11 @@ declare global {
   }
 
   interface RangeSelection {
-    min: string
-    max: string
+    min: string;
+    max: string;
   }
+
+  type ShortlistsById = {
+    [x: string]: Shortlist;
+  };
 }

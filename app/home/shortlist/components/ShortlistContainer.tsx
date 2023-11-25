@@ -6,22 +6,24 @@ import { Fragment, useTransition } from "react";
 import SearchButton from "../edit/components/SearchButton";
 import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
-import { useShortlistQuery, useUpdateReadyStateMutation } from "@/lib/hooks";
+import { useShortlistsQuery, useUpdateReadyStateMutation } from "@/lib/hooks";
 import { RaffleClient } from "../../../components/RaffleClient";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
-  const { data: shortlist, status: shortlistStatus } = useShortlistQuery(session?.user?.shortlistId)
+  //const { data: shortlist, status: shortlistStatus } = useShortlistQuery(session?.user?.shortlistId)
+  const { data: allShortlists, isLoading, status } = useShortlistsQuery();
   const readyStateMutation = useUpdateReadyStateMutation();
+  const shortlist = allShortlists?.[session?.user?.shortlistId];
 
-  if (shortlistStatus === "pending" && !shortlist) {
+  if (status === "pending" && !shortlist) {
     return (
       <div className="flex flex-col justify-center place-items-center">
         <div className="flex flex-row gap-5 w-2/3 sm:w-auto items-center">
-        <ItemSkeleton />
-        <ItemSkeleton />
-        <ItemSkeleton />
-      </div>
+          <ItemSkeleton />
+          <ItemSkeleton />
+          <ItemSkeleton />
+        </div>
       </div>
     );
   }
@@ -35,29 +37,34 @@ export default function ShortlistContainer() {
       : [];
 
   return (
-    <div key={`fragment-${shortlist.id}`} className="flex flex-col justify-center place-items-center m-2">
-      {shortlist.requiresSelection && (shortlist.selectedIndex === null && shortlist.selectedIndex !== 0) && (
-        <SelectionAlert />
-      )}
+    <div
+      key={`fragment-${shortlist?.id}`}
+      className="flex flex-col justify-center place-items-center m-2"
+    >
+      {shortlist?.requiresSelection &&
+        shortlist.selectedIndex === null &&
+        shortlist.selectedIndex !== 0 && <SelectionAlert />}
       <div
         className="flex flex-row justify-center place-items-center m-5"
-        key={`name-container-${shortlist.id}`}
+        key={`name-container-${shortlist?.id}`}
       >
         <div
           className={`avatar mr-5 flex justify-center ${"hover:opacity-70"} w-8 2xl:w-12`}
-          key={`avatar-${shortlist.userId}`}
+          key={`avatar-${shortlist?.userId}`}
           onClick={() => {
-            readyStateMutation.mutate({
-              shortlistId: shortlist.id,
-              isReady: !shortlist.isReady,
-            });
+            if (shortlist) {
+              readyStateMutation.mutate({
+                shortlistId: shortlist.id,
+                isReady: !shortlist.isReady,
+              });
+            }
           }}
         >
           <div
             className={`w-10 2xl:w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
-              shortlist.isReady ? "ring-success" : "ring-error"
+              shortlist?.isReady ? "ring-success" : "ring-error"
             } `}
-            key={`avatar-ring ${shortlist.userId}`}
+            key={`avatar-ring ${shortlist?.userId}`}
           >
             {readyStateMutation.isPending ? (
               <span className="loading loading-spinner m-1 2xl:m-3"></span>
@@ -65,25 +72,25 @@ export default function ShortlistContainer() {
               <img
                 src={session?.user?.image}
                 alt=""
-                key={`profile-img-${shortlist.userId}`}
+                key={`profile-img-${shortlist?.userId}`}
               />
             )}
           </div>
         </div>
 
         <>
-        <div className="max-w-[40px] flex">
-          <SearchButton />
-          <WatchlistButton />
-        </div>
+          <div className="max-w-[40px] flex">
+            <SearchButton />
+            <WatchlistButton />
+          </div>
           <RaffleClient />
         </>
       </div>
       <div
-        key={shortlist.id + "-container"}
+        key={shortlist?.id + "-container"}
         className="flex flex-row gap-5 w-2/3 sm:w-auto items-center"
       >
-        {shortlist.movies.map((movie: Movie, index: number) => {
+        {shortlist?.movies.map((movie: Movie, index: number) => {
           return (
             <ShortListItem
               key={shortlist.id + movie.id}

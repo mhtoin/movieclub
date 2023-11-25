@@ -12,7 +12,13 @@ import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
-import { getWatchProviders, getWatchlist, searchMovies } from "./utils";
+import {
+  getAllShortlistsGroupedById,
+  getWatchProviders,
+  getWatchlist,
+  groupBy,
+  searchMovies,
+} from "./utils";
 import toast from "react-hot-toast";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 
@@ -20,20 +26,8 @@ export const useShortlistsQuery = () => {
   const { data: session } = useSession();
   //console.log('session user is', session)
   return useQuery({
-    queryKey: ["otherShortlists"],
-    queryFn: async () => {
-      const response = await fetch(`/api/shortlist`);
-      const data = await response.json();
-      /** !TODO
-       * Would make sense to just have an endpoint to return everyone else's
-       * shortlist
-       * Or then prefetch all and seed different queries
-       */
-      return data.filter((shortlist: Shortlist) => {
-        return shortlist.id !== session?.user?.shortlistId;
-      });
-    },
-    enabled: !!session?.user?.shortlistId,
+    queryKey: ["shortlists"],
+    queryFn: getAllShortlistsGroupedById,
   });
 };
 
@@ -58,7 +52,7 @@ export const useSearchInfiniteQuery = () => {
     queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
-      
+
       return page < totalPages ? page + 1 : undefined;
     },
     initialPageParam: 1,
@@ -79,15 +73,13 @@ export const useRaffleMutation = () => {
         body: JSON.stringify({ userId: session?.user?.userId }),
       });
       const data = await res.json();
-      
+
       if (!data.ok) {
-       
         throw new Error(data.message);
       }
       return data;
     },
     onSuccess: (data) => {
-      
       setResult(data.movie);
       setIsLoading(false);
       if (!isOpen) {
@@ -173,7 +165,7 @@ export const useAddToWatchlistMutation = () => {
         media_id: movieId,
         watchlist: true,
       });
-      
+
       const response = await fetch(
         `https://api.themoviedb.org/3/account/${session?.user?.accountId}/watchlist?session_id=${session?.user?.sessionId}`,
         {
@@ -279,9 +271,8 @@ const handleShortlistMessage = (
 ) => {
   let messageData = data.data.payload as Shortlist;
   let messageType = data.message;
-  
+
   queryClient.setQueryData(["otherShortlists"], (oldData: any) => {
-    
     return produce(oldData, (draft: Array<Shortlist>) => {
       //console.log('draft is', JSON.parse(JSON.stringify(draft)))
       let targetShortlist = draft?.find(
@@ -338,16 +329,13 @@ export const usePusher = (
   useEffect(() => {
     const bindPusher = async () => {
       const session = await getSession();
-     
+
       const channel = pusher.subscribe(channelName);
       channel.bind(eventName, (data: PusherMessage) => {
         if (channelName === "movieclub-raffle") {
-          
           const messageType = data.message;
           const messageData = data.data as PusherPayload;
           if (messageData.userId !== session?.user?.userId) {
-          
-            
             if (messageType === "result") {
               const payload = messageData.payload as MovieOfTheWeek;
 
@@ -369,7 +357,7 @@ export const usePusher = (
               }
             } else if (messageType === "error") {
               let errorData = messageData.payload as string;
-              
+
               setIsOpen(false);
               setIsLoading(false);
 
