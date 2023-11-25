@@ -273,7 +273,12 @@ export const useAddToShortlistMutation = () => {
         body: JSON.stringify({ movie }),
       });
 
-      return await response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
@@ -281,6 +286,9 @@ export const useAddToShortlistMutation = () => {
           draft[variables.shortlistId].movies = data.movies;
         });
       });
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 };
