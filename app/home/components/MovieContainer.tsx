@@ -38,7 +38,7 @@ export const MovieContainer = () => {
   };
 
   const { data, status } = useQuery({
-    queryKey: ["movieOfTheWeek"],
+    queryKey: ["moviesOfTheWeek"],
     queryFn: getAllMoviesOfTheWeek,
     refetchInterval: 1000,
     refetchIntervalInBackground: true,
