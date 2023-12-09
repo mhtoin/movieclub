@@ -3,6 +3,7 @@ import { format, isWednesday, nextWednesday, set } from "date-fns";
 import { getAdditionalInfo } from "./tmdb";
 import {
   getAllShortLists,
+  removeMovieFromShortlist,
   updateShortlistSelectionStatus,
   updateShortlistState,
 } from "./shortlist";
@@ -260,6 +261,15 @@ export async function chooseMovieOfTheWeek() {
 
     if (item.id === chosen?.shortlistId) {
       await updateShortlistSelectionStatus(true, item.id);
+    }
+
+    // finally, wipe the chosen movie from all shortlists
+    let movieInShortlist = item.movies.find(
+      (movie) => movie.id === chosen?.movie.id
+    );
+
+    if (movieInShortlist) {
+      await removeMovieFromShortlist(movieInShortlist.id, item.id);
     }
   }
 

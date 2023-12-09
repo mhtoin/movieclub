@@ -5,10 +5,11 @@ export default function RaffleResultCard({
 }) {
   return (
     <div className="card bg-base-100 shadow-xl image-full">
-      <figure>
+      <figure className="rounded-2xl">
         <img
           src={`http://image.tmdb.org/t/p/original${chosenMovie?.["poster_path"]}`}
           alt="Shoes"
+          className=""
         />
       </figure>
       <div className="card-body">
@@ -18,7 +19,9 @@ export default function RaffleResultCard({
             <img src={chosenMovie?.user?.image} alt={"user"} />
           </div>
         </div>
-        <p className="text-white overflow-scroll h-[50px]">{chosenMovie?.overview}</p>
+        <p className="text-white overflow-scroll h-[50px] no-scrollbar">
+          {chosenMovie?.overview}
+        </p>
         <div className="card-actions justify-end">
           {chosenMovie?.trailers?.map((trailer) => {
             return (
