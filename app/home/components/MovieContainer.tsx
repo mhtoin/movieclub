@@ -13,7 +13,7 @@ export const MovieContainer = () => {
   );
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [direction, setDirection] = useState<number>(-300);
+  const [direction, setDirection] = useState<number>(-1000);
 
   const minSwipeDistance = 50;
   const onTouchStart = (e: React.TouchEvent) => {
@@ -48,12 +48,12 @@ export const MovieContainer = () => {
 
   const nextDate = () => {
     setMovieDate((prev) => set(prev, { date: prev.getDate() + 7 }));
-    setDirection(300);
+    setDirection(1000);
   };
 
   const prevDate = () => {
     setMovieDate((prev) => set(prev, { date: prev.getDate() - 7 }));
-    setDirection(-300);
+    setDirection(-1000);
   };
 
   return (

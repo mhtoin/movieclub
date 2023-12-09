@@ -27,15 +27,42 @@ export function MovieHero({
     }
   }, []);
 
+  const variants = {
+    enter: (direction: number) => {
+      return {
+        x: direction,
+        opacity: 0,
+      };
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => {
+      return {
+        zIndex: 0,
+        x: direction,
+        opacity: 0,
+      };
+    },
+  };
+
   if (movieOfTheWeek) {
     return (
       <motion.div
         key={movieOfTheWeek?.id}
-        initial={{ x: direction, opacity: 0, scale: 0.5 }}
-        animate={{ x: 0, opacity: 1, scale: 1 }}
-        exit={{ x: direction, opacity: 1, scale: 0.5 }}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        custom={direction}
+        transition={{
+          x: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.2 },
+        }}
+        variants={variants}
       >
-        <div className="card md:card-side lg:w-[380px] xl:w-[380px] 2xl:w-[580px]">
+        <div className="group card md:card-side lg:w-[380px] xl:w-[380px] 2xl:w-[580px]">
           <figure
             className="shadow-xl"
             style={{
@@ -49,12 +76,12 @@ export function MovieHero({
             <Image
               src={backgroundPath}
               width={700}
-              height={800}
+              height={500}
               alt="Movie card background"
-              className="rounded-2xl  object-cover gradient-mask-b-90 relative"
+              className="rounded-2xl object-cover gradient-mask-b-90 relative group-hover:opacity-50"
               priority={true}
             />
-            <button className="btn btn-circle btn-sm absolute top-0 right-0 m-4 flex">
+            <button className="border btn btn-ghost btn-circle btn-sm absolute top-1/2 right-1/2 left-1/2 group-hover:flex hidden">
               <Link href={`/home/movies/${movieOfTheWeek?.id}`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
