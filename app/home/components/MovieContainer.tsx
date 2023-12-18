@@ -13,7 +13,7 @@ export const MovieContainer = () => {
   );
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [direction, setDirection] = useState<number>(-1000);
+  const [direction, setDirection] = useState<number>(-500);
 
   const minSwipeDistance = 50;
   const onTouchStart = (e: React.TouchEvent) => {
@@ -48,17 +48,17 @@ export const MovieContainer = () => {
 
   const nextDate = () => {
     setMovieDate((prev) => set(prev, { date: prev.getDate() + 7 }));
-    setDirection(1000);
+    setDirection(500);
   };
 
   const prevDate = () => {
     setMovieDate((prev) => set(prev, { date: prev.getDate() - 7 }));
-    setDirection(-1000);
+    setDirection(-500);
   };
 
   return (
     <div
-      className="flex flex-col items-center justify-normal p-10 gap-10"
+      className="flex flex-col items-center justify-normal p-10 gap-10 no-scrollbar"
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}

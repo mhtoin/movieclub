@@ -182,9 +182,7 @@ export const getFilters = async () => {
 
 export const getAllMoviesOfTheWeek = async () => {
   const response = await fetch("/api/movies", {
-    next: {
-      revalidate: 6000,
-    },
+    cache: "no-store",
   });
 
   const data = await response.json();

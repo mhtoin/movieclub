@@ -62,7 +62,7 @@ export function MovieHero({
         }}
         variants={variants}
       >
-        <div className="group card md:card-side lg:w-[380px] xl:w-[380px] 2xl:w-[580px]">
+        <div className="group card min-h-[500px] md:card-side lg:w-[380px] xl:w-[380px] 2xl:w-[580px] backdrop-blur-md bg-opacity-60 bg-slate12">
           <figure
             className="shadow-xl"
             style={{
