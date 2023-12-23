@@ -42,6 +42,7 @@ export const MovieContainer = () => {
     queryFn: getAllMoviesOfTheWeek,
     refetchInterval: 1000,
     refetchIntervalInBackground: true,
+    gcTime: 0,
   });
 
   const movieOfTheWeek = data ? data[format(movieDate, "dd.MM.yyyy")] : null;
