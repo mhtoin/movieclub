@@ -5,6 +5,7 @@ import getQueryClient from "@/lib/getQueryClient";
 
 import { MovieContainer } from "./components/MovieContainer";
 import { getAllMoviesOfTheWeek } from "@/lib/utils";
+import MovieCarousel from "../components/home/MovieCarousel";
 
 export default async function HomePage() {
   const queryClient = getQueryClient();
@@ -13,5 +14,5 @@ export default async function HomePage() {
     queryFn: async () => getAllMoviesOfTheWeek(),
   });
 
-  return <MovieContainer />;
+  return <MovieCarousel />;
 }
