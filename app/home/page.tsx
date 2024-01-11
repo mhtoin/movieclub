@@ -14,5 +14,12 @@ export default async function HomePage() {
     queryFn: async () => getAllMoviesOfTheWeek(),
   });
 
-  return <MovieCarousel />;
+  return (
+    <div className="flex flex-col justify-center place-items-center gap-5">
+      <h1 className="text-4xl font-bold text-center">
+        Welcome to the Movie Club
+      </h1>
+      <MovieCarousel />
+    </div>
+  );
 }

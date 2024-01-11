@@ -188,8 +188,11 @@ export const getAllMoviesOfTheWeek = async () => {
 
   const data = await response.json();
   //console.log('data before', data)
-  const groupedData = keyBy(data, (movie: any) =>
-    format(new Date(movie.movieOfTheWeek), "dd.MM.yyyy")
+  const groupedData = keyBy(
+    data,
+    (movie: any) =>
+      //format(new Date(movie.movieOfTheWeek), "dd.MM.yyyy")
+      movie.movieOfTheWeek
   );
   console.log("grouped", groupedData);
   return groupedData;
