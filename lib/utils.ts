@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, nextWednesday, previousWednesday, set } from "date-fns";
 import { getShortList } from "./shortlist";
 import { QueryClient } from "@tanstack/react-query";
 import { produce } from "immer";
@@ -186,14 +186,14 @@ export const getAllMoviesOfTheWeek = async () => {
     cache: "no-store",
   });
 
-  const data = await response.json();
+  const data: MovieOfTheWeek[] = await response.json();
   //console.log('data before', data)
   const groupedData = keyBy(
     data,
     (movie: any) =>
       //format(new Date(movie.movieOfTheWeek), "dd.MM.yyyy")
       movie.movieOfTheWeek
-  );
+  ) as MovieOfTheWeekQueryResult;
   console.log("grouped", groupedData);
   return groupedData;
 };
@@ -230,4 +230,42 @@ export const setShortlistQueryData = (
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function findMovieDate(
+  movies: MovieOfTheWeekQueryResult,
+  startingDate: Date,
+  direction: "previous" | "next" = "previous",
+  tryCount: number = 0
+) {
+  if (tryCount > Object.keys(movies).length) {
+    return null;
+  }
+  const dateAttempt =
+    direction === "previous"
+      ? set(previousWednesday(startingDate), {
+          hours: 18,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        })
+      : set(nextWednesday(startingDate), {
+          hours: 18,
+          minutes: 0,
+          seconds: 0,
+          milliseconds: 0,
+        });
+
+  const movieOnDate = movies ? movies[dateAttempt.toISOString()] : null;
+  console.log("movieOnDate", movieOnDate);
+
+  if (movieOnDate) {
+    return dateAttempt;
+  } else {
+    return findMovieDate(movies, dateAttempt, direction, tryCount + 1);
+  }
+}
+
+export function sortByISODate(a: any, b: any, direction: "asc" | "desc") {
+  return direction === "asc" ? a.localeCompare(b) : -a.localeCompare(b);
 }

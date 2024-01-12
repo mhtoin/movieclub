@@ -1,6 +1,10 @@
 "use client";
 
-import { getAllMoviesOfTheWeek } from "@/lib/utils";
+import {
+  findMovieDate,
+  getAllMoviesOfTheWeek,
+  sortByISODate,
+} from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   Carousel,
@@ -41,27 +45,28 @@ export default function MovieCarousel() {
     refetchIntervalInBackground: true,
     gcTime: 0,
   });
-  let sortedData = data ? Object.keys(data).sort() : null;
+  let sortedData = data
+    ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
+    : null;
 
   //console.log(sortedData);
 
   const scrollPrev = useCallback(() => {
-    console.log(movieDate);
-    api?.scrollPrev();
-  }, [api]);
-  const scrollNext = useCallback(() => {
-    const previous = set(previousWednesday(movieDate), {
-      hours: 18,
-      minutes: 0,
-      seconds: 0,
-      milliseconds: 0,
-    });
-    const movieOnDate = data ? data[previous.toISOString()] : null;
+    console.log("scrollPrev", movieDate);
+    const movieOnDate = data ? findMovieDate(data, movieDate, "next") : null;
 
     if (movieOnDate) {
-      setMovieDate(previous);
+      setMovieDate(movieOnDate);
     }
-    //setMovieDate(previous);
+    api?.scrollPrev();
+  }, [api, data, movieDate]);
+
+  const scrollNext = useCallback(() => {
+    const movieOnDate = data ? findMovieDate(data, movieDate) : null;
+
+    if (movieOnDate) {
+      setMovieDate(movieOnDate);
+    }
 
     api?.scrollNext();
   }, [api, data, movieDate]);

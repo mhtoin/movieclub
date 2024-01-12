@@ -34,6 +34,10 @@ declare global {
     user: User;
   }
 
+  interface MovieOfTheWeekQueryResult {
+    [x: string]: MovieOfTheWeek;
+  }
+
   interface TMDBMovie {
     adult: boolean;
     genre_ids: Array<number>;
