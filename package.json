@@ -55,7 +55,7 @@
     "prisma": "^4.15.0",
     "pusher": "^5.1.3",
     "pusher-js": "^8.2.0",
-    "react": "^18.2.0",
+    "react": "link:@types/heroicons/react",
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^4.21.0",
     "react-dialog\n": "link:@radix-ui/react-dialog\n",

@@ -9,7 +9,7 @@ export function MovieHero({
   movieOfTheWeek,
   direction,
 }: {
-  movieOfTheWeek: MovieOfTheWeek;
+  movieOfTheWeek: MovieOfTheWeek | null;
   direction: number;
 }) {
   const [colorPalette, setColorPalette] = useState<any>([]);

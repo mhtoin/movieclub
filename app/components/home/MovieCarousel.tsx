@@ -106,7 +106,7 @@ export default function MovieCarousel() {
 
     const styles = api.scrollSnapList().map((snap, index) => {
       const diff = snap - scrollProgress;
-      const tweenValue = 1 - Math.abs(diff * 4.8);
+      const tweenValue = 1 - Math.abs(diff * 6.8);
       return numberWithinRange(tweenValue, 0, 1);
     });
     setTweenValues(styles);
@@ -154,7 +154,11 @@ export default function MovieCarousel() {
                 >
                   <Card className="overflow-hidden">
                     <CardContent className="flex aspect-square items-center justify-center p-0">
-                      <img src={backgroundPath} className="w-full h-auto"></img>
+                      <img
+                        src={backgroundPath}
+                        className="w-full h-auto"
+                        alt="movie poster"
+                      />
                     </CardContent>
                   </Card>
                 </CarouselItem>
