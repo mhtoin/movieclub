@@ -237,7 +237,7 @@ export function findMovieDate(
   startingDate: Date,
   direction: "previous" | "next" = "previous",
   tryCount: number = 0
-) {
+): Date | null {
   if (tryCount > Object.keys(movies).length) {
     return null;
   }
