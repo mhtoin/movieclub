@@ -76,20 +76,26 @@ export default function MovieCarousel() {
     [data]
   );
 
-  const onMovieDateSelect = (date: Date) => {
-    setMovieDate(date);
-    const ISODate = set(date, {
-      hours: 18,
-      minutes: 0,
-      seconds: 0,
-    }).toISOString();
-    const index = sortedData ? sortedData.indexOf(ISODate) : 0;
-    if (index !== -1) {
-      api?.scrollTo(index);
-    } else {
-      toast.error("No movie found for this date");
-    }
-  };
+  const onMovieDateSelect = useCallback(
+    (date: Date) => {
+      setMovieDate(date);
+      const ISODate = set(date, {
+        hours: 18,
+        minutes: 0,
+        seconds: 0,
+      }).toISOString();
+      let sortedData = data
+        ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
+        : null;
+      const index = sortedData ? sortedData.indexOf(ISODate) : 0;
+      if (index !== -1) {
+        api?.scrollTo(index);
+      } else {
+        toast.error("No movie found for this date");
+      }
+    },
+    [api, data]
+  );
 
   const scrollPrev = useCallback(() => {
     api?.scrollPrev();
