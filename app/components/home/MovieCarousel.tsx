@@ -28,6 +28,7 @@ import { useCallback, useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import { MovieDatePicker } from "@/app/home/components/MovieDatePicker";
 import { NextButton, PrevButton } from "./CarouselButton";
+import toast from "react-hot-toast";
 
 const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
@@ -47,6 +48,7 @@ export default function MovieCarousel() {
     refetchIntervalInBackground: true,
     gcTime: 0,
   });
+
   let sortedData = data
     ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
     : null;
@@ -60,13 +62,18 @@ export default function MovieCarousel() {
   const onSelect = useCallback(
     (api: CarouselApi) => {
       const selected = api.selectedScrollSnap();
+
+      let sortedData = data
+        ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
+        : null;
       const movieDate = sortedData ? new Date(sortedData[selected]) : null;
+
       setSelectedIndex(selected);
       if (movieDate) {
         setMovieDate(movieDate);
       }
     },
-    [sortedData]
+    [data]
   );
 
   const onMovieDateSelect = (date: Date) => {
@@ -76,10 +83,11 @@ export default function MovieCarousel() {
       minutes: 0,
       seconds: 0,
     }).toISOString();
-    console.log(ISODate);
     const index = sortedData ? sortedData.indexOf(ISODate) : 0;
     if (index !== -1) {
       api?.scrollTo(index);
+    } else {
+      toast.error("No movie found for this date");
     }
   };
 
@@ -114,7 +122,7 @@ export default function MovieCarousel() {
     api.on("select", onSelect);
     api.on("reInit", onScroll);
     api.on("reInit", onInit);
-  }, [api, onScroll]);
+  }, [api, onScroll, onSelect, onInit]);
 
   return (
     <div className="flex flex-col items-center justify-normal p-10 gap-10 no-scrollbar">
