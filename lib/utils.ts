@@ -257,7 +257,7 @@ export function findMovieDate(
         });
 
   const movieOnDate = movies ? movies[dateAttempt.toISOString()] : null;
-  console.log("movieOnDate", movieOnDate);
+  //console.log("movieOnDate", movieOnDate);
 
   if (movieOnDate) {
     return dateAttempt;

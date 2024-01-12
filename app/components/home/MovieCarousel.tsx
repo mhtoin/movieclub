@@ -38,6 +38,8 @@ export default function MovieCarousel() {
   );
   const [api, setApi] = useState<CarouselApi>();
   const [tweenValues, setTweenValues] = useState<number[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const { data, status } = useQuery({
     queryKey: ["moviesOfTheWeek"],
     queryFn: getAllMoviesOfTheWeek,
@@ -51,25 +53,43 @@ export default function MovieCarousel() {
 
   //console.log(sortedData);
 
-  const scrollPrev = useCallback(() => {
-    console.log("scrollPrev", movieDate);
-    const movieOnDate = data ? findMovieDate(data, movieDate, "next") : null;
+  const onInit = useCallback((api: CarouselApi) => {
+    setScrollSnaps(api.scrollSnapList());
+  }, []);
 
-    if (movieOnDate) {
-      setMovieDate(movieOnDate);
+  const onSelect = useCallback(
+    (api: CarouselApi) => {
+      const selected = api.selectedScrollSnap();
+      const movieDate = sortedData ? new Date(sortedData[selected]) : null;
+      setSelectedIndex(selected);
+      if (movieDate) {
+        setMovieDate(movieDate);
+      }
+    },
+    [sortedData]
+  );
+
+  const onMovieDateSelect = (date: Date) => {
+    setMovieDate(date);
+    const ISODate = set(date, {
+      hours: 18,
+      minutes: 0,
+      seconds: 0,
+    }).toISOString();
+    console.log(ISODate);
+    const index = sortedData ? sortedData.indexOf(ISODate) : 0;
+    if (index !== -1) {
+      api?.scrollTo(index);
     }
+  };
+
+  const scrollPrev = useCallback(() => {
     api?.scrollPrev();
-  }, [api, data, movieDate]);
+  }, [api]);
 
   const scrollNext = useCallback(() => {
-    const movieOnDate = data ? findMovieDate(data, movieDate) : null;
-
-    if (movieOnDate) {
-      setMovieDate(movieOnDate);
-    }
-
     api?.scrollNext();
-  }, [api, data, movieDate]);
+  }, [api]);
 
   const onScroll = useCallback(() => {
     if (!api) return;
@@ -78,7 +98,6 @@ export default function MovieCarousel() {
 
     const styles = api.scrollSnapList().map((snap, index) => {
       const diff = snap - scrollProgress;
-
       const tweenValue = 1 - Math.abs(diff * 4.8);
       return numberWithinRange(tweenValue, 0, 1);
     });
@@ -92,13 +111,15 @@ export default function MovieCarousel() {
     api.on("scroll", () => {
       flushSync(() => onScroll());
     });
+    api.on("select", onSelect);
     api.on("reInit", onScroll);
+    api.on("reInit", onInit);
   }, [api, onScroll]);
 
   return (
     <div className="flex flex-col items-center justify-normal p-10 gap-10 no-scrollbar">
       <div className="flex flex-row items-center border bg-transparent rounded-md max-w-[200px] m-1">
-        <MovieDatePicker selected={movieDate} setSelected={setMovieDate} />
+        <MovieDatePicker selected={movieDate} setSelected={onMovieDateSelect} />
       </div>
       <Carousel
         className="w-full max-w-xl"
