@@ -1,9 +1,5 @@
-import { getChosenMovie } from "@/lib/shortlist";
-import { MovieHero } from "./components/MovieHero";
-import DateView from "./components/DateView";
+export const revalidate = 0;
 import getQueryClient from "@/lib/getQueryClient";
-
-import { MovieContainer } from "./components/MovieContainer";
 import { getAllMoviesOfTheWeek } from "@/lib/utils";
 import MovieCarousel from "../components/home/MovieCarousel";
 
