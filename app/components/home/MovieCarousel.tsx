@@ -169,6 +169,7 @@ export default function MovieCarousel() {
                         height={500}
                         className="w-full h-auto"
                         alt="movie poster"
+                        priority={true}
                       />
                     </CardContent>
                   </Card>
