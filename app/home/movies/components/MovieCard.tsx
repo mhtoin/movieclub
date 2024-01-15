@@ -62,7 +62,10 @@ export default function MovieCard({
             Released: {format(new Date(movie?.release_date), "dd.MM.yyyy")}
           </h3>
           <h3 className="text-sm italic">
-            Watched: {movie?.movieOfTheWeek?.toLocaleDateString("fi-FI")}
+            Watched:{" "}
+            {new Date(movie?.movieOfTheWeek as string)?.toLocaleDateString(
+              "fi-FI"
+            )}
           </h3>
           <p className="text-xs xl:text-lg my-2">{movie?.overview}</p>
           {movieInTierlist ? (
