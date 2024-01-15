@@ -91,6 +91,8 @@ export default function MovieCarousel() {
       if (index !== -1) {
         api?.scrollTo(index);
       } else {
+        console.log(ISODate);
+        console.log(sortedData);
         toast.error("No movie found for this date");
       }
     },
