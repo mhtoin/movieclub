@@ -79,11 +79,7 @@ export default function MovieCarousel() {
   const onMovieDateSelect = useCallback(
     (date: Date) => {
       setMovieDate(date);
-      const ISODate = set(date, {
-        hours: 18,
-        minutes: 0,
-        seconds: 0,
-      }).toISOString();
+      const ISODate = formatISO(date, { representation: "date" });
       let sortedData = data
         ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
         : null;

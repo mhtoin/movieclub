@@ -1,4 +1,10 @@
-import { format, nextWednesday, previousWednesday, set } from "date-fns";
+import {
+  format,
+  formatISO,
+  nextWednesday,
+  previousWednesday,
+  set,
+} from "date-fns";
 import { getShortList } from "./shortlist";
 import { QueryClient } from "@tanstack/react-query";
 import { produce } from "immer";
@@ -187,14 +193,25 @@ export const getAllMoviesOfTheWeek = async () => {
   });
 
   const data: MovieOfTheWeek[] = await response.json();
-  //console.log('data before', data)
+  /**
+   * The dates are a bit messed up atm, because the production server timezone differs
+   * from the development. This is a temporary fix, stripping the time part of the date
+   */
+  for (let movie of data) {
+    if (movie.movieOfTheWeek && typeof movie.movieOfTheWeek === "string") {
+      movie.movieOfTheWeek = formatISO(new Date(movie.movieOfTheWeek), {
+        representation: "date",
+      });
+    }
+  }
+
   const groupedData = keyBy(
     data,
     (movie: any) =>
       //format(new Date(movie.movieOfTheWeek), "dd.MM.yyyy")
       movie.movieOfTheWeek
   ) as MovieOfTheWeekQueryResult;
-  console.log("grouped", groupedData);
+
   return groupedData;
 };
 
