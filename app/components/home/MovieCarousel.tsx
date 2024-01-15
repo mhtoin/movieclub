@@ -109,7 +109,7 @@ export default function MovieCarousel() {
     const scrollProgress = api.scrollProgress();
 
     const tweenFactor = (1.5 * api.scrollSnapList().length) / 2;
-    console.log(tweenFactor);
+
     const styles = api.scrollSnapList().map((snap, index) => {
       const diff = snap - scrollProgress;
       //console.log("diff", diff);
@@ -119,7 +119,7 @@ export default function MovieCarousel() {
     });
     setTweenValues(styles);
   }, [api, setTweenValues]);
-  console.log(tweenValues);
+
   useEffect(() => {
     if (!api) return;
 
@@ -138,7 +138,7 @@ export default function MovieCarousel() {
         <MovieDatePicker selected={movieDate} setSelected={onMovieDateSelect} />
       </div>
       <Carousel
-        className="w-full max-w-xl"
+        className="w-full max-w-sm lg:max-w-xl"
         opts={{
           direction: "rtl",
           align: "center",
