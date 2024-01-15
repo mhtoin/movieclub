@@ -108,10 +108,12 @@ export default function MovieCarousel() {
     const engine = api.internalEngine();
     const scrollProgress = api.scrollProgress();
 
+    const tweenFactor = (1.5 * api.scrollSnapList().length) / 2;
+    console.log(tweenFactor);
     const styles = api.scrollSnapList().map((snap, index) => {
       const diff = snap - scrollProgress;
       //console.log("diff", diff);
-      const tweenValue = 1 - Math.abs(diff * 29.8);
+      const tweenValue = 1 - Math.abs(diff * tweenFactor);
       //console.log("tween", tweenValue);
       return numberWithinRange(tweenValue, 0, 1);
     });
