@@ -29,6 +29,7 @@ import { flushSync } from "react-dom";
 import { MovieDatePicker } from "@/app/home/components/MovieDatePicker";
 import { NextButton, PrevButton } from "./CarouselButton";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
@@ -162,8 +163,10 @@ export default function MovieCarousel() {
                 >
                   <Card className="overflow-hidden">
                     <CardContent className="flex aspect-square items-center justify-center p-0">
-                      <img
+                      <Image
                         src={backgroundPath}
+                        width={500}
+                        height={500}
                         className="w-full h-auto"
                         alt="movie poster"
                       />
