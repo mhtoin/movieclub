@@ -110,12 +110,14 @@ export default function MovieCarousel() {
 
     const styles = api.scrollSnapList().map((snap, index) => {
       const diff = snap - scrollProgress;
+      console.log("diff", diff);
       const tweenValue = 1 - Math.abs(diff * 9.8);
+      console.log("tween", tweenValue);
       return numberWithinRange(tweenValue, 0, 1);
     });
     setTweenValues(styles);
   }, [api, setTweenValues]);
-
+  console.log(tweenValues);
   useEffect(() => {
     if (!api) return;
 
