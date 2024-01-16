@@ -134,60 +134,64 @@ export default function MovieCarousel() {
   }, [api, onScroll, onSelect, onInit]);
 
   return (
-    <div className="flex flex-col items-center justify-normal p-10 gap-10 no-scrollbar">
+    <div className="flex flex-col items-center p-10 gap-10 no-scrollbar w-full">
       <div className="flex flex-row items-center border bg-transparent rounded-md max-w-[200px] m-1">
         <MovieDatePicker selected={movieDate} setSelected={onMovieDateSelect} />
       </div>
-      <Carousel
-        className="w-full max-w-sm lg:max-w-xl"
-        opts={{
-          direction: "rtl",
-          align: "center",
-        }}
-        setApi={setApi}
-      >
-        <CarouselContent className="-ml-1" dir="rtl">
-          {data &&
-            sortedData?.map((date, index) => {
-              const movie = data[date];
-              const backgroundPath = movie?.backdrop_path
-                ? `http://image.tmdb.org/t/p/original${movie["poster_path"]}`
-                : "";
-              return (
-                <CarouselItem
-                  key={date}
-                  className="md:basis-1/2 lg:basis-2/3"
-                  style={{
-                    ...(tweenValues.length && { opacity: tweenValues[index] }),
-                  }}
-                >
-                  <Card className="overflow-hidden">
-                    <CardContent className="flex aspect-square items-center justify-center p-0">
-                      <Image
-                        src={backgroundPath}
-                        width={500}
-                        height={500}
-                        className="w-full h-auto"
-                        alt="movie poster"
-                        priority={true}
-                      />
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              );
-            })}
-        </CarouselContent>
-        <CarouselPrevious
-          rtl={true}
-          onClick={scrollNext}
-          className="hidden lg:flex"
-        />
-        <CarouselNext
-          rtl={true}
-          className="hidden lg:flex"
-          onClick={scrollPrev}
-        />
-      </Carousel>
+      <div className="w-full flex items-center justify-center">
+        <Carousel
+          className="w-full max-w-sm lg:max-w-lg"
+          opts={{
+            direction: "rtl",
+            align: "center",
+          }}
+          setApi={setApi}
+        >
+          <CarouselContent className="-ml-1" dir="rtl">
+            {data &&
+              sortedData?.map((date, index) => {
+                const movie = data[date];
+                const backgroundPath = movie?.backdrop_path
+                  ? `http://image.tmdb.org/t/p/original${movie["poster_path"]}`
+                  : "";
+                return (
+                  <CarouselItem
+                    key={date}
+                    className="md:basis-1/2 lg:basis-2/3"
+                    style={{
+                      ...(tweenValues.length && {
+                        opacity: tweenValues[index],
+                      }),
+                    }}
+                  >
+                    <Card className="overflow-hidden max-w-sm">
+                      <CardContent className="flex aspect-square items-center justify-center p-0">
+                        <Image
+                          src={backgroundPath}
+                          width={500}
+                          height={500}
+                          alt="movie poster"
+                          priority={true}
+                          className="object-cover"
+                        />
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                );
+              })}
+          </CarouselContent>
+          <CarouselPrevious
+            rtl={true}
+            onClick={scrollNext}
+            className="hidden lg:flex"
+          />
+          <CarouselNext
+            rtl={true}
+            className="hidden lg:flex"
+            onClick={scrollPrev}
+          />
+        </Carousel>
+      </div>
     </div>
   );
 }
