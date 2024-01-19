@@ -1,9 +1,10 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Button } from "../ui/Button";
 
 export const TierlistDropdown = () => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger asChild>
-      <button>Tierlist</button>
+      <Button variant="ghost">Tierlist</Button>
     </DropdownMenu.Trigger>
     <DropdownMenu.Portal>
       <DropdownMenu.Content
