@@ -8,7 +8,9 @@ import { useState } from "react";
 
 function Providers({ children }: React.PropsWithChildren) {
   const [client] = useState(
-    new QueryClient({ defaultOptions: { queries: { staleTime: 60 * 1000, gcTime: 0 } } })
+    new QueryClient({
+      defaultOptions: { queries: { staleTime: 60 * 1000, gcTime: 0 } },
+    })
   );
 
   const [pusher] = useState(
@@ -18,10 +20,8 @@ function Providers({ children }: React.PropsWithChildren) {
   );
   return (
     <QueryClientProvider client={client}>
-      <PusherPovider pusher={pusher}>
-      {children}
-      </PusherPovider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <PusherPovider pusher={pusher}>{children}</PusherPovider>
+      <ReactQueryDevtools initialIsOpen={false} position="top" />
     </QueryClientProvider>
   );
 }
