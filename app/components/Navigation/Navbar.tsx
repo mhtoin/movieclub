@@ -15,14 +15,16 @@ import {
   navigationMenuTriggerStyle,
 } from "@/app/components/ui/NavigationMenu";
 import { ListItem } from "./ListItem";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 export const NavBar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session;
   return (
-    <div className="min-w-screen flex items-center justify-center py-10">
-      <div className="w-9/12 h-[70px] p-5 border-[0.5px] rounded hidden justify-evenly bg-slate-800/30 items-center sm:flex border-slate-400">
+    <div className="min-w-screen flex items-center justify-center py-10 px-2">
+      <div className="w-full lg:w-9/12 h-[70px] p-5 border-[0.5px] rounded hidden justify-evenly bg-slate-800/30 items-center sm:flex border-slate-400">
         <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
-        <div className="flex flex-row justify-center items-center gap-8 w-full">
+        <div className="flex flex-row justify-center items-center gap-3 w-full">
           <Link href="/home">
             <Button variant={"ghost"}>Home</Button>
           </Link>
@@ -69,11 +71,28 @@ export const NavBar = () => {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-          <div className="w-10 rounded-full">
-            <img src={session?.user?.image} alt="P" />
-          </div>
-        </div>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="h-fit">
+                <Avatar>
+                  <AvatarImage src={session?.user?.image} alt="P" />
+                  <AvatarFallback>P</AvatarFallback>
+                </Avatar>
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="flex flex-col p-5 w-[200px]">
+                  <ListItem href="/profile" title="Account">
+                    View your account
+                  </ListItem>
+                  <ListItem href="/api/auth/signout" title="Sign out">
+                    Sign out of the application
+                  </ListItem>
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
     </div>
   );
