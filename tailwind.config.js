@@ -64,6 +64,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        mobilenav: {
+          DEFAULT: "hsl(var(--mobilenav))",
+        },
       },
       borderRadius: {
         lg: `var(--radius)`,
