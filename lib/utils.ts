@@ -10,6 +10,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { produce } from "immer";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+
 type ArgValCallback<T> = (arg0: T) => any;
 
 export const omit = (obj: any, keys: string[]) => {

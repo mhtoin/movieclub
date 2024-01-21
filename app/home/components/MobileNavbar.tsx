@@ -16,7 +16,6 @@ export default function MobileNavbar() {
   const handleScroll = useDebounce(() => {
     const currentScrollPos = window.scrollY;
     const visible = prevScrollPos >= currentScrollPos;
-   
 
     setPrevScrollPos(currentScrollPos);
     setVisible(visible);
@@ -30,7 +29,7 @@ export default function MobileNavbar() {
 
   return (
     <div
-      className={`btm-nav btm-nav-sm z-40 h-16 ${
+      className={`btm-nav btm-nav-sm z-40 h-16 bg-backgrouns ${
         visible ? "animate-slide-in" : "animate-slide-out fill-mode-forwards"
       } sm:hidden`}
     >
@@ -105,7 +104,7 @@ export default function MobileNavbar() {
         <span className="btm-nav-label">Tierlists</span>
       </MobileNavbarButton>
       <MobileRaffleButton />
-      
+
       <button
         className={`transform active:scale-75 transition-transform btn-circle avatar ${
           pathname == "/profile" ? "active" : ""

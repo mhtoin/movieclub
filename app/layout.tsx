@@ -4,9 +4,10 @@ import { inter } from "@/app/fonts";
 import Notification from "./components/Notification";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
-import NavBar from "./home/components/NavBar";
+
 import RaffleDialog from "./components/RaffleDialog";
 import { Toaster } from "react-hot-toast";
+import { NavBar } from "./components/Navigation/Navbar";
 
 export const metadata = {
   title: "movieclub",

@@ -14,12 +14,11 @@ export default function MobileNavbarButton({
   const router = useRouter();
   return (
     <button
-      className={`transform active:scale-75 transition-transform ${effect && "animate-button-press"} ${
-        pathname === destination ? "text-secondary" : ""
-      }`}
+      className={`transform active:scale-75 transition-transform ${
+        effect && "animate-button-press"
+      } ${pathname === destination ? "text-mobilenav" : ""}`}
       onTouchStart={() => {
         setEffect(true);
-        
       }}
       onClick={() => {
         router.push(destination);
