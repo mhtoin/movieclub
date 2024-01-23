@@ -14,6 +14,7 @@ import Link from "next/link";
 import CreateForm from "./TierlistCreate";
 import { useRouter } from "next/navigation";
 import { ro } from "date-fns/locale";
+import { Button } from "@/app/components/ui/Button";
 
 type MoveItemObject = {
   [x: string]: MovieOfTheWeek[];
@@ -60,7 +61,7 @@ export default function DnDTierContainer({
   const movieMatrix = tierlist.tiers.map((tier) => {
     return tier.movies.map((movie) => movie);
   });
-  const router = useRouter()
+  const router = useRouter();
 
   if (unranked) {
     movieMatrix.unshift(unranked);
@@ -75,7 +76,7 @@ export default function DnDTierContainer({
     if (!authorized) {
       return;
     }
-    
+
     const { source, destination } = result;
 
     if (!destination) {
@@ -150,8 +151,7 @@ export default function DnDTierContainer({
     },
     onSuccess: (data) => {
       setNotification("Tierlist cleared!", "success");
-      window.location.reload()
-      
+      window.location.reload();
     },
     onError: (error) => {
       setNotification("Deleting tierlist failed!", "error");
@@ -172,37 +172,35 @@ export default function DnDTierContainer({
 
   return (
     <>
-    <div className="flex flex-row items-center gap-2">
-      <button
-        className={`btn btn-outline ${authorized ? 'btn-success' : 'btn-disabled'}`}
-        onClick={handleSave}
-        disabled={!authorized}
-      >
-        {saveMutation.isPending ? (
-          <span className="loading loading-spinner"></span>
-        ) : (
-          <span>Save</span>
-        )}
-      </button>
-      <button
-        className={`btn btn-outline ${authorized ? 'btn-success' : 'btn-disabled'}`}
-        onClick={() => {
-          if (movieMatrix.length > 1) {
-            deleteMutation.mutate(tierlist.id)
-          } else {
-            if (document) {
-              (document.getElementById('createModal') as HTMLFormElement).showModal()
+      <div className="flex flex-row items-center gap-2 pt-10 lg:pt-0">
+        <Button onClick={handleSave} disabled={!authorized} variant="default">
+          {saveMutation.isPending ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            <span>Save</span>
+          )}
+        </Button>
+        <Button
+          variant="default"
+          onClick={() => {
+            if (movieMatrix.length > 1) {
+              deleteMutation.mutate(tierlist.id);
+            } else {
+              if (document) {
+                (
+                  document.getElementById("createModal") as HTMLFormElement
+                ).showModal();
+              }
             }
-          }
-        }}
-        disabled={!authorized}
-      >
-        {deleteMutation.isPending ? (
-          <span className="loading loading-spinner"></span>
-        ) : (
-          <span>{movieMatrix.length > 1 ? 'Reset' : 'Create'}</span>
-        )}
-      </button>
+          }}
+          disabled={!authorized}
+        >
+          {deleteMutation.isPending ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            <span>{movieMatrix.length > 1 ? "Reset" : "Create"}</span>
+          )}
+        </Button>
       </div>
       <div className="flex flex-col items-center gap-2">
         <CreateForm />
@@ -246,7 +244,6 @@ export default function DnDTierContainer({
                               <img
                                 src={`http://image.tmdb.org/t/p/original/${item["poster_path"]}`}
                                 alt=""
-                                
                               />
                             </Link>
                           </div>

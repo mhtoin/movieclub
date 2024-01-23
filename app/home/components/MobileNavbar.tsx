@@ -29,7 +29,7 @@ export default function MobileNavbar() {
 
   return (
     <div
-      className={`btm-nav btm-nav-sm z-40 h-16 bg-backgrouns ${
+      className={`btm-nav btm-nav-sm z-40 h-16 bg-background ${
         visible ? "animate-slide-in" : "animate-slide-out fill-mode-forwards"
       } sm:hidden`}
     >
