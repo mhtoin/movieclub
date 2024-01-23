@@ -79,7 +79,7 @@ export default function ShortlistContainer() {
         </div>
 
         <>
-          <div className="max-w-[40px] flex">
+          <div className="max-w-[40px] flex gap-3">
             <SearchButton />
             <WatchlistButton />
           </div>
@@ -88,7 +88,7 @@ export default function ShortlistContainer() {
       </div>
       <div
         key={shortlist?.id + "-container"}
-        className="flex flex-row gap-5 w-2/3 sm:w-auto items-center"
+        className="flex flex-row gap-5 w-2/3 sm:w-auto items-center pt-5 lg:p-5"
       >
         {shortlist?.movies.map((movie: Movie, index: number) => {
           return (

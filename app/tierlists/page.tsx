@@ -16,7 +16,7 @@ export default async function Tierlists() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex flex-col items-center gap-5">
+    <div className="flex flex-col items-center gap-10">
       <h1 className="text-2xl font-bold">Tierlists</h1>
       <div>
         {!usersWithTierlist.includes(session?.user.userId) && (
@@ -41,7 +41,7 @@ export default async function Tierlists() {
           </form>
         )}
       </div>
-      <div className="flex flex-col gap-10">
+      <div className="grid grid-cols-2 gap-10">
         {allTierlists.map((tierlist) => {
           return (
             <>

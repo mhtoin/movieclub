@@ -7,30 +7,35 @@ import { Dispatch, SetStateAction, useState } from "react";
 import ProviderToggle from "./ProviderToggle";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { setYear } from "date-fns";
+import { Button } from "@/app/components/ui/Button";
 
 interface modalProps {
-  handleSearchSubmit: () => void
+  handleSearchSubmit: () => void;
   //handleProviderToggle: Dispatch<SetStateAction<boolean>>
 }
 
 export default function FiltersModal({
   handleSearchSubmit,
-  //handleProviderToggle,
-}: modalProps) {
-  const yearRange = useFilterStore.use.yearRange()
-  const ratingRange = useFilterStore.use.ratingRange()
-  const setYearRange = useFilterStore.use.setYearRange()
-  const setRatingRange = useFilterStore.use.setRatingRange()
- 
+}: //handleProviderToggle,
+modalProps) {
+  const yearRange = useFilterStore.use.yearRange();
+  const ratingRange = useFilterStore.use.ratingRange();
+  const setYearRange = useFilterStore.use.setYearRange();
+  const setRatingRange = useFilterStore.use.setRatingRange();
+
   return (
     <>
-      <button className="btn btn-sm 2xl:btn-md" onClick={() => {
-        if (document) {
-          (document.getElementById('filtersModal') as HTMLFormElement).showModal()
-        }
-      }}>
-        search filters
-      </button>
+      <Button
+        onClick={() => {
+          if (document) {
+            (
+              document.getElementById("filtersModal") as HTMLFormElement
+            ).showModal();
+          }
+        }}
+      >
+        Search filters
+      </Button>
       <dialog id="filtersModal" className="modal modal-middle sm:modal-middle">
         <form method="dialog" className="modal-box h-2/3 ">
           <h3 className="font-bold text-lg m-5">Hello!</h3>

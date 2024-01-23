@@ -74,7 +74,7 @@ export default function AllShortlistsContainer() {
                 </div>
                 <div
                   key={shortlist.id + "-container"}
-                  className="flex flex-row gap-5 w-2/3 sm:w-auto items-center"
+                  className="flex flex-row gap-5 w-2/3 sm:w-auto items-center pt-5 lg:p-5"
                 >
                   {shortlist.movies.map((movie, index) => {
                     return (

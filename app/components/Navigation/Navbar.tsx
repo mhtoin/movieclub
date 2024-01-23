@@ -22,7 +22,7 @@ export const NavBar = () => {
   const isAuthenticated = !!session;
   return (
     <div className="min-w-screen flex items-center justify-center py-10 px-2">
-      <div className="w-full lg:w-9/12 h-[70px] p-5 border-[0.5px] rounded hidden justify-evenly bg-slate-800/30 items-center sm:flex border-slate-400">
+      <div className="w-full lg:w-9/12 h-[70px] p-5 border-[0.5px] rounded hidden justify-evenly items-center sm:flex border-slate-400">
         <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
         <div className="flex flex-row justify-center items-center gap-3 w-full">
           <Link href="/home">

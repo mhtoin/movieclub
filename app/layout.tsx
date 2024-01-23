@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.className} antialiased min-h-screen bg-black no-scrollbar`}
+        className={`${inter.className} antialiased min-h-screen no-scrollbar`}
       >
         <Notification />
         <NextAuthProvider>

@@ -1,9 +1,10 @@
-"use client"
+"use client";
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { useState } from "react";
 import FiltersModal from "./FiltersModal";
 import ProviderButton from "./ProviderButton";
+import { Button } from "@/app/components/ui/Button";
 
 export default function Filters() {
   const [titleSearch, setTitleSearch] = useState("");
@@ -18,7 +19,7 @@ export default function Filters() {
 
   const { data: providers, status: providersStatus } =
     useGetWatchProvidersQuery();
-    
+
   const handleSearchByTitle = () => {
     setSearchValue(
       `${searchBaseUrl}=${titleSearch}&append_to_response=watch/providers`
@@ -66,19 +67,15 @@ export default function Filters() {
         <input
           type="text"
           placeholder="Search by title"
-          className="input input-bordered p-3 input-sm 2xl:input-md"
+          className="input input-bordered p-5 input-sm 2xl:input-md bg-accent"
           value={titleSearch}
           onChange={(event) => setTitleSearch(event.target.value)}
         />
-        <button className="btn btn-sm 2xl:btn-md" onClick={handleSearchByTitle}>
-          Search
-        </button>
+        <Button onClick={handleSearchByTitle}>Search</Button>
       </div>
       <div className="flex flex-row gap-5 items-center justify-center mx-5">
         <FiltersModal handleSearchSubmit={handleSearchSubmit} />
-        <button className="btn btn-sm 2xl:btn-md" onClick={() => setSearchValue("")}>
-          Reset
-        </button>
+        <Button onClick={() => setSearchValue("")}>Reset</Button>
       </div>
       <div className="flex flex-row gap-5 m-auto justify-center">
         {providers?.map((provider: any) => {

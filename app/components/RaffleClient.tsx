@@ -3,6 +3,7 @@
 import { Icon } from "@iconify/react";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 import { useRaffleMutation } from "@/lib/hooks";
+import { Button } from "./ui/Button";
 
 export function RaffleClient() {
   const setIsLoading = useRaffleStore.use.setIsLoading();
@@ -14,19 +15,18 @@ export function RaffleClient() {
 
   return (
     <div className="hidden fixed z-50 bottom-20 right-8 sm:block">
-       <button
-          className="btn btn-circle btn-primary btn-md text-2xl 2xl:btn-lg 2xl:text-4xl"
-          onClick={() => {
-            //console.log("clicked");
-            setIsLoading(true);
-            setIsOpen(true);
-            setSenderIsCurrentUser(true);
-            raffle.mutate();
-            console.log(sender)
-          }}
-        >
-          <Icon icon="game-icons:card-random" />
-        </button>
+      <Button
+        className="btn btn-circle btn-md text-2xl 2xl:btn-lg 2xl:text-4xl"
+        onClick={() => {
+          setIsLoading(true);
+          setIsOpen(true);
+          setSenderIsCurrentUser(true);
+          raffle.mutate();
+          console.log(sender);
+        }}
+      >
+        <Icon icon="game-icons:card-random" />
+      </Button>
     </div>
   );
 }

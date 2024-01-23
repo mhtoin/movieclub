@@ -1,8 +1,9 @@
+import { Button } from "@/app/components/ui/Button";
 import Link from "next/link";
 
 export default function WatchlistButton() {
   return (
-    <button className="btn btn-circle btn-sm btn-ghost">
+    <Button variant="ghost" size="icon">
       <Link href="/home/shortlist/edit/watchlist">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -19,6 +20,6 @@ export default function WatchlistButton() {
           />
         </svg>
       </Link>
-    </button>
+    </Button>
   );
 }
