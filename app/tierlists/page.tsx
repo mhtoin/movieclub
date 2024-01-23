@@ -19,7 +19,7 @@ export default async function Tierlists() {
     <div className="flex flex-col items-center gap-5">
       <h1 className="text-2xl font-bold">Tierlists</h1>
       <div>
-        {true && (
+        {!usersWithTierlist.includes(session?.user.userId) && (
           <form action={createNew}>
             <Button variant="default" type="submit">
               Create new
