@@ -62,7 +62,7 @@ export default function Filters() {
   };
 
   return (
-    <div className="flex flex-col justify-center gap-5 sticky top-0 z-40 bg-black p-2 sm:w-full">
+    <div className="flex flex-col justify-center gap-5 sticky top-0 z-40 bg-background p-2 sm:w-full">
       <div className="flex flex-row gap-5 items-center justify-center mx-5">
         <input
           type="text"
