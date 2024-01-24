@@ -27,8 +27,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import { MovieDatePicker } from "@/app/home/components/MovieDatePicker";
-import { NextButton, PrevButton } from "./CarouselButton";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import Image from "next/image";
 
 const numberWithinRange = (number: number, min: number, max: number): number =>

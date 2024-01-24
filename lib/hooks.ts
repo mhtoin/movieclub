@@ -19,7 +19,7 @@ import {
   groupBy,
   searchMovies,
 } from "./utils";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 
 export const useShortlistsQuery = () => {

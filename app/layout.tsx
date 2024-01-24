@@ -6,8 +6,8 @@ import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
 
 import RaffleDialog from "./components/RaffleDialog";
-import { Toaster } from "react-hot-toast";
 import { NavBar } from "./components/Navigation/Navbar";
+import { Toaster } from "./components/ui/Toaster";
 
 export const metadata = {
   title: "movieclub",
@@ -28,32 +28,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <NavBar />
           <div>
-            <Toaster
-              toastOptions={{
-                style: {
-                  border: "1px solid black",
-                  padding: "10px",
-                },
-                success: {
-                  style: {
-                    background: "#333",
-                    color: "#fff",
-                  },
-                },
-                error: {
-                  style: {
-                    background: "#E5484D",
-                    color: "#fff",
-                  },
-                },
-                loading: {
-                  style: {
-                    background: "#333",
-                    color: "#fff",
-                  },
-                },
-              }}
-            />
+            <Toaster position="bottom-center" />
           </div>
           <Providers>
             <RaffleDialog />
