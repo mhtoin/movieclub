@@ -29,6 +29,7 @@ import { flushSync } from "react-dom";
 import { MovieDatePicker } from "@/app/home/components/MovieDatePicker";
 import { toast } from "sonner";
 import Image from "next/image";
+import { DatePicker } from "./DatePicker";
 
 const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
@@ -78,6 +79,7 @@ export default function MovieCarousel() {
 
   const onMovieDateSelect = useCallback(
     (date: Date) => {
+      console.log("date", date);
       setMovieDate(date);
       const ISODate = formatISO(date, { representation: "date" });
       let sortedData = data
@@ -135,7 +137,8 @@ export default function MovieCarousel() {
   return (
     <div className="flex flex-col items-center p-10 gap-10 no-scrollbar w-full">
       <div className="flex flex-row items-center border bg-transparent rounded-md max-w-[200px] m-1">
-        <MovieDatePicker selected={movieDate} setSelected={onMovieDateSelect} />
+        {/*<MovieDatePicker selected={movieDate} setSelected={onMovieDateSelect} /> */}
+        <DatePicker selected={movieDate} setSelected={onMovieDateSelect} />
       </div>
       <div className="w-full flex items-center justify-center">
         <Carousel
