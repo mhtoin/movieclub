@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { chooseMovieOfTheWeek } from "@/lib/movies";
+import { chooseMovieOfTheWeek } from "@/lib/movies/movies";
 import { isWednesday } from "date-fns";
 import Pusher from "pusher";
 import { ca } from "date-fns/locale";
@@ -21,9 +21,9 @@ export async function POST(
       message: "request",
       data: {
         userId: userId,
-        payload: "request"
-      } as PusherPayload
-    })
+        payload: "request",
+      } as PusherPayload,
+    });
     // get all shortlists and check that everyone is ready
     const todayIsWednesday =
       process.env.NODE_ENV !== "development" ? isWednesday(new Date()) : true;
@@ -33,15 +33,15 @@ export async function POST(
         const chosenMovie = await chooseMovieOfTheWeek();
         await pusher
           .trigger("movieclub-raffle", "result", {
-            message: 'result',
+            message: "result",
             data: {
               userId: userId,
-              payload: chosenMovie
-            } as PusherPayload
+              payload: chosenMovie,
+            } as PusherPayload,
           })
           .catch((err) => {
             //throw new Error(err.message);
-            return NextResponse.error()
+            return NextResponse.error();
           });
         return NextResponse.json(
           { ok: true, movie: chosenMovie },
@@ -53,9 +53,9 @@ export async function POST(
             message: "error",
             data: {
               userId: userId,
-              payload: e.message
-            } as PusherPayload
-          })
+              payload: e.message,
+            } as PusherPayload,
+          });
           return NextResponse.json(
             { ok: false, message: e.message },
             { status: 500 }
@@ -72,9 +72,9 @@ export async function POST(
         message: "error",
         data: {
           userId: userId,
-          payload: "It's not Wednesday!"
-        } as PusherPayload
-      })
+          payload: "It's not Wednesday!",
+        } as PusherPayload,
+      });
       return NextResponse.json(
         { ok: true, message: "Unauthorized!" },
         { status: 401 }
@@ -82,7 +82,6 @@ export async function POST(
     }
   } catch (e) {
     if (e instanceof Error) {
-      
       return NextResponse.json(
         { ok: false, message: e.message },
         { status: 401 }

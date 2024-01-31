@@ -1,14 +1,33 @@
-import prisma from "./prisma";
+"use server";
+import prisma from "../prisma";
 import { format, isWednesday, nextWednesday, set } from "date-fns";
-import { getAdditionalInfo } from "./tmdb";
+import { getAdditionalInfo } from "../tmdb";
 import {
   getAllShortLists,
   removeMovieFromShortlist,
   updateShortlistSelectionStatus,
   updateShortlistState,
-} from "./shortlist";
+} from "../shortlist";
 import type { User } from "@prisma/client";
-import { countByKey, sample, shuffle } from "./utils";
+import { countByKey, sample, shuffle } from "../utils";
+import { queryOptions } from "@tanstack/react-query";
+
+export async function getMoviesUntil(date: Date) {
+  const movies = await prisma.movie.findMany({
+    where: {
+      movieOfTheWeek: {
+        lte: date,
+      },
+    },
+    include: {
+      reviews: true,
+      ratings: true,
+      user: true,
+    },
+  });
+
+  return movies;
+}
 
 export async function getAllMoviesOfTheWeek() {
   const nextMovieDate = set(nextWednesday(new Date()), {

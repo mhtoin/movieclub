@@ -30,6 +30,7 @@ import { MovieDatePicker } from "@/app/home/components/MovieDatePicker";
 import { toast } from "sonner";
 import Image from "next/image";
 import { DatePicker } from "./DatePicker";
+import { movieKeys } from "@/lib/movies/queries";
 
 const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
@@ -42,13 +43,7 @@ export default function MovieCarousel() {
   const [tweenValues, setTweenValues] = useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const { data, status } = useQuery({
-    queryKey: ["moviesOfTheWeek"],
-    queryFn: getAllMoviesOfTheWeek,
-    refetchInterval: 1000 * 60 * 60 * 24,
-    refetchIntervalInBackground: true,
-    gcTime: 0,
-  });
+  const { data, status } = useQuery(movieKeys.next(new Date()));
 
   let sortedData = data
     ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))

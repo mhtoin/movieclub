@@ -1,5 +1,5 @@
 import { getTierlist, getTierlists } from "@/lib/tierlists";
-import { getAllMoviesOfTheWeek } from "@/lib/movies";
+import { getAllMoviesOfTheWeek } from "@/lib/movies/movies";
 //import { getServerSession } from "@/lib/getServerSession";
 import TierContainer from "./components/TierContainer";
 import { getServerSession } from "next-auth";
@@ -28,7 +28,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     ? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
     : [];
 
- 
   const unrankedMovies = moviesOfTheWeek.filter((movie) => {
     const movieInList = tierlistMovies.includes(movie.title);
     return !movieInList;
@@ -36,7 +35,11 @@ export default async function Page({ params }: { params: { id: string } }) {
   const authorized = params.id === session?.user.userId;
   return (
     <div className="flex flex-col items-center gap-5">
-      <TierContainer tierlist={tierlist} authorized={authorized} unranked={unrankedMovies}/>
+      <TierContainer
+        tierlist={tierlist}
+        authorized={authorized}
+        unranked={unrankedMovies}
+      />
     </div>
   );
 }
