@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "knip": "knip"
+    "knip": "knip",
+    "watchdates-script": "tsx scripts/watchdates.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.0.0",
@@ -66,6 +67,7 @@
     "tailwind-merge": "^2.2.0",
     "tailwindcss": "3.4.1",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.7.1",
     "zustand": "^4.3.9"
   },
   "devDependencies": {

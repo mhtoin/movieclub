@@ -64,9 +64,9 @@ export default function RaffleDialog({ children }: PropsWithChildren) {
           </Dialog.Title>
           <Dialog.Description className="">
             {`Movie for ${
-              result && result.movieOfTheWeek
-                ? format(new Date(result.movieOfTheWeek), "MMMM do, yyyy")
-                : "this week"
+              result && result.watchDate
+                ? format(new Date(result.watchDate), "MMMM do, yyyy")
+                : "next week"
             }`}
           </Dialog.Description>
           <div className="flex justify-center p-5">

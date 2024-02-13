@@ -23,7 +23,7 @@ export function DatePicker({
 }) {
   const [date, setDate] = React.useState<Date>();
   const { data } = useQuery({
-    queryKey: ["movieOfTheWeek"],
+    queryKey: ["moviesOfTheWeek"],
     queryFn: getAllMoviesOfTheWeek,
   });
 

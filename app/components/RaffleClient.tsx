@@ -22,7 +22,6 @@ export function RaffleClient() {
           setIsOpen(true);
           setSenderIsCurrentUser(true);
           raffle.mutate();
-          console.log(sender);
         }}
       >
         <Icon icon="game-icons:card-random" />

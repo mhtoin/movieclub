@@ -22,6 +22,7 @@ declare global {
     release_date: string;
     overview: string;
     movieOfTheWeek?: Date | string | null;
+    watchDate?: string;
   }
 
   interface MovieOfTheWeek extends Movie {
@@ -32,6 +33,7 @@ declare global {
     ratings: Array<Rating>;
     owner?: string;
     user: User;
+    watchDate: string;
   }
 
   interface MovieOfTheWeekQueryResult {

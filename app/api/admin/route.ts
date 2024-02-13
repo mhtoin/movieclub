@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { connectChosenMovies } from "@/lib/movies";
+import { connectChosenMovies } from "@/lib/movies/movies";
 
 export async function PUT(request: Request) {
   const data = await request.json();

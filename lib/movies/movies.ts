@@ -1,14 +1,44 @@
-import prisma from "./prisma";
-import { format, isWednesday, nextWednesday, set } from "date-fns";
-import { getAdditionalInfo } from "./tmdb";
+"use server";
+import prisma from "../prisma";
+import {
+  endOfDay,
+  format,
+  formatISO,
+  isWednesday,
+  nextWednesday,
+  set,
+  startOfDay,
+} from "date-fns";
+import { getAdditionalInfo } from "../tmdb";
 import {
   getAllShortLists,
   removeMovieFromShortlist,
   updateShortlistSelectionStatus,
   updateShortlistState,
-} from "./shortlist";
+} from "../shortlist";
 import type { User } from "@prisma/client";
-import { countByKey, sample, shuffle } from "./utils";
+import { countByKey, keyBy, sample, shuffle } from "../utils";
+import { queryOptions } from "@tanstack/react-query";
+
+export async function getMoviesUntil(date: string) {
+  const movies = await prisma.movie.findMany({
+    where: {
+      watchDate: {
+        lte: date,
+      },
+    },
+    include: {
+      reviews: true,
+      ratings: true,
+      user: true,
+    },
+  });
+
+  return keyBy(
+    movies,
+    (movie: any) => movie?.watchDate
+  ) as MovieOfTheWeekQueryResult;
+}
 
 export async function getAllMoviesOfTheWeek() {
   const nextMovieDate = set(nextWednesday(new Date()), {
@@ -22,7 +52,6 @@ export async function getAllMoviesOfTheWeek() {
     ? set(new Date(), { hours: 19, minutes: 0, seconds: 0, milliseconds: 0 })
     : nextMovieDate;
 
-  console.log("now", now);
   const movies = await prisma.movie.findMany({
     where: {
       movieOfTheWeek: {
@@ -42,7 +71,7 @@ export async function getAllMoviesOfTheWeek() {
 export async function getMoviesOfTheWeek() {
   return await prisma.movie.findMany({
     where: {
-      movieOfTheWeek: {
+      watchDate: {
         not: null,
       },
     },
@@ -276,6 +305,7 @@ export async function chooseMovieOfTheWeek() {
   return {
     ...movieObject,
     movieOfTheWeek: getNextDate(),
+    watchDate: getNextDate(),
     owner: chosen?.user.name,
   } as MovieOfTheWeek;
 }
@@ -288,7 +318,7 @@ export async function updateChosenMovie(movie: Movie, userId: string) {
       id: movie.id,
     },
     data: {
-      movieOfTheWeek: nextDate,
+      watchDate: nextDate,
       user: {
         connect: {
           id: userId,
@@ -371,10 +401,15 @@ export async function getStatistics() {
 }
 
 function getNextDate() {
+  return formatISO(nextWednesday(new Date()), {
+    representation: "date",
+  });
+
+  /*
   return set(nextWednesday(new Date()), {
     hours: 18,
     minutes: 0,
     seconds: 0,
     milliseconds: 0,
-  });
+  });*/
 }
