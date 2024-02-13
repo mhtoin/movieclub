@@ -31,6 +31,7 @@ export async function POST(
     if (todayIsWednesday) {
       try {
         const chosenMovie = await chooseMovieOfTheWeek();
+
         await pusher
           .trigger("movieclub-raffle", "result", {
             message: "result",

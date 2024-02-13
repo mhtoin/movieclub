@@ -39,17 +39,19 @@ export default function MovieCarousel() {
   const [movieDate, setMovieDate] = useState<Date>(
     isWednesday(new Date()) ? new Date() : nextWednesday(new Date())
   );
+  const nextMovieDate = formatISO(nextWednesday(new Date()), {
+    representation: "date",
+  });
+
   const [api, setApi] = useState<CarouselApi>();
   const [tweenValues, setTweenValues] = useState<number[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const { data, status } = useQuery(movieKeys.next(new Date()));
+  const { data, status } = useQuery(movieKeys.next(nextMovieDate));
 
   let sortedData = data
     ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
     : null;
-
-  //console.log(sortedData);
 
   const onInit = useCallback((api: CarouselApi) => {
     setScrollSnaps(api.scrollSnapList());
@@ -74,7 +76,6 @@ export default function MovieCarousel() {
 
   const onMovieDateSelect = useCallback(
     (date: Date) => {
-      console.log("date", date);
       setMovieDate(date);
       const ISODate = formatISO(date, { representation: "date" });
       let sortedData = data
@@ -84,8 +85,6 @@ export default function MovieCarousel() {
       if (index !== -1) {
         api?.scrollTo(index);
       } else {
-        console.log(ISODate);
-        console.log(sortedData);
         toast.error("No movie found for this date");
       }
     },
@@ -147,7 +146,7 @@ export default function MovieCarousel() {
           <CarouselContent className="-ml-1" dir="rtl">
             {data &&
               sortedData?.map((date, index) => {
-                const movie = data[date];
+                const movie = data[date as keyof typeof data];
                 const backgroundPath = movie?.backdrop_path
                   ? `http://image.tmdb.org/t/p/original${movie["poster_path"]}`
                   : "";

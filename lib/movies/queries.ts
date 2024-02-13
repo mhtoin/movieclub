@@ -12,7 +12,7 @@ export const movieKeys = {
       queryKey: [...movieKeys.all(), date],
       queryFn: () => getMoviesOfTheWeek(),
     }),
-  next: (date: Date) =>
+  next: (date: string) =>
     queryOptions({
       queryKey: [...movieKeys.all(), date],
       queryFn: () => getMoviesUntil(date),
