@@ -1,5 +1,5 @@
 import { getTierlist, getTierlists } from "@/lib/tierlists";
-import { getAllMoviesOfTheWeek } from "@/lib/movies/movies";
+import { getAllMoviesOfTheWeek, getMoviesOfTheWeek } from "@/lib/movies/movies";
 //import { getServerSession } from "@/lib/getServerSession";
 import TierContainer from "./components/TierContainer";
 import { getServerSession } from "next-auth";
@@ -22,7 +22,7 @@ export const dynamic =
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
   const tierlist = await getTierlist(params.id);
-  const moviesOfTheWeek = await getAllMoviesOfTheWeek();
+  const moviesOfTheWeek = await getMoviesOfTheWeek();
 
   const tierlistMovies = tierlist
     ? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
