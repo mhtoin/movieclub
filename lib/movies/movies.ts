@@ -371,7 +371,7 @@ export async function connectChosenMovies(movies: any[]) {
 export async function getStatistics() {
   const movies = await prisma.movie.findMany({
     where: {
-      movieOfTheWeek: {
+      watchDate: {
         not: null,
       },
     },
