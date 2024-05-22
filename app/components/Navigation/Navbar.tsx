@@ -17,6 +17,7 @@ import {
 import { ListItem } from "./ListItem";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
+import SearchInput from "../search/SearchInput";
 export const NavBar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session;
@@ -69,6 +70,7 @@ export const NavBar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
+            <SearchInput />
           </NavigationMenu>
         </div>
         <NavigationMenu>

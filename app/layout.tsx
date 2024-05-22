@@ -1,6 +1,7 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
-import { inter } from "@/app/fonts";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import Notification from "./components/Notification";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
@@ -14,9 +15,21 @@ export const metadata = {
   description: "Th app for your long-distance movie club",
 };
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const monaspace = localFont({
+  src: "../assets/fonts/MonaspaceNeonVarVF[wght,wdth,slnt].woff2",
+  display: "swap",
+});
+
 export default function RootLayout({
+  searchModal,
   children,
 }: {
+  searchModal?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
@@ -32,6 +45,7 @@ export default function RootLayout({
           </div>
           <Providers>
             <RaffleDialog />
+            <div>{searchModal}</div>
             {children}
             <MobileNavbar />
           </Providers>
