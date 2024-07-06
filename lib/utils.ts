@@ -10,6 +10,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { produce } from "immer";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useCallback } from "react";
 
 type ArgValCallback<T> = (arg0: T) => any;
 
@@ -79,7 +80,7 @@ export const countByKey = (arr: any[], cb: ArgValCallback<any>) => {
 
 export const searchMovies = async (page: number, searchValue: string) => {
   const searchQuery = searchValue
-    ? searchValue + `&page=${page}`
+    ? "discover/movie?" + searchValue + `&page=${page}` + "&watch_region=FI"
     : `discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773`;
 
   //console.log('searching for', searchQuery)
@@ -286,4 +287,41 @@ export function findMovieDate(
 
 export function sortByISODate(a: any, b: any, direction: "asc" | "desc") {
   return direction === "asc" ? a.localeCompare(b) : -a.localeCompare(b);
+}
+
+export function useCreateQueryString(searchParams: URLSearchParams) {
+  return useCallback(
+    (
+      name: string,
+      value: string[] | string | number[],
+      isRange: boolean = false
+    ) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (isRange) {
+        const min = `${name}.gte`;
+        const max = `${name}.lte`;
+        params.set(min, value[0].toString());
+        params.set(max, value[1].toString());
+        return params.toString();
+      }
+
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          params.delete(name);
+          return params.toString();
+        }
+        params.set(name, value.join(","));
+        return params.toString();
+      } else {
+        if (value === "") {
+          params.delete(name);
+          return params.toString();
+        }
+        params.set(name, value);
+        return params.toString();
+      }
+    },
+    [searchParams]
+  );
 }

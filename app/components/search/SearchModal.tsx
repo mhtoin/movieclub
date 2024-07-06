@@ -10,7 +10,10 @@ export default function SearchModal({
   const router = useRouter();
   return (
     <Dialog open={true} onOpenChange={() => router.back()}>
-      <DialogContent className="w-2/3 bg-transparent overflow-scroll no-scrollbar">
+      <DialogContent
+        className="bg-transparent no-scrollbar h-[90vh] max-h-[90vh]"
+        variant="noClose"
+      >
         {children}
       </DialogContent>
     </Dialog>

@@ -21,6 +21,7 @@ import {
 } from "./utils";
 import { toast } from "sonner";
 import { useRaffleStore } from "@/stores/useRaffleStore";
+import { useSearchParams } from "next/navigation";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -46,10 +47,12 @@ export const useShortlistQuery = (id: string) => {
 
 export const useSearchInfiniteQuery = () => {
   const searchValue = useFilterStore.use.searchValue();
-  //console.log('search value is', searchValue)
+  const searchParams = useSearchParams().toString();
+  //console.log("search params", searchParams);
+  //console.log("search value is", searchValue);
   return useInfiniteQuery({
-    queryKey: ["search", searchValue],
-    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
+    queryKey: ["search", searchParams],
+    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
 

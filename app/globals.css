@@ -36,6 +36,7 @@
     --radius: 0.5rem;
 
     --mobilenav: 164 64% 42%;
+    --popoverBackground: hsl(204 4% 16%);
   }
 
   .dark {

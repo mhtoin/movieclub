@@ -36,6 +36,7 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        popoverbg: "hsl(204 4% 16%)",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -162,6 +163,7 @@ module.exports = {
     require("daisyui"),
     require("tailwindcss-animate"),
     require("tailwind-gradient-mask-image"),
+    require("tailwindcss-react-aria-components"),
   ],
   daisyui: {
     themes: ["dark"],

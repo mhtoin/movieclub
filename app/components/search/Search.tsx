@@ -9,6 +9,7 @@ import {
   useShortlistQuery,
 } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
+import FilterBar from "./FilterBar";
 
 export default function Search() {
   const searchValue = useFilterStore.use.searchValue();
@@ -71,8 +72,9 @@ export default function Search() {
     : [];
 
   return (
-    <div className="flex flex-col justify-center m-5 p-10 place-items-center">
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+    <div className="flex flex-col justify-center p-10 border items-center gap-5 bg-background rounded-lg">
+      <FilterBar />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 w-1/2 h-[800px] overflow-auto place-items-center border p-5">
         {data
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
