@@ -8,6 +8,7 @@ import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
 import { useShortlistsQuery, useUpdateReadyStateMutation } from "@/lib/hooks";
 import { RaffleClient } from "../../../components/RaffleClient";
+import { Button } from "@/app/components/ui/Button";
 
 export default function ShortlistContainer() {
   const { data: session } = useSession();
@@ -39,17 +40,23 @@ export default function ShortlistContainer() {
   return (
     <div
       key={`fragment-${shortlist?.id}`}
-      className="flex flex-col justify-center place-items-center m-2"
+      className="flex flex-col justify-center items-center"
     >
       {shortlist?.requiresSelection &&
         shortlist.selectedIndex === null &&
         shortlist.selectedIndex !== 0 && <SelectionAlert />}
       <div
-        className="flex flex-row justify-center place-items-center m-5"
+        className="flex flex-row justify-center items-center gap-2 p-5"
         key={`name-container-${shortlist?.id}`}
       >
-        <div
-          className={`avatar mr-5 flex justify-center ${"hover:opacity-70"} w-8 2xl:w-12`}
+        <Button
+          variant={"outline"}
+          size={"avatar"}
+          className={`flex justify-center ${"hover:opacity-70"} transition-colors outline ${
+            shortlist?.isReady ? "outline-success" : "outline-error"
+          }
+          ${readyStateMutation.isPending ? "animate-pulse" : ""}
+          }`}
           key={`avatar-${shortlist?.userId}`}
           onClick={() => {
             if (shortlist) {
@@ -60,31 +67,18 @@ export default function ShortlistContainer() {
             }
           }}
         >
-          <div
-            className={`w-10 2xl:w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
-              shortlist?.isReady ? "ring-success" : "ring-error"
-            } `}
-            key={`avatar-ring ${shortlist?.userId}`}
-          >
-            {readyStateMutation.isPending ? (
-              <span className="loading loading-spinner m-1 2xl:m-3"></span>
-            ) : (
-              <img
-                src={session?.user?.image}
-                alt=""
-                key={`profile-img-${shortlist?.userId}`}
-              />
-            )}
-          </div>
+          <img
+            src={session?.user?.image}
+            alt=""
+            key={`profile-img-${shortlist?.userId}`}
+          />
+        </Button>
+        <div>
+          <SearchButton />
+          <WatchlistButton />
         </div>
 
-        <>
-          <div className="max-w-[40px] flex gap-3">
-            <SearchButton />
-            <WatchlistButton />
-          </div>
-          <RaffleClient />
-        </>
+        <RaffleClient />
       </div>
       <div
         key={shortlist?.id + "-container"}

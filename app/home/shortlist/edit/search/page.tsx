@@ -3,10 +3,15 @@
 import { Fragment, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import MovieCard from "./components/MovieCard";
-import { useGetWatchlistQuery, useSearchInfiniteQuery, useShortlistQuery } from "@/lib/hooks";
+import {
+  useGetWatchlistQuery,
+  useSearchInfiniteQuery,
+  useShortlistQuery,
+} from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { range } from "@/lib/utils";
 import ItemSkeleton from "../components/ItemSkeleton";
+import { Button } from "@/app/components/ui/Button";
 
 export default function SearchPage() {
   const searchValue = useFilterStore.use.searchValue();
@@ -16,9 +21,12 @@ export default function SearchPage() {
   const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
     session?.user?.shortlistId
   );
-  const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(session?.user);
+  const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(
+    session?.user
+  );
 
-  const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } = useSearchInfiniteQuery()
+  const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useSearchInfiniteQuery();
 
   useEffect(() => {
     if (!hasNextPage) {
@@ -65,10 +73,9 @@ export default function SearchPage() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
 
-  
   return (
     <div className="flex flex-col justify-center m-5 p-10 place-items-center">
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
         {data
           ? data?.pages?.map((page) => (
               <Fragment key={page.page}>
@@ -85,11 +92,15 @@ export default function SearchPage() {
               </Fragment>
             ))
           : []}
-    </div>
-    {hasNextPage && (
-        <button className="btn max-w-sm m-auto" ref={loadMoreButtonRef} onClick={() => fetchNextPage()}>
+      </div>
+      {hasNextPage && (
+        <Button
+          className="max-w-sm m-auto"
+          ref={loadMoreButtonRef}
+          onClick={() => fetchNextPage()}
+        >
           Load More
-        </button>
+        </Button>
       )}
     </div>
   );

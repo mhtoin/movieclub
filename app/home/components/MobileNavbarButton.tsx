@@ -1,3 +1,4 @@
+import { Button } from "@/app/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,7 +14,8 @@ export default function MobileNavbarButton({
   const [effect, setEffect] = useState(false);
   const router = useRouter();
   return (
-    <button
+    <Button
+      variant={"ghost"}
       className={`transform active:scale-75 transition-transform ${
         effect && "animate-button-press"
       } ${pathname === destination ? "text-mobilenav" : ""}`}
@@ -28,6 +30,6 @@ export default function MobileNavbarButton({
       }}
     >
       {children}
-    </button>
+    </Button>
   );
 }

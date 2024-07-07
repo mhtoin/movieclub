@@ -21,7 +21,7 @@ function Providers({ children }: React.PropsWithChildren) {
   return (
     <QueryClientProvider client={client}>
       <PusherPovider pusher={pusher}>{children}</PusherPovider>
-      <ReactQueryDevtools initialIsOpen={false} position="top" />
+      {/*<ReactQueryDevtools initialIsOpen={false} position="top" />*/}
     </QueryClientProvider>
   );
 }

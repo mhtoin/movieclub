@@ -4,6 +4,7 @@ import { Tierlists, TierlistsTier } from "@prisma/client";
 import { startTransition, useState } from "react";
 import { addMovieToTier } from "../../actions/actions";
 import { range } from "@/lib/utils";
+import { Button } from "@/app/components/ui/Button";
 
 export default function TierAdd({
   movies,
@@ -16,7 +17,9 @@ export default function TierAdd({
   const [tierName, setTierName] = useState(tierlist?.tiers[0]?.label || "");
   const currentTier = tierlist?.tiers?.find((tier) => tier.label === tierName);
 
-  const [movieIndex, setMovieIndex] = useState(currentTier && currentTier.movies ? currentTier?.movies?.length + 1 : 1);
+  const [movieIndex, setMovieIndex] = useState(
+    currentTier && currentTier.movies ? currentTier?.movies?.length + 1 : 1
+  );
 
   const handleChange = (value: string) => {
     const movie = movies.find((item) => item.title === value);
@@ -24,7 +27,6 @@ export default function TierAdd({
     if (movie) {
       setSelectedMovie(movie);
     }
-    
   };
 
   const handleTierChange = (value: string) => {
@@ -34,19 +36,24 @@ export default function TierAdd({
   const handleAdd = () => {
     // need new object for converted tierlist
     if (currentTier && selectedMovie) {
-      let currentTierMoviesWithIds = currentTier.movies.map(movie => movie.id) as Array<string>
-      currentTierMoviesWithIds.splice(movieIndex, 0, selectedMovie.id ?? '')
+      let currentTierMoviesWithIds = currentTier.movies.map(
+        (movie) => movie.id
+      ) as Array<string>;
+      currentTierMoviesWithIds.splice(movieIndex, 0, selectedMovie.id ?? "");
       //currentTierMoviesWithIds[movieIndex] = selectedMovie.id ?? ''
-      
-      const currentTierObj = {...currentTier, movies: currentTierMoviesWithIds} as TierlistsTier
+
+      const currentTierObj = {
+        ...currentTier,
+        movies: currentTierMoviesWithIds,
+      } as TierlistsTier;
 
       // need to convert the movielists in tiers back to contain only the id
       // !TODO honestly this needs a better solution
 
-      let tiers = tierlist.tiers.map(tier => {
-        const tierMovies = tier.movies.map(movie => movie.id)
-        return {...tier, movies: tierMovies} as TierlistsTier
-      }) as Array<TierlistsTier>
+      let tiers = tierlist.tiers.map((tier) => {
+        const tierMovies = tier.movies.map((movie) => movie.id);
+        return { ...tier, movies: tierMovies } as TierlistsTier;
+      }) as Array<TierlistsTier>;
 
       let currentTierIndex = tiers.findIndex((tier) => {
         return tier.label === tierName;
@@ -93,9 +100,7 @@ export default function TierAdd({
           <option>0</option>
         )}
       </select>
-      <button className="btn" onClick={handleAdd}>
-        Add
-      </button>
+      <Button onClick={handleAdd}>Add</Button>
     </div>
   );
 }

@@ -27,6 +27,7 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
         iconLg: "h-12 w-12",
+        avatar: "h-12 w-12 rounded-full overflow-hidden",
       },
     },
     defaultVariants: {

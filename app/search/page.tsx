@@ -9,6 +9,7 @@ import {
   useShortlistQuery,
 } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
+import { Button } from "../components/ui/Button";
 
 export default function SearchPage() {
   const searchValue = useFilterStore.use.searchValue();
@@ -91,13 +92,13 @@ export default function SearchPage() {
           : []}
       </div>
       {hasNextPage && (
-        <button
-          className="btn max-w-sm m-auto"
+        <Button
+          className="max-w-sm m-auto"
           ref={loadMoreButtonRef}
           onClick={() => fetchNextPage()}
         >
           Load More
-        </button>
+        </Button>
       )}
     </div>
   );

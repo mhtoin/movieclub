@@ -1,11 +1,3 @@
-const {
-  violet,
-  blackA,
-  mauve,
-  green,
-  gray,
-  slate,
-} = require("@radix-ui/colors");
 const { fontFamily } = require("tailwindcss/defaultTheme");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -25,12 +17,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        ...mauve,
-        ...gray,
-        ...slate,
-        ...violet,
-        ...green,
-        ...blackA,
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -67,6 +53,15 @@ module.exports = {
         },
         mobilenav: {
           DEFAULT: "hsl(var(--mobilenav))",
+        },
+        ring: {
+          DEFAULT: "hsl(var(--ring))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+        },
+        error: {
+          DEFAULT: "hsl(var(--error))",
         },
       },
       borderRadius: {
@@ -160,13 +155,8 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/typography"),
-    require("daisyui"),
     require("tailwindcss-animate"),
     require("tailwind-gradient-mask-image"),
     require("tailwindcss-react-aria-components"),
   ],
-  daisyui: {
-    themes: ["dark"],
-    base: false,
-  },
 };

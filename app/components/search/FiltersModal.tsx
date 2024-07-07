@@ -83,9 +83,7 @@ modalProps) {
 
           <div className="modal-action">
             {/* if there is a button in form, it will close the modal */}
-            <button className="btn" onClick={handleSearchSubmit}>
-              Search
-            </button>
+            <Button onClick={handleSearchSubmit}>Search</Button>
           </div>
         </form>
       </dialog>

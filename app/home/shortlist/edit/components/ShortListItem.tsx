@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { Button } from "@/app/components/ui/Button";
 import {
   useRemoveFromShortlistMutation,
   useUpdateSelectionMutation,
@@ -32,8 +33,7 @@ export default function ShortListItem({
   return (
     <div
       className={`relative indicator mx-auto rounded-md ${
-        highlight &&
-        "border-green-700 shadow-[inset_2px_2px_10px_0px_#2f855a]"
+        highlight && "border-green-700 shadow-[inset_2px_2px_10px_0px_#2f855a]"
       } transition ease-in-out delay-50 hover:scale-110 hover:-translate-y-1
       ${requiresSelection && "hover:shadow-[inset_0px_0px_10px_0px_#2f855a]"} `}
       onMouseEnter={() => setIsHovering(true)}
@@ -61,7 +61,11 @@ export default function ShortListItem({
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
       )}
       {isHovering && (
-        <button className="btn btn-ghost btn-xs p-0 absolute top-0 left-0 bottom-0 right-0 m-auto">
+        <Button
+          size={"icon"}
+          variant={"ghost"}
+          className="p-0 absolute top-0 left-0 bottom-0 right-0 m-auto"
+        >
           <Link
             href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}
             target="_blank"
@@ -82,11 +86,13 @@ export default function ShortListItem({
               />
             </svg>
           </Link>
-        </button>
+        </Button>
       )}
       {removeFromShortList && (
-        <button
-          className="btn btn-circle btn-xs absolute top-0 right-0 p-0"
+        <Button
+          size={"icon"}
+          variant={"ghost"}
+          className="absolute top-0 right-0 p-0"
           onClick={(event) => {
             removeMutation.mutate({ movieId: movie.id!, shortlistId });
             event.stopPropagation();
@@ -104,7 +110,7 @@ export default function ShortListItem({
               clipRule="evenodd"
             />
           </svg>
-        </button>
+        </Button>
       )}
     </div>
   );

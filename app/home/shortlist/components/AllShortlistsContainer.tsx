@@ -26,7 +26,7 @@ export default function AllShortlistsContainer() {
   }
 
   return (
-    <div className="flex flex-col place-items-center gap-2 overflow-hidden">
+    <div className="flex flex-col place-items-center gap-2">
       {Object.values(allShortlists ?? {})?.map(
         (shortlist: Shortlist, index: number) => {
           const movies = (shortlist?.movies as Movie[]) || [];
@@ -40,16 +40,16 @@ export default function AllShortlistsContainer() {
             return (
               <Fragment key={`fragment-${shortlist.id}`}>
                 <div
-                  className="flex flex-row m-2 justify-center place-items-center "
+                  className="flex flex-row justify-center items-center gap-8 p-5 w-full"
                   key={`name-container-${shortlist.id}`}
                 >
                   <div
-                    className={`avatar mr-5 flex justify-center w-8 2xl:w-12`}
+                    className={`flex justify-center`}
                     key={`avatar-${shortlist.userId}`}
                   >
                     <div
-                      className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
-                        shortlist.isReady ? "ring-success" : "ring-error"
+                      className={`w-12 rounded-full outline ${
+                        shortlist.isReady ? "outline-success" : "outline-error"
                       } `}
                       key={`avatar-ring ${shortlist.userId}`}
                     >
@@ -67,9 +67,7 @@ export default function AllShortlistsContainer() {
                     key={shortlist.id + "-title"}
                     className="text-xl max-w-[40px]"
                   >
-                    {index == 0
-                      ? shortlist.user.name + "burner"
-                      : shortlist.user.name}
+                    {index == 0 ? shortlist.user.name : shortlist.user.name}
                   </h1>
                 </div>
                 <div

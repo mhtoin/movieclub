@@ -1,11 +1,12 @@
 import { useFilterStore } from "@/stores/useFilterStore";
 import { de } from "date-fns/locale";
 import { use, useEffect, useState } from "react";
+import { Button } from "../ui/Button";
 
 export default function ProviderButton({
   provider,
   isToggled,
-  submit
+  submit,
 }: {
   provider: WatchProvider;
   isToggled: boolean;
@@ -18,7 +19,7 @@ export default function ProviderButton({
   const removeProvider = useFilterStore((state) => state.removeWatchprovider);
 
   useEffect(() => {
-    submit()
+    submit();
   }, [isToggled]);
 
   const handleSelect = () => {
@@ -35,9 +36,9 @@ export default function ProviderButton({
   };
 
   return (
-    <button
+    <Button
       key={provider.provider_id}
-      className="btn btn-square border-1 btn-sm 2xl:btn-md rounded-md m-1 hover:scale-110"
+      className="border-1 rounded-md m-1 hover:scale-110"
       onClick={handleSelect}
     >
       <img
@@ -46,8 +47,7 @@ export default function ProviderButton({
           isToggled ? "opacity-100" : "opacity-10"
         }`}
         alt={provider.provider_name}
-        
       />
-    </button>
+    </Button>
   );
 }

@@ -12,6 +12,7 @@ import AddButton from "./AddButton";
 import Link from "next/link";
 import MovieCardButton from "./MovieCardButton";
 import CheckMark from "./CheckMark";
+import { Button } from "../ui/Button";
 
 export default function MovieCard({
   movie,
@@ -81,8 +82,9 @@ export default function MovieCard({
           target="_blank"
           rel="noopener noreferrer"
         >
-          <button
-            className="btn btn-ghost absolute top-0 left-0 bottom-0 right-0 m-auto"
+          <Button
+            variant={"ghost"}
+            className="absolute top-0 left-0 bottom-0 right-0 m-auto"
             onClick={(event) => {
               event.stopPropagation();
             }}
@@ -101,7 +103,7 @@ export default function MovieCard({
                 d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
               />
             </svg>
-          </button>
+          </Button>
         </Link>
       )}
     </div>
