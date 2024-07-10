@@ -18,83 +18,18 @@ import { ListItem } from "./ListItem";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import SearchInput from "../search/SearchInput";
+import Menubar from "./Menubar";
 export const NavBar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session;
   return (
-    <div className="min-w-screen flex items-center justify-center py-10 px-2">
-      <div className="w-full lg:w-9/12 h-[70px] p-5 border-[0.5px] rounded hidden justify-evenly items-center sm:flex border-slate-400">
-        <a className="normal-case text-xl">leffaseura</a>
-        <div className="flex flex-row justify-center items-center gap-3 w-full">
-          <Link href="/home">
-            <Button variant={"ghost"}>Home</Button>
-          </Link>
-          <Link href="/dashboard">
-            <Button variant={"ghost"}>Dashboard</Button>
-          </Link>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Shortlist</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="flex flex-col p-5 w-[300px]">
-                    <ListItem href="/home/shortlist" title="All">
-                      All shortlists
-                    </ListItem>
-                    <ListItem href="/home/shortlist/edit/search" title="Search">
-                      Search movies from differnt providers
-                    </ListItem>
-                    <ListItem
-                      href="/home/shortlist/edit/watchlist"
-                      title="Watchlist"
-                    >
-                      View your watchlist
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Tierlist</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="flex flex-col p-5 w-[300px]">
-                    <ListItem href="/tierlists" title="All tierlists">
-                      View the list of tierlists
-                    </ListItem>
-                    <ListItem
-                      href={`/tierlists/${session?.user.userId}`}
-                      title="Edit"
-                    >
-                      Edit your tierlist
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-            <SearchInput />
-          </NavigationMenu>
+    <div className="min-w-screen flex items-center justify-center border p-2">
+      <div className="w-full lg:w-9/12 h-[70px] p-5 rounded hidden  sm:flex border-slate-400">
+        {/**Right side */}
+        <div className="flex items-center justify-center gap-5">
+          <Menubar />
+          <span className="font-bold">leffaseura</span>
         </div>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="h-fit">
-                <Avatar>
-                  <AvatarImage src={session?.user?.image} alt="P" />
-                  <AvatarFallback>P</AvatarFallback>
-                </Avatar>
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="flex flex-col p-5 w-[200px]">
-                  <ListItem href="/profile" title="Account">
-                    View your account
-                  </ListItem>
-                  <ListItem href="/api/auth/signout" title="Sign out">
-                    Sign out of the application
-                  </ListItem>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
       </div>
     </div>
   );
