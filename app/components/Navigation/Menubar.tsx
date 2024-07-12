@@ -15,10 +15,7 @@ export default function Menubar() {
           <div className="w-6 h-1 bg-white rounded"></div>
         </div>
       </Ariakit.MenuButton>
-      <Ariakit.Menu
-        gutter={10}
-        className="relative gap-2 flex z-50 max-h-76 min-w-[180px] flex-col overflow-auto overscroll-contain rounded border bg-popoverbg p-5 border-white/15"
-      >
+      <Ariakit.Menu gutter={10} className="menu">
         <Ariakit.MenuItem className="menu-item">
           <Link href={"/dashboard"}>Dashboard</Link>
           <span className="text-xs text-white/50">View stats</span>

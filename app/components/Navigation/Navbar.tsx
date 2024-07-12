@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import SearchInput from "../search/SearchInput";
 import Menubar from "./Menubar";
+import MagneticNav from "./MagneticNav";
 export const NavBar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session;
@@ -27,7 +28,8 @@ export const NavBar = () => {
       <div className="w-full lg:w-9/12 h-[70px] p-5 rounded hidden  sm:flex border-slate-400">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5">
-          <Menubar />
+          <MagneticNav />
+          {/*<Menubar />*/}
           <span className="font-bold">leffaseura</span>
         </div>
       </div>
