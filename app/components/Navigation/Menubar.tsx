@@ -1,55 +1,89 @@
 import * as Ariakit from "@ariakit/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import MagneticNav from "./MagneticNav";
+import MenuItem from "./MenuItem";
+import { useSession } from "next-auth/react";
 
 export default function Menubar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
+  const menu = Ariakit.useMenuStore({ open, setOpen });
 
   return (
     <Ariakit.MenuProvider>
-      <Ariakit.MenuButton>
+      <Ariakit.MenuButton
+        store={menu}
+        onMouseEnter={() => menu.show()}
+        onMouseLeave={() => menu.hide()}
+      >
         {/* Hamburger icon */}
         <div className="flex flex-col gap-1">
-          <div className="w-6 h-1 bg-white rounded" />
-          <div className="w-6 h-1 bg-white rounded"></div>
-          <div className="w-6 h-1 bg-white rounded"></div>
+          <div
+            className={`w-6 h-1 bg-white rounded origin-top-left transition-all ease-in-out duration-200 ${
+              open ? "rotate-45 " : ""
+            }`}
+          />
+          <div
+            className={`w-6 h-1 bg-white rounded origin-center transition-all ease-in-out duration-200 ${
+              open ? "w-0" : ""
+            }`}
+          ></div>
+          <div
+            className={`w-6 h-1 bg-white rounded origin-bottom-left transition-all ease-in-out duration-200 ${
+              open ? "-rotate-45 " : ""
+            }`}
+          ></div>
         </div>
       </Ariakit.MenuButton>
-      <Ariakit.Menu gutter={10} className="menu">
-        <Ariakit.MenuItem className="menu-item">
-          <Link href={"/dashboard"}>Dashboard</Link>
-          <span className="text-xs text-white/50">View stats</span>
-        </Ariakit.MenuItem>
-        <Ariakit.MenuItem className="menu-item">
-          <Link href={"/home/shortlist"}>Shortlist</Link>
-          <span className="text-xs text-white/50">
-            View all shortlists from users
-          </span>
-        </Ariakit.MenuItem>
-        <Ariakit.MenuItem className="menu-item menu-item-inner">
-          <div className="column">
-            <Link href={"/home/shortlist"}>Search</Link>
-            <span className="text-xs text-white/50">Search for movies</span>
-          </div>
-        </Ariakit.MenuItem>
-        <Ariakit.MenuItem className="menu-item menu-item-inner">
-          <div className="column">
-            <Link href={"/home/shortlist"}>Watchlist</Link>
-            <span className="text-xs text-white/50">View your watchlist</span>
-          </div>
-        </Ariakit.MenuItem>
-        <Ariakit.MenuItem className="menu-item">
-          <Link href={"/tierlists"}>Tierlists</Link>
-          <span className="text-xs text-white/50">
-            View all tierlists from users
-          </span>
-        </Ariakit.MenuItem>
-        <Ariakit.MenuItem className="menu-item menu-item-inner">
-          <div className="column">
-            <Link href={"/home/shortlist"}>Edit</Link>
-            <span className="text-xs text-white/50">Edit your tierlist</span>
-          </div>
-        </Ariakit.MenuItem>
+      <Ariakit.Menu
+        gutter={10}
+        className="menu"
+        store={menu}
+        onMouseLeave={() => menu.hide()}
+      >
+        <nav data-magnetic>
+          <ul>
+            <MenuItem store={menu}>
+              <Link href={"/dashboard"}>
+                Dashboard
+                <span className="menu-label">View stats</span>
+              </Link>
+            </MenuItem>
+            <MenuItem store={menu}>
+              <Link href={"/home/shortlist"}>
+                Shortlist
+                <span className="menu-label">View all shortlists</span>
+              </Link>
+            </MenuItem>
+            <MenuItem className="ml-6 " store={menu}>
+              <Link href={"/search"}>
+                Search
+                <span className="menu-label">Search for movies</span>
+              </Link>
+            </MenuItem>
+            <MenuItem className="ml-6" store={menu}>
+              <Link href={"/home/shortlist/edit/watchlist"}>
+                Watchlist
+                <span className="menu-label">View your watchlist</span>
+              </Link>
+            </MenuItem>
+            <MenuItem store={menu}>
+              <Link href={"/tierlists"}>
+                Tierlists
+                <span className="menu-label">
+                  View all tierlists from users
+                </span>
+              </Link>
+            </MenuItem>
+            <MenuItem className="ml-6" store={menu}>
+              <Link href={`/tierlists/${session?.user.userId}`}>
+                Edit
+                <span className="menu-label">Edit your tierlist</span>
+              </Link>
+            </MenuItem>
+          </ul>
+        </nav>
       </Ariakit.Menu>
     </Ariakit.MenuProvider>
   );

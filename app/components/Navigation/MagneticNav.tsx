@@ -1,41 +1,26 @@
+import Link from "next/link";
+
 export default function MagneticNav() {
   return (
     <nav data-magnetic>
       <ul>
         <li>
-          <a href="#home" id="home">
-            Home
-          </a>
+          <Link href={"/dashboard"}>Dashboard</Link>
         </li>
         <li>
-          <a href="#links" id="links">
-            Links
-          </a>
+          <Link href={"/home/shortlist"}>Shortlist</Link>
+        </li>
+        <li className="ml-8">
+          <Link href={"/home/shortlist"}>Search</Link>
+        </li>
+        <li className="ml-8">
+          <Link href={"/home/shortlist"}>Watchlist</Link>
         </li>
         <li>
-          <a href="#rates" id="rates">
-            Rates
-          </a>
+          <Link href={"/tierlists"}>Tierlists</Link>
         </li>
-        <li>
-          <a href="#speaking" id="speaking">
-            Speaking
-          </a>
-        </li>
-        <li>
-          <a href="#ai" id="ai">
-            AI
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://twitter.com/intent/follow?screen_name=jh3yy"
-            id="follow"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Follow
-          </a>
+        <li className="ml-8">
+          <Link href={"/home/shortlist"}>Edit</Link>
         </li>
       </ul>
     </nav>

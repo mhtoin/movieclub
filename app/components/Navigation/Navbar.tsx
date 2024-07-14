@@ -20,17 +20,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
 import SearchInput from "../search/SearchInput";
 import Menubar from "./Menubar";
 import MagneticNav from "./MagneticNav";
+import ProfileMenu from "./ProfileMenu";
 export const NavBar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session;
   return (
-    <div className="min-w-screen flex items-center justify-center border p-2">
-      <div className="w-full lg:w-9/12 h-[70px] p-5 rounded hidden  sm:flex border-slate-400">
+    <div className="min-w-screen flex items-center justify-center border-b p-2">
+      <div className="w-full lg:w-9/12 h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5">
-          <MagneticNav />
-          {/*<Menubar />*/}
+          {<Menubar />}
           <span className="font-bold">leffaseura</span>
+        </div>
+        <div className="flex gap-10 h-full items-center">
+          <SearchInput />
+          <ProfileMenu />
         </div>
       </div>
     </div>

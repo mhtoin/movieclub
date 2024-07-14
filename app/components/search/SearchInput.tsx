@@ -17,7 +17,7 @@ export default function SearchInput() {
 
   return (
     <div
-      className="border p-3 flex gap-5 items-center rounded-md"
+      className="border py-3 px-4 flex gap-5 items-center rounded-md"
       onClick={() => router.push("/search")}
       role="button"
       tabIndex={0}
