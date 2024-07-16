@@ -40,12 +40,10 @@ export default function RootLayout({
         <Notification />
         <NextAuthProvider>
           <NavBar />
-          <div>
-            <Toaster position="bottom-center" />
-          </div>
+          <Toaster position="bottom-center" />
           <Providers>
             <RaffleDialog />
-            <div>{searchModal}</div>
+            {searchModal}
             {children}
             <MobileNavbar />
           </Providers>

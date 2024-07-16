@@ -6,6 +6,7 @@ import {
   useMutationState,
   useQuery,
   useQueryClient,
+  useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 import { useContext, useEffect, useRef } from "react";
 import { produce } from "immer";
@@ -45,13 +46,32 @@ export const useShortlistQuery = (id: string) => {
   });
 };
 
-export const useSearchInfiniteQuery = () => {
-  const searchValue = useFilterStore.use.searchValue();
+export const useSearchSuspenseInfiniteQuery = () => {
   const searchParams = useSearchParams().toString();
-  //console.log("search params", searchParams);
-  //console.log("search value is", searchValue);
+
+  return useSuspenseInfiniteQuery({
+    queryKey: [
+      "search",
+      searchParams ? searchParams : "with_watch_providers=8",
+    ],
+    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages: totalPages } = lastPage;
+
+      return page < totalPages ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+  });
+};
+
+export const useSearchInfiniteQuery = () => {
+  const searchParams = useSearchParams().toString();
+
   return useInfiniteQuery({
-    queryKey: ["search", searchParams],
+    queryKey: [
+      "search",
+      searchParams ? searchParams : "with_watch_providers=8",
+    ],
     queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;

@@ -6,6 +6,7 @@ import MovieCard from "./MovieCard";
 import {
   useGetWatchlistQuery,
   useSearchInfiniteQuery,
+  useSearchSuspenseInfiniteQuery,
   useShortlistQuery,
 } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
@@ -24,8 +25,7 @@ export default function Search() {
     session?.user
   );
 
-  const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useSearchInfiniteQuery();
+  const { data, hasNextPage, fetchNextPage } = useSearchSuspenseInfiniteQuery();
 
   useEffect(() => {
     if (!hasNextPage) {

@@ -8,7 +8,7 @@ export default function SearchInput() {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        router.push("/search");
+        router.push("/search?with_watch_providers=8");
       }
     };
     document.addEventListener("keydown", down);
@@ -18,7 +18,7 @@ export default function SearchInput() {
   return (
     <div
       className="border py-3 px-4 flex gap-5 items-center rounded-md"
-      onClick={() => router.push("/search")}
+      onClick={() => router.push("/search?with_watch_providers=8")}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {

@@ -1,21 +1,14 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { Dialog, DialogContent } from "../ui/Dialog";
+import { usePathname, useRouter } from "next/navigation";
+import AriaDialog from "../ui/AriaDialog";
+import Search from "./Search";
 
-export default function SearchModal({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SearchModal() {
   const router = useRouter();
+  const pathname = usePathname();
   return (
-    <Dialog open={true} onOpenChange={() => router.back()}>
-      <DialogContent
-        className="bg-transparent no-scrollbar h-[90vh] max-h-[90vh]"
-        variant="noClose"
-      >
-        {children}
-      </DialogContent>
-    </Dialog>
+    <AriaDialog title="Search" onClose={() => router.back()}>
+      <Search />
+    </AriaDialog>
   );
 }
