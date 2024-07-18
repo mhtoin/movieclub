@@ -1,11 +1,15 @@
 import SearchModal from "@/app/components/search/SearchModal";
 import { searchMovies } from "@/lib/utils";
-import { getQueryClient } from "@/utils/getQueryClient";
+import { getQueryClient } from "@/utils/provider";
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 export default function Page() {
-  const queryClient = getQueryClient();
+  const queryClient = new QueryClient();
 
   void queryClient?.prefetchInfiniteQuery({
     queryKey: ["search", "with_watch_providers=8"],
