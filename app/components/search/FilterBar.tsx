@@ -27,6 +27,8 @@ export default function FilterBar() {
     queryFn: getFilters,
   });
 
+  console.log(watchProviders, providers);
+
   const createQueryString = useCallback(
     (
       name: string,
@@ -115,10 +117,10 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-1/2 h-1/5 bg-card rounded-lg border flex flex-col justify-center items-center p-5 gap-2">
+    <div className="min-h-[100px] w-1/2 bg-card rounded-lg border flex flex-col justify-center items-center p-5 gap-2">
       <div className="flex gap-5">
         <Input type="text" placeholder="Search for a movie" />
-        <Button>
+        <Button variant={"outline"}>
           <MagnifyingGlassIcon />
         </Button>
       </div>
@@ -135,8 +137,11 @@ export default function FilterBar() {
           return (
             <ProviderCheckbox
               provider={provider}
-              key={provider.id}
+              key={provider.provider_id}
               handleClick={handleProviderSelect}
+              defaultChecked={watchProviders.includes(
+                provider.provider_id.toString()
+              )}
             />
           );
         })}

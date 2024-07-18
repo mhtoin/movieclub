@@ -1,11 +1,10 @@
 "use client";
 
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, Suspense, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import MovieCard from "./MovieCard";
 import {
   useGetWatchlistQuery,
-  useSearchInfiniteQuery,
   useSearchSuspenseInfiniteQuery,
   useShortlistQuery,
 } from "@/lib/hooks";
@@ -14,7 +13,6 @@ import FilterBar from "./FilterBar";
 import { Button } from "../ui/Button";
 
 export default function Search() {
-  const searchValue = useFilterStore.use.searchValue();
   const { data: session } = useSession();
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -73,35 +71,37 @@ export default function Search() {
     : [];
 
   return (
-    <div className="flex flex-col justify-center p-10 border items-center gap-5 bg-background rounded-lg">
+    <div className="flex flex-col justify-center p-10 items-center gap-5 rounded-lg">
       <FilterBar />
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 w-1/2 h-[800px] overflow-auto place-items-center border p-5">
-        {data
-          ? data?.pages?.map((page) => (
-              <Fragment key={page.page}>
-                {page.results.map((movie: TMDBMovie) => {
-                  return (
-                    <MovieCard
-                      key={movie.id}
-                      movie={movie}
-                      added={shortlistMovieIds?.includes(movie.id)}
-                      inWatchlist={watchlistMovieIds?.includes(movie.id)}
-                    />
-                  );
-                })}
-              </Fragment>
-            ))
-          : []}
-      </div>
-      {hasNextPage && (
-        <Button
-          className="max-w-sm m-auto"
-          ref={loadMoreButtonRef}
-          onClick={() => fetchNextPage()}
-        >
-          Load More
-        </Button>
-      )}
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 h-[600px] overflow-auto no-scrollbar place-items-center p-5">
+          {data
+            ? data?.pages?.map((page) => (
+                <Fragment key={page.page}>
+                  {page.results.map((movie: TMDBMovie) => {
+                    return (
+                      <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        added={shortlistMovieIds?.includes(movie.id)}
+                        inWatchlist={watchlistMovieIds?.includes(movie.id)}
+                      />
+                    );
+                  })}
+                </Fragment>
+              ))
+            : []}
+          {hasNextPage && (
+            <Button
+              className="max-w-sm m-auto"
+              ref={loadMoreButtonRef}
+              onClick={() => fetchNextPage()}
+            >
+              Load More
+            </Button>
+          )}
+        </div>
+      </Suspense>
     </div>
   );
 }

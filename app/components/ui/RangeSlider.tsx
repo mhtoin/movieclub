@@ -23,7 +23,7 @@ export default function RangeSlider<T extends number | number[]>({
       {...props}
       className="grid grid-cols-[1fr_auto] items-center gap-2 w-64"
     >
-      <Label>{label}</Label>
+      <Label className="bg-secondary">{label}</Label>
       <SliderOutput className="text-sm text-foreground font-medium">
         {({ state }) =>
           state.values.map((_, i) => state.getThumbValueLabel(i)).join(" – ")

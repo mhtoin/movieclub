@@ -8,34 +8,26 @@ export default async function SearchLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["watchProviders"],
-    queryFn: getWatchProviders,
-  });
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: [
-      "search",
-      "discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773",
-    ],
-    queryFn: async () => {
-      return await searchMovies(1, "")
+  void queryClient.prefetchInfiniteQuery({
+    queryKey: ["search", "with_watch_providers=8"],
+    queryFn: async ({ pageParam = 1 }) => {
+      return await searchMovies(pageParam, "with_watch_providers=8");
     },
     initialPageParam: 1,
-  });
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages: totalPages } = lastPage;
 
-  await queryClient.prefetchQuery({
-    queryKey: ["genres"],
-    queryFn: getFilters,
+      return page < totalPages ? page + 1 : undefined;
+    },
+    pages: 2,
   });
 
   return (
     <>
-    <HydrationBoundary state={dehydrate(queryClient)} >
-      <Filters />
-      {children}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        {children}
       </HydrationBoundary>
     </>
   );

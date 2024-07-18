@@ -7,7 +7,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 export default function Page() {
   const queryClient = getQueryClient();
 
-  void queryClient.prefetchInfiniteQuery({
+  void queryClient?.prefetchInfiniteQuery({
     queryKey: ["search", "with_watch_providers=8"],
     queryFn: async ({ pageParam = 1 }) => {
       return await searchMovies(pageParam, "with_watch_providers=8");
@@ -21,7 +21,7 @@ export default function Page() {
     pages: 2,
   });
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <HydrationBoundary state={dehydrate(queryClient!)}>
       <SearchModal />
     </HydrationBoundary>
   );
