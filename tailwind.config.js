@@ -11,11 +11,11 @@ module.exports = {
     container: {
       center: true,
       padding: "2rem",
+    },
+    extend: {
       screens: {
         "2xl": "1400px",
       },
-    },
-    extend: {
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -158,5 +158,6 @@ module.exports = {
     require("tailwindcss-animate"),
     require("tailwind-gradient-mask-image"),
     require("tailwindcss-react-aria-components"),
+    require("@tailwindcss/container-queries"),
   ],
 };

@@ -117,7 +117,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-1/2 bg-card rounded-lg border flex flex-col justify-center items-center p-5 gap-2">
+    <div className="min-h-[100px] w-full bg-card flex flex-col justify-center items-center p-5 gap-2 sticky top-0 z-50">
       <div className="flex gap-5">
         <Input type="text" placeholder="Search for a movie" />
         <Button variant={"outline"}>

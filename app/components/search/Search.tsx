@@ -71,10 +71,10 @@ export default function Search() {
     : [];
 
   return (
-    <div className="flex flex-col justify-center p-10 items-center gap-5 rounded-lg">
+    <div className="flex flex-col justify-center items-center gap-5 rounded-lg relative z-50">
       <FilterBar />
       <Suspense fallback={<div>Loading...</div>}>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 h-[600px] overflow-auto no-scrollbar place-items-center p-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-5">
           {data
             ? data?.pages?.map((page) => (
                 <Fragment key={page.page}>

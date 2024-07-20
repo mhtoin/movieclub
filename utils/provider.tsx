@@ -6,6 +6,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import Pusher from "pusher-js";
 import { useState } from "react";
 import { PusherPovider } from "./PusherProvider";
@@ -17,12 +18,6 @@ function makeQueryClient() {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
-      },
-      dehydrate: {
-        // include pending queries in dehydration
-        shouldDehydrateQuery: (query) =>
-          defaultShouldDehydrateQuery(query) ||
-          query.state.status === "pending",
       },
     },
   });
@@ -58,7 +53,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PusherPovider pusher={pusher}>{children}</PusherPovider>
+      <ReactQueryStreamedHydration>
+        <PusherPovider pusher={pusher}>{children}</PusherPovider>
+      </ReactQueryStreamedHydration>
     </QueryClientProvider>
   );
 }
