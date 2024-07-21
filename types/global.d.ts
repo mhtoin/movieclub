@@ -1,3 +1,4 @@
+import { EventNotifier } from "@/lib/eventWriter";
 import { PrismaClient, Prisma } from "@prisma/client";
 import type { Rating, Review } from "@prisma/client";
 import { ObjectId } from "mongodb";
@@ -176,4 +177,64 @@ declare global {
   type ShortlistsById = {
     [x: string]: Shortlist;
   };
+
+  type EventOptions<T = string | Record<string, unknown>> = {
+    beforeFn?: CustomFn<T>;
+    afterFn?: CustomFn<T>;
+  };
+
+  interface Message<T = string | Record<string, unknown>> {
+    data: T;
+    comment?: string;
+    event?: string;
+    id?: string;
+    retry?: number;
+  }
+
+  type CustomFn<T = string | Record<string, unknown>> = (data: T) => unknown;
+
+  interface EventNotifier<
+    T extends {
+      update: T["update"] extends Message
+        ? Message<T["update"]>["data"]
+        : never;
+      complete: T["complete"] extends Message
+        ? Message<T["complete"]>["data"]
+        : never;
+      error?: T["error"] extends Message ? Message<T["error"]>["data"] : never;
+      close?: T["close"] extends Message ? Message<T["close"]>["data"] : never;
+    } = any
+  > {
+    update: (
+      message: Message<T["update"]>["data"],
+      opts?: EventOptions<Message<T["update"]>["data"]>
+    ) => void;
+    complete: (
+      message: Message<T["complete"]>["data"],
+      opts?: EventOptions<Message<T["complete"]>["data"]>
+    ) => void;
+    error?: (
+      message: Message<T["error"]>["data"],
+      opts?: EventOptions<Message<T["error"]>["data"]>
+    ) => void;
+    close?: (
+      message: Message<T["close"]>["data"],
+      opts?: EventOptions<Message<T["close"]>["data"]>
+    ) => void;
+  }
+
+  type ChosenMovieEvent = EventNotifier<{
+    update: {
+      data: {
+        message: string;
+      };
+      event: "update";
+    };
+    complete: {
+      data: {
+        message: string;
+      };
+      event: "complete";
+    };
+  }>;
 }

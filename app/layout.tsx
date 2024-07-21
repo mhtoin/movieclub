@@ -9,6 +9,7 @@ import { NextAuthProvider } from "@/utils/NextAuthProvider";
 import RaffleDialog from "./components/RaffleDialog";
 import { NavBar } from "./components/Navigation/Navbar";
 import { Toaster } from "./components/ui/Toaster";
+import ChosenMovieClient from "./components/client/ChosenMovieClient";
 
 export const metadata = {
   title: "movieclub",
@@ -41,6 +42,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <NavBar />
           <Toaster position="bottom-center" />
+          <ChosenMovieClient />
           <Providers>
             <RaffleDialog />
             {searchModal}

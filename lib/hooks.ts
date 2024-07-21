@@ -91,12 +91,12 @@ export const useRaffleMutation = () => {
   return useMutation({
     mutationKey: ["raffle"],
     mutationFn: async () => {
-      const res = await fetch("/api/raffle", {
+      const res = await fetch("/api/chooseMovie", {
         method: "POST",
         body: JSON.stringify({ userId: session?.user?.userId }),
       });
       const data = await res.json();
-
+      console.log("data", data);
       if (!data.ok) {
         throw new Error(data.message);
       }
