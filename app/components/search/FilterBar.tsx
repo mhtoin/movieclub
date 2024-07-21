@@ -13,6 +13,7 @@ import FilterRange from "./FilterRange";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { ProviderCheckbox } from "./ProviderCheckbox";
+import SearchInput from "./SearchInput";
 
 export default function FilterBar() {
   const router = useRouter();
@@ -116,14 +117,13 @@ export default function FilterBar() {
     }
   };
 
+  const handleSearch = (event: HTMLInputElement) => {
+    console.log(event);
+  };
+
   return (
     <div className="min-h-[100px] w-full bg-card flex flex-col justify-center items-center p-5 gap-2 sticky top-0 z-50">
-      <div className="flex gap-5">
-        <Input type="text" placeholder="Search for a movie" />
-        <Button variant={"outline"}>
-          <MagnifyingGlassIcon />
-        </Button>
-      </div>
+      <SearchInput />
       <div className="flex items-center gap-2">
         <FilterSelect
           label="Genres"

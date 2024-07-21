@@ -21,24 +21,24 @@ export default function RangeSlider<T extends number | number[]>({
   return (
     <Slider
       {...props}
-      className="grid grid-cols-[1fr_auto] items-center gap-2 w-64"
+      className="grid grid-cols-[1fr_auto] items-center gap-2 w-64 px-7"
     >
-      <Label className="bg-secondary">{label}</Label>
-      <SliderOutput className="text-sm text-foreground font-medium">
-        {({ state }) =>
-          state.values.map((_, i) => state.getThumbValueLabel(i)).join(" – ")
-        }
+      <SliderOutput className="text-sm text-foreground font-medium absolute left-0 px-3">
+        {({ state }) => state.getThumbValue(0)}
       </SliderOutput>
-      <SliderTrack className="group col-span-2 h-6 flex items-center">
+      <SliderOutput className="text-sm text-foreground font-medium absolute right-0 px-3">
+        {({ state }) => state.getThumbValue(1)}
+      </SliderOutput>
+      <SliderTrack className="group col-span-2 h-6 flex items-center px-2">
         {({ state, ...renderProps }) => (
           <>
-            <div className="rounded full w-full h-[6px] bg-card" />
+            <div className="rounded-full w-full h-[4px] bg-secondary" />
             {state.values.map((_, i) => (
               <SliderThumb
                 key={i}
                 index={i}
                 aria-label={thumbLabels?.[i]}
-                className="w-6 h-6 mt-6 rounded-full bg-gray-50 dark:bg-primary border-2 border-gray-700 dark:border-gray-300"
+                className="w-4 h-4 mt-4 rounded-full bg-gray-50 dark:bg-primary border-2 border-gray-700 dark:border-gray-300"
               />
             ))}
           </>

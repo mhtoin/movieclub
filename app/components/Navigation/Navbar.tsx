@@ -17,7 +17,7 @@ import {
 import { ListItem } from "./ListItem";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
-import SearchInput from "../search/SearchInput";
+import SearchButton from "../search/SearchButton";
 import Menubar from "./Menubar";
 import MagneticNav from "./MagneticNav";
 import ProfileMenu from "./ProfileMenu";
@@ -33,7 +33,7 @@ export const NavBar = () => {
           <span className="font-bold">leffaseura</span>
         </div>
         <div className="flex gap-10 h-full items-center">
-          <SearchInput />
+          <SearchButton />
           <ProfileMenu />
         </div>
       </div>

@@ -391,6 +391,16 @@
     scale: 1;
     translate: 0;
   }
+
+  .popover[data-leave] {
+    opacity: 0;
+    scale: 0.95;
+    translate: 0 -0.5rem;
+  }
+
+  .popover[data-enter] > .arrow {
+    @apply rotate-180;
+  }
 }
 
 /*

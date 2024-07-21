@@ -18,3 +18,30 @@ export const movieKeys = {
       queryFn: () => getMoviesUntil(date),
     }),
 };
+
+export const searchKeywords = async (value: string) => {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/search/keyword?query=${value}`,
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+      },
+    }
+  );
+  return await res.json();
+};
+
+export const getKeyWord = async (id: string) => {
+  const res = await fetch(`https://api.themoviedb.org/3/keyword/${id}`, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+    },
+  });
+  return await res.json();
+};

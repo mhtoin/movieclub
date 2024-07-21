@@ -12,7 +12,8 @@ export default function FilterRange({ onChange }: FilterRangeProps) {
   const handleRangeSelect = (value: string) => {};
   return (
     <Popover label="Rating">
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-3">
+        <span>Rating</span>
         <RangeSlider
           label="Rating"
           value={value}
