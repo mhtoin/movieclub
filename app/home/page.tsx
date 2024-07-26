@@ -1,6 +1,5 @@
 export const revalidate = 0;
 import getQueryClient from "@/lib/getQueryClient";
-import { getAllMoviesOfTheWeek } from "@/lib/utils";
 import MovieCarousel from "../components/home/MovieCarousel";
 import { movieKeys } from "@/lib/movies/queries";
 import { formatISO, nextWednesday } from "date-fns";

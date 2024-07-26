@@ -84,6 +84,7 @@ export default function MovieCard({
         >
           <Button
             variant={"ghost"}
+            size={"icon"}
             className="absolute top-0 left-0 bottom-0 right-0 m-auto"
             onClick={(event) => {
               event.stopPropagation();

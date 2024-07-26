@@ -28,8 +28,6 @@ export default function FilterBar() {
     queryFn: getFilters,
   });
 
-  console.log(watchProviders, providers);
-
   const createQueryString = useCallback(
     (
       name: string,
@@ -37,7 +35,7 @@ export default function FilterBar() {
       isRange: boolean = false
     ) => {
       const params = new URLSearchParams(searchParams.toString());
-
+      params.delete("query");
       if (isRange) {
         const min = `${name}.gte`;
         const max = `${name}.lte`;
@@ -66,32 +64,25 @@ export default function FilterBar() {
   );
 
   const handleGenreSelect = (value: string) => {
-    console.log("value", value);
     const query = createQueryString("with_genres", value);
-    console.log("query", query);
     router.push(`${pathname}?${query}`, {
       scroll: false,
     });
   };
 
   const handleRangeSelect = (value: number[]) => {
-    console.log("value", value);
     const query = createQueryString("vote_average", value, true);
-
     router.push(`${pathname}?${query}`, {
       scroll: false,
     });
   };
 
   const handleProviderSelect = (value: string) => {
-    console.log("value", value);
     const params = new URLSearchParams(searchParams.toString());
-    console.log("params", params);
+    params.delete("query");
     const providers = params.get("with_watch_providers")?.split("|") || [];
-    console.log("providers", providers);
 
     if (providers.includes(value)) {
-      console.log("removing provider");
       const newProviders = providers.filter((provider) => provider !== value);
 
       if (newProviders.length === 0) {
@@ -108,9 +99,7 @@ export default function FilterBar() {
       });
     } else {
       const newProviders = [...providers, value];
-      console.log("adding", newProviders);
       params.set("with_watch_providers", newProviders.join("|"));
-      console.log("query", params.toString());
       router.push(`${pathname}?${params.toString()}`, {
         scroll: false,
       });
@@ -122,7 +111,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-full bg-card flex flex-col justify-center items-center p-5 gap-2 sticky top-0 z-50">
+    <div className="min-h-[100px] w-full bg-card flex flex-col justify-center items-center py-10 gap-2 sticky top-0 z-50">
       <SearchInput />
       <div className="flex items-center gap-2">
         <FilterSelect

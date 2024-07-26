@@ -5,6 +5,7 @@ export default function LogicToggle() {
     <RadioGroup
       className={"flex gap-2 bg-popoverbg/10 w-fit items-center p-2 shadow-lg"}
       defaultValue={"AND"}
+      aria-label="Filter logic"
     >
       <Radio
         value="AND"

@@ -27,9 +27,10 @@ export default function RangeSlider({
         value={value}
         className="range"
         step={step}
+        aria-label="Range slider"
         onChange={(event) => {
           setValue(event.target.value);
-          onChange(label, event.target.value)
+          onChange(label, event.target.value);
         }}
       />
       <div className="w-full flex justify-between text-xs px-2">

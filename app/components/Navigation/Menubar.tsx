@@ -25,8 +25,8 @@ export default function Menubar() {
             }`}
           />
           <div
-            className={`w-6 h-1 bg-white rounded origin-center transition-all ease-in-out duration-200 ${
-              open ? "w-0" : ""
+            className={`w-6 h-1 bg-white rounded origin-center transition-transform ease-in-out duration-200 ${
+              open ? "max-w-0" : ""
             }`}
           ></div>
           <div
@@ -38,11 +38,11 @@ export default function Menubar() {
       </Ariakit.MenuButton>
       <Ariakit.Menu
         gutter={10}
-        className="menu"
+        className="menu z-[9999]"
         store={menu}
         onMouseLeave={() => menu.hide()}
       >
-        <nav data-magnetic>
+        <nav data-magnetic className="z-[9999]">
           <ul>
             <MenuItem store={menu}>
               <Link href={"/dashboard"}>
@@ -57,7 +57,7 @@ export default function Menubar() {
               </Link>
             </MenuItem>
             <MenuItem className="ml-6 " store={menu}>
-              <Link href={"/search"}>
+              <Link href={"/home/search"}>
                 Search
                 <span className="menu-label">Search for movies</span>
               </Link>

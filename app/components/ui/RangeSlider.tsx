@@ -22,6 +22,7 @@ export default function RangeSlider<T extends number | number[]>({
     <Slider
       {...props}
       className="grid grid-cols-[1fr_auto] items-center gap-2 w-64 px-7"
+      aria-label={label}
     >
       <SliderOutput className="text-sm text-foreground font-medium absolute left-0 px-3">
         {({ state }) => state.getThumbValue(0)}

@@ -8,7 +8,6 @@ import {
   useSearchSuspenseInfiniteQuery,
   useShortlistQuery,
 } from "@/lib/hooks";
-import { useFilterStore } from "@/stores/useFilterStore";
 import FilterBar from "./FilterBar";
 import { Button } from "../ui/Button";
 

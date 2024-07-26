@@ -47,14 +47,24 @@ export const useShortlistQuery = (id: string) => {
 };
 
 export const useSearchSuspenseInfiniteQuery = () => {
-  const searchParams = useSearchParams().toString();
+  const searchParams = useSearchParams();
+  console.log("searchParams", searchParams);
+  const titleSearch = searchParams.get("query");
+  const searchType = titleSearch ? "search" : "discover";
+  const searchParamsString = searchParams.toString();
+
+  /**
+   * If there is a title, we need to use a whole different endpoint to search for movies
+   * instead of using the discover endpoint, since that does not support title search
+   */
 
   return useSuspenseInfiniteQuery({
     queryKey: [
       "search",
-      searchParams ? searchParams : "with_watch_providers=8",
+      searchParams ? searchParamsString : "with_watch_providers=8",
     ],
-    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
+    queryFn: async ({ pageParam }) =>
+      searchMovies(pageParam, searchParamsString, searchType),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
 
