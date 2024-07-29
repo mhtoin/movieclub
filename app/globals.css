@@ -4,59 +4,135 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 80%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --background: hsl(0 0% 100%);
+    --foreground: hsl(240 10% 3.9%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(240 10% 3.9%);
+    --popover: hsl(0 0% 80%);
+    --popover-foreground: hsl(240 10% 3.9%);
+    --primary: hsl(240 5.9% 10%);
+    --primary-foreground: hsl(0 0% 98%);
+    --secondary: hsl(240 4.8% 95.9%);
+    --secondary-foreground: hsl(240 5.9% 10%);
+    --muted: hsl(240 4.8% 95.9%);
+    --muted-foreground: hsl(240 3.8% 46.1%);
+    --accent: hsl(240 4.8% 95.9%);
+    --accent-foreground: hsl(240 5.9% 10%);
+    --destructive: hsl(0 84.2% 60.2%);
+    --destructive-foreground: hsl(0 0% 98%);
+    --border: hsl(240 3.7% 15.9%);
+    --input: hsl(240 5.9% 90%);
+    --ring: hsl(240 5.9% 10%);
     --radius: 0.5rem;
 
-    --mobilenav: 164 64% 42%;
+    --mobilenav: hsl(164 64% 42%);
+    --popoverBackground: hsl(204 4% 16%);
+  }
+  /**
+   * @theme light
+   */
+
+  .light {
+    --background: hsl(0 0% 100%);
+    --foreground: hsl(240 10% 3.9%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(240 10% 3.9%);
+    --popover: hsl(0 0% 80%);
+    --popover-foreground: hsl(240 10% 3.9%);
+    --primary: hsl(240 5.9% 10%);
+    --primary-foreground: hsl(0 0% 98%);
+    --secondary: hsl(240 4.8% 95.9%);
+    --secondary-foreground: hsl(240 5.9% 10%);
+    --muted: hsl(240 4.8% 95.9%);
+    --muted-foreground: hsl(240 3.8% 46.1%);
+    --accent: hsl(240 4.8% 95.9%);
+    --accent-foreground: hsl(240 5.9% 10%);
+    --destructive: hsl(0 84.2% 60.2%);
+    --destructive-foreground: hsl(0 0% 98%);
+    --border: hsl(240 3.7% 15.9%);
+    --input: hsl(240 5.9% 90%);
+    --ring: hsl(240 5.9% 10%);
+    --radius: 0.5rem;
+
+    --mobilenav: hsl(164 64% 42%);
     --popoverBackground: hsl(204 4% 16%);
   }
 
+  .light[data-accent="magenta"] {
+    --accent: hsl(340, 82%, 52%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(340, 82%, 52%);
+    --secondary-foreground: hsl(240 10% 3.9%);
+  }
+
+  :root[data-accent="aqua"] {
+    --accent: hsl(187, 49%, 17%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(188, 9%, 52%);
+    --secondary-foreground: hsl(187, 49%, 17%);
+  }
+
+  :root[data-accent="orange"] {
+    --accent: hsl(25, 97%, 53%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(25, 97%, 53%);
+    --secondary-foreground: hsl(0, 0%, 100%);
+  }
+
+  /**
+   * @theme dark
+   */
+
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 50%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    /*
+    * Surfaces
+    */
+    --background: hsl(0, 0%, 7%);
+    --card: hsl(0, 0%, 12%);
+    --popover: hsl(0 0% 13.7%);
+    --dialog: hsl(240 10% 3.9%);
+    /*
+    * Components
+    */
+    --primary: hsl(0 0% 98%);
+    --secondary: hsl(0, 0%, 18%);
+    --muted: hsl(240 3.7% 15.9%);
+    --accent: hsl(203, 5%, 35%);
+    --destructive: hsl(0 62.8% 30.6%);
+    --border: hsl(0, 0%, 25%);
+    --input: hsl(240 3.7% 15.9%);
+    --ring: hsl(240 4.9% 83.9%);
+    /*
+    * Typography
+    */
+    --primary-foreground: hsl(240 5.9% 10%);
+    --foreground: hsl(0 0% 98%);
+    --card-foreground: hsl(0 0% 98%);
+    --secondary-foreground: hsl(0 0% 98%);
+    --popover-foreground: hsl(0, 0%, 9%);
+    --muted-foreground: hsl(240 5% 64.9%);
+    --accent-foreground: hsl(0 0% 98%);
+    --destructive-foreground: hsl(0 0% 98%);
+    --ring: hsl(216 34% 17%);
+    --success: hsl(113 100% 40%);
+    --error: hsl(9 100% 40%);
+    --mobilenav: hsl(191 100% 39%);
+  }
 
-    --mobilenav: 191 100% 39%;
+  .dark[data-accent="magenta"] {
+    --accent: hsl(340, 82%, 52%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(345, 84%, 61%);
+    --secondary-foreground: hsl(240 10% 3.9%);
+  }
 
-    --ring: 216 34% 17%;
-    --success: 113 100% 40%;
-    --error: 9 100% 40%;
-
-    --radius: 0.5rem;
+  .dark[data-accent="aqua"] {
+    --background: hsl(190, 13%, 9%);
+    --popover: hsl(188, 14%, 21%);
+    --accent: hsl(187, 49%, 17%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(188, 9%, 52%);
+    --secondary-foreground: hsl(187, 49%, 17%);
   }
 }
 
@@ -88,7 +164,7 @@
   }
 
   ul {
-    @apply text-popover-foreground;
+    color: var(--accent-foreground);
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -113,7 +189,7 @@
 
   @supports not (anchor-name: --a) {
     li a:hover {
-      background: color-mix(in lch, canvasText, canvas 15%);
+      background: color-mix(in lch, var(--accent), transparent 20%);
       border-radius: 6px;
       transition: background-color 0.3s ease-in-out;
     }
@@ -219,7 +295,7 @@
     opacity: var(--intent, 0);
     z-index: -1;
     border-radius: 6px;
-    background: color-mix(in lch, canvasText, canvas 15%);
+    background: hsl(var(--accent));
     transition: all var(--transition), top var(--transition),
       left var(--transition), height var(--transition),
       opacity var(--transition), color var(--transition),
@@ -398,8 +474,27 @@
     translate: 0 -0.5rem;
   }
 
+  .arrow > svg {
+    fill: hsl(204 4% 16%);
+    stroke: hsl(204 4% 24%);
+  }
+
+  .arrow:where(.dark, .dark *) > svg {
+    fill: hsl(204 4% 16%);
+    stroke: hsl(204 4% 24%);
+  }
+
   .popover[data-enter] > .arrow {
     @apply rotate-180;
+  }
+
+  .separator {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    height: 0px;
+    width: 100%;
+    border-top-width: 1px;
+    border-color: var(--border);
   }
 }
 

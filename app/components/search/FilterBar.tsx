@@ -111,7 +111,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-full bg-card flex flex-col justify-center items-center py-10 gap-2 sticky top-0 z-50">
+    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center py-10 gap-2 sticky top-0 z-50">
       <SearchInput />
       <div className="flex items-center gap-2">
         <FilterSelect

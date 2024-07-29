@@ -21,6 +21,7 @@ import SearchButton from "../search/SearchButton";
 import Menubar from "./Menubar";
 import MagneticNav from "./MagneticNav";
 import ProfileMenu from "./ProfileMenu";
+import ThemeSwitcher from "../theme/ThemeSwitcher";
 export const NavBar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session;
@@ -34,6 +35,7 @@ export const NavBar = () => {
         </div>
         <div className="flex gap-10 h-full items-center">
           <SearchButton />
+          <ThemeSwitcher />
           <ProfileMenu />
         </div>
       </div>

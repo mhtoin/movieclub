@@ -97,7 +97,7 @@ export default function SearchInput() {
         <Button
           variant={"secondary"}
           size={"xs"}
-          className={`transition-opacity ${
+          className={`hover:bg-accent transition-opacity ${
             type === "keyword" ? "opacity-100" : "opacity-40"
           }`}
           onClick={() => setType("keyword")}
@@ -107,7 +107,7 @@ export default function SearchInput() {
         <Button
           variant={"secondary"}
           size={"xs"}
-          className={`transition-opacity ${
+          className={`hover:bg-accent transition-opacity ${
             type === "title" ? "opacity-100" : "opacity-40"
           }`}
           onClick={() => setType("title")}

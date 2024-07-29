@@ -1,4 +1,7 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
+
+const mix = (name) =>
+  `color-mix(in hsl, var(${name}), transparent calc(100% - 100% * <alpha-value>))`;
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -17,51 +20,51 @@ module.exports = {
         "2xl": "1400px",
       },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        popoverbg: "hsl(204 4% 16%)",
+        border: mix("--border"),
+        input: mix("--input"),
+        ring: mix("--ring"),
+        background: mix("--background"),
+        foreground: mix("--foreground"),
+        popoverbg: mix("204 4% 16%"),
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: mix("--primary"),
+          foreground: mix("--primary-foreground"),
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: mix("--secondary"),
+          foreground: mix("--secondary-foreground"),
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: mix("--destructive"),
+          foreground: mix("--destructive-foreground"),
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: mix("--muted"),
+          foreground: mix("--muted-foreground"),
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: mix("--accent"),
+          foreground: mix("--accent-foreground"),
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: mix("--popover"),
+          foreground: mix("--popover-foreground"),
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: mix("--card"),
+          foreground: mix("--card-foreground"),
         },
         mobilenav: {
-          DEFAULT: "hsl(var(--mobilenav))",
+          DEFAULT: mix("--mobilenav"),
         },
         ring: {
-          DEFAULT: "hsl(var(--ring))",
+          DEFAULT: mix("--ring"),
         },
         success: {
-          DEFAULT: "hsl(var(--success))",
+          DEFAULT: mix("--success"),
         },
         error: {
-          DEFAULT: "hsl(var(--error))",
+          DEFAULT: mix("--error"),
         },
       },
       borderRadius: {
