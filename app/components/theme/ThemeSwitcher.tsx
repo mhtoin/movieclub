@@ -1,12 +1,20 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import * as Ariakit from "@ariakit/react";
 import { Label } from "react-aria-components";
+import { createThemeCookie } from "@/lib/actions/setThemeCookie";
 
-export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const [accentColor, setAccentColor] = useState("");
+export default function ThemeSwitcher({
+  userTheme,
+  userAccentColor,
+}: {
+  userTheme: "light" | "dark" | undefined;
+  userAccentColor: string | undefined;
+}) {
+  const [theme, setTheme] = useState<"light" | "dark" | undefined>(userTheme);
+  const [accentColor, setAccentColor] = useState(userAccentColor || "");
   const accents = [
     {
       label: "Default",
@@ -27,41 +35,34 @@ export default function ThemeSwitcher() {
   ];
 
   useEffect(() => {
-    // Read from local storage
-    const theme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const accent = localStorage.getItem("accent") as string | null;
-    if (theme) {
-      setTheme(theme);
-    } else {
-      setTheme(
-        window.matchMedia("(prefers-color-scheme: light)").matches
-          ? "light"
-          : "dark"
-      );
-    }
-    if (accent) {
-      setAccentColor(accent);
-    }
     if (document !== undefined) {
+      if (!userTheme && !theme) {
+        setTheme(
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light"
+        );
+      }
       document.documentElement.classList.toggle("light", theme === "light");
       document.documentElement.classList.toggle("dark", theme === "dark");
     }
-  }, [theme]);
+  }, [theme, userTheme]);
 
   useEffect(() => {
     if (document !== undefined) {
       document.documentElement.setAttribute("data-accent", accentColor);
     }
   }, [accentColor]);
-  const handleThemeSwitch = (theme: "light" | "dark") => {
+  const handleThemeSwitch = async (theme: "light" | "dark") => {
     setTheme(theme);
-    localStorage.setItem("theme", theme);
+    await createThemeCookie("theme", theme);
   };
 
-  const handleAccentSwitch = (color: string) => {
+  const handleAccentSwitch = async (color: string) => {
     console.log("color", color);
     setAccentColor(color === "Default" ? "" : color.toLowerCase());
-    localStorage.setItem(
+    // TODO: Server action to save to cookie
+    await createThemeCookie(
       "accent",
       color === "Default" ? "" : color.toLowerCase()
     );

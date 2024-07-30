@@ -9,6 +9,7 @@ import { NextAuthProvider } from "@/utils/NextAuthProvider";
 import RaffleDialog from "./components/RaffleDialog";
 import { NavBar } from "./components/Navigation/Navbar";
 import { Toaster } from "./components/ui/Toaster";
+import { cookies } from "next/headers";
 
 export const metadata = {
   title: "movieclub",
@@ -32,8 +33,15 @@ export default function RootLayout({
   searchModal?: React.ReactNode;
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const theme = cookieStore.get("theme");
+  const accent = cookieStore.get("accent");
   return (
-    <html lang="en" className="">
+    <html
+      lang="en"
+      className={theme ? theme.value : ""}
+      data-accent={accent ? accent.value : ""}
+    >
       <body
         className={`${inter.className} antialiased min-h-screen no-scrollbar`}
       >

@@ -1,3 +1,4 @@
+"use client";
 import * as Ariakit from "@ariakit/react";
 import { Button } from "../ui/Button";
 import Image from "next/image";
