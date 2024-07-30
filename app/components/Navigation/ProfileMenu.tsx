@@ -26,13 +26,13 @@ export default function ProfileMenu() {
         />
       </Ariakit.MenuButton>
       <Ariakit.Menu
-        className="menu"
+        className="menu z-[9999]"
         shift={-70}
         gutter={10}
         onMouseLeave={() => menu.hide()}
         store={menu}
       >
-        <nav data-magnetic>
+        <nav data-magnetic className="z-[9999]">
           <ul>
             <MenuItem store={menu}>
               <Link href={"/dashboard"}>Profile</Link>

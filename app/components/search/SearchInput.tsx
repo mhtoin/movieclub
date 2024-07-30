@@ -90,7 +90,7 @@ export default function SearchInput() {
 
   return (
     <form
-      className="py-7 relative h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2"
+      className="py-7 relative h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-background"
       onSubmit={handleSubmit}
     >
       <div className="flex gap-2">
