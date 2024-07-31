@@ -46,6 +46,12 @@ export default function Menubar() {
         <nav data-magnetic className="z-[9999]">
           <ul>
             <MenuItem store={menu}>
+              <Link href={"/home"}>
+                <span className="text-foreground">Home</span>
+                <span className="menu-label">View home page</span>
+              </Link>
+            </MenuItem>
+            <MenuItem store={menu}>
               <Link href={"/dashboard"}>
                 <span className="text-foreground">Dashboard</span>
                 <span className="menu-label">View stats</span>

@@ -17,6 +17,7 @@ export default function ProfileMenu() {
         className="relative w-12 h-12"
         store={menu}
         onMouseEnter={() => menu.show()}
+        onMouseLeave={() => menu.hide()}
       >
         <Image
           src={session?.user?.image || ""}

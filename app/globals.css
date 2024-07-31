@@ -75,7 +75,7 @@
     --accent: hsl(187, 49%, 17%);
     --accent-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(188, 9%, 52%);
-    --secondary-foreground: hsl(187, 49%, 17%);
+    --secondary-foreground: hsl(0, 0%, 100%);
   }
 
   :root[data-accent="orange"] {
@@ -137,7 +137,7 @@
     --accent: hsl(187, 49%, 17%);
     --accent-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(188, 9%, 52%);
-    --secondary-foreground: hsl(187, 49%, 17%);
+    --secondary-foreground: hsl(0, 0%, 100%);
   }
 
   .dark[data-accent="purple"] {
@@ -252,6 +252,12 @@
     --item-active-width: var(--item-6-width);
     --item-active-height: var(--item-6-height);
   }
+  [data-no-anchor] ul:has(li:nth-of-type(7) a:is(:hover, :focus-visible)) {
+    --item-active-y: var(--item-7-y);
+    --item-active-x: var(--item-7-x);
+    --item-active-width: var(--item-7-width);
+    --item-active-height: var(--item-7-height);
+  }
 
   [data-no-anchor] ul:has(li:nth-of-type(1) a:target) {
     --target-y: var(--item-1-y);
@@ -288,6 +294,12 @@
     --target-x: var(--item-6-x);
     --target-width: var(--item-6-width);
     --target-height: var(--item-6-height);
+  }
+  [data-no-anchor] ul:has(li:nth-of-type(7) a:target) {
+    --target-y: var(--item-7-y);
+    --target-x: var(--item-7-x);
+    --target-width: var(--item-7-width);
+    --target-height: var(--item-7-height);
   }
 
   ul:has(a:is(:focus-visible, :hover)) {

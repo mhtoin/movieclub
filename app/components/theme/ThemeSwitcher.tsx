@@ -15,6 +15,8 @@ export default function ThemeSwitcher({
 }) {
   const [theme, setTheme] = useState<"light" | "dark" | undefined>(userTheme);
   const [accentColor, setAccentColor] = useState(userAccentColor || "");
+  const [open, setOpen] = useState(false);
+  const menu = Ariakit.useMenuStore({ open, setOpen });
   const accents = [
     {
       label: "Default",
@@ -73,10 +75,19 @@ export default function ThemeSwitcher({
   };
   return (
     <Ariakit.MenuProvider>
-      <Ariakit.MenuButton render={<Button variant={"outline"} size={"icon"} />}>
+      <Ariakit.MenuButton
+        render={<Button variant={"outline"} size={"icon"} />}
+        store={menu}
+        onMouseEnter={() => menu.show()}
+        onMouseLeave={() => menu.hide()}
+      >
         {theme === "light" ? <SunIcon /> : <MoonIcon />}
       </Ariakit.MenuButton>
-      <Ariakit.Menu className="menu popover z-[9990]">
+      <Ariakit.Menu
+        className="menu popover z-[9990]"
+        store={menu}
+        onMouseLeave={() => menu.hide()}
+      >
         <Ariakit.PopoverArrow className="arrow bg-gray-50" />
         <span>Theme</span>
         <div className="flex gap-5">
