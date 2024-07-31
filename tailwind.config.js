@@ -25,6 +25,7 @@ module.exports = {
         ring: mix("--ring"),
         background: mix("--background"),
         foreground: mix("--foreground"),
+        navigation: mix("--navigation"),
         popoverbg: mix("204 4% 16%"),
         primary: {
           DEFAULT: mix("--primary"),

@@ -32,6 +32,10 @@ export default function ThemeSwitcher({
       label: "Magenta",
       color: "#e91e63",
     },
+    {
+      label: "Purple",
+      color: "#7e1e8f",
+    },
   ];
 
   useEffect(() => {

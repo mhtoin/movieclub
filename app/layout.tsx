@@ -43,7 +43,7 @@ export default function RootLayout({
       data-accent={accent ? accent.value : ""}
     >
       <body
-        className={`${inter.className} antialiased min-h-screen no-scrollbar`}
+        className={`${inter.className} antialiased min-h-screen no-scrollbar relative`}
       >
         <Notification />
         <NextAuthProvider>

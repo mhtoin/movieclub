@@ -47,31 +47,31 @@ export default function Menubar() {
           <ul>
             <MenuItem store={menu}>
               <Link href={"/dashboard"}>
-                Dashboard
+                <span className="text-foreground">Dashboard</span>
                 <span className="menu-label">View stats</span>
               </Link>
             </MenuItem>
             <MenuItem store={menu}>
               <Link href={"/home/shortlist"}>
-                Shortlist
+                <span className="text-foreground">Shortlist</span>
                 <span className="menu-label">View all shortlists</span>
               </Link>
             </MenuItem>
             <MenuItem className="ml-6 " store={menu}>
               <Link href={"/home/search"}>
-                Search
+                <span className="text-foreground">Search</span>
                 <span className="menu-label">Search for movies</span>
               </Link>
             </MenuItem>
             <MenuItem className="ml-6" store={menu}>
               <Link href={"/home/shortlist/edit/watchlist"}>
-                Watchlist
+                <span className="text-foreground">Watchlist</span>
                 <span className="menu-label">View your watchlist</span>
               </Link>
             </MenuItem>
             <MenuItem store={menu}>
               <Link href={"/tierlists"}>
-                Tierlists
+                <span className="text-foreground">Tierlists</span>
                 <span className="menu-label">
                   View all tierlists from users
                 </span>
@@ -79,7 +79,7 @@ export default function Menubar() {
             </MenuItem>
             <MenuItem className="ml-6" store={menu}>
               <Link href={`/tierlists/${session?.user.userId}`}>
-                Edit
+                <span className="text-foreground">Edit</span>
                 <span className="menu-label">Edit your tierlist</span>
               </Link>
             </MenuItem>

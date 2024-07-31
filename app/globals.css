@@ -20,10 +20,13 @@
     --accent-foreground: hsl(240 5.9% 10%);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(240 3.7% 15.9%);
+    --border: hsl(0, 0%, 27%);
     --input: hsl(240 5.9% 90%);
     --ring: hsl(240 5.9% 10%);
     --radius: 0.5rem;
+    --ring: hsl(216 34% 17%);
+    --success: hsl(113, 93%, 38%);
+    --error: hsl(0, 99%, 32%);
 
     --mobilenav: hsl(164 64% 42%);
     --popoverBackground: hsl(204 4% 16%);
@@ -37,11 +40,11 @@
     --foreground: hsl(240 10% 3.9%);
     --card: hsl(0 0% 100%);
     --card-foreground: hsl(240 10% 3.9%);
-    --popover: hsl(0 0% 80%);
+    --popover: hsl(0, 0%, 100%);
     --popover-foreground: hsl(240 10% 3.9%);
-    --primary: hsl(240 5.9% 10%);
+    --primary: hsl(0, 0%, 27%);
     --primary-foreground: hsl(0 0% 98%);
-    --secondary: hsl(240 4.8% 95.9%);
+    --secondary: hsl(0, 0%, 39%);
     --secondary-foreground: hsl(240 5.9% 10%);
     --muted: hsl(240 4.8% 95.9%);
     --muted-foreground: hsl(240 3.8% 46.1%);
@@ -49,10 +52,13 @@
     --accent-foreground: hsl(240 5.9% 10%);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(240 3.7% 15.9%);
+    --border: hsl(240, 2%, 21%);
     --input: hsl(240 5.9% 90%);
     --ring: hsl(240 5.9% 10%);
     --radius: 0.5rem;
+    --ring: hsl(216 34% 17%);
+    --success: hsl(113 100% 40%);
+    --error: hsl(9 100% 40%);
 
     --mobilenav: hsl(164 64% 42%);
     --popoverBackground: hsl(204 4% 16%);
@@ -76,7 +82,7 @@
     --accent: hsl(25, 97%, 53%);
     --accent-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(25, 97%, 53%);
-    --secondary-foreground: hsl(0, 0%, 100%);
+    --secondary-foreground: hsl(0, 0%, 0%);
   }
 
   /**
@@ -87,15 +93,16 @@
     /*
     * Surfaces
     */
-    --background: hsl(0, 0%, 7%);
-    --card: hsl(0, 0%, 12%);
-    --popover: hsl(0 0% 13.7%);
+    --background: hsl(0, 0%, 4%);
+    --card: hsl(0, 0%, 10%);
+    --popover: hsl(0, 0%, 12%);
+    --navigation: hsl(0, 0%, 25%);
     --dialog: hsl(240 10% 3.9%);
     /*
     * Components
     */
     --primary: hsl(0 0% 98%);
-    --secondary: hsl(0, 0%, 18%);
+    --secondary: hsl(0, 0%, 25%);
     --muted: hsl(240 3.7% 15.9%);
     --accent: hsl(203, 5%, 35%);
     --destructive: hsl(0 62.8% 30.6%);
@@ -105,10 +112,10 @@
     /*
     * Typography
     */
-    --primary-foreground: hsl(240 5.9% 10%);
+    --primary-foreground: hsl(0, 0%, 100%);
     --foreground: hsl(0 0% 98%);
     --card-foreground: hsl(0 0% 98%);
-    --secondary-foreground: hsl(0 0% 98%);
+    --secondary-foreground: hsl(0, 0%, 100%);
     --popover-foreground: hsl(0, 0%, 9%);
     --muted-foreground: hsl(240 5% 64.9%);
     --accent-foreground: hsl(0 0% 98%);
@@ -127,12 +134,17 @@
   }
 
   .dark[data-accent="aqua"] {
-    --background: hsl(190, 13%, 9%);
-    --popover: hsl(188, 14%, 21%);
     --accent: hsl(187, 49%, 17%);
     --accent-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(188, 9%, 52%);
     --secondary-foreground: hsl(187, 49%, 17%);
+  }
+
+  .dark[data-accent="purple"] {
+    --accent: hsl(291, 65%, 34%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(265, 48%, 70%);
+    --secondary-foreground: hsl(240 10% 3.9%);
   }
 }
 
@@ -160,7 +172,7 @@
 
 @layer components {
   .menu {
-    @apply relative gap-2 flex z-50 min-w-[180px] flex-col overflow-auto overscroll-contain rounded border bg-popover p-5 border-white/10;
+    @apply relative gap-2 flex z-50 min-w-[180px] flex-col overflow-auto overscroll-contain rounded border bg-popover p-5 text-foreground;
   }
 
   ul {
@@ -201,7 +213,7 @@
 
   a:is(:focus-visible, :hover),
   ul:has(a:target:is(:focus-visible, :hover))::after {
-    color: white;
+    color: var(--accent-foreground);
   }
 
   [data-no-anchor] ul:has(li:nth-of-type(1) a:is(:hover, :focus-visible)) {
@@ -447,7 +459,7 @@
   }
 
   .menu-label {
-    @apply text-xs text-white/40;
+    @apply text-xs text-foreground/40;
   }
 
   .popover {

@@ -8,7 +8,7 @@ export const NavBar = () => {
   const theme = cookieStore.get("theme");
   const accent = cookieStore.get("accent");
   return (
-    <div className="min-w-screen flex items-center justify-center border-b p-2 z-50">
+    <div className="min-w-screen flex items-center justify-center border-b p-2 z-50  bg-background">
       <div className="w-full lg:w-9/12 h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5">

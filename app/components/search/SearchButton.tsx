@@ -17,7 +17,7 @@ export default function SearchButton() {
 
   return (
     <div
-      className="border py-3 px-4 flex gap-5 items-center rounded-md"
+      className="border py-3 px-4 flex gap-5 items-center rounded-md bg-input"
       onClick={() => router.push("/search?with_watch_providers=8")}
       role="button"
       tabIndex={0}

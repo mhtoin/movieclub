@@ -22,7 +22,7 @@ export default function ProfileMenu() {
           src={session?.user?.image || ""}
           alt="P"
           fill
-          className="rounded-full"
+          className="rounded-full border border-border/50"
         />
       </Ariakit.MenuButton>
       <Ariakit.Menu
@@ -35,10 +35,14 @@ export default function ProfileMenu() {
         <nav data-magnetic className="z-[9999]">
           <ul>
             <MenuItem store={menu}>
-              <Link href={"/dashboard"}>Profile</Link>
+              <Link href={"/dashboard"} className="text-lg text-foreground">
+                Profile
+              </Link>
             </MenuItem>
             <MenuItem store={menu}>
-              <Link href={"/logout"}>Logout</Link>
+              <Link href={"/logout"} className="text-lg text-foreground">
+                Logout
+              </Link>
             </MenuItem>
           </ul>
         </nav>

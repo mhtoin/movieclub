@@ -90,7 +90,7 @@ export default function SearchInput() {
 
   return (
     <form
-      className="py-7 relative h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-background"
+      className="py-7 relative h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-input"
       onSubmit={handleSubmit}
     >
       <div className="flex gap-2">
@@ -119,7 +119,7 @@ export default function SearchInput() {
         <Input
           type="text"
           placeholder={`Search movies by ${type}`}
-          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />

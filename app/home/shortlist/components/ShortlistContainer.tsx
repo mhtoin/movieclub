@@ -20,6 +20,16 @@ export default function ShortlistContainer() {
   if (status === "pending" && !shortlist) {
     return (
       <div className="flex flex-col justify-center place-items-center">
+        <div
+          className="flex flex-row justify-center items-center gap-2 p-5"
+          key={`name-container-${session?.user?.shortlistId}`}
+        >
+          <div className="h-12 w-12 rounded-full bg-primary border"></div>
+          <div>
+            <SearchButton />
+            <WatchlistButton />
+          </div>
+        </div>
         <div className="flex flex-row gap-5 w-2/3 sm:w-auto items-center">
           <ItemSkeleton />
           <ItemSkeleton />
