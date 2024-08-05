@@ -112,7 +112,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center lg:py-8 gap-2 z-50 border-b">
+    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center lg:py-8 gap-2 border-b">
       <div className="relative flex flex-col gap-4 pt-5 px-4 lg:w-1/2 w-full lg:p-10 lg:items-center lg:justify-center">
         <SearchInput />
         <div className="hidden lg:flex items-center gap-2">
