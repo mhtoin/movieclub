@@ -35,7 +35,7 @@ export const NavBar = ({
     );
   }
   return (
-    <div className="min-w-screen flex items-center justify-center border-b p-2 z-50 bg-background h-[70px] min-h-[70px]">
+    <div className="min-w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md sticky top-0 h-[70px] min-h-[70px]">
       <div className="w-9/12 h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5">
