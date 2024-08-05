@@ -43,28 +43,21 @@ export default function SearchInput() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    console.log("keywordArr", keywordArr);
     keywordArr?.forEach(async (keyword) => {
-      console.log("keyword", keyword);
       const data = await queryClient.ensureQueryData({
         queryKey: ["keywordSearch", keyword],
         queryFn: () => getKeyWord(keyword),
       });
-      console.log("search data", data);
 
       if (data) {
-        console.log("keyword data", data);
-        console.log("keywords", keywords);
         if (keywords.find((kw) => kw.id === data?.id)) return;
         const updatedKeywords = keywords.concat(data);
-        console.log("updatedKeywords", updatedKeywords);
         setKeywords(updatedKeywords);
       }
     });
   }, [keywordArr, keywords, queryClient]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("submit");
     e.preventDefault();
     /**
      * Since searching by title uses a different endpoint, we need to wipe the search params clean and just provide the query
@@ -83,14 +76,12 @@ export default function SearchInput() {
     const queryString = params.toString();
     //setKeywords([...keywords, value]);
 
-    console.log("queryString", queryString);
-
     router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
     <form
-      className="py-7 relative h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-input"
+      className="w-full lg:py-7 relative lg:h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-input"
       onSubmit={handleSubmit}
     >
       <div className="flex gap-2">
@@ -119,7 +110,7 @@ export default function SearchInput() {
         <Input
           type="text"
           placeholder={`Search movies by ${type}`}
-          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input"
+          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-xs placeholder:text-xs"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -137,7 +128,6 @@ export default function SearchInput() {
             className="text-[0.7rem] group/badge min-w-12"
             key={keyword?.id}
             onClick={() => {
-              console.log("keyword", keyword);
               const params = new URLSearchParams(searchParams.toString());
               const currentKeywords =
                 searchParams.get("with_keywords")?.split(",") ?? [];
@@ -145,7 +135,6 @@ export default function SearchInput() {
               const updatedKeywords = currentKeywords.filter(
                 (kw) => kw !== keyword?.id.toString()
               );
-              console.log("updatedKeywords", updatedKeywords);
               params.set("with_keywords", updatedKeywords.join(","));
               const updatedState = keywords.filter(
                 (kw) => kw.id !== keyword.id

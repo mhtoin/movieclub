@@ -93,7 +93,7 @@
     /*
     * Surfaces
     */
-    --background: hsl(0, 0%, 4%);
+    --background: hsl(0, 0%, 2%);
     --card: hsl(0, 0%, 10%);
     --popover: hsl(0, 0%, 12%);
     --navigation: hsl(0, 0%, 25%);
@@ -124,6 +124,8 @@
     --success: hsl(113 100% 40%);
     --error: hsl(9 100% 40%);
     --mobilenav: hsl(191 100% 39%);
+
+    @apply bg-easing-b-ex3;
   }
 
   .dark[data-accent="magenta"] {
@@ -153,7 +155,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -173,6 +175,72 @@
 @layer components {
   .menu {
     @apply relative gap-2 flex z-50 min-w-[180px] flex-col overflow-auto overscroll-contain rounded border bg-popover p-5 text-foreground;
+  }
+
+  /**
+   * Checkbox
+   */
+  .checkbox {
+    display: flex;
+    user-select: none;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    border-width: 2px;
+    border-color: var(--border);
+    background-color: var(--background);
+    padding: 1rem;
+    padding-right: 1.5rem;
+    outline-width: 4px;
+    outline-color: var(--accent);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .checkbox[data-checked="true"] {
+    border-color: var(--accent);
+  }
+
+  .checkbox[data-focus-visible] {
+    outline-style: solid;
+  }
+
+  .checkbox:where(.dark, .dark *) {
+    border-color: var(--border);
+    background-color: var(--background);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.25), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .checkbox:where(.dark, .dark *)[data-checked="true"] {
+    border-color: var(--accent);
+  }
+
+  .check {
+    display: block;
+    border-radius: 9999px;
+    background-color: var(--background);
+    padding: 0.125rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    transition-property: stroke-dashoffset;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    border: inherit;
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+  }
+
+  .check[data-checked="true"] {
+    background-color: var(--accent);
+    color: white;
+    stroke-dashoffset: 0;
+  }
+
+  .check:where(.dark, .dark *) {
+    background-color: var(--background);
+  }
+
+  .check:where(.dark, .dark *)[data-checked="true"] {
+    background-color: var(--accent);
   }
 
   ul {

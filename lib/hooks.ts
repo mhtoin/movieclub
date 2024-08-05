@@ -8,7 +8,7 @@ import {
   useQueryClient,
   useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
@@ -48,7 +48,6 @@ export const useShortlistQuery = (id: string) => {
 
 export const useSearchSuspenseInfiniteQuery = () => {
   const searchParams = useSearchParams();
-  console.log("searchParams", searchParams);
   const titleSearch = searchParams.get("query");
   const searchType = titleSearch ? "search" : "discover";
   const searchParamsString = searchParams.toString();
@@ -543,4 +542,22 @@ export const useDebounce = (callback: Function, delay: number) => {
   };
 
   return debouncedCallback;
+};
+
+export const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.matchMedia("(max-width: 768px)").matches;
+      setIsMobile(mobile);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
 };

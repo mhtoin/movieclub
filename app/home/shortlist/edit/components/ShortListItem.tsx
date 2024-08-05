@@ -55,7 +55,7 @@ export default function ShortListItem({
         width={"150"}
         className={`${
           isHovering && "opacity-50"
-        } rounded-md relative -z-10 gradient-mask-b-80 object-fill object-center w-[120px] h-auto 2xl:w-[150px]`}
+        } rounded-md relative gradient-mask-b-80 object-fill object-center w-[120px] h-auto 2xl:w-[150px]`}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>

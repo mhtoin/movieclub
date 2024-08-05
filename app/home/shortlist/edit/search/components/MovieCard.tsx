@@ -42,7 +42,7 @@ export default function MovieCard({
         width={"150"}
         className={`${
           isHovering && "opacity-50"
-        } object-fill object-center rounded-md w-[120px] h-auto 2xl:w-[150px] relative -z-10 gradient-mask-b-80`}
+        } object-fill object-center rounded-md w-[120px] h-auto 2xl:w-[150px] relative gradient-mask-b-80`}
       />
       {addMutation.isPending && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>

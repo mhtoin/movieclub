@@ -16,7 +16,7 @@ import LogicToggle from "./LogicToggle";
 interface SelectProps {
   label: string;
   options?: { label: string; value: number }[];
-  onChange?: (value: string) => void;
+  onChange: (value: string[]) => void;
 }
 
 export default function FilterSelect({
@@ -32,7 +32,14 @@ export default function FilterSelect({
 
   return (
     <div className="flex flex-col gap-1 p-1">
-      <SelectProvider value={selectedGenres} setValue={onChange}>
+      <SelectProvider
+        value={value}
+        setValue={(value) => {
+          setValue([...value]);
+          onChange([...value]);
+        }}
+        store={store}
+      >
         <SelectLabel hidden>{label}</SelectLabel>
         <Select
           store={store}
@@ -62,6 +69,7 @@ export default function FilterSelect({
               <SelectItem
                 key={option.value}
                 value={option?.value.toString()}
+                store={store}
                 className="flex cursor-default items-center gap-2 rounded p-2 !outline-[none] text-foreground hover:bg-accent/80 hover:text-accent-foreground"
               >
                 <SelectItemCheck />

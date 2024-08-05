@@ -163,5 +163,30 @@ module.exports = {
     require("tailwind-gradient-mask-image"),
     require("tailwindcss-react-aria-components"),
     require("@tailwindcss/container-queries"),
+    require("tailwind-easing-gradients")({
+      variants: ["responsive"],
+      // required
+      gradients: {
+        ex1: ["#050505", "#292929"], // must be two colors
+        ex2: { easing: "ease-in-out", steps: 5, color: ["#050505", "#163c41"] },
+        ex3: {
+          easing: "cubic-bezier(0.48, 0.3, 0.64, 1)",
+          color: ["#050505", "#050505"],
+        },
+        ex4: { easing: "steps(4, skip-none)", color: ["#4ae", "#0da"] },
+      },
+      // defaults
+      alphaDecimals: 5,
+      colorMode: "lrgb",
+      type: "linear",
+      easing: "ease", // default settings
+      colorStops: 15,
+      directions: {
+        t: "to top",
+        r: "to right",
+        b: "to bottom",
+        l: "to left",
+      },
+    }),
   ],
 };

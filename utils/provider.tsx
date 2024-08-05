@@ -54,7 +54,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
       <ReactQueryStreamedHydration>
         <PusherPovider pusher={pusher}>{children}</PusherPovider>
       </ReactQueryStreamedHydration>

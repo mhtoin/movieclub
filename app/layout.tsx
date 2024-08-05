@@ -43,17 +43,19 @@ export default function RootLayout({
       data-accent={accent ? accent.value : ""}
     >
       <body
-        className={`${inter.className} antialiased min-h-screen no-scrollbar relative`}
+        className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
       >
         <Notification />
         <NextAuthProvider>
-          <NavBar />
+          <NavBar
+            theme={theme as { value: string; name: string }}
+            accent={accent as { value: string; name: string }}
+          />
           <Toaster position="bottom-center" />
           <Providers>
             <RaffleDialog />
             {searchModal}
             {children}
-            <MobileNavbar />
           </Providers>
         </NextAuthProvider>
       </body>

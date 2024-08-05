@@ -15,8 +15,6 @@ export default function Popover({ label, children }: PopoverProps) {
   const isLarge = useMedia("(min-width: 640px)", true);
   const isOpen = popover.useState("open");
 
-  console.log(isOpen);
-
   const updatePosition = () => {
     const { popoverElement, mounted } = popover.getState();
     if (!popoverElement) return;

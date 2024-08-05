@@ -21,7 +21,6 @@ export default function KeywordCombobox({
     initialPageParam: 1,
   });
 
-  console.log("data", keywords);
   return (
     <Ariakit.ComboboxProvider
       setValue={(value) => {
@@ -38,7 +37,7 @@ export default function KeywordCombobox({
     >
       <Ariakit.Combobox
         placeholder="Search for a keyword"
-        className=" h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-sm border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+        className=" h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-xs lg:text-sm border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
       />
       <Ariakit.ComboboxPopover
         gutter={4}

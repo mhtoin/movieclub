@@ -1,9 +1,13 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useIsMobile } from "@/lib/hooks";
+import { Button } from "../ui/Button";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 export default function SearchButton() {
   const router = useRouter();
+  const isMobile = useIsMobile();
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -15,9 +19,22 @@ export default function SearchButton() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
+  if (isMobile) {
+    return (
+      <Button
+        onClick={() => router.push("/search?with_watch_providers=8")}
+        variant={"ghost"}
+        size={"icon"}
+        className="rounded-full p-0"
+      >
+        <MagnifyingGlassIcon className="w-5 h-5" />
+      </Button>
+    );
+  }
+
   return (
     <div
-      className="border py-3 px-4 flex gap-5 items-center rounded-md bg-input"
+      className="border py-2 px-4 flex gap-5 items-center rounded-md bg-input"
       onClick={() => router.push("/search?with_watch_providers=8")}
       role="button"
       tabIndex={0}

@@ -65,7 +65,6 @@ export default function ThemeSwitcher({
   };
 
   const handleAccentSwitch = async (color: string) => {
-    console.log("color", color);
     setAccentColor(color === "Default" ? "" : color.toLowerCase());
     // TODO: Server action to save to cookie
     await createThemeCookie(

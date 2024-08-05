@@ -14,6 +14,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { ProviderCheckbox } from "./ProviderCheckbox";
 import SearchInput from "./SearchInput";
+import FilterDrawer from "./FilterDrawer";
 
 export default function FilterBar() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function FilterBar() {
     [searchParams]
   );
 
-  const handleGenreSelect = (value: string) => {
+  const handleGenreSelect = (value: string[]) => {
     const query = createQueryString("with_genres", value);
     router.push(`${pathname}?${query}`, {
       scroll: false,
@@ -111,10 +112,10 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center py-10 gap-2 sticky top-0 z-50">
-      <div className="flex flex-col gap-2 border border-border/50 w-1/2 rounded-lg p-10 bg-card items-center justify-center">
+    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center lg:py-8 gap-2 z-50 border-b">
+      <div className="relative flex flex-col gap-4 pt-5 px-4 lg:w-1/2 w-full lg:p-10 lg:items-center lg:justify-center">
         <SearchInput />
-        <div className="flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2">
           <FilterSelect
             label="Genres"
             options={genreOptions}
@@ -122,7 +123,7 @@ export default function FilterBar() {
           />
           <FilterRange onChange={handleRangeSelect} />
         </div>
-        <div className="flex flex-row gap-5 m-auto justify-center">
+        <div className="flex flex-row gap-5 m-auto justify-center overflow-x-auto w-full">
           {providers?.map((provider: any) => {
             return (
               <ProviderCheckbox
@@ -135,6 +136,12 @@ export default function FilterBar() {
               />
             );
           })}
+        </div>
+        <div className="lg:hidden pt-5">
+          <FilterDrawer
+            genres={genreOptions}
+            handleRangeSelect={handleRangeSelect}
+          />
         </div>
       </div>
     </div>
