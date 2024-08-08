@@ -25,7 +25,7 @@ export default async function ShortlistLayout({
     queryFn: getAllShortlistsGroupedById,
   });
   return (
-    <div className="">
+    <div className="pt-20">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ShortlistContainer />
         {children}

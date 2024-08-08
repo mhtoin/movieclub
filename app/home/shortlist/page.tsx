@@ -1,4 +1,3 @@
-
 import AllShortlistsContainer from "./components/AllShortlistsContainer";
 
 export default async function ShortList() {
