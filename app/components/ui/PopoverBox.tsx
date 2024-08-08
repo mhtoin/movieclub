@@ -32,7 +32,7 @@ export default function Popover({ label, children }: PopoverProps) {
       <Ariakit.PopoverDisclosure
         className={cn(
           "flex flex-none h-10 select-none items-center gap-1 whitespace-nowrap rounded-lg border pl-4 pr-4 text-[1rem] leading-6 text-secondary-foreground [text-decoration-line:none] outline-[2px] outline-offset-[2px] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] justify-between",
-          "bg-secondary"
+          "border-accent"
         )}
       >
         {label}

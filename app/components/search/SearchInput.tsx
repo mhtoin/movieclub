@@ -43,6 +43,8 @@ export default function SearchInput() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    console.log("running", keywordArr);
+
     keywordArr?.forEach(async (keyword) => {
       const data = await queryClient.ensureQueryData({
         queryKey: ["keywordSearch", keyword],
@@ -55,7 +57,7 @@ export default function SearchInput() {
         setKeywords(updatedKeywords);
       }
     });
-  }, [keywordArr, keywords, queryClient]);
+  }, [keywordArr, queryClient, keywords]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,9 +81,11 @@ export default function SearchInput() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  console.log("keywords", keywords);
+
   return (
     <form
-      className="w-full lg:py-7 relative lg:h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-input"
+      className="lg:py-7 relative lg:h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-input"
       onSubmit={handleSubmit}
     >
       <div className="flex gap-2">
@@ -135,11 +139,18 @@ export default function SearchInput() {
               const updatedKeywords = currentKeywords.filter(
                 (kw) => kw !== keyword?.id.toString()
               );
-              params.set("with_keywords", updatedKeywords.join(","));
+
+              if (updatedKeywords.length === 0) {
+                params.delete("with_keywords");
+              } else {
+                params.set("with_keywords", updatedKeywords.join(","));
+              }
               const updatedState = keywords.filter(
                 (kw) => kw.id !== keyword.id
               );
+              console.log("updatedState", updatedState);
               setKeywords(updatedState);
+
               router.push(`${pathname}?${params.toString()}`);
             }}
           >

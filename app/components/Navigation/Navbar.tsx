@@ -16,7 +16,7 @@ export const NavBar = ({
 
   if (isMobile) {
     return (
-      <div className="min-w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md min-h-[70px] h-[70px] sticky top-0">
+      <div className="min-w-screen w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md min-h-[70px] h-[70px] fixed top-0">
         <div className="w-full py-5 px-1 rounded flex justify-between items-center">
           <div className="flex items-center justify-center gap-2">
             <ProfileMenu />
@@ -35,7 +35,7 @@ export const NavBar = ({
     );
   }
   return (
-    <div className="min-w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md sticky top-0 h-[70px] min-h-[70px]">
+    <div className="min-w-screen w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md fixed top-0 h-[70px] min-h-[70px]">
       <div className="w-9/12 h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5">

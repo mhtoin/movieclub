@@ -1,20 +1,17 @@
+"use client";
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
-import { Input } from "../ui/Input";
-import ProviderButton from "./ProviderButton";
-import { useFilterStore } from "@/stores/useFilterStore";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { Button } from "../ui/Button";
 import { getFilters } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import FilterSelect from "./FilterSelect";
-import Popover from "../ui/PopoverBox";
-import RangeSlider from "../ui/RangeSlider";
 import FilterRange from "./FilterRange";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { ProviderCheckbox } from "./ProviderCheckbox";
 import SearchInput from "./SearchInput";
 import FilterDrawer from "./FilterDrawer";
+import { ArrowUpDown, Filter } from "lucide-react";
+import SortMenu from "./SortMenu";
+import SortDrawer from "./SortDrawer";
 
 export default function FilterBar() {
   const router = useRouter();
@@ -112,18 +109,19 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center lg:py-8 gap-2 border-b">
-      <div className="relative flex flex-col gap-4 pt-5 px-4 lg:w-1/2 w-full lg:p-10 lg:items-center lg:justify-center">
-        <SearchInput />
-        <div className="hidden lg:flex items-center gap-2">
-          <FilterSelect
-            label="Genres"
-            options={genreOptions}
-            onChange={handleGenreSelect}
-          />
-          <FilterRange onChange={handleRangeSelect} />
+    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center gap-2 border-b sticky top-0 z-40 pb-2">
+      <div className="relative flex flex-col gap-4 px-4 lg:w-1/2 w-full lg:items-center lg:justify-center mt-10">
+        <div className="flex flex-row gap-2 items-center justify-center">
+          <div className="flex flex-row gap-2 lg:hidden">
+            <FilterDrawer
+              genres={genreOptions}
+              handleRangeSelect={handleRangeSelect}
+            />
+            <SortDrawer />
+          </div>
+          <SearchInput />
         </div>
-        <div className="flex flex-row gap-5 m-auto justify-center overflow-x-auto w-full">
+        <div className="flex flex-row gap-5 justify-center overflow-x-scroll w-full h-full p-2 no-scrollbar">
           {providers?.map((provider: any) => {
             return (
               <ProviderCheckbox
@@ -137,11 +135,22 @@ export default function FilterBar() {
             );
           })}
         </div>
-        <div className="lg:hidden pt-5">
-          <FilterDrawer
-            genres={genreOptions}
-            handleRangeSelect={handleRangeSelect}
+        <div className="hidden lg:flex items-center gap-4 pb-2">
+          <div className="flex flex-row gap-2 items-center">
+            <ArrowUpDown className="w-6 h-6 text-accent" />
+            <p className="text-sm font-medium text-accent">Sorting</p>
+            <SortMenu />
+          </div>
+          <div className="flex flex-row gap-2 items-center">
+            <Filter className="w-6 h-6 text-accent" />
+            <p className="text-sm font-medium text-accent">Filters</p>
+          </div>
+          <FilterSelect
+            label="Genres"
+            options={genreOptions}
+            onChange={handleGenreSelect}
           />
+          <FilterRange onChange={handleRangeSelect} />
         </div>
       </div>
     </div>
