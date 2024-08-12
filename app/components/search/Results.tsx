@@ -54,7 +54,7 @@ export default function Results() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
   return (
-    <div className="h-[600px] overflow-y-auto lg:h-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-5 bg-background">
+    <div className="h-[calc(100vh-210px)] w-full overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background">
       {data
         ? data?.pages?.map((page) => (
             <Fragment key={page.page}>

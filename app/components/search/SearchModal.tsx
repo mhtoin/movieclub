@@ -5,6 +5,8 @@ import Search from "./Search";
 import useWindowSize from "@/lib/getWindowSize";
 import { useIsMobile } from "@/lib/hooks";
 import SearchDrawer from "./SearchDrawer";
+import FilterBar from "./FilterBar";
+import Results from "./Results";
 
 export default function SearchModal() {
   const router = useRouter();
@@ -14,7 +16,11 @@ export default function SearchModal() {
     <SearchDrawer />
   ) : (
     <AriaDialog title="Search" onClose={() => router.back()}>
-      <Search />
+      <div className="flex flex-col justify-center items-center gap-2 rounded-lg relative">
+        <FilterBar />
+
+        <Results />
+      </div>
     </AriaDialog>
   );
 }
