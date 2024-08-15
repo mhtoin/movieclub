@@ -140,6 +140,7 @@
     --accent-foreground: hsl(0, 0%, 100%);
     --secondary: hsl(188, 9%, 52%);
     --secondary-foreground: hsl(0, 0%, 100%);
+    --card: hsl(0, 0%, 4%);
   }
 
   .dark[data-accent="purple"] {

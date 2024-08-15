@@ -7,6 +7,7 @@ import {
   useQuery,
   useQueryClient,
   useSuspenseInfiniteQuery,
+  useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useContext, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
@@ -28,6 +29,15 @@ export const useShortlistsQuery = () => {
   const { data: session } = useSession();
   //console.log('session user is', session)
   return useQuery({
+    queryKey: ["shortlists"],
+    queryFn: getAllShortlistsGroupedById,
+  });
+};
+
+export const useSuspenseShortlistsQuery = () => {
+  const { data: session } = useSession();
+  //console.log('session user is', session)
+  return useSuspenseQuery({
     queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
   });

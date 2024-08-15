@@ -50,13 +50,38 @@ export default function ShortlistContainer() {
   return (
     <div
       key={`fragment-${shortlist?.id}`}
-      className="flex flex-col justify-center items-center"
+      className="flex flex-col justify-center items-center border rounded-3xl p-5 gap-2 bg-card"
     >
       {shortlist?.requiresSelection &&
         shortlist.selectedIndex === null &&
         shortlist.selectedIndex !== 0 && <SelectionAlert />}
       <div
-        className="flex flex-row justify-center items-center gap-2 p-5"
+        key={shortlist?.id + "-container"}
+        className="flex flex-row gap-5 sm:w-auto items-center pt-5 lg:p-5 border rounded-xl bg-background"
+      >
+        {shortlist?.movies.map((movie: Movie, index: number) => {
+          return (
+            <ShortListItem
+              key={shortlist.id + movie.id}
+              movie={movie}
+              shortlistId={shortlist.id}
+              highlight={
+                shortlist.requiresSelection && shortlist.selectedIndex === index
+                  ? true
+                  : false
+              }
+              requiresSelection={shortlist.requiresSelection}
+              removeFromShortList={true}
+              index={index}
+            />
+          );
+        })}
+        {skeletons.map((skeleton) => {
+          return skeleton;
+        })}
+      </div>
+      <div
+        className="flex flex-row w-full items-center gap-2 p-5 border rounded-xl bg-background"
         key={`name-container-${shortlist?.id}`}
       >
         <Button
@@ -89,31 +114,6 @@ export default function ShortlistContainer() {
         </div>
 
         <RaffleClient />
-      </div>
-      <div
-        key={shortlist?.id + "-container"}
-        className="flex flex-row gap-5 w-2/3 sm:w-auto items-center pt-5 lg:p-5"
-      >
-        {shortlist?.movies.map((movie: Movie, index: number) => {
-          return (
-            <ShortListItem
-              key={shortlist.id + movie.id}
-              movie={movie}
-              shortlistId={shortlist.id}
-              highlight={
-                shortlist.requiresSelection && shortlist.selectedIndex === index
-                  ? true
-                  : false
-              }
-              requiresSelection={shortlist.requiresSelection}
-              removeFromShortList={true}
-              index={index}
-            />
-          );
-        })}
-        {skeletons.map((skeleton) => {
-          return skeleton;
-        })}
       </div>
     </div>
   );

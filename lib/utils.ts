@@ -5,8 +5,8 @@ import {
   previousWednesday,
   set,
 } from "date-fns";
-import { getShortList } from "./shortlist";
-import { QueryClient } from "@tanstack/react-query";
+import { getAllShortLists, getShortList } from "./shortlist";
+import { isServer, QueryClient } from "@tanstack/react-query";
 import { produce } from "immer";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -78,6 +78,15 @@ export const countByKey = (arr: any[], cb: ArgValCallback<any>) => {
   }, {});
 };
 
+function getBaseURL() {
+  if (!isServer) {
+    return "";
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return "http://localhost:3000";
+}
 export const searchMovies = async (
   page: number = 1,
   searchValue: string = "with_watch_providers=8",
@@ -226,13 +235,20 @@ export const getAllMoviesOfTheWeek = async () => {
 
 export const getAllShortlistsGroupedById =
   async (): Promise<ShortlistsById> => {
-    const response = await fetch("/api/shortlist", {
+    /*
+    const baseURL = getBaseURL();
+    const path = "/api/shortlist";
+    const response = await fetch(`${baseURL}${path}`, {
       next: {
         revalidate: 6000,
       },
     });
 
+    console.log("response", response);
+
     const data = await response.json();
+    console.log("data", data);*/
+    const data = await getAllShortLists();
     const groupedData = keyBy(data, (shortlist: any) => shortlist.id);
     return groupedData;
   };
