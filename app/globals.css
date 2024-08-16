@@ -589,6 +589,157 @@
     border-top-width: 1px;
     border-color: var(--border);
   }
+
+  .flow > * + * {
+    margin-top: var(--flow-space, 1em);
+  }
+
+  .shortlist__card {
+    display: grid;
+    place-items: center;
+    width: 50vw;
+    max-width: 10rem;
+    height: 14.125rem;
+    overflow: hidden;
+    border-radius: 0.625rem;
+    box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+  }
+
+  .shortlist__card > * {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
+  .shortlist__card__background {
+    object-fit: cover;
+    object-position: center;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .shortlist__card__content {
+    --flow-space: 0.9375rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: flex-end;
+    height: 75%;
+    width: 100%;
+    padding: 12% 1.25rem 1.875rem;
+    background: linear-gradient(
+      180deg,
+      hsla(0, 0%, 0%, 0) 0%,
+      hsla(0, 0%, 0%, 0.3) 10%,
+      hsl(0, 0%, 0%) 100%
+    );
+  }
+
+  .shortlist__card__content--container {
+    --flow-space: 1.15rem;
+  }
+
+  .shortlist__card__title {
+    position: relative;
+    width: fit-content;
+    width: -moz-fit-content;
+  }
+
+  .shortlist__card__title::after {
+    content: "";
+    position: absolute;
+    height: 0.3125rem;
+    width: calc(100% + 1.25rem);
+    bottom: calc((1.25rem - 0.5rem) * -1);
+    left: -1.25rem;
+    background-color: var(--accent);
+  }
+
+  .shortlist__card__button {
+    padding: 0.75em 1.6em;
+    width: fit-content;
+    width: -moz-fit-content; /* Prefijo necesario para Firefox  */
+    font-variant: small-caps;
+    font-weight: bold;
+    border-radius: 0.45em;
+    border: none;
+    background-color: var(--accent);
+    font-size: 1.125rem;
+    color: var(--foreground);
+  }
+
+  .shortlist__card__button:focus {
+    outline: 2px solid black;
+    outline-offset: -5px;
+  }
+
+  @media (any-hover: hover) and (any-pointer: fine) {
+    .shortlist__card__content {
+      transform: translateY(62%);
+      transition: transform 500ms ease-out;
+      transition-delay: 500ms;
+    }
+
+    .shortlist__card__title::after {
+      opacity: 0;
+      transform: scaleX(0);
+      transition: opacity 1000ms ease-in, transform 500ms ease-out;
+      transition-delay: 500ms;
+      transform-origin: right;
+    }
+
+    .shortlist__card__background {
+      transition: transform 500ms ease-in;
+    }
+
+    .shortlist__card__content--container > :not(.shortlist__card__title),
+    .shortlist__card__button {
+      opacity: 0;
+      transition: transform 500ms ease-out, opacity 500ms ease-out;
+    }
+
+    .shortlist__card:hover,
+    .shortlist__card:focus-within {
+      transform: scale(1.05);
+      transition: transform 500ms ease-in;
+    }
+
+    .shortlist__card:hover .shortlist__card__content,
+    .shortlist__card:focus-within .shortlist__card__content {
+      transform: translateY(0);
+      transition: transform 500ms ease-in;
+    }
+
+    .shortlist__card:focus-within .shortlist__card__content {
+      transition-duration: 0ms;
+    }
+
+    .shortlist__card:hover .shortlist__card__background,
+    .shortlist__card:focus-within .shortlist__card__background {
+      transform: scale(1.3);
+    }
+
+    .shortlist__card:hover
+      .shortlist__card__content--container
+      > :not(.shortlist__card__title),
+    .shortlist__card:hover .shortlist__card__button,
+    .shortlist__card:focus-within
+      .shortlist__card__content--container
+      > :not(.shortlist__card__title),
+    .shortlist__card:focus-within .shortlist__card__button {
+      opacity: 1;
+      transition: opacity 500ms ease-in;
+      transition-delay: 1000ms;
+    }
+
+    .shortlist__card:hover .shortlist__card__title::after,
+    .shortlist__card:focus-within .shortlist__card__title::after {
+      opacity: 1;
+      transform: scaleX(1);
+      transform-origin: left;
+      transition: opacity 500ms ease-in, transform 500ms ease-in;
+      transition-delay: 500ms;
+    }
+  }
 }
 
 /*

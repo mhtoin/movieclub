@@ -1,11 +1,10 @@
-import SelectionAlert from "@/app/home/shortlist/edit/components/SelectionAlert";
-import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
 import WatchlistButton from "@/app/home/shortlist/edit/components/WatchlistButton";
 import { Button } from "../../ui/Button";
 import { useUpdateReadyStateMutation } from "@/lib/hooks";
 import ItemSkeleton from "@/app/home/shortlist/edit/components/ItemSkeleton";
 import { useSession } from "next-auth/react";
 import SearchButton from "@/app/home/shortlist/edit/components/SearchButton";
+import ShortlistItem from "./ShortlistItem";
 
 export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
   const readyStateMutation = useUpdateReadyStateMutation();
@@ -29,7 +28,7 @@ export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
       >
         {shortlist?.movies.map((movie: Movie, index: number) => {
           return (
-            <ShortListItem
+            <ShortlistItem
               key={shortlist.id + movie.id}
               movie={movie}
               shortlistId={shortlist.id}

@@ -5,7 +5,7 @@ export default function SearchButton() {
   return (
     <>
       <Button variant="ghost" size="icon">
-        <Link href="/home/shortlist/edit/search">
+        <Link href="/home/search">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
