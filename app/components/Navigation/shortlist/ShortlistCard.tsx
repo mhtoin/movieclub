@@ -4,6 +4,7 @@ import { useUpdateReadyStateMutation } from "@/lib/hooks";
 import ItemSkeleton from "@/app/home/shortlist/edit/components/ItemSkeleton";
 import { useSession } from "next-auth/react";
 import SearchButton from "@/app/home/shortlist/edit/components/SearchButton";
+import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
 import ShortlistItem from "./ShortlistItem";
 
 export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
@@ -24,7 +25,7 @@ export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
     >
       <div
         key={shortlist?.id + "-container"}
-        className="flex flex-row gap-5 sm:w-auto items-center p-2 lg:p-5 border rounded-xl bg-background h-2/3"
+        className="flex flex-row flex-wrap gap-5 sm:w-auto items-center justify-center p-2 lg:p-5 border rounded-xl bg-background lg:h-3/4 lg:flex-nowrap"
       >
         {shortlist?.movies.map((movie: Movie, index: number) => {
           return (
@@ -48,7 +49,7 @@ export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
         })}
       </div>
       <div
-        className="flex flex-row w-full items-center gap-5 p-5 border rounded-xl bg-background h-1/3"
+        className="flex flex-row w-full items-center gap-5 p-5 border rounded-xl bg-background h-1/4"
         key={`name-container-${shortlist?.id}`}
       >
         <Button
