@@ -22,9 +22,16 @@ export default function ShortlistItem({
       <Image
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt="Movie poster"
-        width={180}
-        height={240}
+        width={1150}
+        height={180}
         className="shortlist__card__background"
+        priority={true}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 33vw"
+        quality={100}
+        loading="eager"
+        style={{ objectFit: "cover" }}
+        placeholder="blur"
+        blurDataURL={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
       />
       <div className="shortlist__card__content | flow">
         <div className="shortlist__card__content--container | flow">
