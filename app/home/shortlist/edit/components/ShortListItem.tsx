@@ -115,7 +115,10 @@ export default function ShortListItem({
           <div className="description-links">
             <div className="flex flex-col items-center">
               <span className="text-xs">TMDb</span>
-              <Link href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}>
+              <Link
+                href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}
+                target="_blank"
+              >
                 <Button variant="ghost" size="icon">
                   <ExternalLink />
                 </Button>
