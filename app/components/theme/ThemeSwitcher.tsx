@@ -97,7 +97,7 @@ export default function ThemeSwitcher({
           </Button>
         </DrawerTrigger>
         <DrawerContent>
-          <div className="flex flex-col gap-5 p-5 ">
+          <div className="flex flex-col gap-5 p-5 pb-10">
             <span>Theme</span>
             <div className="flex gap-5">
               <div className="flex flex-col gap-2 justify-center items-center">
