@@ -17,7 +17,9 @@ export default function SearchModal() {
   ) : (
     <AriaDialog title="Search" onClose={() => router.back()}>
       <div className="flex flex-col justify-center items-center gap-2 rounded-lg relative">
-        <FilterBar />
+        <div className="sticky z-40 top-0 w-full bg-background pb-2">
+          <FilterBar />
+        </div>
 
         <Results />
       </div>

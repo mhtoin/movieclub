@@ -54,7 +54,7 @@ export default function Results() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
   return (
-    <div className="h-[calc(100vh-210px)] w-full overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background">
+    <div className="h-[calc(100vh-210px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background">
       {data
         ? data?.pages?.map((page) => (
             <Fragment key={page.page}>
@@ -73,6 +73,8 @@ export default function Results() {
         : []}
       {hasNextPage && (
         <Button
+          variant="outline"
+          size="lg"
           className="max-w-sm m-auto"
           ref={loadMoreButtonRef}
           onClick={() => fetchNextPage()}

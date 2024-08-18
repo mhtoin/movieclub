@@ -109,7 +109,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center gap-2 border-b sticky top-0 z-40 pb-2">
+    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center gap-2 border-b z-40 pb-2">
       <div className="relative flex flex-col gap-4 px-4 lg:w-1/2 w-full lg:items-center lg:justify-center mt-10">
         <div className="flex flex-row gap-2 items-center justify-center">
           <div className="flex flex-row gap-2 lg:hidden">

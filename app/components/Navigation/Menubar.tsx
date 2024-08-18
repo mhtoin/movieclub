@@ -5,11 +5,85 @@ import { useEffect, useState } from "react";
 import MagneticNav from "./MagneticNav";
 import MenuItem from "./MenuItem";
 import { useSession } from "next-auth/react";
+import HamburgerMenu from "./HamburgerMenu";
+import NavigationMenu from "./NavigationMenu";
+import { useIsMobile } from "@/lib/hooks";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/Drawer";
+import { Filter } from "lucide-react";
+import RangeSlider from "../ui/RangeSlider";
+import { Button } from "../ui/Button";
 
 export default function Menubar() {
   const [open, setOpen] = useState(false);
-  const { data: session } = useSession();
+  const isMobile = useIsMobile();
   const menu = Ariakit.useMenuStore({ open, setOpen });
+  const { data: session } = useSession();
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            onTouchStart={() => setOpen(true)}
+          >
+            <HamburgerMenu open={open} />
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className="flex flex-col gap-4 p-5">
+            <Link href={"/home"} className="flex flex-col p-2 border-b">
+              <span className="text-foreground">Home</span>
+              <span className="menu-label">View home page</span>
+            </Link>
+            <Link href={"/dashboard"} className="flex flex-col p-2 border-b ">
+              <span className="text-foreground">Dashboard</span>
+              <span className="menu-label">View stats</span>
+            </Link>
+            <Link
+              href={"/home/shortlist"}
+              className="flex flex-col p-2 border-b"
+            >
+              <span className="text-foreground">Shortlist</span>
+              <span className="menu-label">View all shortlists</span>
+            </Link>
+            <Link
+              href={"/home/search"}
+              className="flex flex-col ml-5 p-2 border-b"
+            >
+              <span className="text-foreground">Search</span>
+              <span className="menu-label">Search for movies</span>
+            </Link>
+            <Link
+              href={"/home/shortlist/edit/watchlist"}
+              className="flex flex-col ml-5 p-2 border-b"
+            >
+              <span className="text-foreground">Watchlist</span>
+              <span className="menu-label">View your watchlist</span>
+            </Link>
+            <Link href={"/tierlists"} className="flex flex-col p-2 border-b">
+              <span className="text-foreground">Tierlists</span>
+              <span className="menu-label">View all tierlists from users</span>
+            </Link>
+            <Link
+              href={`/tierlists/${session?.user.userId}`}
+              className="flex flex-col ml-5 p-2 border-b"
+            >
+              <span className="text-foreground">Edit</span>
+              <span className="menu-label">Edit your tierlist</span>
+            </Link>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
 
   return (
     <Ariakit.MenuProvider>
@@ -18,25 +92,9 @@ export default function Menubar() {
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
       >
-        {/* Hamburger icon */}
-        <div className="flex flex-col gap-1">
-          <div
-            className={`w-6 h-1 bg-foreground rounded origin-top-left transition-all ease-in-out duration-200 ${
-              open ? "rotate-45 " : ""
-            }`}
-          />
-          <div
-            className={`w-6 h-1 bg-foreground rounded origin-center transition-transform ease-in-out duration-200 ${
-              open ? "max-w-0" : ""
-            }`}
-          ></div>
-          <div
-            className={`w-6 h-1 bg-foreground rounded origin-bottom-left transition-all ease-in-out duration-200 ${
-              open ? "-rotate-45 " : ""
-            }`}
-          ></div>
-        </div>
+        <HamburgerMenu open={open} />
       </Ariakit.MenuButton>
+
       <Ariakit.Menu
         gutter={10}
         className="menu z-[9999]"
