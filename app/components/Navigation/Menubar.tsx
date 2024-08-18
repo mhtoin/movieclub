@@ -38,7 +38,7 @@ export default function Menubar() {
           </Button>
         </DrawerTrigger>
         <DrawerContent>
-          <div className="flex flex-col gap-4 p-5">
+          <div className="flex flex-col gap-4 p-5 pb-10">
             <Link href={"/home"} className="flex flex-col p-2 border-b">
               <span className="text-foreground">Home</span>
               <span className="menu-label">View home page</span>

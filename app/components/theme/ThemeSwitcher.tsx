@@ -5,6 +5,14 @@ import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import * as Ariakit from "@ariakit/react";
 import { Label } from "react-aria-components";
 import { createThemeCookie } from "@/lib/actions/setThemeCookie";
+import { useIsMobile } from "@/lib/hooks";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTrigger,
+} from "../ui/Drawer";
+import HamburgerMenu from "../Navigation/HamburgerMenu";
 
 export default function ThemeSwitcher({
   userTheme,
@@ -16,6 +24,7 @@ export default function ThemeSwitcher({
   const [theme, setTheme] = useState<"light" | "dark" | undefined>(userTheme);
   const [accentColor, setAccentColor] = useState(userAccentColor || "");
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
   const menu = Ariakit.useMenuStore({ open, setOpen });
   const accents = [
     {
@@ -43,12 +52,14 @@ export default function ThemeSwitcher({
   useEffect(() => {
     if (document !== undefined) {
       if (!userTheme && !theme) {
-        setTheme(
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-        );
+        const newTheme = window.matchMedia("(prefers-color-scheme: dark)")
+          .matches
+          ? "dark"
+          : "light";
+        setTheme(newTheme);
+        createThemeCookie("theme", newTheme);
       }
+
       document.documentElement.classList.toggle("light", theme === "light");
       document.documentElement.classList.toggle("dark", theme === "dark");
     }
@@ -72,6 +83,67 @@ export default function ThemeSwitcher({
       color === "Default" ? "" : color.toLowerCase()
     );
   };
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            onTouchStart={() => setOpen(true)}
+          >
+            {theme === "light" ? <SunIcon /> : <MoonIcon />}
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className="flex flex-col gap-5 p-5 ">
+            <span>Theme</span>
+            <div className="flex gap-5">
+              <div className="flex flex-col gap-2 justify-center items-center">
+                <Label className="text-xs">Light</Label>
+                <Button
+                  variant={"outline"}
+                  size={"icon"}
+                  onClick={() => handleThemeSwitch("light")}
+                >
+                  <SunIcon />
+                </Button>
+              </div>
+              <div className="flex flex-col gap-2 justify-center items-center">
+                <Label className="text-xs">Dark</Label>
+                <Button
+                  variant={"outline"}
+                  size={"icon"}
+                  onClick={() => handleThemeSwitch("dark")}
+                >
+                  <MoonIcon />
+                </Button>
+              </div>
+            </div>
+            <span>Accent</span>
+            <div className="flex gap-5 flex-wrap">
+              {accents?.map((accent) => (
+                <div key={accent.label} className="flex flex-col gap-2">
+                  <Label className="text-xs">{accent.label}</Label>
+                  <Button
+                    variant={"outline"}
+                    size={"icon"}
+                    onClick={() => handleAccentSwitch(accent.label)}
+                  >
+                    <div
+                      className="w-5 h-5 rounded-full"
+                      style={{ backgroundColor: accent.color }}
+                    />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
   return (
     <Ariakit.MenuProvider>
       <Ariakit.MenuButton
