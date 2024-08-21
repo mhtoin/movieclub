@@ -46,13 +46,13 @@ export default function ShortListItem({
         width={"150"}
         className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
       />
-      <img
+      {/*<img
         src={`http://image.tmdb.org/t/p/original/${movie["backdrop_path"]}`}
         alt=""
         width={"150"}
         height={"220"}
         className={`w-auto h-[220px] 2xl:w-auto 2xl:h-[220px] secondary-img`}
-      />
+      />*/}
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
       )}

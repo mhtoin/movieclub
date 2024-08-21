@@ -846,7 +846,7 @@
     }
 
     .card:hover .primary-img {
-      opacity: 0;
+      opacity: 1;
       transition: opacity 500ms ease-in;
       transition-delay: 200ms;
     }

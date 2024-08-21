@@ -40,12 +40,12 @@ export default function MovieCard({
         width={"150"}
         className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
       />
-      <img
+      {/*<img
         src={`http://image.tmdb.org/t/p/original/${movie["backdrop_path"]}`}
         alt=""
         height={"220"}
         className={`secondary-img`}
-      />
+      />*/}
       <div className="card__content">
         <div className="card__title-container">
           <h2 className="card__title line-clamp-2">{movie.title}</h2>

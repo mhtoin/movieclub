@@ -456,6 +456,13 @@ export const useGetWatchlistQuery = (user: User) => {
   });
 };
 
+export const useSuspenseGetWatchlistQuery = (user: User) => {
+  return useSuspenseQuery({
+    queryKey: ["watchlist"],
+    queryFn: async () => getWatchlist(user),
+  });
+};
+
 export const useGetWatchProvidersQuery = () => {
   return useQuery({
     queryKey: ["watchProviders"],
