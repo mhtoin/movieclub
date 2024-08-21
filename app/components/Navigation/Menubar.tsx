@@ -23,7 +23,7 @@ export default function Menubar() {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
   const menu = Ariakit.useMenuStore({ open, setOpen });
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   if (isMobile) {
     return (

@@ -3,6 +3,8 @@ import getQueryClient from "@/lib/getQueryClient";
 import MovieCarousel from "../components/home/MovieCarousel";
 import { movieKeys } from "@/lib/movies/queries";
 import { formatISO, nextWednesday } from "date-fns";
+import { Suspense } from "react";
+import CarouselSkeleton from "../components/home/CarouselSkeleton";
 
 export default async function HomePage() {
   const queryClient = getQueryClient();
@@ -16,7 +18,9 @@ export default async function HomePage() {
       <h1 className="text-4xl font-bold text-center">
         Welcome to the Movie Club
       </h1>
-      <MovieCarousel />
+      <Suspense fallback={<CarouselSkeleton />}>
+        <MovieCarousel />
+      </Suspense>
     </div>
   );
 }
