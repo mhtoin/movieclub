@@ -702,7 +702,7 @@
   .secondary-img {
     position: absolute;
     border-radius: calc(var(--radius) - 2px);
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     opacity: 0;
   }
