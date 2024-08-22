@@ -15,7 +15,15 @@ import Link from "next/link";
 import MovieCardButton from "./MovieCardButton";
 import CheckMark from "./CheckMark";
 import { Button } from "../ui/Button";
-import { ListPlus, ListCheck, ListX, ExternalLink } from "lucide-react";
+import {
+  ListPlus,
+  ListCheck,
+  ListX,
+  ExternalLink,
+  BookmarkPlus,
+  BookmarkMinus,
+  Bookmark,
+} from "lucide-react";
 
 export default function MovieCard({
   movie,
@@ -28,12 +36,13 @@ export default function MovieCard({
 }) {
   const [isHovering, setIsHovering] = useState(false);
   const watchlistMutation = useAddToWatchlistMutation();
-  const removeMutation = useRemoveFromShortlistMutation();
-  const selectionMutation = useUpdateSelectionMutation();
   const addMutation = useAddToShortlistMutation();
   const { data: session } = useSession();
   return (
     <div className={`card`}>
+      {inWatchlist && (
+        <Bookmark className="absolute top-0 right-0 w-6 h-6 z-10 fill-accent stroke-foreground" />
+      )}
       <img
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
@@ -54,21 +63,36 @@ export default function MovieCard({
           <div className="description-actions">
             <div className="flex flex-col items-center">
               <span className="text-xs">Add</span>
-              <Button variant={"ghost"} size={"icon"}>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => {
+                  addMutation.mutate({
+                    shortlistId: session?.user?.shortlistId,
+                    movie: {
+                      ...omit(movie, ["id"]),
+                      tmdbId: movie.id,
+                    } as Movie,
+                  });
+                }}
+              >
                 <ListPlus />
               </Button>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-xs">Select</span>
-              <Button variant="ghost" size="icon">
-                <ListCheck />
-              </Button>
-            </div>
+
             {
               <div className="flex flex-col items-center">
-                <span className="text-xs">Remove</span>
-                <Button variant="ghost" size="icon">
-                  <ListX />
+                <span className="text-xs">Favorite</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    watchlistMutation.mutate({
+                      movieId: movie.id,
+                    });
+                  }}
+                >
+                  {inWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
                 </Button>
               </div>
             }
