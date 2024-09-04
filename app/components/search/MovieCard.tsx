@@ -39,7 +39,7 @@ export default function MovieCard({
   const addMutation = useAddToShortlistMutation();
   const { data: session } = useSession();
   return (
-    <div className={`card`}>
+    <div className={`moviecard`}>
       {inWatchlist && (
         <Bookmark className="absolute top-0 right-0 w-6 h-6 z-10 fill-accent stroke-foreground" />
       )}
@@ -47,25 +47,18 @@ export default function MovieCard({
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
         width={"150"}
-        className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
+        className={`w-[150px] h-auto 2xl:w-[150px]`}
       />
-      {/*<img
-        src={`http://image.tmdb.org/t/p/original/${movie["backdrop_path"]}`}
-        alt=""
-        height={"220"}
-        className={`secondary-img`}
-      />*/}
-      <div className="card__content">
-        <div className="card__title-container">
-          <h2 className="card__title line-clamp-2">{movie.title}</h2>
-        </div>
-        <div className="card__description">
-          <div className="description-actions">
+      <div className="info">
+        <h1 className="title line-clamp-2">{movie.title}</h1>
+        <p className="line-clamp-3">{movie.overview}</p>
+        <div className="flex flex-col justify-between gap-2">
+          <div className="flex flex-row gap-2">
             <div className="flex flex-col items-center">
               <span className="text-xs">Add</span>
               <Button
                 variant={"ghost"}
-                size={"icon"}
+                size={"xs"}
                 onClick={() => {
                   addMutation.mutate({
                     shortlistId: session?.user?.shortlistId,
@@ -85,7 +78,7 @@ export default function MovieCard({
                 <span className="text-xs">Favorite</span>
                 <Button
                   variant="ghost"
-                  size="icon"
+                  size="xs"
                   onClick={() => {
                     watchlistMutation.mutate({
                       movieId: movie.id,
@@ -104,7 +97,7 @@ export default function MovieCard({
                 href={`https://www.themoviedb.org/movie/${movie.id}`}
                 target="_blank"
               >
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="xs">
                   <ExternalLink />
                 </Button>
               </Link>

@@ -10,6 +10,7 @@ import RaffleDialog from "./components/RaffleDialog";
 import { NavBar } from "./components/Navigation/Navbar";
 import { Toaster } from "./components/ui/Toaster";
 import { cookies } from "next/headers";
+import ReplaceDialog from "./components/search/ReplaceDialog";
 
 export const metadata = {
   title: "movieclub",
@@ -51,9 +52,10 @@ export default function RootLayout({
             theme={theme as { value: string; name: string }}
             accent={accent as { value: string; name: string }}
           />
-          <Toaster position="bottom-center" />
+          <Toaster position="top-center" />
           <Providers>
             <RaffleDialog />
+            <ReplaceDialog />
             {searchModal}
             {children}
           </Providers>

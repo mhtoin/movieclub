@@ -24,6 +24,8 @@ import {
 import { toast } from "sonner";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 import { useSearchParams } from "next/navigation";
+import { Toast } from "@/app/components/common/Toast";
+import { useDialogStore } from "@/stores/useDialogStore";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -302,6 +304,8 @@ export const useRemoveFromShortlistMutation = () => {
 
 export const useAddToShortlistMutation = () => {
   const queryClient = useQueryClient();
+  const isOpen = useDialogStore.use.isOpen();
+  const setIsOpen = useDialogStore.use.setIsOpen();
   return useMutation({
     mutationFn: async ({
       movie,
@@ -329,8 +333,14 @@ export const useAddToShortlistMutation = () => {
         });
       });
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (error, variables) => {
+      console.log("error", error);
+
+      console.log("error isOpen", isOpen);
+      if (!isOpen) {
+        console.log("setting isOpen to true");
+        setIsOpen(true);
+      }
     },
   });
 };
