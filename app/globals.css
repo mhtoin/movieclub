@@ -933,7 +933,7 @@
     position: relative;
     overflow: hidden;
     padding: 1.5rem;
-    border-radius: calc(var(--radius) - 2px);
+    border-radius: var(--radius);
     max-height: 220px;
     max-width: 150px;
     height: 220px;
@@ -966,7 +966,6 @@
     display: block;
     width: 100%;
     height: 100%;
-    border-radius: 15px;
     background: rgba(0, 0, 0, 0.8);
     z-index: 2;
     transition: 0.5s;
@@ -981,7 +980,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    border-radius: 15px;
+    border-radius: var(--radius);
   }
 
   .moviecard .info {

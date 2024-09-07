@@ -23,7 +23,12 @@ import {
   BookmarkPlus,
   BookmarkMinus,
   Bookmark,
+  Star,
+  Users,
+  TrendingUp,
 } from "lucide-react";
+import { SiThemoviedatabase, SiImdb } from "react-icons/si";
+import { FaImdb } from "react-icons/fa";
 
 export default function MovieCard({
   movie,
@@ -39,10 +44,36 @@ export default function MovieCard({
   const addMutation = useAddToShortlistMutation();
   const { data: session } = useSession();
   return (
-    <div className={`moviecard`}>
-      {inWatchlist && (
-        <Bookmark className="absolute top-0 right-0 w-6 h-6 z-10 fill-accent stroke-foreground" />
-      )}
+    <div className={`moviecard group`}>
+      <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+        <Button
+          variant={"ghost"}
+          size={"iconXs"}
+          onClick={() => {
+            addMutation.mutate({
+              shortlistId: session?.user?.shortlistId,
+              movie: {
+                ...omit(movie, ["id"]),
+                tmdbId: movie.id,
+              } as Movie,
+            });
+          }}
+        >
+          <ListPlus />
+        </Button>
+        <Button
+          variant="ghost"
+          size="iconXs"
+          onClick={() => {
+            watchlistMutation.mutate({
+              movieId: movie.id,
+            });
+          }}
+        >
+          {inWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
+        </Button>
+      </div>
+
       <img
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
@@ -51,54 +82,35 @@ export default function MovieCard({
       />
       <div className="info">
         <h1 className="title line-clamp-2">{movie.title}</h1>
-        <p className="line-clamp-3">{movie.overview}</p>
+        <div className="flex flex-row gap-2 flex-wrap">
+          <span className="text-xs flex flex-row items-center gap-1">
+            <Star className="w-4 h-4" />
+            {movie.vote_average.toFixed(1)}
+          </span>
+          <span className="text-xs flex flex-row items-center gap-1">
+            <Users className="w-4 h-4" />
+            {movie.vote_count}
+          </span>
+          <span className="text-xs flex flex-row items-center gap-1">
+            <TrendingUp className="w-4 h-4" />
+            {movie.popularity.toFixed(1)}
+          </span>
+        </div>
         <div className="flex flex-col justify-between gap-2">
-          <div className="flex flex-row gap-2">
-            <div className="flex flex-col items-center">
-              <span className="text-xs">Add</span>
-              <Button
-                variant={"ghost"}
-                size={"xs"}
-                onClick={() => {
-                  addMutation.mutate({
-                    shortlistId: session?.user?.shortlistId,
-                    movie: {
-                      ...omit(movie, ["id"]),
-                      tmdbId: movie.id,
-                    } as Movie,
-                  });
-                }}
-              >
-                <ListPlus />
-              </Button>
-            </div>
-
-            {
-              <div className="flex flex-col items-center">
-                <span className="text-xs">Favorite</span>
-                <Button
-                  variant="ghost"
-                  size="xs"
-                  onClick={() => {
-                    watchlistMutation.mutate({
-                      movieId: movie.id,
-                    });
-                  }}
-                >
-                  {inWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
-                </Button>
-              </div>
-            }
-          </div>
+          <div className="flex flex-row gap-2"></div>
           <div className="description-links">
-            <div className="flex flex-col items-center">
-              <span className="text-xs">TMDb</span>
+            <div className="flex flex-row items-center gap-2">
               <Link
                 href={`https://www.themoviedb.org/movie/${movie.id}`}
                 target="_blank"
               >
-                <Button variant="ghost" size="xs">
-                  <ExternalLink />
+                <Button variant="ghost" size="icon">
+                  <SiThemoviedatabase className="w-6 h-6" />
+                </Button>
+              </Link>
+              <Link href={`https://www.imdb.com/title/${movie.id}`}>
+                <Button variant="ghost" size="icon">
+                  <FaImdb className="w-6 h-6" />
                 </Button>
               </Link>
             </div>

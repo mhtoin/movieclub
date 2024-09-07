@@ -57,6 +57,7 @@ model Movie {
   backdrop_path     String?     @default("")
   genre_ids         Int[]
   tmdbId            Int         @unique
+  imdbId            String?
   original_language String
   original_title    String
   overview          String
