@@ -5,6 +5,7 @@ import { omit } from "@/lib/utils";
 import {
   useAddToShortlistMutation,
   useAddToWatchlistMutation,
+  useMovieQuery,
   useRemoveFromShortlistMutation,
   useUpdateSelectionMutation,
 } from "@/lib/hooks";
@@ -29,6 +30,8 @@ import {
 } from "lucide-react";
 import { SiThemoviedatabase, SiImdb } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
+import { useQueryClient } from "@tanstack/react-query";
+import { getMovie } from "@/lib/movies/queries";
 
 export default function MovieCard({
   movie,
@@ -39,28 +42,68 @@ export default function MovieCard({
   added: boolean;
   inWatchlist: boolean;
 }) {
+  const queryClient = useQueryClient();
   const [isHovering, setIsHovering] = useState(false);
   const watchlistMutation = useAddToWatchlistMutation();
   const addMutation = useAddToShortlistMutation();
+  const removeMutation = useRemoveFromShortlistMutation();
+  const { data: movieData, status } = useMovieQuery(movie.id, isHovering);
   const { data: session } = useSession();
+
+  const prefetch = () => {
+    queryClient.prefetchQuery({
+      queryKey: ["movie", movie.id],
+      queryFn: () => getMovie(movie.id),
+      staleTime: 1000 * 60 * 60 * 24,
+      gcTime: 1000 * 60 * 60 * 24,
+    });
+  };
+
   return (
-    <div className={`moviecard group`}>
-      <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
-        <Button
-          variant={"ghost"}
-          size={"iconXs"}
-          onClick={() => {
-            addMutation.mutate({
-              shortlistId: session?.user?.shortlistId,
-              movie: {
-                ...omit(movie, ["id"]),
-                tmdbId: movie.id,
-              } as Movie,
-            });
-          }}
-        >
-          <ListPlus />
-        </Button>
+    <div
+      className={`moviecard group`}
+      onMouseEnter={() => {
+        prefetch();
+        setIsHovering(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovering(false);
+      }}
+    >
+      <div className="opacity-0 group-hover:opacity-80  backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+        {added ? (
+          <Button
+            variant={"ghost"}
+            size={"iconXs"}
+            onClick={() => {
+              removeMutation.mutate({
+                shortlistId: session?.user?.shortlistId,
+                movieId: movie.id,
+              });
+            }}
+            isLoading={addMutation.isPending}
+          >
+            <ListCheck />
+          </Button>
+        ) : (
+          <Button
+            variant={"ghost"}
+            size={"iconXs"}
+            onClick={() => {
+              addMutation.mutate({
+                shortlistId: session?.user?.shortlistId,
+                movie: {
+                  ...omit(movie, ["id"]),
+                  tmdbId: movie.id,
+                  imdbId: movieData?.imdb_id,
+                } as Movie,
+              });
+            }}
+            isLoading={addMutation.isPending}
+          >
+            <ListPlus />
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="iconXs"
@@ -69,6 +112,7 @@ export default function MovieCard({
               movieId: movie.id,
             });
           }}
+          isLoading={watchlistMutation.isPending}
         >
           {inWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
         </Button>
@@ -108,8 +152,12 @@ export default function MovieCard({
                   <SiThemoviedatabase className="w-6 h-6" />
                 </Button>
               </Link>
-              <Link href={`https://www.imdb.com/title/${movie.id}`}>
-                <Button variant="ghost" size="icon">
+              <Link href={`https://www.imdb.com/title/${movieData?.imdb_id}`}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  isLoading={status === "pending"}
+                >
                   <FaImdb className="w-6 h-6" />
                 </Button>
               </Link>

@@ -71,7 +71,7 @@ export default function ShortlistContainer() {
                   : false
               }
               requiresSelection={shortlist.requiresSelection}
-              removeFromShortList={true}
+              removeFromShortList={shortlist?.id === session?.user?.shortlistId}
               index={index}
             />
           );

@@ -26,6 +26,7 @@ import { useRaffleStore } from "@/stores/useRaffleStore";
 import { useSearchParams } from "next/navigation";
 import { Toast } from "@/app/components/common/Toast";
 import { useDialogStore } from "@/stores/useDialogStore";
+import { getMovie } from "./movies/queries";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -55,6 +56,14 @@ export const useShortlistQuery = (id: string) => {
       return await response.json();
     },
     enabled: !!id,
+  });
+};
+
+export const useMovieQuery = (id: number, enabled: boolean) => {
+  return useQuery({
+    queryKey: ["movie", id],
+    queryFn: async () => getMovie(id),
+    enabled: !!id && enabled,
   });
 };
 
@@ -237,6 +246,9 @@ export const useAddToWatchlistMutation = () => {
 
       return await response.json();
     },
+    onSuccess: () => {
+      toast.success("Movie added to watchlist");
+    },
   });
 };
 
@@ -278,7 +290,7 @@ export const useRemoveFromShortlistMutation = () => {
       movieId,
       shortlistId,
     }: {
-      movieId: string;
+      movieId: string | number;
       shortlistId: string;
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}`, {
@@ -289,6 +301,7 @@ export const useRemoveFromShortlistMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
+      toast.success("Movie removed from shortlist");
       queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
         return produce(oldData, (draft) => {
           draft[variables.shortlistId].movies = data.movies;
@@ -327,6 +340,7 @@ export const useAddToShortlistMutation = () => {
       }
     },
     onSuccess: (data, variables) => {
+      toast.success("Movie added to shortlist");
       queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
         return produce(oldData, (draft) => {
           draft[variables.shortlistId].movies = data.movies;

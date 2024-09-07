@@ -57,20 +57,18 @@ export default function ShortListItem({
         highlight ? "border-accent border-b-4 transition-all duration-700" : ""
       }`}
     >
-      {requiresSelection && (
+      {requiresSelection && shortlistId === session?.user?.shortlistId && (
         <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
           <Button
             variant={"ghost"}
             size={"iconSm"}
             onClick={() => {
-              addMutation.mutate({
+              selectionMutation.mutate({
                 shortlistId: session?.user?.shortlistId,
-                movie: {
-                  ...omit(movie, ["id"]),
-                  tmdbId: movie.id,
-                } as Movie,
+                selectedIndex: index!,
               });
             }}
+            isLoading={selectionMutation.isPending}
           >
             {highlight ? (
               <TicketCheck className="w-5 h-5" />
@@ -81,21 +79,38 @@ export default function ShortListItem({
         </div>
       )}
       <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
-        <Button
-          variant={"ghost"}
-          size={"iconXs"}
-          onClick={() => {
-            addMutation.mutate({
-              shortlistId: session?.user?.shortlistId,
-              movie: {
-                ...omit(movie, ["id"]),
-                tmdbId: movie.id,
-              } as Movie,
-            });
-          }}
-        >
-          <ListPlus />
-        </Button>
+        {removeFromShortList ? (
+          <Button
+            variant={"ghost"}
+            size={"iconXs"}
+            onClick={() => {
+              removeMutation.mutate({
+                shortlistId: session?.user?.shortlistId,
+                movieId: movie.id!,
+              });
+            }}
+            isLoading={removeMutation.isPending}
+          >
+            <ListX />
+          </Button>
+        ) : (
+          <Button
+            variant={"ghost"}
+            size={"iconXs"}
+            onClick={() => {
+              addMutation.mutate({
+                shortlistId: session?.user?.shortlistId,
+                movie: {
+                  ...omit(movie, ["id"]),
+                  tmdbId: movie.tmdbId,
+                } as Movie,
+              });
+            }}
+            isLoading={addMutation.isPending}
+          >
+            <ListPlus />
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="iconXs"
@@ -104,6 +119,7 @@ export default function ShortListItem({
               movieId: movie.tmdbId,
             });
           }}
+          isLoading={watchlistMutation.isPending}
         >
           {true ? <BookmarkMinus /> : <BookmarkPlus />}
         </Button>

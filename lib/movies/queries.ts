@@ -45,3 +45,15 @@ export const getKeyWord = async (id: string) => {
   });
   return await res.json();
 };
+
+export const getMovie = async (id: number) => {
+  const res = await fetch(`https://api.themoviedb.org/3/movie/${id}`, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+    },
+  });
+  return await res.json();
+};
