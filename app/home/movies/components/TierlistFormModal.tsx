@@ -9,11 +9,15 @@ export default function TierlistFormModal({
 }) {
   return (
     <div>
-      <button className="btn" onClick={() => {
-        if (document) {
-          (document.getElementById('tierlistmodal') as HTMLFormElement).showModal()
-        }
-      }}>
+      <button
+        onClick={() => {
+          if (document) {
+            (
+              document.getElementById("tierlistmodal") as HTMLFormElement
+            ).showModal();
+          }
+        }}
+      >
         Add to tierlist
       </button>
       <dialog id="tierlistmodal" className="modal">
@@ -24,7 +28,7 @@ export default function TierlistFormModal({
 
           <div className="modal-action">
             {/* if there is a button in form, it will close the modal */}
-            <button className="btn">Close</button>
+            <button>Close</button>
           </div>
         </form>
       </dialog>

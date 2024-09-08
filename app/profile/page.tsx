@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { saveProfile } from "./actions/action";
 import { useTransition } from "react";
 import { useGetTMDBSession } from "@/lib/hooks";
+import { Button } from "../components/ui/Button";
 
 export default function Profile() {
   let [isPending, startTransition] = useTransition();
@@ -50,7 +51,10 @@ export default function Profile() {
     const { success, request_token } = await res.json();
 
     if (success && request_token) {
-      let redirectUrl = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://movieclub-seven.vercel.app";
+      let redirectUrl =
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://movieclub-seven.vercel.app";
       window.location.href = `https://www.themoviedb.org/authenticate/${request_token}?redirect_to=${redirectUrl}/profile`;
     }
   };
@@ -81,11 +85,7 @@ export default function Profile() {
           TMDB Account Settings
         </summary>
         <div className="collapse-content flex flex-col items-center gap-5">
-          <button
-            className="btn btn-success"
-            onClick={handleClick}
-            disabled={sessionId && accountId}
-          >
+          <Button onClick={handleClick} disabled={sessionId && accountId}>
             Link TMDB account
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@ export default function Profile() {
                 />
               </g>
             </svg>
-          </button>
+          </Button>
           <input
             type="text"
             placeholder="TMDB Account ID - link by pressing the above button"
@@ -118,8 +118,7 @@ export default function Profile() {
           />
         </div>
       </details>
-      <div
-        className="btn"
+      <Button
         onClick={() =>
           startTransition(() =>
             saveProfile({
@@ -130,7 +129,7 @@ export default function Profile() {
         }
       >
         Save
-      </div>
+      </Button>
     </div>
   );
 }

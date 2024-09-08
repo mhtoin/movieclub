@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  findMovieDate,
-  getAllMoviesOfTheWeek,
-  sortByISODate,
-} from "@/lib/utils";
+import { sortByISODate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   Carousel,
@@ -14,19 +10,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/app/components/ui/Carousel";
-import { MovieHero } from "@/app/home/components/MovieHero";
 import { Card, CardContent } from "../ui/Card";
-import {
-  format,
-  formatISO,
-  isWednesday,
-  nextWednesday,
-  previousWednesday,
-  set,
-} from "date-fns";
+import { formatISO, isWednesday, nextWednesday } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import { flushSync } from "react-dom";
-import { MovieDatePicker } from "@/app/home/components/MovieDatePicker";
 import { toast } from "sonner";
 import Image from "next/image";
 import { DatePicker } from "./DatePicker";

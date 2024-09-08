@@ -6,14 +6,17 @@ import {
   useMutationState,
   useQuery,
   useQueryClient,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
 import {
   getAllShortlistsGroupedById,
+  getShortlist,
   getWatchProviders,
   getWatchlist,
   groupBy,
@@ -21,6 +24,11 @@ import {
 } from "./utils";
 import { toast } from "sonner";
 import { useRaffleStore } from "@/stores/useRaffleStore";
+import { useSearchParams } from "next/navigation";
+import { Toast } from "@/app/components/common/Toast";
+import { useDialogStore } from "@/stores/useDialogStore";
+import { getMovie } from "./movies/queries";
+import { replaceShortlistItem } from "./actions/replaceShortlistItem";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -31,25 +39,67 @@ export const useShortlistsQuery = () => {
   });
 };
 
+export const useSuspenseShortlistsQuery = () => {
+  const { data: session } = useSession();
+  //console.log('session user is', session)
+  return useSuspenseQuery({
+    queryKey: ["shortlists"],
+    queryFn: getAllShortlistsGroupedById,
+  });
+};
+
 export const useShortlistQuery = (id: string) => {
   return useQuery({
     queryKey: ["shortlist", id],
-    queryFn: async () => {
-      const response = await fetch(`/api/shortlist/${id}`, {
-        cache: "no-store",
-      });
-      return await response.json();
-    },
+    queryFn: () => getShortlist(id),
     enabled: !!id,
   });
 };
 
+export const useMovieQuery = (id: number, enabled: boolean) => {
+  return useQuery({
+    queryKey: ["movie", id],
+    queryFn: async () => getMovie(id),
+    enabled: !!id && enabled,
+  });
+};
+
+export const useSearchSuspenseInfiniteQuery = () => {
+  const searchParams = useSearchParams();
+  const titleSearch = searchParams.get("query");
+  const searchType = titleSearch ? "search" : "discover";
+  const searchParamsString = searchParams.toString();
+
+  /**
+   * If there is a title, we need to use a whole different endpoint to search for movies
+   * instead of using the discover endpoint, since that does not support title search
+   */
+
+  return useSuspenseInfiniteQuery({
+    queryKey: [
+      "search",
+      searchParams ? searchParamsString : "with_watch_providers=8",
+    ],
+    queryFn: async ({ pageParam }) =>
+      searchMovies(pageParam, searchParamsString, searchType),
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages: totalPages } = lastPage;
+
+      return page < totalPages ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
+  });
+};
+
 export const useSearchInfiniteQuery = () => {
-  const searchValue = useFilterStore.use.searchValue();
-  //console.log('search value is', searchValue)
+  const searchParams = useSearchParams().toString();
+
   return useInfiniteQuery({
-    queryKey: ["search", searchValue],
-    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchValue),
+    queryKey: [
+      "search",
+      searchParams ? searchParams : "with_watch_providers=8",
+    ],
+    queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage;
 
@@ -193,6 +243,9 @@ export const useAddToWatchlistMutation = () => {
 
       return await response.json();
     },
+    onSuccess: () => {
+      toast.success("Movie added to watchlist");
+    },
   });
 };
 
@@ -234,7 +287,7 @@ export const useRemoveFromShortlistMutation = () => {
       movieId,
       shortlistId,
     }: {
-      movieId: string;
+      movieId: string | number;
       shortlistId: string;
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}`, {
@@ -245,6 +298,7 @@ export const useRemoveFromShortlistMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
+      toast.success("Movie removed from shortlist");
       queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
         return produce(oldData, (draft) => {
           draft[variables.shortlistId].movies = data.movies;
@@ -260,6 +314,9 @@ export const useRemoveFromShortlistMutation = () => {
 
 export const useAddToShortlistMutation = () => {
   const queryClient = useQueryClient();
+  const isOpen = useDialogStore.use.isOpen();
+  const setIsOpen = useDialogStore.use.setIsOpen();
+  const setMovie = useDialogStore.use.setMovie();
   return useMutation({
     mutationFn: async ({
       movie,
@@ -281,14 +338,60 @@ export const useAddToShortlistMutation = () => {
       }
     },
     onSuccess: (data, variables) => {
+      toast.success("Movie added to shortlist");
       queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
         return produce(oldData, (draft) => {
           draft[variables.shortlistId].movies = data.movies;
         });
       });
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (error, variables) => {
+      console.log("error", error);
+
+      console.log("error isOpen", isOpen);
+      if (!isOpen) {
+        console.log("setting isOpen to true");
+        console.log("variables", variables.movie);
+        setIsOpen(true);
+        setMovie(variables.movie);
+      }
+    },
+  });
+};
+
+export const useReplaceShortlistMutation = () => {
+  const queryClient = useQueryClient();
+  const setIsOpen = useDialogStore.use.setIsOpen();
+  const setMovie = useDialogStore.use.setMovie();
+  return useMutation({
+    mutationFn: async ({
+      replacedMovie,
+      replacingWithMovie,
+      shortlistId,
+    }: {
+      replacedMovie: Movie; // always guaranteed to be of type Movie
+      replacingWithMovie: Movie;
+      shortlistId: string;
+    }) => {
+      return await replaceShortlistItem(
+        replacedMovie,
+        replacingWithMovie,
+        shortlistId
+      );
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].movies = data.movies.map((movie) => ({
+            ...movie,
+            watchDate: movie.watchDate || undefined,
+            imdbId: movie.imdbId || undefined,
+          }));
+        });
+      });
+      toast.success("Movie replaced in shortlist");
+      setIsOpen(false);
+      setMovie(null);
     },
   });
 };
@@ -414,6 +517,13 @@ export const useGetWatchlistQuery = (user: User) => {
   });
 };
 
+export const useSuspenseGetWatchlistQuery = (user: User) => {
+  return useSuspenseQuery({
+    queryKey: ["watchlist"],
+    queryFn: async () => getWatchlist(user),
+  });
+};
+
 export const useGetWatchProvidersQuery = () => {
   return useQuery({
     queryKey: ["watchProviders"],
@@ -510,4 +620,22 @@ export const useDebounce = (callback: Function, delay: number) => {
   };
 
   return debouncedCallback;
+};
+
+export const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.matchMedia("(max-width: 768px)").matches;
+      setIsMobile(mobile);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
 };

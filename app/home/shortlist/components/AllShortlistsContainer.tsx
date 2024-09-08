@@ -7,6 +7,7 @@ import ShortListItem from "../edit/components/ShortListItem";
 import ShortlistSkeleton from "./ShortlistSkeleton";
 import { range } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { Button } from "@/app/components/ui/Button";
 
 export default function AllShortlistsContainer() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
@@ -26,7 +27,7 @@ export default function AllShortlistsContainer() {
   }
 
   return (
-    <div className="flex flex-col place-items-center gap-2 overflow-hidden">
+    <div className="grid grid-cols-2 gap-5 w-full">
       {Object.values(allShortlists ?? {})?.map(
         (shortlist: Shortlist, index: number) => {
           const movies = (shortlist?.movies as Movie[]) || [];
@@ -38,59 +39,22 @@ export default function AllShortlistsContainer() {
               : [];
           if (shortlist.id !== session?.user?.shortlistId) {
             return (
-              <Fragment key={`fragment-${shortlist.id}`}>
+              <div
+                key={`fragment-${shortlist?.id}`}
+                className="flex flex-col justify-center items-center border rounded-3xl p-5 gap-2 bg-card"
+              >
                 <div
-                  className="flex flex-row m-2 justify-center place-items-center "
-                  key={`name-container-${shortlist.id}`}
+                  key={shortlist?.id + "-container"}
+                  className="flex flex-row gap-5 sm:w-auto items-center pt-5 lg:p-5 border rounded-xl bg-background"
                 >
-                  <div
-                    className={`avatar mr-5 flex justify-center w-8 2xl:w-12`}
-                    key={`avatar-${shortlist.userId}`}
-                  >
-                    <div
-                      className={`w-12 rounded-full ring ring-offset-base-200 ring-offset-2 ${
-                        shortlist.isReady ? "ring-success" : "ring-error"
-                      } `}
-                      key={`avatar-ring ${shortlist.userId}`}
-                    >
-                      <img
-                        src={shortlist?.user?.image}
-                        alt=""
-                        key={`profile-img-${shortlist.userId}`}
-                        className={`${
-                          shortlist.participating ? "opacity-100" : "opacity-20"
-                        } rounded-full`}
-                      />
-                    </div>
-                  </div>
-                  <h1
-                    key={shortlist.id + "-title"}
-                    className="text-xl max-w-[40px]"
-                  >
-                    {index == 0
-                      ? shortlist.user.name + "burner"
-                      : shortlist.user.name}
-                  </h1>
-                </div>
-                <div
-                  key={shortlist.id + "-container"}
-                  className="flex flex-row gap-5 w-2/3 sm:w-auto items-center pt-5 lg:p-5"
-                >
-                  {shortlist.movies.map((movie, index) => {
+                  {shortlist?.movies.map((movie: Movie, index: number) => {
                     return (
                       <ShortListItem
                         key={shortlist.id + movie.id}
                         movie={movie}
                         shortlistId={shortlist.id}
-                        highlight={
-                          shortlist.requiresSelection &&
-                          shortlist.selectedIndex === index
-                            ? true
-                            : false
-                        }
-                        requiresSelection={false}
-                        removeFromShortList={false}
                         index={index}
+                        showActions={true}
                       />
                     );
                   })}
@@ -98,7 +62,28 @@ export default function AllShortlistsContainer() {
                     return skeleton;
                   })}
                 </div>
-              </Fragment>
+                <div
+                  className="flex flex-row w-full items-center gap-5 p-5 border rounded-xl bg-background"
+                  key={`name-container-${shortlist?.id}`}
+                >
+                  <Button
+                    variant={"outline"}
+                    size={"avatar"}
+                    className={`flex justify-center ${"hover:opacity-70"} transition-colors outline ${
+                      shortlist?.isReady ? "outline-success" : "outline-error"
+                    }
+        }`}
+                    key={`avatar-${shortlist?.userId}`}
+                  >
+                    <img
+                      src={shortlist?.user?.image}
+                      alt=""
+                      key={`profile-img-${shortlist?.userId}`}
+                    />
+                  </Button>
+                  {shortlist.user.name}
+                </div>
+              </div>
             );
           }
         }

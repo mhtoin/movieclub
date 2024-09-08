@@ -16,7 +16,8 @@ export function RaffleClient() {
   return (
     <div className="hidden fixed z-50 bottom-20 right-8 sm:block">
       <Button
-        className="btn btn-circle btn-md text-2xl 2xl:btn-lg 2xl:text-4xl"
+        className="text-2xl 2xl:text-4xl rounded-full"
+        size={"iconLg"}
         onClick={() => {
           setIsLoading(true);
           setIsOpen(true);

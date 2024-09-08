@@ -10,6 +10,7 @@ declare global {
     adult: boolean;
     genre_ids: Array<number>;
     tmdbId: number;
+    imdbId?: string;
     original_language: string;
     popularity: number;
     video: boolean;
@@ -55,7 +56,8 @@ declare global {
     original_title: string;
     release_date: string;
     overview: string;
-    userId: ObjectId | string;
+    userId?: ObjectId | string;
+    imdb_id?: string;
   }
 
   interface WatchProviders {

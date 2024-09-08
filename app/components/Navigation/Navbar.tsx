@@ -1,98 +1,55 @@
 "use client";
-import Link from "next/link";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useSession } from "next-auth/react";
-import { ShortlistDropdown } from "./ShortlistDropdown";
-import { TierlistDropdown } from "./TierlistDropwdown";
-import { Button } from "../ui/Button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/app/components/ui/NavigationMenu";
-import { ListItem } from "./ListItem";
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
-export const NavBar = () => {
-  const { data: session } = useSession();
-  const isAuthenticated = !!session;
-  return (
-    <div className="min-w-screen flex items-center justify-center py-10 px-2">
-      <div className="w-full lg:w-9/12 h-[70px] p-5 border-[0.5px] rounded hidden justify-evenly items-center sm:flex border-slate-400">
-        <a className="btn btn-ghost normal-case text-xl">leffaseura</a>
-        <div className="flex flex-row justify-center items-center gap-3 w-full">
-          <Link href="/home">
-            <Button variant={"ghost"}>Home</Button>
-          </Link>
-          <Link href="/dashboard">
-            <Button variant={"ghost"}>Dashboard</Button>
-          </Link>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Shortlist</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="flex flex-col p-5 w-[300px]">
-                    <ListItem href="/home/shortlist" title="All">
-                      All shortlists
-                    </ListItem>
-                    <ListItem href="/home/shortlist/edit/search" title="Search">
-                      Search movies from differnt providers
-                    </ListItem>
-                    <ListItem
-                      href="/home/shortlist/edit/watchlist"
-                      title="Watchlist"
-                    >
-                      View your watchlist
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Tierlist</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="flex flex-col p-5 w-[300px]">
-                    <ListItem href="/tierlists" title="All tierlists">
-                      View the list of tierlists
-                    </ListItem>
-                    <ListItem
-                      href={`/tierlists/${session?.user.userId}`}
-                      title="Edit"
-                    >
-                      Edit your tierlist
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+import SearchButton from "../search/SearchButton";
+import Menubar from "./Menubar";
+import ProfileMenu from "./ProfileMenu";
+import ThemeSwitcher from "../theme/ThemeSwitcher";
+import { cookies } from "next/headers";
+import { useIsMobile } from "@/lib/hooks";
+export const NavBar = ({
+  theme,
+  accent,
+}: {
+  theme: { value: string; name: string };
+  accent: { value: string; name: string };
+}) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <div className="min-w-screen w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md min-h-[70px] h-[70px] fixed top-0">
+        <div className="w-full py-5 px-1 rounded flex justify-between items-center">
+          <div className="flex items-center justify-center gap-2">
+            <ProfileMenu />
+            <span className="font-bold">leffaseura</span>
+          </div>
+          <div className="flex gap-2 h-full items-center">
+            <ThemeSwitcher
+              userTheme={theme?.value as "light" | "dark" | undefined}
+              userAccentColor={accent?.value}
+            />
+            <SearchButton />
+            <Menubar />
+          </div>
         </div>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger className="h-fit">
-                <Avatar>
-                  <AvatarImage src={session?.user?.image} alt="P" />
-                  <AvatarFallback>P</AvatarFallback>
-                </Avatar>
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="flex flex-col p-5 w-[200px]">
-                  <ListItem href="/profile" title="Account">
-                    View your account
-                  </ListItem>
-                  <ListItem href="/api/auth/signout" title="Sign out">
-                    Sign out of the application
-                  </ListItem>
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
+      </div>
+    );
+  }
+  return (
+    <div className="min-w-screen w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md fixed top-0 h-[70px] min-h-[70px]">
+      <div className="w-2/3 h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
+        {/**Right side */}
+        <div className="flex items-center justify-center gap-5">
+          {<Menubar />}
+          <span className="font-bold">leffaseura</span>
+        </div>
+        <div className="flex gap-10 h-full items-center">
+          <SearchButton />
+          <ThemeSwitcher
+            userTheme={theme?.value as "light" | "dark" | undefined}
+            userAccentColor={accent?.value}
+          />
+          <ProfileMenu />
+        </div>
       </div>
     </div>
   );

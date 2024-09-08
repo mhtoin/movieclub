@@ -16,7 +16,7 @@ export default async function Tierlists() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="flex flex-col items-center gap-10 pt-20">
       <h1 className="text-2xl font-bold">Tierlists</h1>
       <div>
         {!usersWithTierlist.includes(session?.user.userId) && (

@@ -1,12 +1,7 @@
-const {
-  violet,
-  blackA,
-  mauve,
-  green,
-  gray,
-  slate,
-} = require("@radix-ui/colors");
 const { fontFamily } = require("tailwindcss/defaultTheme");
+
+const mix = (name) =>
+  `color-mix(in hsl, var(${name}), transparent calc(100% - 100% * <alpha-value>))`;
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -19,53 +14,58 @@ module.exports = {
     container: {
       center: true,
       padding: "2rem",
+    },
+    extend: {
       screens: {
         "2xl": "1400px",
       },
-    },
-    extend: {
       colors: {
-        ...mauve,
-        ...gray,
-        ...slate,
-        ...violet,
-        ...green,
-        ...blackA,
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: mix("--border"),
+        input: mix("--input"),
+        ring: mix("--ring"),
+        background: mix("--background"),
+        foreground: mix("--foreground"),
+        navigation: mix("--navigation"),
+        popoverbg: mix("204 4% 16%"),
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: mix("--primary"),
+          foreground: mix("--primary-foreground"),
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: mix("--secondary"),
+          foreground: mix("--secondary-foreground"),
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: mix("--destructive"),
+          foreground: mix("--destructive-foreground"),
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: mix("--muted"),
+          foreground: mix("--muted-foreground"),
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: mix("--accent"),
+          foreground: mix("--accent-foreground"),
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: mix("--popover"),
+          foreground: mix("--popover-foreground"),
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: mix("--card"),
+          foreground: mix("--card-foreground"),
         },
         mobilenav: {
-          DEFAULT: "hsl(var(--mobilenav))",
+          DEFAULT: mix("--mobilenav"),
+        },
+        ring: {
+          DEFAULT: mix("--ring"),
+        },
+        success: {
+          DEFAULT: mix("--success"),
+        },
+        error: {
+          DEFAULT: mix("--error"),
         },
       },
       borderRadius: {
@@ -159,12 +159,34 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/typography"),
-    require("daisyui"),
     require("tailwindcss-animate"),
     require("tailwind-gradient-mask-image"),
+    require("tailwindcss-react-aria-components"),
+    require("@tailwindcss/container-queries"),
+    require("tailwind-easing-gradients")({
+      variants: ["responsive"],
+      // required
+      gradients: {
+        ex1: ["#050505", "#292929"], // must be two colors
+        ex2: { easing: "ease-in-out", steps: 5, color: ["#050505", "#163c41"] },
+        ex3: {
+          easing: "cubic-bezier(0.48, 0.3, 0.64, 1)",
+          color: ["#050505", "#050505"],
+        },
+        ex4: { easing: "steps(4, skip-none)", color: ["#4ae", "#0da"] },
+      },
+      // defaults
+      alphaDecimals: 5,
+      colorMode: "lrgb",
+      type: "linear",
+      easing: "ease", // default settings
+      colorStops: 15,
+      directions: {
+        t: "to top",
+        r: "to right",
+        b: "to bottom",
+        l: "to left",
+      },
+    }),
   ],
-  daisyui: {
-    themes: ["dark"],
-    base: false,
-  },
 };

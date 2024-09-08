@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createNewTierlist } from "../actions/actions";
-
-
+import { Button } from "@/app/components/ui/Button";
 
 export default function Page() {
   const [tiers, setTiers] = useState(
@@ -16,7 +15,10 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items center">
-      <form className="flex flex-col items-center gap-4" action={createNewTierlist}>
+      <form
+        className="flex flex-col items-center gap-4"
+        action={createNewTierlist}
+      >
         {tiers?.map((tier) => {
           return (
             <>
@@ -30,7 +32,7 @@ export default function Page() {
             </>
           );
         })}
-        <button className="btn btn-success" type="submit">Create</button>
+        <Button type="submit">Create</Button>
       </form>
     </div>
   );
