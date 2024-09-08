@@ -22,11 +22,6 @@ const inter = Inter({
   display: "swap",
 });
 
-const monaspace = localFont({
-  src: "../assets/fonts/MonaspaceNeonVarVF[wght,wdth,slnt].woff2",
-  display: "swap",
-});
-
 export default function RootLayout({
   searchModal,
   children,
