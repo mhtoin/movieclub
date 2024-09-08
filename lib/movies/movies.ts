@@ -278,6 +278,21 @@ export async function chooseMovieOfTheWeek() {
 
   await updateChosenMovie(movieObject!, chosen!.user.id);
 
+  const raffle = await prisma.raffle.create({
+    data: {
+      participants: {
+        connect: shortlists.map((shortlist) => ({ id: shortlist.user.id })),
+      },
+      movies: {
+        connect: movies.map((movie) => ({ id: movie.movie.id })),
+      },
+      winningMovieID: chosen?.movie.id!,
+      date: formatISO(new Date(), {
+        representation: "date",
+      }),
+    },
+  });
+
   for (let item of shortlists) {
     await updateShortlistState(false, item.id);
 

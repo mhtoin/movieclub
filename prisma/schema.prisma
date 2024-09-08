@@ -75,6 +75,8 @@ model Movie {
   ratings           Rating[]
   reviews           Review[]
   userId            String?     @db.ObjectId
+  raffles           Raffle[]    @relation(fields: [raffleIDs], references: [id])
+  raffleIDs         String[]    @db.ObjectId
 
   @@map("movies")
 }
@@ -124,6 +126,18 @@ model User {
   ratings       Rating[]
   reviews       Review[]
   movies        Movie[]
+  Raffle        Raffle[]    @relation(fields: [raffleIDs], references: [id])
+  raffleIDs     String[]    @db.ObjectId
 
   @@map("users")
+}
+
+model Raffle {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  participants   User[]   @relation(fields: [participantIDs], references: [id])
+  participantIDs String[] @db.ObjectId
+  movieIDs       String[] @db.ObjectId
+  movies         Movie[]  @relation(fields: [movieIDs], references: [id])
+  winningMovieID String   @db.ObjectId
+  date           String
 }
