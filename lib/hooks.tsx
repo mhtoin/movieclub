@@ -385,6 +385,7 @@ export const useReplaceShortlistMutation = () => {
           draft[variables.shortlistId].movies = data.movies.map((movie) => ({
             ...movie,
             watchDate: movie.watchDate || undefined,
+            imdbId: movie.imdbId || undefined,
           }));
         });
       });
