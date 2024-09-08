@@ -45,14 +45,10 @@ export default function Results() {
       observer.unobserve(el);
     };
   }, [hasNextPage, fetchNextPage]);
+  const shortlistMovieIds =
+    shortlist?.movies?.map((movie: Movie) => movie.tmdbId) ?? [];
 
-  const shortlistMovieIds = shortlist
-    ? shortlist?.movies?.map((movie: Movie) => movie.tmdbId)
-    : [];
-
-  const watchlistMovieIds = watchlist
-    ? watchlist?.map((movie: TMDBMovie) => movie.id)
-    : [];
+  const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? [];
   return (
     <div className="h-[calc(100vh-210px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background">
       {data
@@ -65,6 +61,7 @@ export default function Results() {
                     movie={movie}
                     added={shortlistMovieIds?.includes(movie.id)}
                     inWatchlist={watchlistMovieIds?.includes(movie.id)}
+                    showActions
                   />
                 );
               })}

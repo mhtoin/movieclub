@@ -16,6 +16,7 @@ import { getSession, useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
 import {
   getAllShortlistsGroupedById,
+  getShortlist,
   getWatchProviders,
   getWatchlist,
   groupBy,
@@ -27,6 +28,7 @@ import { useSearchParams } from "next/navigation";
 import { Toast } from "@/app/components/common/Toast";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { getMovie } from "./movies/queries";
+import { replaceShortlistItem } from "./actions/replaceShortlistItem";
 
 export const useShortlistsQuery = () => {
   const { data: session } = useSession();
@@ -49,12 +51,7 @@ export const useSuspenseShortlistsQuery = () => {
 export const useShortlistQuery = (id: string) => {
   return useQuery({
     queryKey: ["shortlist", id],
-    queryFn: async () => {
-      const response = await fetch(`/api/shortlist/${id}`, {
-        cache: "no-store",
-      });
-      return await response.json();
-    },
+    queryFn: () => getShortlist(id),
     enabled: !!id,
   });
 };
@@ -319,6 +316,7 @@ export const useAddToShortlistMutation = () => {
   const queryClient = useQueryClient();
   const isOpen = useDialogStore.use.isOpen();
   const setIsOpen = useDialogStore.use.setIsOpen();
+  const setMovie = useDialogStore.use.setMovie();
   return useMutation({
     mutationFn: async ({
       movie,
@@ -353,8 +351,46 @@ export const useAddToShortlistMutation = () => {
       console.log("error isOpen", isOpen);
       if (!isOpen) {
         console.log("setting isOpen to true");
+        console.log("variables", variables.movie);
         setIsOpen(true);
+        setMovie(variables.movie);
       }
+    },
+  });
+};
+
+export const useReplaceShortlistMutation = () => {
+  const queryClient = useQueryClient();
+  const setIsOpen = useDialogStore.use.setIsOpen();
+  const setMovie = useDialogStore.use.setMovie();
+  return useMutation({
+    mutationFn: async ({
+      replacedMovie,
+      replacingWithMovie,
+      shortlistId,
+    }: {
+      replacedMovie: Movie; // always guaranteed to be of type Movie
+      replacingWithMovie: Movie;
+      shortlistId: string;
+    }) => {
+      return await replaceShortlistItem(
+        replacedMovie,
+        replacingWithMovie,
+        shortlistId
+      );
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].movies = data.movies.map((movie) => ({
+            ...movie,
+            watchDate: movie.watchDate || undefined,
+          }));
+        });
+      });
+      toast.success("Movie replaced in shortlist");
+      setIsOpen(false);
+      setMovie(null);
     },
   });
 };

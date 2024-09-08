@@ -55,5 +55,5 @@ export const getMovie = async (id: number) => {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
     },
   });
-  return await res.json();
+  return (await res.json()) as TMDBMovie;
 };

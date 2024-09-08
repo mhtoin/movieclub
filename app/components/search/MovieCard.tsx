@@ -37,10 +37,12 @@ export default function MovieCard({
   movie,
   added,
   inWatchlist,
+  showActions,
 }: {
   movie: TMDBMovie;
-  added: boolean;
-  inWatchlist: boolean;
+  added?: boolean;
+  inWatchlist?: boolean;
+  showActions?: boolean;
 }) {
   const queryClient = useQueryClient();
   const [isHovering, setIsHovering] = useState(false);
@@ -70,53 +72,55 @@ export default function MovieCard({
         setIsHovering(false);
       }}
     >
-      <div className="opacity-0 group-hover:opacity-80  backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
-        {added ? (
+      {showActions && (
+        <div className="opacity-0 group-hover:opacity-80  backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+          {added ? (
+            <Button
+              variant={"ghost"}
+              size={"iconXs"}
+              onClick={() => {
+                removeMutation.mutate({
+                  shortlistId: session?.user?.shortlistId,
+                  movieId: movie.id,
+                });
+              }}
+              isLoading={addMutation.isPending}
+            >
+              <ListCheck />
+            </Button>
+          ) : (
+            <Button
+              variant={"ghost"}
+              size={"iconXs"}
+              onClick={() => {
+                addMutation.mutate({
+                  shortlistId: session?.user?.shortlistId,
+                  movie: {
+                    ...omit(movie, ["id"]),
+                    tmdbId: movie.id,
+                    imdbId: movieData?.imdb_id,
+                  } as Movie,
+                });
+              }}
+              isLoading={addMutation.isPending}
+            >
+              <ListPlus />
+            </Button>
+          )}
           <Button
-            variant={"ghost"}
-            size={"iconXs"}
+            variant="ghost"
+            size="iconXs"
             onClick={() => {
-              removeMutation.mutate({
-                shortlistId: session?.user?.shortlistId,
+              watchlistMutation.mutate({
                 movieId: movie.id,
               });
             }}
-            isLoading={addMutation.isPending}
+            isLoading={watchlistMutation.isPending}
           >
-            <ListCheck />
+            {inWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
           </Button>
-        ) : (
-          <Button
-            variant={"ghost"}
-            size={"iconXs"}
-            onClick={() => {
-              addMutation.mutate({
-                shortlistId: session?.user?.shortlistId,
-                movie: {
-                  ...omit(movie, ["id"]),
-                  tmdbId: movie.id,
-                  imdbId: movieData?.imdb_id,
-                } as Movie,
-              });
-            }}
-            isLoading={addMutation.isPending}
-          >
-            <ListPlus />
-          </Button>
-        )}
-        <Button
-          variant="ghost"
-          size="iconXs"
-          onClick={() => {
-            watchlistMutation.mutate({
-              movieId: movie.id,
-            });
-          }}
-          isLoading={watchlistMutation.isPending}
-        >
-          {inWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
-        </Button>
-      </div>
+        </div>
+      )}
 
       <img
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}

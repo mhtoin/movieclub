@@ -54,6 +54,7 @@ export default function AllShortlistsContainer() {
                         movie={movie}
                         shortlistId={shortlist.id}
                         index={index}
+                        showActions={true}
                       />
                     );
                   })}

@@ -233,6 +233,11 @@ export const getAllMoviesOfTheWeek = async () => {
   return groupedData;
 };
 
+export const getShortlist = async (id: string) => {
+  const response = await fetch(`/api/shortlist/${id}`);
+  return await response.json();
+};
+
 export const getAllShortlistsGroupedById =
   async (): Promise<ShortlistsById> => {
     /*

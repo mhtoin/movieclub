@@ -42,6 +42,7 @@ export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
               requiresSelection={shortlist.requiresSelection}
               removeFromShortList={session?.user?.userId === shortlist.userId}
               index={index}
+              showActions={true}
             />
           );
         })}

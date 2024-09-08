@@ -73,6 +73,7 @@ export default function ShortlistContainer() {
               requiresSelection={shortlist.requiresSelection}
               removeFromShortList={shortlist?.id === session?.user?.shortlistId}
               index={index}
+              showActions={true}
             />
           );
         })}

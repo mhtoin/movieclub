@@ -35,6 +35,7 @@ interface SearchResultCardProps {
   highlight?: boolean;
   requiresSelection?: boolean;
   index?: number;
+  showActions?: boolean;
 }
 
 export default function ShortListItem({
@@ -44,6 +45,7 @@ export default function ShortListItem({
   highlight,
   requiresSelection,
   index,
+  showActions,
 }: SearchResultCardProps) {
   const removeMutation = useRemoveFromShortlistMutation();
   const selectionMutation = useUpdateSelectionMutation();
@@ -57,73 +59,74 @@ export default function ShortListItem({
         highlight ? "border-accent border-b-4 transition-all duration-700" : ""
       }`}
     >
-      {requiresSelection && shortlistId === session?.user?.shortlistId && (
-        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
+      {showActions &&
+        requiresSelection &&
+        shortlistId === session?.user?.shortlistId && (
+          <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
+            <Button
+              variant={"ghost"}
+              size={"iconSm"}
+              onClick={() => {
+                selectionMutation.mutate({
+                  shortlistId: session?.user?.shortlistId,
+                  selectedIndex: index!,
+                });
+              }}
+              isLoading={selectionMutation.isPending}
+            >
+              {highlight ? (
+                <TicketCheck className="w-5 h-5" />
+              ) : (
+                <TicketPlus className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
+        )}
+      {showActions && (
+        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+          {removeFromShortList ? (
+            <Button
+              variant={"ghost"}
+              size={"iconXs"}
+              onClick={() => {
+                removeMutation.mutate({
+                  shortlistId: session?.user?.shortlistId,
+                  movieId: movie.id!,
+                });
+              }}
+              isLoading={removeMutation.isPending}
+            >
+              <ListX />
+            </Button>
+          ) : (
+            <Button
+              variant={"ghost"}
+              size={"iconXs"}
+              onClick={() => {
+                addMutation.mutate({
+                  shortlistId: session?.user?.shortlistId,
+                  movie: movie,
+                });
+              }}
+              isLoading={addMutation.isPending}
+            >
+              <ListPlus />
+            </Button>
+          )}
           <Button
-            variant={"ghost"}
-            size={"iconSm"}
+            variant="ghost"
+            size="iconXs"
             onClick={() => {
-              selectionMutation.mutate({
-                shortlistId: session?.user?.shortlistId,
-                selectedIndex: index!,
+              watchlistMutation.mutate({
+                movieId: movie.tmdbId,
               });
             }}
-            isLoading={selectionMutation.isPending}
+            isLoading={watchlistMutation.isPending}
           >
-            {highlight ? (
-              <TicketCheck className="w-5 h-5" />
-            ) : (
-              <TicketPlus className="w-5 h-5" />
-            )}
+            {true ? <BookmarkMinus /> : <BookmarkPlus />}
           </Button>
         </div>
       )}
-      <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
-        {removeFromShortList ? (
-          <Button
-            variant={"ghost"}
-            size={"iconXs"}
-            onClick={() => {
-              removeMutation.mutate({
-                shortlistId: session?.user?.shortlistId,
-                movieId: movie.id!,
-              });
-            }}
-            isLoading={removeMutation.isPending}
-          >
-            <ListX />
-          </Button>
-        ) : (
-          <Button
-            variant={"ghost"}
-            size={"iconXs"}
-            onClick={() => {
-              addMutation.mutate({
-                shortlistId: session?.user?.shortlistId,
-                movie: {
-                  ...omit(movie, ["id"]),
-                  tmdbId: movie.tmdbId,
-                } as Movie,
-              });
-            }}
-            isLoading={addMutation.isPending}
-          >
-            <ListPlus />
-          </Button>
-        )}
-        <Button
-          variant="ghost"
-          size="iconXs"
-          onClick={() => {
-            watchlistMutation.mutate({
-              movieId: movie.tmdbId,
-            });
-          }}
-          isLoading={watchlistMutation.isPending}
-        >
-          {true ? <BookmarkMinus /> : <BookmarkPlus />}
-        </Button>
-      </div>
       <img
         src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
@@ -161,7 +164,7 @@ export default function ShortListItem({
           <div className="description-links">
             <div className="flex flex-row items-center gap-2">
               <Link
-                href={`https://www.themoviedb.org/movie/${movie.id}`}
+                href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
                 target="_blank"
               >
                 <Button variant="ghost" size="icon">
