@@ -12,7 +12,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const [focusVisible, setFocusVisible] = useState(false);
     return (
       <label
-        className="checkbox"
+        className={`checkbox ${props.className}`}
         data-checked={checked}
         data-focus-visible={focusVisible || undefined}
       >

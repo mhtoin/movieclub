@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ariakit/react':
-    specifier: ^0.4.7
-    version: 0.4.7(react-dom@18.3.1)(react@18.3.1)
+    specifier: ^0.4.11
+    version: 0.4.11(react-dom@18.3.1)(react@18.3.1)
   '@auth/prisma-adapter':
     specifier: ^1.0.0
     version: 1.0.0(@prisma/client@5.16.1)
@@ -230,30 +230,30 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  /@ariakit/core@0.4.7:
-    resolution: {integrity: sha512-GUy/3ZY4kW1KdYHtMZRrRlj5FYbZTAyHlimxHI7Zs0xsC+kAzIf8lopnf67Y9IYLgEMr37KosIV7kwpkJpNs5Q==}
+  /@ariakit/core@0.4.10:
+    resolution: {integrity: sha512-mX3EabQbfVh5uTjsTJ3+gjj7KGdTNhIN0qZHJd5Z2iPUnKl9NBy23Lgu6PEskpVsKAZ3proirjguD7U9fKMs/A==}
     dev: false
 
-  /@ariakit/react-core@0.4.7(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-OogUyQ20cxkRNRuqLI05JbmpR4Lr5HwhUIqnb/sipzt6bkg/3wCXEnUAjfxg3nPjLTMjJ8+ODWmPC9JMJTW/yg==}
+  /@ariakit/react-core@0.4.11(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-i6KedWhjZkNC7tMEKO0eNjjq2HRPiHyGaBS2x2VaWwzBepoYtjyvxRXyqLJ3gaiNdlwckN1TZsRDfD+viy13IQ==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
-      '@ariakit/core': 0.4.7
+      '@ariakit/core': 0.4.10
       '@floating-ui/dom': 1.5.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       use-sync-external-store: 1.2.0(react@18.3.1)
     dev: false
 
-  /@ariakit/react@0.4.7(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-uUruuCo1M0Nj2oq1nTwDfUlVTLuoI9xeHP75EkuXX46lg5hzE5vVWbSMO1D6MCy7UwrUx2Ts4IqxdKr97suTwQ==}
+  /@ariakit/react@0.4.11(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-nLpPrmNcspqNhk4o+epsgeZfP1+Fkh4uIzNe5yrFkXolRkqHGKAxl4Hi82e0yxIBUbYbZIEwsZQQVceF1L6xrw==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
-      '@ariakit/react-core': 0.4.7(react-dom@18.3.1)(react@18.3.1)
+      '@ariakit/react-core': 0.4.11(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false

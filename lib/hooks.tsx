@@ -109,6 +109,20 @@ export const useSearchInfiniteQuery = () => {
   });
 };
 
+export const useRaffle = () => {
+  const { data: session } = useSession();
+  return useMutation({
+    mutationFn: async ({ movies }: { movies: Movie[] }) => {
+      const res = await fetch("/api/weeklyRaffle", {
+        method: "POST",
+        body: JSON.stringify({ userId: session?.user?.userId, movies }),
+      });
+      const data = await res.json();
+      return data;
+    },
+  });
+};
+
 export const useRaffleMutation = () => {
   const { data: session } = useSession();
   const setIsOpen = useRaffleStore.use.setIsOpen();

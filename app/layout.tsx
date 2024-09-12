@@ -6,11 +6,12 @@ import Notification from "./components/Notification";
 import MobileNavbar from "./home/components/MobileNavbar";
 import { NextAuthProvider } from "@/utils/NextAuthProvider";
 
-import RaffleDialog from "./components/RaffleDialog";
 import { NavBar } from "./components/Navigation/Navbar";
 import { Toaster } from "./components/ui/Toaster";
 import { cookies } from "next/headers";
 import ReplaceDialog from "./components/search/ReplaceDialog";
+import RaffleButton from "./components/raffle/RaffleButton";
+import RaffleDialog from "./components/raffle/RaffleDialog";
 
 export const metadata = {
   title: "movieclub",

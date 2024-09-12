@@ -123,7 +123,7 @@ module.exports = {
           to: { opacity: 1, transform: "translateY(0)" },
         },
         slideLeftAndFade: {
-          from: { opacity: 0, transform: "translateX(2px)" },
+          from: { opacity: 0, transform: "translateX(10px)" },
           to: { opacity: 1, transform: "translateX(0)" },
         },
       },
@@ -142,7 +142,7 @@ module.exports = {
         slideDownAndFade:
           "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideLeftAndFade:
-          "slideLeftAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
+          "slideLeftAndFade 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
