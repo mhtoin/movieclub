@@ -1,4 +1,5 @@
 import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export async function GET() {
   const { user, session } = await validateRequest();
@@ -6,7 +7,7 @@ export async function GET() {
   console.log("user", user);
 
   if (!user) {
-    return Response.redirect(new URL("/login"));
+    return redirect("/login");
   }
   return new Response(JSON.stringify(user), { status: 200 });
 }

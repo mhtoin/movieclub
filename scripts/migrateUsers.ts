@@ -5,6 +5,7 @@ async function migrateUsers() {
   const shortlists = await prisma.shortlist.findMany();
 
   console.log(users);
+  console.log(shortlists);
 
   for (const shortlist of shortlists) {
     let updated = await prisma.user.update({
