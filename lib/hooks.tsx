@@ -14,6 +14,7 @@ import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
 import { useFilterStore } from "@/stores/useFilterStore";
+import { User as DatabaseUser } from "@prisma/client";
 import {
   getAllShortlistsGroupedById,
   getShortlist,
@@ -30,9 +31,18 @@ import { useDialogStore } from "@/stores/useDialogStore";
 import { getMovie } from "./movies/queries";
 import { replaceShortlistItem } from "./actions/replaceShortlistItem";
 
+export const useValidateSession = () => {
+  return useQuery({
+    queryKey: ["me"],
+    queryFn: async () => {
+      const response = await fetch("/api/auth/user");
+      const data: DatabaseUser = await response.json();
+      return data;
+    },
+  });
+};
+
 export const useShortlistsQuery = () => {
-  const { data: session } = useSession();
-  //console.log('session user is', session)
   return useQuery({
     queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
@@ -40,8 +50,6 @@ export const useShortlistsQuery = () => {
 };
 
 export const useSuspenseShortlistsQuery = () => {
-  const { data: session } = useSession();
-  //console.log('session user is', session)
   return useSuspenseQuery({
     queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
@@ -523,15 +531,19 @@ export const usePusher = (
   }, []);
 };
 
-export const useGetWatchlistQuery = (user: User) => {
+export const useGetWatchlistQuery = (user: DatabaseUser | null) => {
   return useQuery({
     queryKey: ["watchlist"],
-    queryFn: async () => getWatchlist(user),
+    queryFn: async () => {
+      if (user) {
+        return getWatchlist(user);
+      }
+    },
     enabled: !!user && !!user.sessionId && !!user.accountId,
   });
 };
 
-export const useSuspenseGetWatchlistQuery = (user: User) => {
+export const useSuspenseGetWatchlistQuery = (user: DatabaseUser) => {
   return useSuspenseQuery({
     queryKey: ["watchlist"],
     queryFn: async () => getWatchlist(user),

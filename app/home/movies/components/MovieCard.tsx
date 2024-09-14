@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Review from "./Review";
 import TierlistFormModal from "./TierlistFormModal";
 import { format } from "date-fns";
+import { User } from "lucia";
 
 export default function MovieCard({
   movie,
@@ -12,7 +13,7 @@ export default function MovieCard({
 }: {
   movie: MovieOfTheWeek;
   tierlist: Tierlist;
-  user: User;
+  user: User | null;
 }) {
   const [colorPalette, setColorPalette] = useState<any>([]);
   const movieInTierlist = tierlist.tiers.find((tier) => {

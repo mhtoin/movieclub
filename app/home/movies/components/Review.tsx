@@ -1,16 +1,17 @@
 "use client";
 import { useState, useTransition } from "react";
 import { createReviewAction } from "../actions/actions";
+import { User } from "lucia";
 
 export default function Review({
   movie,
   user,
 }: {
   movie: MovieOfTheWeek;
-  user: User;
+  user: User | null;
 }) {
   const reviewedByUser = movie.reviews.find(
-    (review) => review.userId === user.userId
+    (review) => review.userId === user?.id
   );
   const [value, setValue] = useState(reviewedByUser?.content);
   let [isPending, startTransition] = useTransition();
@@ -20,9 +21,14 @@ export default function Review({
       <div>
         {movie.reviews.map((movieItem, index) => {
           return (
-            <div key={movieItem.id} className={`chat chat-${index % 2 === 0 ? "start" : "end"}`}>  
+            <div
+              key={movieItem.id}
+              className={`chat chat-${index % 2 === 0 ? "start" : "end"}`}
+            >
               <div className="chat-header py-1">{movieItem.user.name}</div>
-              <div className={`chat-bubble chat-bubble-primary`}>{movieItem.content}</div>
+              <div className={`chat-bubble chat-bubble-primary`}>
+                {movieItem.content}
+              </div>
             </div>
           );
         })}

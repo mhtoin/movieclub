@@ -21,17 +21,17 @@ model Tierlists {
 }
 
 model Account {
-  id                String @id @default(auto()) @map("_id") @db.ObjectId
-  access_token      String
-  expires_at        Int
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  access_token      String?
+  expires_at        Int?
   provider          String
-  providerAccountId String
-  refresh_token     String
-  scope             String
-  token_type        String
-  type              String
-  userId            String @db.ObjectId
-  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerAccountId String  @unique
+  refresh_token     String?
+  scope             String?
+  token_type        String?
+  type              String?
+  userId            String  @db.ObjectId
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -113,24 +113,32 @@ enum Trailer {
 }
 
 model User {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  email         String      @unique
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  email         String     @unique
   /// Could not determine type: the field only had null or empty values in the sample set.
   emailVerified DateTime?
   image         String
   name          String
   sessionId     String?
   accountId     Int?
-  shortlists    Shortlist[]
+  shortlist     Shortlist?
   accounts      Account[]
   tierlist      Tierlists?
   ratings       Rating[]
   reviews       Review[]
   movies        Movie[]
-  Raffle        Raffle[]    @relation(fields: [raffleIDs], references: [id])
-  raffleIDs     String[]    @db.ObjectId
+  Raffle        Raffle[]   @relation(fields: [raffleIDs], references: [id])
+  raffleIDs     String[]   @db.ObjectId
+  sessions      Session[]
 
   @@map("users")
+}
+
+model Session {
+  id        String   @id @map("_id")
+  userId    String   @db.ObjectId
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Raffle {

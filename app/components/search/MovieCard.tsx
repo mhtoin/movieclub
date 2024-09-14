@@ -1,29 +1,21 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { omit } from "@/lib/utils";
 import {
   useAddToShortlistMutation,
   useAddToWatchlistMutation,
   useMovieQuery,
   useRemoveFromShortlistMutation,
-  useUpdateSelectionMutation,
+  useValidateSession,
 } from "@/lib/hooks";
 import { useState } from "react";
-import BookmarkButton from "./BookmarkButton";
-import AddButton from "./AddButton";
 import Link from "next/link";
-import MovieCardButton from "./MovieCardButton";
-import CheckMark from "./CheckMark";
 import { Button } from "../ui/Button";
 import {
   ListPlus,
   ListCheck,
-  ListX,
-  ExternalLink,
   BookmarkPlus,
   BookmarkMinus,
-  Bookmark,
   Star,
   Users,
   TrendingUp,
@@ -50,7 +42,7 @@ export default function MovieCard({
   const addMutation = useAddToShortlistMutation();
   const removeMutation = useRemoveFromShortlistMutation();
   const { data: movieData, status } = useMovieQuery(movie.id, isHovering);
-  const { data: session } = useSession();
+  const { data: user } = useValidateSession();
 
   const prefetch = () => {
     queryClient.prefetchQuery({
@@ -80,7 +72,7 @@ export default function MovieCard({
               size={"iconXs"}
               onClick={() => {
                 removeMutation.mutate({
-                  shortlistId: session?.user?.shortlistId,
+                  shortlistId: user?.shortlistId ?? "",
                   movieId: movie.id,
                 });
               }}
@@ -94,7 +86,7 @@ export default function MovieCard({
               size={"iconXs"}
               onClick={() => {
                 addMutation.mutate({
-                  shortlistId: session?.user?.shortlistId,
+                  shortlistId: user?.shortlistId ?? "",
                   movie: {
                     ...omit(movie, ["id"]),
                     tmdbId: movie.id,

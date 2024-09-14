@@ -4,6 +4,7 @@ import MovieCard from "../components/MovieCard";
 import { getTierlist } from "@/lib/tierlists";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
+import { validateRequest } from "@/lib/auth";
 
 async function staticParams() {
   const movies = await getAllMoviesOfTheWeek();
@@ -25,13 +26,13 @@ export default async function MoviePage({
   params: { id: string };
 }) {
   const movie = await getMovie(params.id);
-  const session = await getServerSession(authOptions);
-  const tierlist = await getTierlist(session?.user.userId);
+  const { user } = await validateRequest();
+  const tierlist = await getTierlist(user?.id ?? "");
 
   if (movie) {
     return (
       <div className="flex flex-col items-center justify-normal p-10 gap-10">
-        <MovieCard movie={movie} tierlist={tierlist} user={session?.user} />
+        <MovieCard movie={movie} tierlist={tierlist} user={user} />
       </div>
     );
   }

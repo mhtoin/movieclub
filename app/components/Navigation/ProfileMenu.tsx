@@ -1,30 +1,29 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
-import { Button } from "../ui/Button";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 import MenuItem from "./MenuItem";
 import { Link } from "react-aria-components";
 import { useState } from "react";
+import { useValidateSession } from "@/lib/hooks";
+import { Loader2 } from "lucide-react";
 
 export default function ProfileMenu() {
-  const { data: session } = useSession();
+  const { data: user, status } = useValidateSession();
   const [open, setOpen] = useState(false);
   const menu = Ariakit.useMenuStore({ open, setOpen });
   return (
     <Ariakit.MenuProvider>
       <Ariakit.MenuButton
-        className="relative w-12 h-12"
+        className="relative w-12 h-12 border rounded-full overflow-hidden flex items-center justify-center"
         store={menu}
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
       >
-        <Image
-          src={session?.user?.image || ""}
-          alt="P"
-          fill
-          className="rounded-full border border-border/50"
-        />
+        {user && status === "success" ? (
+          <Image src={user?.image || ""} alt="P" fill />
+        ) : (
+          <Loader2 className="animate-spin" />
+        )}
       </Ariakit.MenuButton>
       <Ariakit.Menu
         className="menu z-[9999]"

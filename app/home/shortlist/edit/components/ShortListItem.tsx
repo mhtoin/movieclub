@@ -7,13 +7,11 @@ import {
   useAddToWatchlistMutation,
   useRemoveFromShortlistMutation,
   useUpdateSelectionMutation,
+  useValidateSession,
 } from "@/lib/hooks";
-import { omit } from "@/lib/utils";
 import {
   BookmarkMinus,
   BookmarkPlus,
-  ExternalLink,
-  ListCheck,
   ListPlus,
   ListX,
   Star,
@@ -24,7 +22,6 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState, useTransition } from "react";
 import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";
 
@@ -51,7 +48,7 @@ export default function ShortListItem({
   const selectionMutation = useUpdateSelectionMutation();
   const watchlistMutation = useAddToWatchlistMutation();
   const addMutation = useAddToShortlistMutation();
-  const { data: session } = useSession();
+  const { data: user } = useValidateSession();
 
   return (
     <div
@@ -61,14 +58,14 @@ export default function ShortListItem({
     >
       {showActions &&
         requiresSelection &&
-        shortlistId === session?.user?.shortlistId && (
+        shortlistId === user?.shortlistId && (
           <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
             <Button
               variant={"ghost"}
               size={"iconSm"}
               onClick={() => {
                 selectionMutation.mutate({
-                  shortlistId: session?.user?.shortlistId,
+                  shortlistId: user?.shortlistId || "",
                   selectedIndex: index!,
                 });
               }}
@@ -90,7 +87,7 @@ export default function ShortListItem({
               size={"iconXs"}
               onClick={() => {
                 removeMutation.mutate({
-                  shortlistId: session?.user?.shortlistId,
+                  shortlistId: user?.shortlistId || "",
                   movieId: movie.id!,
                 });
               }}
@@ -104,7 +101,7 @@ export default function ShortListItem({
               size={"iconXs"}
               onClick={() => {
                 addMutation.mutate({
-                  shortlistId: session?.user?.shortlistId,
+                  shortlistId: user?.shortlistId || "",
                   movie: movie,
                 });
               }}
@@ -133,13 +130,6 @@ export default function ShortListItem({
         width={"150"}
         className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
       />
-      {/*<img
-        src={`http://image.tmdb.org/t/p/original/${movie["backdrop_path"]}`}
-        alt=""
-        width={"150"}
-        height={"220"}
-        className={`w-auto h-[220px] 2xl:w-auto 2xl:h-[220px] secondary-img`}
-      />*/}
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
       )}

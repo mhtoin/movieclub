@@ -1,6 +1,6 @@
 import WatchlistButton from "@/app/home/shortlist/edit/components/WatchlistButton";
 import { Button } from "../../ui/Button";
-import { useUpdateReadyStateMutation } from "@/lib/hooks";
+import { useUpdateReadyStateMutation, useValidateSession } from "@/lib/hooks";
 import ItemSkeleton from "@/app/home/shortlist/edit/components/ItemSkeleton";
 import { useSession } from "next-auth/react";
 import SearchButton from "@/app/home/shortlist/edit/components/SearchButton";
@@ -8,9 +8,13 @@ import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
 import ShortlistItem from "./ShortlistItem";
 import { MessageCircleWarning } from "lucide-react";
 
-export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
+export default function ShortlistCard({
+  shortlist,
+}: {
+  shortlist: Shortlist | null;
+}) {
   const readyStateMutation = useUpdateReadyStateMutation();
-  const { data: session } = useSession();
+  const { data: user } = useValidateSession();
   const movies = (shortlist?.movies as Movie[]) || [];
   const skeletons =
     movies?.length < 3
@@ -18,7 +22,7 @@ export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
           <ItemSkeleton key={index} />
         ))
       : [];
-  const isEditable = shortlist && shortlist.userId === session?.user?.userId;
+  const isEditable = shortlist && shortlist.userId === user?.id;
   return (
     <div
       key={`fragment-${shortlist?.id}`}
@@ -40,7 +44,7 @@ export default function ShortlistCard({ shortlist }: { shortlist: Shortlist }) {
                   : false
               }
               requiresSelection={shortlist.requiresSelection}
-              removeFromShortList={session?.user?.userId === shortlist.userId}
+              removeFromShortList={user?.id === shortlist.userId}
               index={index}
               showActions={true}
             />

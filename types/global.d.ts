@@ -178,4 +178,19 @@ declare global {
   type ShortlistsById = {
     [x: string]: Shortlist;
   };
+
+  type DiscordUser = {
+    id: string;
+    username: string;
+    avatar: string;
+    avatar_decoration: string;
+    discriminator: string;
+    public_flags: number;
+    verified?: boolean;
+    email?: string;
+    flags: number;
+    banner: string;
+    banner_color: string;
+    accent_color: number;
+  };
 }

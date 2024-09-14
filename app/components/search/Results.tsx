@@ -3,21 +3,21 @@ import {
   useShortlistQuery,
   useGetWatchlistQuery,
   useSearchSuspenseInfiniteQuery,
+  useValidateSession,
 } from "@/lib/hooks";
-import { useSession } from "next-auth/react";
 import { Fragment, useEffect, useRef } from "react";
 import { Button } from "@/app/components/ui/Button";
 import MovieCard from "./MovieCard";
 
 export default function Results() {
-  const { data: session } = useSession();
+  const { data: user } = useValidateSession();
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
   const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
-    session?.user?.shortlistId
+    user?.shortlistId ?? ""
   );
   const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(
-    session?.user
+    user ? user : null
   );
 
   const { data, hasNextPage, fetchNextPage } = useSearchSuspenseInfiniteQuery();
@@ -50,7 +50,7 @@ export default function Results() {
 
   const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? [];
   return (
-    <div className="h-[calc(100vh-210px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background">
+    <div className="h-[calc(100vh-210px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background justify-items-center">
       {data
         ? data?.pages?.map((page) => (
             <Fragment key={page.page}>

@@ -15,7 +15,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col justify-center place-items-center gap-5 pt-20">
-      <h1 className="text-4xl font-bold text-center">
+      <h1 className="text-2xl font-bold text-center">
         Welcome to the Movie Club
       </h1>
       <Suspense fallback={<CarouselSkeleton />}>

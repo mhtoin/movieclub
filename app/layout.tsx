@@ -44,12 +44,12 @@ export default function RootLayout({
       >
         <Notification />
         <NextAuthProvider>
-          <NavBar
-            theme={theme as { value: string; name: string }}
-            accent={accent as { value: string; name: string }}
-          />
-          <Toaster position="top-center" />
           <Providers>
+            <NavBar
+              theme={theme as { value: string; name: string }}
+              accent={accent as { value: string; name: string }}
+            />
+            <Toaster position="top-center" />
             <RaffleDialog />
             <ReplaceDialog />
             {searchModal}

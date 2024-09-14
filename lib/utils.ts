@@ -11,6 +11,7 @@ import { produce } from "immer";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useCallback } from "react";
+import { User as DatabaseUser } from "@prisma/client";
 
 type ArgValCallback<T> = (arg0: T) => any;
 
@@ -122,7 +123,7 @@ export const getUserShortlist = async (id: string) => {
   //return shortlist;
 };
 
-export const getWatchlist = async (user: User) => {
+export const getWatchlist = async (user: DatabaseUser) => {
   let pagesLeft = true;
   let page = 1;
   const movies = [];
@@ -240,19 +241,6 @@ export const getShortlist = async (id: string) => {
 
 export const getAllShortlistsGroupedById =
   async (): Promise<ShortlistsById> => {
-    /*
-    const baseURL = getBaseURL();
-    const path = "/api/shortlist";
-    const response = await fetch(`${baseURL}${path}`, {
-      next: {
-        revalidate: 6000,
-      },
-    });
-
-    console.log("response", response);
-
-    const data = await response.json();
-    console.log("data", data);*/
     const data = await getAllShortLists();
     const groupedData = keyBy(data, (shortlist: any) => shortlist.id);
     return groupedData;
