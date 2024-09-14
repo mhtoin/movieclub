@@ -50,7 +50,7 @@ export default function RootLayout({
               accent={accent as { value: string; name: string }}
             />
             <Toaster position="top-center" />
-            <RaffleDialog />
+
             <ReplaceDialog />
             {searchModal}
             {children}
