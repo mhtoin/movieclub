@@ -13,7 +13,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
-import { useFilterStore } from "@/stores/useFilterStore";
 import { User as DatabaseUser } from "@prisma/client";
 import {
   getAllShortlistsGroupedById,
@@ -26,7 +25,6 @@ import {
 import { toast } from "sonner";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 import { useSearchParams } from "next/navigation";
-import { Toast } from "@/app/components/common/Toast";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { getMovie } from "./movies/queries";
 import { replaceShortlistItem } from "./actions/replaceShortlistItem";
@@ -37,6 +35,7 @@ export const useValidateSession = () => {
     queryFn: async () => {
       const response = await fetch("/api/auth/user");
       const data: DatabaseUser = await response.json();
+      console.log("data", data);
       return data;
     },
   });
