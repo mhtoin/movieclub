@@ -9,6 +9,7 @@ import { Suspense } from "react";
 
 export default function Shortlists() {
   const { data: user } = useValidateSession();
+  console.log("user", user);
 
   const {
     data: allShortlists,
@@ -18,7 +19,7 @@ export default function Shortlists() {
   const userShortlist = user?.shortlistId
     ? allShortlists?.[user?.shortlistId]
     : null;
-
+  console.log("userShortlist", userShortlist);
   return (
     <div className="pt-20 flex flex-col justify-center items-center">
       <main className="flex flex-col items-center gap-5 overflow-hidden p-2">

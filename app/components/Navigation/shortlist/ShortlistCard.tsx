@@ -23,6 +23,7 @@ export default function ShortlistCard({
         ))
       : [];
   const isEditable = shortlist && shortlist.userId === user?.id;
+
   return (
     <div
       key={`fragment-${shortlist?.id}`}

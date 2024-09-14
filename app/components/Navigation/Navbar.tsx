@@ -3,7 +3,6 @@ import SearchButton from "../search/SearchButton";
 import Menubar from "./Menubar";
 import ProfileMenu from "./ProfileMenu";
 import ThemeSwitcher from "../theme/ThemeSwitcher";
-import { cookies } from "next/headers";
 import { useIsMobile } from "@/lib/hooks";
 export const NavBar = ({
   theme,

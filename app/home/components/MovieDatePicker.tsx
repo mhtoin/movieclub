@@ -1,6 +1,6 @@
-import { getAllMoviesOfTheWeek } from "@/lib/utils";
+import { getAllMoviesOfTheWeek } from "@/lib/movies/queries";
 import { useQuery } from "@tanstack/react-query";
-import { format, isWednesday, parse } from "date-fns";
+import { isWednesday } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -15,12 +15,16 @@ export const MovieDatePicker = ({
     queryKey: ["movieOfTheWeek"],
     queryFn: getAllMoviesOfTheWeek,
   });
-  
+
   const isDateMovieDate = (date: Date) => {
     return isWednesday(date);
   };
 
-  const highletedDates = data ? Object.values<MovieOfTheWeek>(data).map((movie: MovieOfTheWeek) => new Date(movie.movieOfTheWeek!)) : [];
+  const highletedDates = data
+    ? Object.values<MovieOfTheWeek>(data).map(
+        (movie: MovieOfTheWeek) => new Date(movie.movieOfTheWeek!)
+      )
+    : [];
   return (
     <DatePicker
       showIcon

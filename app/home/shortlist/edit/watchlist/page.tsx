@@ -1,9 +1,9 @@
 import WatchlistContainer from "./components/WatchlistContainer";
 import getQueryClient from "@/lib/getQueryClient";
 import { getServerSession } from "next-auth";
-import { getUserShortlist, getWatchlist } from "@/lib/utils";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
+import { getUserShortlist, getWatchlist } from "@/lib/movies/queries";
 
 export default async function Watchlist() {
   const queryClient = getQueryClient();

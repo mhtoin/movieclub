@@ -1,6 +1,4 @@
 import SearchModal from "@/app/components/search/SearchModal";
-import { searchMovies } from "@/lib/utils";
-import { getQueryClient } from "@/utils/provider";
 
 import {
   dehydrate,

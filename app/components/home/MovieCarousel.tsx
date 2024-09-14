@@ -17,8 +17,7 @@ import { flushSync } from "react-dom";
 import { toast } from "sonner";
 import Image from "next/image";
 import { DatePicker } from "./DatePicker";
-import { movieKeys } from "@/lib/movies/queries";
-
+import { movieKeys } from "@/lib/movies/movieKeys";
 const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
 

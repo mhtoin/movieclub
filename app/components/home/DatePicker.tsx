@@ -4,7 +4,7 @@ import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format, isWednesday, set } from "date-fns";
 
-import { cn, getAllMoviesOfTheWeek } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/app/components/ui/Button";
 import { Calendar } from "@/app/components/ui/Calendar";
 import {
@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/app/components/ui/Popover";
 import { useQuery } from "@tanstack/react-query";
+import { getAllMoviesOfTheWeek } from "@/lib/movies/queries";
 
 export function DatePicker({
   selected,

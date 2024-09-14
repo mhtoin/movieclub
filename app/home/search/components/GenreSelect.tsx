@@ -1,13 +1,11 @@
-import { getFilters } from "@/lib/utils";
+import { getFilters } from "@/lib/movies/queries";
 import { useFilterStore } from "@/stores/useFilterStore";
 import { useQuery } from "@tanstack/react-query";
-import { add, set } from "date-fns";
-import { useState } from "react";
 import Select from "react-select";
 
 export default function GenreSelect() {
-  const genres = useFilterStore.use.genres()
-  const setGenres = useFilterStore.use.setGenres()
+  const genres = useFilterStore.use.genres();
+  const setGenres = useFilterStore.use.setGenres();
   const { data: genreOptions, status } = useQuery({
     queryKey: ["genres"],
     queryFn: getFilters,
@@ -21,7 +19,7 @@ export default function GenreSelect() {
         defaultValue={genres}
         options={genreOptions}
         onChange={(selections) => {
-          setGenres([...selections])
+          setGenres([...selections]);
         }}
         styles={{
           control: (baseStyles, state) => ({

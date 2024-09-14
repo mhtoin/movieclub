@@ -1,6 +1,5 @@
 "use client";
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
-import { getFilters } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import FilterSelect from "./FilterSelect";
 import FilterRange from "./FilterRange";
@@ -12,6 +11,7 @@ import FilterDrawer from "./FilterDrawer";
 import { ArrowUpDown, Filter } from "lucide-react";
 import SortMenu from "./SortMenu";
 import SortDrawer from "./SortDrawer";
+import { getFilters } from "@/lib/movies/queries";
 
 export default function FilterBar() {
   const router = useRouter();

@@ -1,12 +1,12 @@
+"server only";
 import prisma from "./prisma";
-import { ObjectId, OptionalId } from "mongodb";
-import { Prisma } from "@prisma/client";
 import { getAdditionalInfo } from "./tmdb";
 import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
 import Pusher from "pusher";
 import { getMovie } from "./movies/queries";
-import { omit } from "./utils";
+import { keyBy, omit } from "./utils";
+import { db } from "./db";
 
 export const revalidate = 10;
 
@@ -76,13 +76,20 @@ export async function getShortList(id: string) {
 }
 
 export async function getAllShortLists() {
-  return await prisma.shortlist.findMany({
+  return await db.shortlist.findMany({
     include: {
       movies: true,
       user: true,
     },
   });
 }
+
+export const getAllShortlistsGroupedById =
+  async (): Promise<ShortlistsById> => {
+    const data = await getAllShortLists();
+    const groupedData = keyBy(data, (shortlist: any) => shortlist.id);
+    return groupedData;
+  };
 
 export async function findOrCreateShortList(userId: string) {
   const shortlist = await prisma.shortlist.upsert({

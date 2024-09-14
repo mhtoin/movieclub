@@ -9,7 +9,7 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { getSession, useSession } from "next-auth/react";
@@ -19,9 +19,8 @@ import {
   getShortlist,
   getWatchProviders,
   getWatchlist,
-  groupBy,
   searchMovies,
-} from "./utils";
+} from "./movies/queries";
 import { toast } from "sonner";
 import { useRaffleStore } from "@/stores/useRaffleStore";
 import { useSearchParams } from "next/navigation";
@@ -664,3 +663,39 @@ export const useIsMobile = () => {
 
   return isMobile;
 };
+export function useCreateQueryString(searchParams: URLSearchParams) {
+  return useCallback(
+    (
+      name: string,
+      value: string[] | string | number[],
+      isRange: boolean = false
+    ) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (isRange) {
+        const min = `${name}.gte`;
+        const max = `${name}.lte`;
+        params.set(min, value[0].toString());
+        params.set(max, value[1].toString());
+        return params.toString();
+      }
+
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          params.delete(name);
+          return params.toString();
+        }
+        params.set(name, value.join(","));
+        return params.toString();
+      } else {
+        if (value === "") {
+          params.delete(name);
+          return params.toString();
+        }
+        params.set(name, value);
+        return params.toString();
+      }
+    },
+    [searchParams]
+  );
+}

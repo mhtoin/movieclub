@@ -122,6 +122,7 @@ model User {
   sessionId     String?
   accountId     Int?
   shortlist     Shortlist?
+  shortlistId   String?    @db.ObjectId
   accounts      Account[]
   tierlist      Tierlists?
   ratings       Rating[]

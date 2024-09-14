@@ -1,6 +1,5 @@
 import getQueryClient from "@/lib/getQueryClient";
-import Filters from "./components/Filters";
-import { getFilters, getWatchProviders, searchMovies } from "@/lib/utils";
+import { searchMovies } from "@/lib/movies/queries";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
 export default async function SearchLayout({

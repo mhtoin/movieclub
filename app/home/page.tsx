@@ -1,10 +1,10 @@
 export const revalidate = 0;
 import getQueryClient from "@/lib/getQueryClient";
 import MovieCarousel from "../components/home/MovieCarousel";
-import { movieKeys } from "@/lib/movies/queries";
 import { formatISO, nextWednesday } from "date-fns";
 import { Suspense } from "react";
 import CarouselSkeleton from "../components/home/CarouselSkeleton";
+import { movieKeys } from "@/lib/movies/movieKeys";
 
 export default async function HomePage() {
   const queryClient = getQueryClient();
