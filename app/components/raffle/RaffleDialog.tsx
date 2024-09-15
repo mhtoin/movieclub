@@ -1,11 +1,7 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
 import { Button } from "../ui/Button";
-import {
-  useRaffle,
-  useRaffleMutation,
-  useSuspenseShortlistsQuery,
-} from "@/lib/hooks";
+import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Dices } from "lucide-react";
 import { shuffle } from "@/lib/utils";
@@ -16,20 +12,39 @@ export default function RaffleDialog() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [count, setCount] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const { data: allShortlists } = useSuspenseShortlistsQuery();
+  const { data: allShortlists, status } = useShortlistsQuery();
+
+  console.log("allShortlists in dialog", allShortlists);
 
   const [movies, setMovies] = useState<Movie[]>(
-    Object?.entries(allShortlists)?.flatMap(([shortlistId, shortlist]) => {
-      return shortlist?.movies?.map((movie) => {
-        return {
-          ...movie,
-          user: shortlist?.user,
-        };
-      });
-    }) || []
+    (allShortlists &&
+      Object?.entries(allShortlists)?.flatMap(([shortlistId, shortlist]) => {
+        return shortlist?.movies?.map((movie) => {
+          return {
+            ...movie,
+            user: shortlist?.user,
+          };
+        });
+      })) ||
+      []
   );
-
   const { data, mutate: raffle } = useRaffle();
+
+  useEffect(() => {
+    if (allShortlists && movies.length === 0 && status === "success") {
+      const movieArr = Object?.entries(allShortlists)?.flatMap(
+        ([shortlistId, shortlist]) => {
+          return shortlist?.movies?.map((movie) => {
+            return {
+              ...movie,
+              user: shortlist?.user,
+            };
+          });
+        }
+      );
+      setMovies(movieArr);
+    }
+  }, [movies, status]);
 
   const nextIndex = useCallback(() => {
     setCurrentIndex((currentIndex + 1) % movies.length);
@@ -39,11 +54,11 @@ export default function RaffleDialog() {
     setCurrentIndex((currentIndex - 1 + movies.length) % movies.length);
   };
 
-  const users = Object.entries(allShortlists).map(
-    ([shortlistId, shortlist]) => {
-      return shortlist?.user;
-    }
-  );
+  const users = allShortlists
+    ? Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
+        return shortlist?.user;
+      })
+    : [];
 
   const distanceToChosenIndex = useMemo(() => {
     return Math.abs(data?.chosenIndex - currentIndex);
@@ -103,7 +118,7 @@ export default function RaffleDialog() {
             {users.map((user) => {
               return (
                 <div
-                  key={`avatar-${user?.userId}`}
+                  key={`avatar-${user?.id}`}
                   className="flex flex-col gap-5 items-center justify-center"
                 >
                   <span
@@ -117,12 +132,12 @@ export default function RaffleDialog() {
                     size={"avatarSm"}
                     className={`flex justify-center ${"hover:opacity-70"} transition-colors outline outline-success
           }`}
-                    key={`avatar-${user?.userId}`}
+                    key={`avatar-${user?.id}`}
                   >
                     <img
                       src={user?.image}
                       alt=""
-                      key={`profile-img-${user?.userId}`}
+                      key={`profile-img-${user?.id}`}
                     />
                   </Button>
                   <ParticipationButton defaultChecked={true} />

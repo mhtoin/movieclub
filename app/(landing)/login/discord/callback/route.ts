@@ -24,7 +24,6 @@ export async function GET(request: Request): Promise<Response> {
     );
 
     const discordUser: DiscordUser = await discordUserResponse.json();
-    console.log("discordUser", discordUser);
 
     const existingUser = await db?.account.findUnique({
       where: {
@@ -35,8 +34,6 @@ export async function GET(request: Request): Promise<Response> {
         user: true,
       },
     });
-
-    console.log("existingUser", existingUser);
 
     if (existingUser) {
       const session = await lucia.createSession(existingUser.userId, {});

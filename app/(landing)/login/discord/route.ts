@@ -8,7 +8,6 @@ export async function GET(): Promise<Response> {
     scopes: ["identify", "email", "guilds"],
   });
 
-  console.log("url", url);
   cookies().set("discord_oauth_state", state, {
     path: "/",
     secure: process.env.NODE_ENV === "production",

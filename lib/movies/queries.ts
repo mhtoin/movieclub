@@ -253,12 +253,12 @@ export function findMovieDate(
 
 export async function getAllShortlistsGroupedById(): Promise<ShortlistsById> {
   const fetchUrl = `${getBaseURL()}/api/shortlist`;
-  console.log("fetchUrl", fetchUrl);
+  //console.log("fetchUrl", fetchUrl);
   const response = await fetch(fetchUrl);
-  console.log("response", response.body);
+  //console.log("response", response.body);
   try {
     const data: Shortlist[] = await response.json();
-    console.log("data", data);
+    //console.log("data", data);
     const groupedData: ShortlistsById = keyBy(
       data,
       (shortlist: any) => shortlist.id

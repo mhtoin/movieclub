@@ -43,8 +43,6 @@ export default function SearchInput() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    console.log("running", keywordArr);
-
     keywordArr?.forEach(async (keyword) => {
       const data = await queryClient.ensureQueryData({
         queryKey: ["keywordSearch", keyword],

@@ -5,8 +5,6 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const { user, session } = await validateRequest();
 
-  console.log("user", user);
-
   if (!user) {
     return NextResponse.json(
       { ok: false, message: "Not authenticated" },

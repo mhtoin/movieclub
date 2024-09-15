@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     const shortlists = await getAllShortLists();
-    console.log("shortlists", shortlists);
+
     return NextResponse.json(shortlists, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
