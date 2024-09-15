@@ -1,28 +1,33 @@
 "use client";
-import { useSession } from "next-auth/react";
+
 import ItemSkeleton from "../edit/components/ItemSkeleton";
 import SelectionAlert from "../edit/components/SelectionAlert";
-import { Fragment, useTransition } from "react";
 import SearchButton from "../edit/components/SearchButton";
 import WatchlistButton from "../edit/components/WatchlistButton";
 import ShortListItem from "../edit/components/ShortListItem";
-import { useShortlistsQuery, useUpdateReadyStateMutation } from "@/lib/hooks";
+import {
+  useShortlistsQuery,
+  useUpdateReadyStateMutation,
+  useValidateSession,
+} from "@/lib/hooks";
 import { RaffleClient } from "../../../components/RaffleClient";
 import { Button } from "@/app/components/ui/Button";
 
 export default function ShortlistContainer() {
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   //const { data: shortlist, status: shortlistStatus } = useShortlistQuery(session?.user?.shortlistId)
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
   const readyStateMutation = useUpdateReadyStateMutation();
-  const shortlist = allShortlists?.[session?.user?.shortlistId];
+  const shortlist = session?.shortlistId
+    ? allShortlists?.[session?.shortlistId]
+    : null;
 
   if (status === "pending" && !shortlist) {
     return (
       <div className="flex flex-col justify-center place-items-center">
         <div
           className="flex flex-row justify-center items-center gap-2 p-5"
-          key={`name-container-${session?.user?.shortlistId}`}
+          key={`name-container-${session?.shortlistId}`}
         >
           <div className="h-12 w-12 rounded-full bg-primary border"></div>
           <div>
@@ -71,7 +76,7 @@ export default function ShortlistContainer() {
                   : false
               }
               requiresSelection={shortlist.requiresSelection}
-              removeFromShortList={shortlist?.id === session?.user?.shortlistId}
+              removeFromShortList={shortlist?.id === session?.shortlistId}
               index={index}
               showActions={true}
             />
@@ -104,7 +109,7 @@ export default function ShortlistContainer() {
           }}
         >
           <img
-            src={session?.user?.image}
+            src={session?.image}
             alt=""
             key={`profile-img-${shortlist?.userId}`}
           />

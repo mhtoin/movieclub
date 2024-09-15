@@ -1,9 +1,9 @@
 import { MenuItem, MenuStore, Menu } from "@ariakit/react";
-import { useSession } from "next-auth/react";
+import { useValidateSession } from "@/lib/hooks";
 import Link from "next/link";
 
 export default function NavigationMenu({ menu }: { menu: MenuStore }) {
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   return (
     <Menu
       gutter={10}
@@ -50,7 +50,7 @@ export default function NavigationMenu({ menu }: { menu: MenuStore }) {
             </Link>
           </MenuItem>
           <MenuItem className="ml-6" store={menu}>
-            <Link href={`/tierlists/${session?.user.userId}`}>
+            <Link href={`/tierlists/${session?.id}`}>
               <span className="text-foreground">Edit</span>
               <span className="menu-label">Edit your tierlist</span>
             </Link>

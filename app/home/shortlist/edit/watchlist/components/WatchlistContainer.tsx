@@ -1,14 +1,15 @@
 "use client";
-import { useGetWatchlistQuery, useShortlistQuery } from "@/lib/hooks";
-import { range } from "@/lib/utils";
-import { useSession } from "next-auth/react";
-import ItemSkeleton from "../../components/ItemSkeleton";
+import {
+  useGetWatchlistQuery,
+  useShortlistQuery,
+  useValidateSession,
+} from "@/lib/hooks";
 import MovieCard from "../../search/components/MovieCard";
 
 export default function WatchlistContainer() {
-  const { data: session } = useSession();
-  const { data: watchlist, status } = useGetWatchlistQuery(session?.user);
-  const { data: shortlistData } = useShortlistQuery(session?.user?.shortlistId);
+  const { data: session } = useValidateSession();
+  const { data: watchlist, status } = useGetWatchlistQuery(session || null);
+  const { data: shortlistData } = useShortlistQuery(session?.shortlistId || "");
 
   const shortlistMovieIds = shortlistData
     ? shortlistData?.movies?.map((movie: Movie) => movie.tmdbId)
@@ -19,7 +20,7 @@ export default function WatchlistContainer() {
     : [];
   return (
     <div className="flex flex-col justify-center m-5 p-10 place-items-center">
-      {session && session.user && !session?.user.accountId && (
+      {session && !session.accountId && (
         <div className="alert alert-error w-1/3">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,29 +1,18 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import MagneticNav from "./MagneticNav";
+import { useState } from "react";
 import MenuItem from "./MenuItem";
-import { useSession } from "next-auth/react";
 import HamburgerMenu from "./HamburgerMenu";
-import NavigationMenu from "./NavigationMenu";
-import { useIsMobile } from "@/lib/hooks";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../ui/Drawer";
-import { Filter } from "lucide-react";
-import RangeSlider from "../ui/RangeSlider";
+import { useIsMobile, useValidateSession } from "@/lib/hooks";
+import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import { Button } from "../ui/Button";
 
 export default function Menubar() {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
   const menu = Ariakit.useMenuStore({ open, setOpen });
-  const { data: session, status } = useSession();
+  const { data: session, status } = useValidateSession();
 
   if (isMobile) {
     return (
@@ -88,7 +77,7 @@ export default function Menubar() {
               <span className="menu-label">View all tierlists from users</span>
             </Link>
             <Link
-              href={`/tierlists/${session?.user.userId}`}
+              href={`/tierlists/${session?.id}`}
               className="flex flex-col ml-5 p-2 border-b"
               onClick={() => setOpen(false)}
             >
@@ -158,7 +147,7 @@ export default function Menubar() {
               </Link>
             </MenuItem>
             <MenuItem className="ml-6" store={menu}>
-              <Link href={`/tierlists/${session?.user.userId}`}>
+              <Link href={`/tierlists/${session?.id}`}>
                 <span className="text-foreground">Edit</span>
                 <span className="menu-label">Edit your tierlist</span>
               </Link>

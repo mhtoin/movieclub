@@ -1,5 +1,6 @@
+import { Button } from "@/app/components/ui/Button";
 import Link from "next/link";
-import { Button } from "../components/ui/Button";
+
 import { SiDiscord } from "react-icons/si";
 
 export default function LoginPage() {

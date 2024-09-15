@@ -1,28 +1,26 @@
 "use client";
 
 import { Fragment, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
 import MovieCard from "./components/MovieCard";
 import {
   useGetWatchlistQuery,
   useSearchInfiniteQuery,
   useShortlistQuery,
+  useValidateSession,
 } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
-import { range } from "@/lib/utils";
-import ItemSkeleton from "../components/ItemSkeleton";
 import { Button } from "@/app/components/ui/Button";
 
 export default function SearchPage() {
   const searchValue = useFilterStore.use.searchValue();
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
   const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
-    session?.user?.shortlistId
+    session?.shortlistId || ""
   );
   const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(
-    session?.user
+    session || null
   );
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } =

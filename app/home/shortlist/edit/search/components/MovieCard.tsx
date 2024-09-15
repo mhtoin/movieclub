@@ -1,10 +1,10 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { omit } from "@/lib/utils";
 import {
   useAddToShortlistMutation,
   useAddToWatchlistMutation,
+  useValidateSession,
 } from "@/lib/hooks";
 import { useState } from "react";
 import BookmarkButton from "./BookmarkButton";
@@ -12,7 +12,6 @@ import AddButton from "./AddButton";
 import Link from "next/link";
 import MovieCardButton from "./MovieCardButton";
 import CheckMark from "./CheckMark";
-import { set } from "date-fns";
 import { Button } from "@/app/components/ui/Button";
 
 export default function MovieCard({
@@ -24,7 +23,7 @@ export default function MovieCard({
   added: boolean;
   inWatchlist: boolean;
 }) {
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   const [isHovering, setIsHovering] = useState(false);
   const addMutation = useAddToShortlistMutation();
   const watchlistMutation = useAddToWatchlistMutation();
@@ -55,7 +54,7 @@ export default function MovieCard({
             ? () => void 0
             : () => {
                 addMutation.mutate({
-                  shortlistId: session?.user?.shortlistId,
+                  shortlistId: session?.shortlistId || "",
                   movie: {
                     ...omit(movie, ["id"]),
                     tmdbId: movie.id,

@@ -4,7 +4,6 @@ import { Button } from "../ui/Button";
 import {
   useRaffle,
   useRaffleMutation,
-  useShortlistsQuery,
   useSuspenseShortlistsQuery,
 } from "@/lib/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -17,19 +16,17 @@ export default function RaffleDialog() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [count, setCount] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const { data: allShortlists } = useShortlistsQuery();
-  console.log("allShortlists", allShortlists);
+  const { data: allShortlists } = useSuspenseShortlistsQuery();
+
   const [movies, setMovies] = useState<Movie[]>(
-    Object?.entries(allShortlists || {})?.flatMap(
-      ([shortlistId, shortlist]) => {
-        return shortlist?.movies?.map((movie) => {
-          return {
-            ...movie,
-            user: shortlist?.user,
-          };
-        });
-      }
-    ) || []
+    Object?.entries(allShortlists)?.flatMap(([shortlistId, shortlist]) => {
+      return shortlist?.movies?.map((movie) => {
+        return {
+          ...movie,
+          user: shortlist?.user,
+        };
+      });
+    }) || []
   );
 
   const { data, mutate: raffle } = useRaffle();
@@ -42,7 +39,7 @@ export default function RaffleDialog() {
     setCurrentIndex((currentIndex - 1 + movies.length) % movies.length);
   };
 
-  const users = Object.entries(allShortlists || {}).map(
+  const users = Object.entries(allShortlists).map(
     ([shortlistId, shortlist]) => {
       return shortlist?.user;
     }

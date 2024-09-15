@@ -1,30 +1,28 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { saveProfile } from "./actions/action";
 import { useTransition } from "react";
-import { useGetTMDBSession } from "@/lib/hooks";
-import { Button } from "../components/ui/Button";
+import { useGetTMDBSession, useValidateSession } from "@/lib/hooks";
+import { Button } from "@/app/components/ui/Button";
 
 export default function Profile() {
   let [isPending, startTransition] = useTransition();
-  const { data: session, status } = useSession();
-  const [sessionId, setSessionId] = useState(session?.user.sessionId);
-  const [accountId, setAccountId] = useState(session?.user.accountId);
+  const { data: session, status } = useValidateSession();
+  const [sessionId, setSessionId] = useState(session?.sessionId);
+  const [accountId, setAccountId] = useState(session?.accountId);
   const [notification, setNotification] = useState("");
 
   useEffect(() => {
-    if (session?.user.sessionId) {
-      setSessionId(session?.user.sessionId);
+    if (session?.sessionId) {
+      setSessionId(session?.sessionId);
     }
 
-    setAccountId(session?.user.accountId);
+    setAccountId(session?.accountId);
   }, [session]);
-  useGetTMDBSession(session?.user.userId, setSessionId, setAccountId);
+  useGetTMDBSession(session?.id || "", setSessionId, setAccountId);
 
-  if (status === "loading") {
+  if (status === "pending") {
     return (
       <div className="flex flex-col items-center justify-center gap-5">
         <span className="loading loading-spinner text-success"></span>
@@ -32,7 +30,7 @@ export default function Profile() {
     );
   }
 
-  if (status === "unauthenticated") {
+  if (status === "error") {
     return <p>Access Denied</p>;
   }
 
@@ -79,13 +77,13 @@ export default function Profile() {
           <span>{notification}</span>
         </div>
       )}
-      <div>Welcome {session?.user.name}</div>
+      <div>Welcome {session?.name}</div>
       <details className="collapse collapse-arrow border border-base-300 bg-base-200 max-w-sm">
         <summary className="collapse-title text-xl font-medium">
           TMDB Account Settings
         </summary>
         <div className="collapse-content flex flex-col items-center gap-5">
-          <Button onClick={handleClick} disabled={sessionId && accountId}>
+          <Button onClick={handleClick} disabled={!sessionId || !accountId}>
             Link TMDB account
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +121,7 @@ export default function Profile() {
           startTransition(() =>
             saveProfile({
               sessionId: sessionId,
-              accountId: parseInt(accountId),
+              accountId: accountId ? accountId : null,
             } as User)
           )
         }

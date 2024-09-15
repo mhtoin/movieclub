@@ -20,7 +20,6 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";

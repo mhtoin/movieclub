@@ -2,14 +2,11 @@
 import * as Ariakit from "@ariakit/react";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { Button } from "../ui/Button";
-import MovieCard from "./MovieCard";
-import { useSession } from "next-auth/react";
 import {
   useIsMobile,
-  useMovieQuery,
   useReplaceShortlistMutation,
   useShortlistQuery,
-  useUpdateShortlistMutation,
+  useValidateSession,
 } from "@/lib/hooks";
 import { ArrowRightLeft } from "lucide-react";
 import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
@@ -21,8 +18,8 @@ export default function ReplaceDialog() {
   const isOpen = useDialogStore.use.isOpen();
   const setIsOpen = useDialogStore.use.setIsOpen();
   const movie = useDialogStore.use.movie();
-  const { data: session } = useSession();
-  const { data: shortlist } = useShortlistQuery(session?.user?.shortlistId);
+  const { data: session } = useValidateSession();
+  const { data: shortlist } = useShortlistQuery(session?.shortlistId || "");
   const shortlistUpdateMutation = useReplaceShortlistMutation();
 
   if (isMobile) {

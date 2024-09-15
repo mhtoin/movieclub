@@ -2,10 +2,8 @@ import WatchlistButton from "@/app/home/shortlist/edit/components/WatchlistButto
 import { Button } from "../../ui/Button";
 import { useUpdateReadyStateMutation, useValidateSession } from "@/lib/hooks";
 import ItemSkeleton from "@/app/home/shortlist/edit/components/ItemSkeleton";
-import { useSession } from "next-auth/react";
 import SearchButton from "@/app/home/shortlist/edit/components/SearchButton";
 import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
-import ShortlistItem from "./ShortlistItem";
 import { MessageCircleWarning } from "lucide-react";
 
 export default function ShortlistCard({

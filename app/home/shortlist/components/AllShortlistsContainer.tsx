@@ -1,17 +1,15 @@
 "use client";
 
-import { usePusher, useShortlistsQuery } from "@/lib/hooks";
+import { usePusher, useShortlistsQuery, useValidateSession } from "@/lib/hooks";
 import ItemSkeleton from "../edit/components/ItemSkeleton";
-import { Fragment } from "react";
 import ShortListItem from "../edit/components/ShortListItem";
 import ShortlistSkeleton from "./ShortlistSkeleton";
 import { range } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import { Button } from "@/app/components/ui/Button";
 
 export default function AllShortlistsContainer() {
   const { data: allShortlists, isLoading, status } = useShortlistsQuery();
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   usePusher("movieclub-shortlist", "shortlist-update");
 
   if (isLoading && !allShortlists && !session) {
@@ -37,7 +35,7 @@ export default function AllShortlistsContainer() {
                   <ItemSkeleton key={index} />
                 ))
               : [];
-          if (shortlist.id !== session?.user?.shortlistId) {
+          if (shortlist.id !== session?.shortlistId) {
             return (
               <div
                 key={`fragment-${shortlist?.id}`}

@@ -1,9 +1,8 @@
 "use client";
-import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MobileNavbarButton from "./MobileNavbarButton";
-import { useDebounce } from "@/lib/hooks";
+import { useDebounce, useValidateSession } from "@/lib/hooks";
 import { MobileRaffleButton } from "@/app/components/MobileRaffleButton";
 import { Button } from "@/app/components/ui/Button";
 import Image from "next/image";
@@ -11,7 +10,7 @@ import Image from "next/image";
 export default function MobileNavbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -123,7 +122,7 @@ export default function MobileNavbar() {
         onClick={() => router.push("/profile")}
       >
         <Image
-          src={session?.user?.image || ""}
+          src={session?.image || ""}
           alt="P"
           height={30}
           width={30}

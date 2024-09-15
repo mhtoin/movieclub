@@ -12,7 +12,7 @@ import {
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { User as DatabaseUser } from "@prisma/client";
 import {
   getAllShortlistsGroupedById,
@@ -116,12 +116,12 @@ export const useSearchInfiniteQuery = () => {
 };
 
 export const useRaffle = () => {
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   return useMutation({
     mutationFn: async ({ movies }: { movies: Movie[] }) => {
       const res = await fetch("/api/weeklyRaffle", {
         method: "POST",
-        body: JSON.stringify({ userId: session?.user?.userId, movies }),
+        body: JSON.stringify({ userId: session?.id, movies }),
       });
       const data = await res.json();
       return data;
@@ -130,7 +130,7 @@ export const useRaffle = () => {
 };
 
 export const useRaffleMutation = () => {
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   const setIsOpen = useRaffleStore.use.setIsOpen();
   const setIsLoading = useRaffleStore.use.setIsLoading();
   const setResult = useRaffleStore.use.setResult();
@@ -140,7 +140,7 @@ export const useRaffleMutation = () => {
     mutationFn: async () => {
       const res = await fetch("/api/raffle", {
         method: "POST",
-        body: JSON.stringify({ userId: session?.user?.userId }),
+        body: JSON.stringify({ userId: session?.id }),
       });
       const data = await res.json();
 
@@ -239,7 +239,7 @@ export const useUpdateSelectionMutation = () => {
 };
 
 export const useAddToWatchlistMutation = () => {
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   return useMutation({
     mutationFn: async ({ movieId }: { movieId: number }) => {
       const requestBody = JSON.stringify({
@@ -249,7 +249,7 @@ export const useAddToWatchlistMutation = () => {
       });
 
       const response = await fetch(
-        `https://api.themoviedb.org/3/account/${session?.user?.accountId}/watchlist?session_id=${session?.user?.sessionId}`,
+        `https://api.themoviedb.org/3/account/${session?.accountId}/watchlist?session_id=${session?.sessionId}`,
         {
           method: "POST",
           headers: {
@@ -567,11 +567,11 @@ export const useGetTMDBSession = (
   const setNotification = useNotificationStore(
     (state) => state.setNotification
   );
-  const { data: session } = useSession();
+  const { data: session } = useValidateSession();
   useEffect(() => {
     const loc = window.location.search;
 
-    if (loc && session?.user?.userId) {
+    if (loc && session?.id) {
       let locParts = loc ? loc.split("&") : "";
 
       if (locParts && locParts.length > 1) {
@@ -599,7 +599,7 @@ export const useGetTMDBSession = (
               setAccountId(accountBody.id);
 
               if (id.session_id && accountBody.id) {
-                await fetch(`/api/user/${session?.user?.userId}`, {
+                await fetch(`/api/user/${session?.id}`, {
                   method: "PUT",
                   body: JSON.stringify({
                     sessionId: id.session_id,
