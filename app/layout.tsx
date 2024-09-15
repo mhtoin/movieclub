@@ -2,6 +2,8 @@ import Providers from "@/utils/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
+import getQueryClient from "@/lib/getQueryClient";
+import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 
 export const metadata = {
   title: "movieclub",
@@ -13,7 +15,7 @@ const inter = Inter({
   display: "swap",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -21,6 +23,7 @@ export default function RootLayout({
   const cookieStore = cookies();
   const theme = cookieStore.get("theme");
   const accent = cookieStore.get("accent");
+
   return (
     <html
       lang="en"
