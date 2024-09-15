@@ -10,7 +10,7 @@ import {
   useUpdateReadyStateMutation,
   useValidateSession,
 } from "@/lib/hooks";
-import { RaffleClient } from "../../../components/RaffleClient";
+import { RaffleClient } from "@/app/components/RaffleClient";
 import { Button } from "@/app/components/ui/Button";
 
 export default function ShortlistContainer() {

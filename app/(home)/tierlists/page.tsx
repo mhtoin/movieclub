@@ -1,9 +1,8 @@
+import { Button } from "@/app/components/ui/Button";
+import { validateRequest } from "@/lib/auth";
 import { getTierlists } from "@/lib/tierlists";
-import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { authOptions } from "../api/auth/[...nextauth]/auth";
-import { Button } from "../components/ui/Button";
 
 async function createNew() {
   "use server";
@@ -13,13 +12,13 @@ async function createNew() {
 export default async function Tierlists() {
   const allTierlists = await getTierlists();
   const usersWithTierlist = allTierlists.map((tierlist) => tierlist.userId);
-  const session = await getServerSession(authOptions);
+  const { user } = await validateRequest();
 
   return (
     <div className="flex flex-col items-center gap-10 pt-20">
       <h1 className="text-2xl font-bold">Tierlists</h1>
       <div>
-        {!usersWithTierlist.includes(session?.user.userId) && (
+        {!usersWithTierlist.includes(user?.id || "") && (
           <form action={createNew}>
             <Button variant="default" type="submit">
               Create new
@@ -48,7 +47,7 @@ export default async function Tierlists() {
               <Link href={`/tierlists/${tierlist.userId}`}>
                 <div className="avatar">
                   <div className="w-24 mask mask-heart">
-                    <img src={tierlist.user?.image} />
+                    <img src={tierlist.user?.image} alt="user" />
                   </div>
                 </div>
               </Link>

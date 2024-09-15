@@ -1,4 +1,4 @@
-import TierAdd from "@/app/tierlists/[id]/components/TierAdd";
+import TierAdd from "@/app/(home)/tierlists/[id]/components/TierAdd";
 
 export default function TierlistFormModal({
   tierlist,

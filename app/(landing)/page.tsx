@@ -1,7 +1,7 @@
 //import { getServerSession } from "@/lib/deprecated_getServerSession";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "./api/auth/[...nextauth]/auth";
+import { authOptions } from "../api/auth/[...nextauth]/auth";
 import { validateRequest } from "@/lib/auth";
 
 export default async function Home() {

@@ -9,8 +9,9 @@ import {
   useValidateSession,
 } from "@/lib/hooks";
 import { ArrowRightLeft } from "lucide-react";
-import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
+
 import { Drawer, DrawerContent } from "../ui/Drawer";
+import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
 
 export default function ReplaceDialog() {
   const isMobile = useIsMobile();

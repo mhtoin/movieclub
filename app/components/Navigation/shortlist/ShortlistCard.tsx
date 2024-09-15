@@ -1,10 +1,10 @@
-import WatchlistButton from "@/app/home/shortlist/edit/components/WatchlistButton";
+import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
 import { Button } from "../../ui/Button";
 import { useUpdateReadyStateMutation, useValidateSession } from "@/lib/hooks";
-import ItemSkeleton from "@/app/home/shortlist/edit/components/ItemSkeleton";
-import SearchButton from "@/app/home/shortlist/edit/components/SearchButton";
-import ShortListItem from "@/app/home/shortlist/edit/components/ShortListItem";
 import { MessageCircleWarning } from "lucide-react";
+import ItemSkeleton from "@/app/(home)/home/shortlist/edit/components/ItemSkeleton";
+import WatchlistButton from "@/app/(home)/home/shortlist/edit/components/WatchlistButton";
+import SearchButton from "@/app/(home)/home/shortlist/edit/components/SearchButton";
 
 export default function ShortlistCard({
   shortlist,

@@ -1,17 +1,7 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import localFont from "next/font/local";
-import Notification from "./components/Notification";
-import MobileNavbar from "./home/components/MobileNavbar";
-import { NextAuthProvider } from "@/utils/NextAuthProvider";
-
-import { NavBar } from "./components/Navigation/Navbar";
-import { Toaster } from "./components/ui/Toaster";
 import { cookies } from "next/headers";
-import ReplaceDialog from "./components/search/ReplaceDialog";
-import RaffleButton from "./components/raffle/RaffleButton";
-import RaffleDialog from "./components/raffle/RaffleDialog";
 
 export const metadata = {
   title: "movieclub",
@@ -24,10 +14,8 @@ const inter = Inter({
 });
 
 export default function RootLayout({
-  searchModal,
   children,
 }: {
-  searchModal?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const cookieStore = cookies();
@@ -42,20 +30,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
       >
-        <Notification />
-        <NextAuthProvider>
-          <Providers>
-            <NavBar
-              theme={theme as { value: string; name: string }}
-              accent={accent as { value: string; name: string }}
-            />
-            <Toaster position="top-center" />
-
-            <ReplaceDialog />
-            {searchModal}
-            {children}
-          </Providers>
-        </NextAuthProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
