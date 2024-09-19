@@ -1,26 +1,24 @@
 import WatchlistContainer from "./components/WatchlistContainer";
-import getQueryClient from "@/lib/getQueryClient";
-import { getServerSession } from "next-auth";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import { getUserShortlist, getWatchlist } from "@/lib/movies/queries";
-
+import { getQueryClient } from "@/lib/getQueryClient";
+import { validateRequest } from "@/lib/auth";
 export default async function Watchlist() {
   const queryClient = getQueryClient();
-  const session = await getServerSession(authOptions);
+  const { user, session } = await validateRequest();
 
   await queryClient.prefetchQuery({
     queryKey: ["watchlist"],
     queryFn: async () => {
-      const data = await getWatchlist(session?.user);
+      const data = await getWatchlist(user || null);
       return data;
     },
   });
 
   await queryClient.prefetchQuery({
-    queryKey: ["shortlist", session?.user?.shortlistId],
+    queryKey: ["shortlist", user?.shortlistId],
     queryFn: async () => {
-      return await getUserShortlist(session?.user?.shortlistId);
+      return await getUserShortlist(user?.shortlistId || "");
     },
   });
 

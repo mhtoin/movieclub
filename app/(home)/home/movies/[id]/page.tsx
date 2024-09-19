@@ -1,9 +1,6 @@
 import { getAllMoviesOfTheWeek, getMovie } from "@/lib/movies/movies";
 import MovieCard from "../components/MovieCard";
-//import { getServerSession } from "@/lib/deprecated_getServerSession";
 import { getTierlist } from "@/lib/tierlists";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import { validateRequest } from "@/lib/auth";
 
 async function staticParams() {

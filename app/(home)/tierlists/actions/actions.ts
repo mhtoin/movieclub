@@ -1,6 +1,6 @@
 "use server";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
+import { validateRequest } from "@/lib/auth";
 import {
   createTierlist,
   modifyTierlist,
@@ -37,9 +37,9 @@ export async function saveTierlist(tierlist: Tierlist) {
 }
 
 export async function recreateTierlist(formData: FormData) {
-  const session = await getServerSession(authOptions);
+  const { user, session } = await validateRequest();
 
-  const userId = session?.user?.userId;
+  const userId = user?.id;
   const modified = await modifyTierlist(formData);
   redirect(`/tierlists/${userId}`);
 }

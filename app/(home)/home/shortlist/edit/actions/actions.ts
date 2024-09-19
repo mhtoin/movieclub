@@ -14,16 +14,13 @@ import { revalidateTag } from "next/cache";
 import "dotenv/config";
 import { sample } from "@/lib/utils";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
+import { validateRequest } from "@/lib/auth";
 
 export async function addMovie(movie: Movie) {
-  const session = await getServerSession(authOptions);
-  
-  if (session && session.user && session.user.userId) {
-    let res = await addMovieToShortlist(
-      {...movie},
-      session.user.shortlistId
-    );
+  const { user } = await validateRequest();
+
+  if (user && user.shortlistId) {
+    let res = await addMovieToShortlist({ ...movie }, user.shortlistId);
     revalidate("shortlist");
     //return res;
   } else {
@@ -73,16 +70,16 @@ export async function getColours(img: string) {
 }
 
 export async function updateShortlistReadyState(ready: boolean) {
-  const session = await getServerSession(authOptions);
-  await updateShortlistState(ready, session?.user.shortlistId)
+  const { user } = await validateRequest();
+  await updateShortlistState(ready, user?.shortlistId || "");
 }
 
 export async function updateShortlistParticipation(ready: boolean) {
-  const session = await getServerSession(authOptions);
-  await updateShortlistParticipationState(ready, session?.user.shortlistId)
+  const { user } = await validateRequest();
+  await updateShortlistParticipationState(ready, user?.shortlistId || "");
 }
 
 export async function updateSelection(index: number) {
-  const session = await getServerSession(authOptions);
-  await updateShortlistSelection(index, session?.user.shortlistId)
+  const { user } = await validateRequest();
+  await updateShortlistSelection(index, user?.shortlistId || "");
 }

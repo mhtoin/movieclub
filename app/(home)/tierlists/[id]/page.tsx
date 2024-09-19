@@ -1,9 +1,7 @@
 import { getTierlist, getTierlists } from "@/lib/tierlists";
-import { getAllMoviesOfTheWeek, getMoviesOfTheWeek } from "@/lib/movies/movies";
-//import { getServerSession } from "@/lib/getServerSession";
+import { getMoviesOfTheWeek } from "@/lib/movies/movies";
+import { validateRequest } from "@/lib/auth";
 import TierContainer from "./components/TierContainer";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 async function staticParams() {
   const tierlists = await getTierlists();
@@ -20,7 +18,7 @@ export const dynamic =
   process.env.NODE_ENV === "production" ? "auto" : "force-dynamic";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const { user, session } = await validateRequest();
   const tierlist = await getTierlist(params.id);
   const moviesOfTheWeek = await getMoviesOfTheWeek();
 
@@ -32,7 +30,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     const movieInList = tierlistMovies.includes(movie.title);
     return !movieInList;
   }) as unknown as MovieOfTheWeek[];
-  const authorized = params.id === session?.user.userId;
+  const authorized = params.id === user?.id;
   return (
     <div className="flex flex-col items-center gap-5 pt-20">
       <TierContainer

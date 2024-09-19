@@ -55,7 +55,8 @@ export default function MovieCard({
             ? () => void 0
             : () => {
                 addMutation.mutate({
-                  shortlistId: session?.shortlistId!,
+                  userId: session?.id || "",
+                  shortlistId: session?.shortlistId || "",
                   movie: {
                     ...omit(movie, ["id"]),
                     tmdbId: movie.id,

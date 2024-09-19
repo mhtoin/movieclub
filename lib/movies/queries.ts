@@ -7,6 +7,7 @@ import { formatISO, nextWednesday, previousWednesday, set } from "date-fns";
 import { produce } from "immer";
 import { getAllShortLists } from "../shortlist";
 import { getBaseURL, keyBy } from "../utils";
+import { type User } from "lucia";
 import { User as DatabaseUser } from "@prisma/client";
 
 export const searchKeywords = async (value: string) => {
@@ -83,14 +84,14 @@ export const getUserShortlist = async (id: string) => {
   //return shortlist;
 };
 
-export const getWatchlist = async (user: DatabaseUser) => {
+export const getWatchlist = async (user: User | DatabaseUser | null) => {
   let pagesLeft = true;
   let page = 1;
   const movies = [];
 
   do {
     let watchlist = await fetch(
-      `https://api.themoviedb.org/3/account/${user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.sessionId}&sort_by=created_at.asc`,
+      `https://api.themoviedb.org/3/account/${user?.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user?.sessionId}&sort_by=created_at.asc`,
       {
         method: "GET",
         headers: {

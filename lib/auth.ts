@@ -24,6 +24,7 @@ export const lucia = new Lucia(adapter, {
       accountId: attributes.accountId,
       image: attributes.image,
       shortlistId: attributes.shortlistId,
+      sessionId: attributes.sessionId,
     };
   },
 });
