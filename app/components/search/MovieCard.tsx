@@ -72,6 +72,7 @@ export default function MovieCard({
               size={"iconXs"}
               onClick={() => {
                 removeMutation.mutate({
+                  userId: user?.id ?? "",
                   shortlistId: user?.shortlistId ?? "",
                   movieId: movie.id,
                 });
@@ -86,6 +87,7 @@ export default function MovieCard({
               size={"iconXs"}
               onClick={() => {
                 addMutation.mutate({
+                  userId: user?.id ?? "",
                   shortlistId: user?.shortlistId ?? "",
                   movie: {
                     ...omit(movie, ["id"]),

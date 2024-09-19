@@ -72,6 +72,7 @@ export default function ShortlistCard({
                 readyStateMutation.mutate({
                   shortlistId: shortlist.id,
                   isReady: !shortlist.isReady,
+                  userId: shortlist.userId,
                 });
               }
             }}

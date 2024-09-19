@@ -1,12 +1,13 @@
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import getQueryClient from "@/lib/getQueryClient";
+
 import Shortlists from "@/app/components/Navigation/shortlist/Shortlists";
 import { getAllShortlistsGroupedById } from "@/lib/shortlist";
+import { getQueryClient } from "@/lib/getQueryClient";
 
 export default async function ShortList() {
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
+  queryClient.prefetchQuery({
     queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
   });

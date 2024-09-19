@@ -27,6 +27,8 @@ import { useSearchParams } from "next/navigation";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { getMovie } from "./movies/queries";
 import { replaceShortlistItem } from "./actions/replaceShortlistItem";
+import { socket } from "./socket";
+import { sendShortlistUpdate } from "./utils";
 
 export const useValidateSession = () => {
   return useQuery({
@@ -181,10 +183,12 @@ export const useUpdateReadyStateMutation = () => {
   return useMutation({
     mutationFn: async ({
       shortlistId,
+      userId,
       isReady,
     }: {
       shortlistId: string;
       isReady: boolean;
+      userId: string;
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}/ready`, {
         method: "PUT",
@@ -194,15 +198,12 @@ export const useUpdateReadyStateMutation = () => {
       return await response.json();
     },
     onSuccess: (data, variables) => {
-      /*
-      queryClient.invalidateQueries({
-        queryKey: ["shortlists"],
-      });*/
       queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
         return produce(oldData, (draft) => {
           draft[variables.shortlistId].isReady = data.isReady;
         });
       });
+      sendShortlistUpdate(variables.userId);
     },
   });
 };
@@ -211,9 +212,11 @@ export const useUpdateSelectionMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
+      userId,
       shortlistId,
       selectedIndex,
     }: {
+      userId: string;
       shortlistId: string;
       selectedIndex: number;
     }) => {
@@ -230,10 +233,7 @@ export const useUpdateSelectionMutation = () => {
           draft[variables.shortlistId].selectedIndex = data.selectedIndex;
         });
       });
-      /*
-      queryClient.invalidateQueries({
-        queryKey: ["shortlist"],
-      });*/
+      sendShortlistUpdate(variables.userId);
     },
   });
 };
@@ -269,6 +269,9 @@ export const useAddToWatchlistMutation = () => {
   });
 };
 
+/**
+ * TODO: Remove
+ */
 export const useUpdateShortlistMutation = (method: string) => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -304,9 +307,11 @@ export const useRemoveFromShortlistMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
+      userId,
       movieId,
       shortlistId,
     }: {
+      userId: string;
       movieId: string | number;
       shortlistId: string;
     }) => {
@@ -324,10 +329,7 @@ export const useRemoveFromShortlistMutation = () => {
           draft[variables.shortlistId].movies = data.movies;
         });
       });
-      /*
-      queryClient.invalidateQueries({
-        queryKey: ["shortlist"],
-      });*/
+      sendShortlistUpdate(variables.userId);
     },
   });
 };
@@ -339,9 +341,11 @@ export const useAddToShortlistMutation = () => {
   const setMovie = useDialogStore.use.setMovie();
   return useMutation({
     mutationFn: async ({
+      userId,
       movie,
       shortlistId,
     }: {
+      userId: string;
       movie: Movie;
       shortlistId: string;
     }) => {
@@ -364,6 +368,7 @@ export const useAddToShortlistMutation = () => {
           draft[variables.shortlistId].movies = data.movies;
         });
       });
+      sendShortlistUpdate(variables.userId);
     },
     onError: (error, variables) => {
       console.log("error", error);
@@ -698,4 +703,68 @@ export function useCreateQueryString(searchParams: URLSearchParams) {
     },
     [searchParams]
   );
+}
+
+export function useSocket() {
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [connection, setConnection] = useState<WebSocket | null>(null);
+  const { data: user } = useValidateSession();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    async function connect() {
+      if (!isRegistered && user) {
+        // register the client first
+        const res = await fetch("http://localhost:8000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: user.id,
+            topic: "shortlist",
+          }),
+        });
+
+        console.log("res", res);
+
+        if (res.ok) {
+          const data = await res.json();
+          const webSocket = new WebSocket(data.url);
+          webSocket.onopen = () => {
+            console.log("WebSocket connection established successfully");
+          };
+
+          webSocket.onmessage = (event) => {
+            console.log("WebSocket message received:", event.data);
+            const message = JSON.parse(event.data);
+            console.log("message", message);
+            if ("queryKey" in message) {
+              queryClient.invalidateQueries({
+                queryKey: message.queryKey,
+              });
+              toast.success("Shortlist updated");
+            } else if ("message" in message) {
+              toast.success(message.message);
+            } else {
+              toast.error("Unknown message type");
+            }
+          };
+
+          webSocket.onclose = () => {
+            console.log("WebSocket connection closed");
+          };
+
+          setConnection(webSocket);
+          setIsRegistered(true);
+          console.log("WebSocket connection established");
+        }
+      }
+    }
+
+    connect();
+  }, [isRegistered, user, queryClient]);
+
+  return { connection };
 }

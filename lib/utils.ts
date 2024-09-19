@@ -85,3 +85,26 @@ export function cn(...inputs: ClassValue[]) {
 export function sortByISODate(a: any, b: any, direction: "asc" | "desc") {
   return direction === "asc" ? a.localeCompare(b) : -a.localeCompare(b);
 }
+
+export function sendShortlistUpdate(userId: string) {
+  "use client";
+  publishMessage({ queryKey: ["shortlists"] }, "shortlist", userId);
+}
+
+export async function publishMessage(
+  message: string | object,
+  topic: string,
+  user_id: string
+) {
+  const res = await fetch("http://localhost:8000/publish", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message: message,
+      topic: topic,
+      user_id: user_id,
+    }),
+  });
+}

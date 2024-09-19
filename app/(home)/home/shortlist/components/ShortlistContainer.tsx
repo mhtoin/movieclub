@@ -104,6 +104,7 @@ export default function ShortlistContainer() {
               readyStateMutation.mutate({
                 shortlistId: shortlist.id,
                 isReady: !shortlist.isReady,
+                userId: shortlist.userId,
               });
             }
           }}

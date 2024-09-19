@@ -1,4 +1,4 @@
-import getQueryClient from "@/lib/getQueryClient";
+import { getQueryClient } from "@/lib/getQueryClient";
 import { searchMovies } from "@/lib/movies/queries";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 

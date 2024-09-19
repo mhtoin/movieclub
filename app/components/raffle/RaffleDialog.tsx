@@ -11,40 +11,24 @@ export default function RaffleDialog() {
   const dialog = Ariakit.useDialogStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [count, setCount] = useState(0);
+  const [shuffled, setShuffled] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
   const { data: allShortlists, status } = useShortlistsQuery();
 
-  console.log("allShortlists in dialog", allShortlists);
-
-  const [movies, setMovies] = useState<Movie[]>(
-    (allShortlists &&
-      Object?.entries(allShortlists)?.flatMap(([shortlistId, shortlist]) => {
-        return shortlist?.movies?.map((movie) => {
-          return {
-            ...movie,
-            user: shortlist?.user,
-          };
-        });
-      })) ||
-      []
-  );
   const { data, mutate: raffle } = useRaffle();
 
-  useEffect(() => {
-    if (allShortlists && movies.length === 0 && status === "success") {
-      const movieArr = Object?.entries(allShortlists)?.flatMap(
-        ([shortlistId, shortlist]) => {
-          return shortlist?.movies?.map((movie) => {
-            return {
-              ...movie,
-              user: shortlist?.user,
-            };
-          });
-        }
-      );
-      setMovies(movieArr);
-    }
-  }, [movies, status]);
+  const movies = useMemo(() => {
+    return allShortlists
+      ? Object.entries(allShortlists).flatMap(([shortlistId, shortlist]) => {
+          return shortlist?.movies;
+        })
+      : [];
+  }, [allShortlists]);
+
+  const shuffledMovies: Movie[] = useMemo(() => {
+    return shuffled ? shuffle([...movies]) : movies;
+  }, [movies, shuffled]);
 
   const nextIndex = useCallback(() => {
     setCurrentIndex((currentIndex + 1) % movies.length);
@@ -151,9 +135,9 @@ export default function RaffleDialog() {
               size={"iconLg"}
               onClick={() => {
                 if (!isPlaying) {
-                  const shuffledMovies = shuffle([...movies]);
-                  setMovies(shuffledMovies);
-
+                  console.log("start");
+                  setStarted(true);
+                  setShuffled(true);
                   setTimeout(() => {
                     raffle({
                       movies: shuffledMovies,
@@ -169,7 +153,7 @@ export default function RaffleDialog() {
             </Button>
           </div>
           <div className="grid grid-cols-3 gap-7">
-            {movies.map((movie, index) => {
+            {shuffledMovies.map((movie, index) => {
               return (
                 <img
                   src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}

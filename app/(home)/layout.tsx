@@ -2,9 +2,11 @@ import { Toaster } from "sonner";
 import { cookies } from "next/headers";
 import { NavBar } from "../components/Navigation/Navbar";
 import ReplaceDialog from "../components/search/ReplaceDialog";
-import getQueryClient from "@/lib/getQueryClient";
-import RaffleDialog from "../components/raffle/RaffleDialog";
 import { getAllShortlistsGroupedById } from "@/lib/shortlist";
+import { getQueryClient } from "@/lib/getQueryClient";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { SocketClient } from "../components/common/SocketClient";
+import Chat from "../components/common/Chat";
 
 export default async function HomeLayout({
   searchModal,
@@ -19,21 +21,25 @@ export default async function HomeLayout({
 
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
+  queryClient.prefetchQuery({
     queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
   });
   return (
     <>
-      <NavBar
-        theme={theme as { value: string; name: string }}
-        accent={accent as { value: string; name: string }}
-      />
-      <Toaster position="top-center" />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NavBar
+          theme={theme as { value: string; name: string }}
+          accent={accent as { value: string; name: string }}
+        />
+        <SocketClient />
+        <Chat />
+        <Toaster position="top-center" />
+        <ReplaceDialog />
+        {searchModal}
 
-      <ReplaceDialog />
-      {searchModal}
-      {children}
+        {children}
+      </HydrationBoundary>
     </>
   );
 }

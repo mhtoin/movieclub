@@ -1,6 +1,7 @@
 "use client";
 import {
   useShortlistsQuery,
+  useSocket,
   useSuspenseShortlistsQuery,
   useValidateSession,
 } from "@/lib/hooks";

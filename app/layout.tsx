@@ -2,8 +2,6 @@ import Providers from "@/utils/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-import getQueryClient from "@/lib/getQueryClient";
-import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 
 export const metadata = {
   title: "movieclub",

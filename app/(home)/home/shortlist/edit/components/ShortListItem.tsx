@@ -64,6 +64,7 @@ export default function ShortListItem({
               size={"iconSm"}
               onClick={() => {
                 selectionMutation.mutate({
+                  userId: user?.id || "",
                   shortlistId: user?.shortlistId || "",
                   selectedIndex: index!,
                 });
@@ -86,6 +87,7 @@ export default function ShortListItem({
               size={"iconXs"}
               onClick={() => {
                 removeMutation.mutate({
+                  userId: user?.id || "",
                   shortlistId: user?.shortlistId || "",
                   movieId: movie.id!,
                 });
@@ -100,6 +102,7 @@ export default function ShortListItem({
               size={"iconXs"}
               onClick={() => {
                 addMutation.mutate({
+                  userId: user?.id || "",
                   shortlistId: user?.shortlistId || "",
                   movie: movie,
                 });
