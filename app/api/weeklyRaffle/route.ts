@@ -11,5 +11,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     (movie: Movie) => movie.tmdbId === chosen.tmdbId
   );
 
+  console.log("chosenIndex", chosenIndex);
+  console.log("chosen", chosen);
   return NextResponse.json({ chosenIndex });
 }

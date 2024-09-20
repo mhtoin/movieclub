@@ -33,7 +33,7 @@ export default async function HomeLayout({
           accent={accent as { value: string; name: string }}
         />
         <SocketClient />
-        <Chat />
+
         <Toaster position="top-center" />
         <ReplaceDialog />
         {searchModal}

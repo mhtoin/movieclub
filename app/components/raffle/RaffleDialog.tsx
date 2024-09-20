@@ -3,7 +3,7 @@ import * as Ariakit from "@ariakit/react";
 import { Button } from "../ui/Button";
 import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Dices } from "lucide-react";
+import { Dices, PenOff, Shuffle, UserPen } from "lucide-react";
 import { shuffle } from "@/lib/utils";
 import { ParticipationButton } from "./ParticipationButton";
 
@@ -11,10 +11,11 @@ export default function RaffleDialog() {
   const dialog = Ariakit.useDialogStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [count, setCount] = useState(0);
-  const [shuffled, setShuffled] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [started, setStarted] = useState(false);
   const { data: allShortlists, status } = useShortlistsQuery();
+  const [shuffledMovies, setShuffledMovies] = useState<Movie[]>([]);
 
   const { data, mutate: raffle } = useRaffle();
 
@@ -25,10 +26,6 @@ export default function RaffleDialog() {
         })
       : [];
   }, [allShortlists]);
-
-  const shuffledMovies: Movie[] = useMemo(() => {
-    return shuffled ? shuffle([...movies]) : movies;
-  }, [movies, shuffled]);
 
   const nextIndex = useCallback(() => {
     setCurrentIndex((currentIndex + 1) % movies.length);
@@ -51,6 +48,18 @@ export default function RaffleDialog() {
   const calculateIntervalVelocity = useMemo(() => {
     // start slowing down the interval 5 steps before the chosen index
   }, [count, distanceToChosenIndex]);
+
+  const resetRaffle = useCallback(() => {
+    setCurrentIndex(0);
+    setCount(0);
+
+    setIsPlaying(false);
+    setStarted(false);
+  }, []);
+  useEffect(() => {
+    console.log("setting shuffled movies");
+    setShuffledMovies(movies);
+  }, [movies]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -95,15 +104,32 @@ export default function RaffleDialog() {
         backdrop={
           <div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
         }
-        className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-fit p-10 min-w-96 m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
+        className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[70vw] p-10 min-w-96 m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
       >
         <div className="flex flex-col gap-5 p-5 justify-center items-center">
-          <div className="flex flex-row gap-5">
+          <div className="flex flex-row justify-center items-center gap-5">
+            <h3 className="text-lg font-bold">Participants</h3>
+            <Button
+              variant={"outline"}
+              size={"iconSm"}
+              onClick={() => setIsEditing(!isEditing)}
+            >
+              {isEditing ? (
+                <UserPen className="w-4 h-4" />
+              ) : (
+                <PenOff className="w-4 h-4" />
+              )}
+            </Button>
+          </div>
+          <div className="flex flex-row gap-10">
             {users.map((user) => {
+              const participating = user?.shortlistId
+                ? allShortlists?.[user?.shortlistId]?.participating
+                : false;
               return (
                 <div
                   key={`avatar-${user?.id}`}
-                  className="flex flex-col gap-5 items-center justify-center"
+                  className="flex flex-col gap-5 items-center justify-center border rounded-md px-10 py-5"
                 >
                   <span
                     className={`text-xs text-center`}
@@ -124,7 +150,10 @@ export default function RaffleDialog() {
                       key={`profile-img-${user?.id}`}
                     />
                   </Button>
-                  <ParticipationButton defaultChecked={true} />
+                  <ParticipationButton
+                    defaultChecked={participating}
+                    disabled={!isEditing}
+                  />
                 </div>
               );
             })}
@@ -135,24 +164,32 @@ export default function RaffleDialog() {
               size={"iconLg"}
               onClick={() => {
                 if (!isPlaying) {
-                  console.log("start");
                   setStarted(true);
-                  setShuffled(true);
-                  setTimeout(() => {
-                    raffle({
-                      movies: shuffledMovies,
-                    });
-                    setIsPlaying(true);
-                  }, 1000);
+                  setIsPlaying(true);
+                  raffle({
+                    movies: shuffledMovies,
+                  });
                 } else {
                   setIsPlaying(false);
                 }
               }}
             >
-              <Dices className="w-4 h-4" />
+              <Dices className="w-6 h-6" />
+            </Button>
+            <Button
+              variant={"outline"}
+              size={"iconLg"}
+              onClick={() => {
+                const shuffled = shuffle([...shuffledMovies]);
+                setShuffledMovies(shuffled);
+                resetRaffle();
+              }}
+            >
+              <Shuffle className="w-6 h-6" />
             </Button>
           </div>
-          <div className="grid grid-cols-3 gap-7">
+          <h3 className="text-lg font-bold">Movies</h3>
+          <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-7">
             {shuffledMovies.map((movie, index) => {
               return (
                 <img
@@ -161,7 +198,7 @@ export default function RaffleDialog() {
                   alt=""
                   width={"150"}
                   className={`w-[150px] h-auto 2xl:w-[150px] animate-slideLeftAndFade transition-all duration-300 ease-in-out rounded-md ${
-                    index === currentIndex
+                    index === currentIndex && started
                       ? "saturate-100 scale-110"
                       : "saturate-0 scale-100"
                   }`}

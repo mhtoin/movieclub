@@ -44,13 +44,18 @@ export const ParticipationButton = forwardRef<HTMLInputElement, CheckboxProps>(
           />
         </VisuallyHidden>
 
-        <Calendar
-          className={`h-5 w-5 transition-all duration-500 ${
-            checked
-              ? "stroke-2 stroke-accent opacity-100"
-              : "stroke-1 opacity-60"
-          }`}
-        />
+        <div className="check" data-checked={checked}>
+          <svg
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 16 16"
+            height="1em"
+            width="1em"
+          >
+            <polyline points="4,8 7,12 12,4" />
+          </svg>
+        </div>
       </label>
     );
   }
