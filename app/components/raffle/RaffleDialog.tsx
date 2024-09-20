@@ -1,7 +1,13 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
 import { Button } from "../ui/Button";
-import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
+import {
+  useRaffle,
+  useShortlistsQuery,
+  useUpdateParticipationMutation,
+  useUpdateReadyStateMutation,
+  useValidateSession,
+} from "@/lib/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Dices, PenOff, Shuffle, UserPen } from "lucide-react";
 import { shuffle } from "@/lib/utils";
@@ -16,13 +22,23 @@ export default function RaffleDialog() {
   const [started, setStarted] = useState(false);
   const { data: allShortlists, status } = useShortlistsQuery();
   const [shuffledMovies, setShuffledMovies] = useState<Movie[]>([]);
+  const { data: currentUser } = useValidateSession();
+  const { status: updateParticipationStatus, mutate: updateParticipation } =
+    useUpdateParticipationMutation();
+  const {
+    variables: readyStateVariables,
+    status: updateReadyStateStatus,
+    mutate: updateReadyState,
+  } = useUpdateReadyStateMutation();
 
   const { data, mutate: raffle } = useRaffle();
 
   const movies = useMemo(() => {
     return allShortlists
       ? Object.entries(allShortlists).flatMap(([shortlistId, shortlist]) => {
-          return shortlist?.movies;
+          return shortlist?.requiresSelection && shortlist?.selectedIndex
+            ? shortlist?.movies[shortlist?.selectedIndex]
+            : shortlist?.movies;
         })
       : [];
   }, [allShortlists]);
@@ -31,23 +47,9 @@ export default function RaffleDialog() {
     setCurrentIndex((currentIndex + 1) % movies.length);
   }, [currentIndex, movies]);
 
-  const previousIndex = () => {
-    setCurrentIndex((currentIndex - 1 + movies.length) % movies.length);
-  };
-
-  const users = allShortlists
-    ? Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
-        return shortlist?.user;
-      })
-    : [];
-
   const distanceToChosenIndex = useMemo(() => {
     return Math.abs(data?.chosenIndex - currentIndex);
   }, [data?.chosenIndex, currentIndex]);
-
-  const calculateIntervalVelocity = useMemo(() => {
-    // start slowing down the interval 5 steps before the chosen index
-  }, [count, distanceToChosenIndex]);
 
   const resetRaffle = useCallback(() => {
     setCurrentIndex(0);
@@ -122,41 +124,62 @@ export default function RaffleDialog() {
             </Button>
           </div>
           <div className="flex flex-row gap-10">
-            {users.map((user) => {
-              const participating = user?.shortlistId
-                ? allShortlists?.[user?.shortlistId]?.participating
-                : false;
-              return (
-                <div
-                  key={`avatar-${user?.id}`}
-                  className="flex flex-col gap-5 items-center justify-center border rounded-md px-10 py-5"
-                >
-                  <span
-                    className={`text-xs text-center`}
-                    style={{ color: user?.color }}
+            {allShortlists &&
+              Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
+                const participating = shortlist?.participating;
+                const user = shortlist?.user;
+
+                return (
+                  <div
+                    key={`avatar-${user?.id}-${participating}-${shortlist?.isReady}`}
+                    className="flex flex-col gap-5 items-center justify-center border rounded-md px-10 py-5"
                   >
-                    {user?.name}
-                  </span>
-                  <Button
-                    variant={"outline"}
-                    size={"avatarSm"}
-                    className={`flex justify-center ${"hover:opacity-70"} transition-colors outline outline-success
-          }`}
-                    key={`avatar-${user?.id}`}
-                  >
-                    <img
-                      src={user?.image}
-                      alt=""
-                      key={`profile-img-${user?.id}`}
+                    <span
+                      className={`text-xs text-center`}
+                      style={{ color: user?.color }}
+                    >
+                      {user?.name}
+                    </span>
+                    <Button
+                      variant={"outline"}
+                      size={"avatarSm"}
+                      className={`flex justify-center ${"hover:opacity-70"} transition-colors outline ${
+                        shortlist?.isReady ? "outline-success" : "outline-error"
+                      }`}
+                      key={`avatar-${user?.id}`}
+                      disabled={!isEditing}
+                      isLoading={
+                        updateReadyStateStatus === "pending" &&
+                        readyStateVariables?.shortlistId === shortlistId
+                      }
+                      onClick={() => {
+                        updateReadyState({
+                          userId: currentUser?.id || "",
+                          shortlistId: shortlistId,
+                          isReady: !shortlist?.isReady,
+                        });
+                      }}
+                    >
+                      <img
+                        src={user?.image}
+                        alt=""
+                        key={`profile-img-${user?.id}`}
+                      />
+                    </Button>
+                    <ParticipationButton
+                      defaultChecked={participating}
+                      disabled={!isEditing}
+                      onChange={(e) => {
+                        updateParticipation({
+                          userId: currentUser?.id || "",
+                          shortlistId: shortlistId,
+                          participating: e.target.checked,
+                        });
+                      }}
                     />
-                  </Button>
-                  <ParticipationButton
-                    defaultChecked={participating}
-                    disabled={!isEditing}
-                  />
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })}
           </div>
           <div className="flex flex-row gap-2">
             <Button

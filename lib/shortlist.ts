@@ -246,7 +246,7 @@ export async function updateShortlistState(
 }
 
 export async function updateShortlistParticipationState(
-  ready: boolean,
+  participating: boolean,
   shortlistId: string
 ) {
   return await prisma.shortlist.update({
@@ -254,7 +254,7 @@ export async function updateShortlistParticipationState(
       id: shortlistId,
     },
     data: {
-      participating: ready,
+      participating: participating,
     },
   });
 }

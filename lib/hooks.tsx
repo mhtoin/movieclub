@@ -208,6 +208,40 @@ export const useUpdateReadyStateMutation = () => {
   });
 };
 
+export const useUpdateParticipationMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      userId,
+      shortlistId,
+      participating,
+    }: {
+      userId: string;
+      shortlistId: string;
+      participating: boolean;
+    }) => {
+      const response = await fetch(
+        `/api/shortlist/${shortlistId}/participation`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ participating }),
+        }
+      );
+
+      return await response.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
+        return produce(oldData, (draft) => {
+          draft[variables.shortlistId].participating = data.participating;
+        });
+      });
+      sendShortlistUpdate(variables.userId);
+    },
+  });
+};
+
 export const useUpdateSelectionMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({

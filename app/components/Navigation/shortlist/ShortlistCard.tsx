@@ -96,7 +96,8 @@ export default function ShortlistCard({
             )}
           </div>
         </div>
-        {shortlist?.requiresSelection && shortlist.selectedIndex === -1 ? (
+        {shortlist?.requiresSelection &&
+        (shortlist.selectedIndex === -1 || shortlist.selectedIndex === null) ? (
           <div className="flex flex-row border rounded-xl p-3 items-center justify-center">
             <MessageCircleWarning className="w-4 h-4 mr-2 " />
             <span>Select a movie!!</span>
