@@ -750,18 +750,19 @@ export function useSocket() {
     async function connect() {
       if (!isRegistered && user) {
         // register the client first
-        const res = await fetch("http://localhost:8000/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id: user.id,
-            topic: "shortlist",
-          }),
-        });
-
-        console.log("res", res);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_RELAY_URL}/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_id: user.id,
+              topic: "shortlist",
+            }),
+          }
+        );
 
         if (res.ok) {
           const data = await res.json();
@@ -778,7 +779,6 @@ export function useSocket() {
               queryClient.invalidateQueries({
                 queryKey: message.queryKey,
               });
-              toast.success("Shortlist updated");
             } else if ("message" in message) {
               toast.success(message.message);
             } else {

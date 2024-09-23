@@ -149,6 +149,9 @@ dependencies:
   react-aria-components:
     specifier: ^1.2.1
     version: 1.2.1(react-dom@18.3.1)(react@18.3.1)
+  react-canvas-confetti:
+    specifier: ^2.0.7
+    version: 2.0.7(react@18.3.1)
   react-chartjs-2:
     specifier: ^5.2.0
     version: 5.2.0(chart.js@4.3.0)(react@18.3.1)
@@ -3716,6 +3719,10 @@ packages:
     dev: false
     optional: true
 
+  /@types/canvas-confetti@1.6.4:
+    resolution: {integrity: sha512-fNyZ/Fdw/Y92X0vv7B+BD6ysHL4xVU5dJcgzgxLdGbn8O3PezZNIJpml44lKM0nsGur+o/6+NZbZeNTt00U1uA==}
+    dev: false
+
   /@types/hoist-non-react-statics@3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
@@ -4330,6 +4337,10 @@ packages:
 
   /caniuse-lite@1.0.30001662:
     resolution: {integrity: sha512-sgMUVwLmGseH8ZIrm1d51UbrhqMCH3jvS7gF/M6byuHOnKyLOBL7W8yz5V02OHwgLGA36o/AFhWzzh4uc5aqTA==}
+    dev: false
+
+  /canvas-confetti@1.9.3:
+    resolution: {integrity: sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==}
     dev: false
 
   /chalk@2.4.1:
@@ -7648,6 +7659,16 @@ packages:
       '@react-types/shared': 3.23.1(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /react-canvas-confetti@2.0.7(react@18.3.1):
+    resolution: {integrity: sha512-DIj44O35TPAwJkUSIZqWdVsgAMHtVf8h7YNmnr3jF3bn5mG+d7Rh9gEcRmdJfYgRzh6K+MAGujwUoIqQyLnMJw==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      '@types/canvas-confetti': 1.6.4
+      canvas-confetti: 1.9.3
+      react: 18.3.1
     dev: false
 
   /react-chartjs-2@5.2.0(chart.js@4.3.0)(react@18.3.1):

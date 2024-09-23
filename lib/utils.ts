@@ -97,7 +97,7 @@ export async function publishMessage(
   topic: string,
   user_id: string
 ) {
-  const res = await fetch("http://localhost:8000/publish", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_RELAY_URL}/publish`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
