@@ -204,7 +204,8 @@ export default function RaffleDialog() {
               variant={"outline"}
               size={"iconLg"}
               onClick={() => {
-                const shuffled = shuffle([...shuffledMovies]);
+                const currentMovies = [...shuffledMovies];
+                const shuffled = shuffle(currentMovies);
                 setShuffledMovies(shuffled);
                 resetRaffle();
               }}
