@@ -119,14 +119,19 @@ export const useSearchInfiniteQuery = () => {
 
 export const useRaffle = () => {
   const { data: session } = useValidateSession();
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ movies }: { movies: Movie[] }) => {
+    mutationFn: async ({ movies }: { movies: MovieWithUser[] }) => {
       const res = await fetch("/api/weeklyRaffle", {
         method: "POST",
         body: JSON.stringify({ userId: session?.id, movies }),
       });
       const data = await res.json();
       return data;
+    },
+    onSuccess: (data) => {
+      console.log("data", data);
+      queryClient.setQueryData(["raffle"], data);
     },
   });
 };
@@ -751,7 +756,11 @@ export function useSocket() {
       if (!isRegistered && user) {
         // register the client first
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_RELAY_URL}/register`,
+          `${
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:8080"
+              : process.env.NEXT_PUBLIC_RELAY_URL
+          }/register`,
           {
             method: "POST",
             headers: {

@@ -37,6 +37,10 @@ declare global {
     watchDate: string;
   }
 
+  interface MovieWithUser extends Movie {
+    user: User;
+  }
+
   interface MovieOfTheWeekQueryResult {
     [x: string]: MovieOfTheWeek;
   }

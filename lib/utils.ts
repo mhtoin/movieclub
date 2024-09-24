@@ -97,15 +97,22 @@ export async function publishMessage(
   topic: string,
   user_id: string
 ) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_RELAY_URL}/publish`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      message: message,
-      topic: topic,
-      user_id: user_id,
-    }),
-  });
+  const res = await fetch(
+    `${
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:8080"
+        : process.env.NEXT_PUBLIC_RELAY_URL
+    }/publish`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: message,
+        topic: topic,
+        user_id: user_id,
+      }),
+    }
+  );
 }
