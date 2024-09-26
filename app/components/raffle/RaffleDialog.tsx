@@ -111,7 +111,7 @@ export default function RaffleDialog() {
         backdrop={
           <div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
         }
-        className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[70vw] p-10 min-w-96 m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
+        className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border w-fit max-w-[50vw] max-h-[70vh] p-10 m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
       >
         <div className="flex flex-col gap-5 p-5 justify-center items-center h-full">
           {finished && data ? (
