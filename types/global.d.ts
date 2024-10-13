@@ -24,6 +24,9 @@ declare global {
     overview: string;
     movieOfTheWeek?: Date | string | null;
     watchDate?: string;
+    genres?: Array<Genre>;
+    runtime?: number;
+    tagline?: string;
   }
 
   interface MovieOfTheWeek extends Movie {
@@ -62,6 +65,11 @@ declare global {
     overview: string;
     userId?: ObjectId | string;
     imdb_id?: string;
+    genres?: Array<MovieGenre>;
+    runtime?: number;
+    tagline?: string;
+    "watch/providers"?: { results: { [x: string]: WatchProviders } };
+    videos?: { results: Array<Trailer> };
   }
 
   interface WatchProviders {
@@ -172,6 +180,11 @@ declare global {
   interface Genre {
     label: string;
     value: number;
+  }
+
+  interface MovieGenre {
+    id: number;
+    name: string;
   }
 
   interface RangeSelection {

@@ -126,7 +126,8 @@ export const useRaffle = () => {
         method: "POST",
         body: JSON.stringify({ userId: session?.id, movies }),
       });
-      const data = await res.json();
+      const data: { movie: MovieWithUser; chosenIndex: number } =
+        await res.json();
       return data;
     },
     onSuccess: (data) => {

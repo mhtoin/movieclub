@@ -14,7 +14,7 @@ export default function RaffleItems({
       <h3 className="text-lg font-bold">Movies</h3>
       <motion.div
         layout
-        className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-7"
+        className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-7 p-5"
       >
         {shuffledMovies.map((movie, index) => {
           return (

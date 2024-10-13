@@ -41,7 +41,7 @@ export default function Participants({
           )}
         </Button>
       </div>
-      <div className="flex flex-row gap-10">
+      <div className="flex flex-row gap-5">
         {allShortlists &&
           Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
             const participating = shortlist?.participating;
@@ -50,10 +50,10 @@ export default function Participants({
             return (
               <div
                 key={`avatar-${user?.id}-${participating}-${shortlist?.isReady}`}
-                className="flex flex-col gap-5 items-center justify-center border rounded-md px-10 py-5"
+                className="flex flex-col gap-3 items-center justify-center border rounded-md px-10 py-5"
               >
                 <span
-                  className={`text-xs text-center`}
+                  className={`text-xs text-center font-semibold`}
                   style={{ color: user?.color }}
                 >
                   {user?.name}

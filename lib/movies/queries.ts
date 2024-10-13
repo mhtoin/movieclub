@@ -38,15 +38,19 @@ export const getKeyWord = async (id: string) => {
 };
 
 export const getMovie = async (id: number) => {
-  const res = await fetch(`https://api.themoviedb.org/3/movie/${id}`, {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
-    },
-  });
-  return (await res.json()) as TMDBMovie;
+  const res = await fetch(
+    `https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+      },
+    }
+  );
+  const data: TMDBMovie = await res.json();
+  return data;
 };
 
 export const searchMovies = async (

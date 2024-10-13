@@ -111,31 +111,31 @@ export default function RaffleDialog() {
         backdrop={
           <div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
         }
-        className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border w-fit max-w-[50vw] max-h-[70vh] p-10 m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
+        className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
       >
-        <div className="flex flex-col gap-5 p-5 justify-center items-center h-full">
-          {finished && data ? (
+        {finished && data ? (
+          <div className="flex flex-col gap-5 justify-center items-center">
             <ResultCard movie={data?.movie} />
-          ) : (
-            <>
-              <Participants isEditing={isEditing} setIsEditing={setIsEditing} />
-              <ActionButtons
-                isPlaying={isPlaying}
-                setIsPlaying={setIsPlaying}
-                setStarted={setStarted}
-                shuffledMovies={shuffledMovies}
-                setShuffledMovies={setShuffledMovies}
-                resetRaffle={resetRaffle}
-                raffle={raffle}
-              />
-              <RaffleItems
-                shuffledMovies={shuffledMovies}
-                currentIndex={currentIndex}
-                started={started}
-              />
-            </>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-5 justify-center items-center p-5">
+            <Participants isEditing={isEditing} setIsEditing={setIsEditing} />
+            <ActionButtons
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+              setStarted={setStarted}
+              shuffledMovies={shuffledMovies}
+              setShuffledMovies={setShuffledMovies}
+              resetRaffle={resetRaffle}
+              raffle={raffle}
+            />
+            <RaffleItems
+              shuffledMovies={shuffledMovies}
+              currentIndex={currentIndex}
+              started={started}
+            />
+          </div>
+        )}
       </Ariakit.Dialog>
     </>
   );

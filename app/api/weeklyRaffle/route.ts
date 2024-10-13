@@ -16,5 +16,5 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
   console.log("chosenIndex", chosenIndex);
   console.log("chosen", chosen);
-  return NextResponse.json({ chosenIndex, movie: movieObject });
+  return NextResponse.json({ chosenIndex, movie: chosen });
 }

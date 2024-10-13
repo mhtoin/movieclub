@@ -134,7 +134,7 @@ export default function MovieCarousel() {
               sortedData?.map((date, index) => {
                 const movie = data[date as keyof typeof data];
                 const backgroundPath = movie?.backdrop_path
-                  ? `http://image.tmdb.org/t/p/original${movie["poster_path"]}`
+                  ? `https://image.tmdb.org/t/p/original${movie["poster_path"]}`
                   : "";
                 return (
                   <CarouselItem
