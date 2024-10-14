@@ -5,12 +5,17 @@ import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";
 import { SiYoutube } from "react-icons/si";
+import CastPortrait from "./CastPortrait";
+import CastPopover from "./CastPopover";
+import UserPortrait from "./UserPortrait";
+import TrailerLink from "./TrailerLink";
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
   const { data: movieData } = useMovieQuery(movie.tmdbId, movie ? true : false);
   const watchproviders = movieData?.["watch/providers"]
     ? movieData["watch/providers"].results["FI"]
     : null;
+
   console.log("movieData", movieData);
   console.log("watchproviders", watchproviders);
   return (
@@ -42,7 +47,13 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
                 <div className="flex flex-row gap-2 bg-accent/50 rounded-md p-2 w-fit">
                   <span className="text-sm flex flex-row items-center gap-1">
                     <Clock className="w-6 h-6" />
-                    {movieData?.runtime}
+                    {`${
+                      movieData?.runtime
+                        ? Math.floor(movieData?.runtime / 60)
+                        : 0
+                    } h ${
+                      movieData?.runtime ? movieData?.runtime % 60 : 0
+                    } min`}
                   </span>
                   <span className="text-sm flex flex-row items-center gap-1">
                     <Calendar className="w-6 h-6" />
@@ -116,15 +127,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
             </div>
             <div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">
               {movieData?.videos?.results?.slice(0, 3).map((video) => {
-                return (
-                  <Link
-                    href={`https://www.youtube.com/watch?v=${video.key}`}
-                    target="_blank"
-                    key={video.id}
-                  >
-                    <SiYoutube className="w-6 h-6" />
-                  </Link>
-                );
+                return <TrailerLink video={video} key={video.id} />;
               })}
             </div>
           </div>
@@ -133,16 +136,18 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
           <span className="text-foreground/50 text-md font-bold italic">
             {movieData?.tagline}
           </span>
+          <div className="flex flex-row gap-2 justify-start items-center">
+            {movieData?.credits?.cast?.slice(0, 6).map((cast) => {
+              return <CastPortrait cast={cast} key={cast.id} />;
+            })}
+            {movieData?.credits?.cast && (
+              <CastPopover cast={movieData?.credits?.cast} />
+            )}
+          </div>
           <p className="text-foreground/50 ">{movie.overview}</p>
           <div className="flex flex-row gap-2">
             <div className="flex flex-row gap-2">
-              <img
-                src={movie?.user?.image}
-                alt={movie?.user?.name}
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
+              <UserPortrait user={movie?.user} />
             </div>
           </div>
         </div>

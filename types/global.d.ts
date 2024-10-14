@@ -70,6 +70,16 @@ declare global {
     tagline?: string;
     "watch/providers"?: { results: { [x: string]: WatchProviders } };
     videos?: { results: Array<Trailer> };
+    credits?: {
+      cast: Array<Cast>;
+    };
+  }
+
+  interface Cast {
+    name: string;
+    profile_path: string;
+    character: string;
+    id: number;
   }
 
   interface WatchProviders {
