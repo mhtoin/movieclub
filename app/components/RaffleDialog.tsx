@@ -2,14 +2,13 @@
 import { PropsWithChildren, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useRaffleStore } from "@/stores/useRaffleStore";
-import { usePusher } from "@/lib/hooks";
+import { usePusher, useValidateSession } from "@/lib/hooks";
 import RaffleResultCard from "./RaffleResultCard";
 import { format } from "date-fns";
-import { useSession } from "next-auth/react";
 
 export default function RaffleDialog({ children }: PropsWithChildren) {
-  const { data: session } = useSession();
-  usePusher("movieclub-raffle", "result", session?.user?.userId);
+  const { data: session } = useValidateSession();
+  usePusher("movieclub-raffle", "result", session?.id);
   const isOpen = useRaffleStore.use.isOpen();
   const setIsOpen = useRaffleStore.use.setIsOpen();
   /*

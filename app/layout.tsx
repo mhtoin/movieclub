@@ -1,13 +1,7 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Notification from "./components/Notification";
-import MobileNavbar from "./home/components/MobileNavbar";
-import { NextAuthProvider } from "@/utils/NextAuthProvider";
-
-import RaffleDialog from "./components/RaffleDialog";
-import { NavBar } from "./components/Navigation/Navbar";
-import { Toaster } from "./components/ui/Toaster";
+import { cookies } from "next/headers";
 
 export const metadata = {
   title: "movieclub",
@@ -19,26 +13,25 @@ const inter = Inter({
   display: "swap",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const theme = cookieStore.get("theme");
+  const accent = cookieStore.get("accent");
+
   return (
-    <html lang="en" className={`dark ${inter.className}`}>
-      <body className={`antialiased min-h-screen no-scrollbar`}>
-        <Notification />
-        <NextAuthProvider>
-          <NavBar />
-          <div>
-            <Toaster position="bottom-center" />
-          </div>
-          <Providers>
-            <RaffleDialog />
-            {children}
-            <MobileNavbar />
-          </Providers>
-        </NextAuthProvider>
+    <html
+      lang="en"
+      className={theme ? theme.value : ""}
+      data-accent={accent ? accent.value : ""}
+    >
+      <body
+        className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
+      >
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

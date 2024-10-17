@@ -1,14 +1,11 @@
 "use client";
-import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/lib/hooks";
-import { MobileRaffleButton } from "@/app/components/MobileRaffleButton";
 
 export default function BottomNavigation() {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session } = useSession();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 

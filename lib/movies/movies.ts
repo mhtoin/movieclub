@@ -18,9 +18,9 @@ import {
 } from "../shortlist";
 import type { User } from "@prisma/client";
 import { countByKey, keyBy, sample, shuffle } from "../utils";
-import { queryOptions } from "@tanstack/react-query";
 
 export async function getMoviesUntil(date: string) {
+  console.log("getting movies until", date);
   const movies = await prisma.movie.findMany({
     where: {
       watchDate: {
