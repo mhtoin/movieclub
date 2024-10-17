@@ -1,5 +1,12 @@
 import { useMovieQuery } from "@/lib/hooks";
-import { Star, Users, TrendingUp, Calendar, Clock } from "lucide-react";
+import {
+  Star,
+  Users,
+  TrendingUp,
+  Calendar,
+  Clock,
+  Loader2,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
@@ -11,13 +18,30 @@ import UserPortrait from "./UserPortrait";
 import TrailerLink from "./TrailerLink";
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
-  const { data: movieData } = useMovieQuery(movie.tmdbId, movie ? true : false);
+  const { data: movieData, status } = useMovieQuery(
+    movie.tmdbId,
+    movie ? true : false
+  );
+
+  if (status === "pending") return <Loader2 className="animate-spin" />;
+
   const watchproviders = movieData?.["watch/providers"]
     ? movieData["watch/providers"].results["FI"]
     : null;
+  const backdrops = movieData?.images?.backdrops.filter(
+    (backdrop) => backdrop.iso_639_1 === "en"
+  );
+  const posters = movieData?.images?.posters.filter(
+    (poster) => poster.iso_639_1 === "en"
+  );
 
-  console.log("movieData", movieData);
-  console.log("watchproviders", watchproviders);
+  const randomPoster = posters
+    ? posters[Math.floor(Math.random() * posters.length)]
+    : null;
+  const randomBackdrop = backdrops
+    ? backdrops[Math.floor(Math.random() * backdrops.length)]
+    : null;
+
   return (
     <div className="grid grid-rows-6 h-full">
       <div className="row-span-4 flex relative ">
@@ -81,23 +105,23 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
           </div>
         </div>
         <Image
-          src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
+          src={`https://image.tmdb.org/t/p/original${randomBackdrop?.file_path}`}
           alt={movie.title}
-          width={2000}
-          height={2000}
-          className="object-cover"
+          width={randomBackdrop?.width}
+          height={randomBackdrop?.height}
+          className={`object-cover aspect-[${randomBackdrop?.aspect_ratio}]`}
           quality={100}
         />
       </div>
       <div className="grid grid-cols-3 gap-5 items-center justify-center px-10 row-span-2">
         <div className="flex flex-col col-span-1  h-full relative">
-          <div className="flex flex-col justify-center items-center absolute -top-[85%] left-0 gap-5">
-            <img
-              src={`https://image.tmdb.org/t/p/original${movie?.poster_path}`}
+          <div className="flex flex-col justify-center items-center absolute -top-[85%] left-0 gap-5 py-2">
+            <Image
+              src={`https://image.tmdb.org/t/p/original${randomPoster?.file_path}`}
               alt={movie.title}
-              width={100}
-              height={200}
-              className="object-contain w-4/5 rounded-sm"
+              width={randomPoster?.width}
+              height={randomPoster?.height}
+              className="object-contain w-4/5 rounded-sm aspect-[${randomPoster?.aspect_ratio}]"
             />
             <div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">
               {watchproviders?.flatrate?.map((provider) => {

@@ -133,6 +133,10 @@ export const useRaffle = () => {
     onSuccess: (data) => {
       console.log("data", data);
       queryClient.setQueryData(["raffle"], data);
+      queryClient.prefetchQuery({
+        queryKey: ["movie", data.movie.tmdbId],
+        queryFn: () => getMovie(data.movie.tmdbId),
+      });
     },
   });
 };

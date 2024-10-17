@@ -73,6 +73,20 @@ declare global {
     credits?: {
       cast: Array<Cast>;
     };
+    images?: {
+      backdrops: Array<TMDbImage>;
+      posters: Array<TMDbImage>;
+    };
+  }
+
+  interface TMDbImage {
+    aspect_ratio: number;
+    file_path: string;
+    height: number;
+    width: number;
+    iso_639_1: string;
+    vote_average: number;
+    vote_count: number;
   }
 
   interface Cast {

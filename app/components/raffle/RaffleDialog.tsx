@@ -57,6 +57,7 @@ export default function RaffleDialog() {
 
     setIsPlaying(false);
     setStarted(false);
+    setFinished(false);
   }, []);
 
   useEffect(() => {
@@ -108,6 +109,7 @@ export default function RaffleDialog() {
       </Button>
       <Ariakit.Dialog
         store={dialog}
+        onClose={resetRaffle}
         backdrop={
           <div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
         }

@@ -1,6 +1,7 @@
 import { getMovie } from "@/lib/movies/movies";
 import { sample } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const { userId, movies }: { userId: string; movies: MovieWithUser[] } =
@@ -16,5 +17,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
   console.log("chosenIndex", chosenIndex);
   console.log("chosen", chosen);
+
   return NextResponse.json({ chosenIndex, movie: chosen });
 }

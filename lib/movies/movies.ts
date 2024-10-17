@@ -325,6 +325,8 @@ export async function chooseMovieOfTheWeek() {
   } as MovieOfTheWeek;
 }
 
+export async function postRaffleWork() {}
+
 export async function updateChosenMovie(movie: Movie, userId: string) {
   const nextDate = getNextDate();
 
