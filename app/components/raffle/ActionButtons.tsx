@@ -1,7 +1,7 @@
 import { Dices, Shuffle } from "lucide-react";
 import { Button } from "../ui/Button";
 import { shuffle } from "@/lib/utils";
-import { useRaffle } from "@/lib/hooks";
+import { useRaffle, useValidateSession } from "@/lib/hooks";
 import { UseMutateFunction } from "@tanstack/react-query";
 
 export default function ActionButtons({
@@ -20,14 +20,19 @@ export default function ActionButtons({
   setShuffledMovies: (shuffledMovies: MovieWithUser[]) => void;
   resetRaffle: () => void;
   raffle: UseMutateFunction<
-    any,
+    {
+      movie: MovieWithUser;
+      chosenIndex: number;
+    },
     Error,
     {
       movies: MovieWithUser[];
+      startingUserId: string;
     },
     unknown
   >;
 }): JSX.Element {
+  const { data: user } = useValidateSession();
   return (
     <div className="flex flex-row gap-2">
       <Button
@@ -39,6 +44,7 @@ export default function ActionButtons({
             setIsPlaying(true);
             raffle({
               movies: shuffledMovies,
+              startingUserId: user?.id!,
             });
           } else {
             setIsPlaying(false);

@@ -121,10 +121,16 @@ export const useRaffle = () => {
   const { data: session } = useValidateSession();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ movies }: { movies: MovieWithUser[] }) => {
+    mutationFn: async ({
+      movies,
+      startingUserId,
+    }: {
+      movies: MovieWithUser[];
+      startingUserId: string;
+    }) => {
       const res = await fetch("/api/weeklyRaffle", {
         method: "POST",
-        body: JSON.stringify({ userId: session?.id, movies }),
+        body: JSON.stringify({ userId: session?.id, movies, startingUserId }),
       });
       const data: { movie: MovieWithUser; chosenIndex: number } =
         await res.json();

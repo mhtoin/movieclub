@@ -113,8 +113,8 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
           quality={100}
         />
       </div>
-      <div className="grid grid-cols-3 gap-5 items-center justify-center px-10 row-span-2">
-        <div className="flex flex-col col-span-1  h-full relative">
+      <div className="grid grid-cols-3 gap-5 items-center justify-center px-10 row-span-2 ">
+        <div className="flex flex-col col-span-1 h-full relative ">
           <div className="flex flex-col justify-center items-center absolute -top-[85%] left-0 gap-5 py-2">
             <Image
               src={`https://image.tmdb.org/t/p/original${randomPoster?.file_path}`}

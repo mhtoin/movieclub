@@ -116,3 +116,27 @@ export async function publishMessage(
     }
   );
 }
+
+export async function sendNotification(
+  message: string | object,
+  user_id: string
+) {
+  const res = await fetch(
+    `${
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:8080"
+        : process.env.NEXT_PUBLIC_RELAY_URL
+    }/publish`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: message,
+        topic: "shortlist",
+        user_id: user_id,
+      }),
+    }
+  );
+}

@@ -28,7 +28,7 @@ export default function RaffleDialog() {
   const [finished, setFinished] = useState(false);
   const { data: allShortlists, status } = useShortlistsQuery();
   const [shuffledMovies, setShuffledMovies] = useState<MovieWithUser[]>([]);
-
+  const { data: session } = useValidateSession();
   const { data, mutate: raffle } = useRaffle();
 
   const movies: MovieWithUser[] = useMemo(() => {
