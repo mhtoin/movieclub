@@ -10,6 +10,7 @@ declare global {
     adult: boolean;
     genre_ids: Array<number>;
     tmdbId: number;
+    imdbId?: string;
     original_language: string;
     popularity: number;
     video: boolean;
@@ -23,6 +24,9 @@ declare global {
     overview: string;
     movieOfTheWeek?: Date | string | null;
     watchDate?: string;
+    genres?: Array<Genre>;
+    runtime?: number;
+    tagline?: string;
   }
 
   interface MovieOfTheWeek extends Movie {
@@ -34,6 +38,10 @@ declare global {
     owner?: string;
     user: User;
     watchDate: string;
+  }
+
+  interface MovieWithUser extends Movie {
+    user: User;
   }
 
   interface MovieOfTheWeekQueryResult {
@@ -55,7 +63,37 @@ declare global {
     original_title: string;
     release_date: string;
     overview: string;
-    userId: ObjectId | string;
+    userId?: ObjectId | string;
+    imdb_id?: string;
+    genres?: Array<MovieGenre>;
+    runtime?: number;
+    tagline?: string;
+    "watch/providers"?: { results: { [x: string]: WatchProviders } };
+    videos?: { results: Array<Trailer> };
+    credits?: {
+      cast: Array<Cast>;
+    };
+    images?: {
+      backdrops: Array<TMDbImage>;
+      posters: Array<TMDbImage>;
+    };
+  }
+
+  interface TMDbImage {
+    aspect_ratio: number;
+    file_path: string;
+    height: number;
+    width: number;
+    iso_639_1: string;
+    vote_average: number;
+    vote_count: number;
+  }
+
+  interface Cast {
+    name: string;
+    profile_path: string;
+    character: string;
+    id: number;
   }
 
   interface WatchProviders {
@@ -168,6 +206,11 @@ declare global {
     value: number;
   }
 
+  interface MovieGenre {
+    id: number;
+    name: string;
+  }
+
   interface RangeSelection {
     min: string;
     max: string;
@@ -175,5 +218,20 @@ declare global {
 
   type ShortlistsById = {
     [x: string]: Shortlist;
+  };
+
+  type DiscordUser = {
+    id: string;
+    username: string;
+    avatar: string;
+    avatar_decoration: string;
+    discriminator: string;
+    public_flags: number;
+    verified?: boolean;
+    email?: string;
+    flags: number;
+    banner: string;
+    banner_color: string;
+    accent_color: number;
   };
 }
