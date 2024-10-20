@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";
@@ -126,10 +127,11 @@ export default function ShortListItem({
           </Button>
         </div>
       )}
-      <img
-        src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+      <Image
+        src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
         width={"150"}
+        height={"150"}
         className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
@@ -163,7 +165,10 @@ export default function ShortListItem({
                   <SiThemoviedatabase className="w-6 h-6" />
                 </Button>
               </Link>
-              <Link href={`https://www.imdb.com/title/${movie?.id}`}>
+              <Link
+                href={`https://www.imdb.com/title/${movie?.imdbId}`}
+                target="_blank"
+              >
                 <Button variant="ghost" size="icon">
                   <FaImdb className="w-6 h-6" />
                 </Button>
