@@ -17,10 +17,10 @@ import {
   updateShortlistState,
 } from "../shortlist";
 import type { User } from "@prisma/client";
-import { countByKey, keyBy, sample, shuffle } from "../utils";
-import { queryOptions } from "@tanstack/react-query";
+import { countByKey, keyBy, sample, sendNotification, shuffle } from "../utils";
 
 export async function getMoviesUntil(date: string) {
+  console.log("getting movies until", date);
   const movies = await prisma.movie.findMany({
     where: {
       watchDate: {
@@ -323,6 +323,74 @@ export async function chooseMovieOfTheWeek() {
     watchDate: getNextDate(),
     owner: chosen?.user.name,
   } as MovieOfTheWeek;
+}
+
+export async function postRaffleWork({
+  movies,
+  winner,
+  startingUserId,
+}: {
+  movies: MovieWithUser[];
+  winner: MovieWithUser;
+  startingUserId: string;
+}) {
+  // estimate the time it takes to run the raffle
+  // 200ms per movie * 4 rounds + 500ms per movie for the last round is the absolute maximum
+  let runtime = movies.length * 4 * 200 + movies.length * 500;
+
+  // await the timeout
+  await new Promise((resolve) => setTimeout(resolve, runtime));
+  console.log("Raffle finished");
+
+  let participants = [...new Set(movies.map((movie) => movie.user.id))];
+
+  // create a raffle record
+  await prisma.raffle.create({
+    data: {
+      participants: {
+        connect: participants.map((participant) => ({ id: participant })),
+      },
+      movies: {
+        connect: movies.map((movie) => ({ id: movie.id })),
+      },
+      winningMovieID: winner.id!,
+      date: formatISO(new Date(), {
+        representation: "date",
+      }),
+    },
+  });
+
+  // update the winner with the watch date
+  await updateChosenMovie(winner, winner.user.id);
+
+  // update shortlist states, remove the winning movie from all shortlists
+  participants.forEach(async (participant) => {
+    let shortlist = await prisma.shortlist.findUnique({
+      where: {
+        userId: participant,
+      },
+      include: {
+        movies: true,
+      },
+    });
+    let movieInShortlist = shortlist?.movies.find(
+      (movie) => movie.id === winner.id
+    );
+
+    await updateShortlistState(false, shortlist!.id);
+    await updateShortlistSelectionStatus(
+      participant === winner.user.id,
+      shortlist!.id
+    );
+    if (movieInShortlist) {
+      await removeMovieFromShortlist(movieInShortlist.id, shortlist!.id);
+    }
+  });
+  console.log("sending notification");
+  sendNotification(
+    { message: `${winner.user.name} won the raffle!` },
+    startingUserId
+  );
 }
 
 export async function updateChosenMovie(movie: Movie, userId: string) {

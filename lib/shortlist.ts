@@ -1,10 +1,12 @@
+"server only";
 import prisma from "./prisma";
-import { ObjectId, OptionalId } from "mongodb";
-import { Prisma } from "@prisma/client";
 import { getAdditionalInfo } from "./tmdb";
 import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
 import Pusher from "pusher";
+import { getMovie } from "./movies/queries";
+import { keyBy, omit } from "./utils";
+import { db } from "./db";
 
 export const revalidate = 10;
 
@@ -70,17 +72,24 @@ export async function getShortList(id: string) {
     },
   });
 
-  return shortlist as Prisma.ShortlistInclude;
+  return shortlist;
 }
 
 export async function getAllShortLists() {
-  return await prisma.shortlist.findMany({
+  return await db.shortlist.findMany({
     include: {
       movies: true,
       user: true,
     },
   });
 }
+
+export const getAllShortlistsGroupedById =
+  async (): Promise<ShortlistsById> => {
+    const data = await getAllShortLists();
+    const groupedData = keyBy(data, (shortlist: any) => shortlist.id);
+    return groupedData;
+  };
 
 export async function findOrCreateShortList(userId: string) {
   const shortlist = await prisma.shortlist.upsert({
@@ -237,7 +246,7 @@ export async function updateShortlistState(
 }
 
 export async function updateShortlistParticipationState(
-  ready: boolean,
+  participating: boolean,
   shortlistId: string
 ) {
   return await prisma.shortlist.update({
@@ -245,7 +254,7 @@ export async function updateShortlistParticipationState(
       id: shortlistId,
     },
     data: {
-      participating: ready,
+      participating: participating,
     },
   });
 }
@@ -302,5 +311,42 @@ export async function updateShortlistSelectionStatus(
     .catch((err) => {
       throw new Error(err.message);
     });
+  return updated;
+}
+
+export async function replaceShortlistMovie(
+  replacedMovie: Movie,
+  replacingWithMovie: Movie,
+  shortlistId: string
+) {
+  // try to fetch the movie from the db to check if it exists
+  // if tmdbId is present, it means replacingWithMovie is of type Movie
+  // so we can just insert it directly
+  console.log("is tmdb movie", replacingWithMovie);
+  console.log("replacedMovie", replacedMovie);
+  const movie = await getMovie(replacingWithMovie.tmdbId);
+  const movieObject = {
+    ...omit(replacingWithMovie, ["id"]),
+    tmdbId: movie.id,
+    imdbId: movie?.imdb_id,
+  } as Movie;
+  const updated = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      movies: {
+        disconnect: [{ id: replacedMovie.id }],
+        connectOrCreate: {
+          where: { tmdbId: replacingWithMovie.tmdbId },
+          create: movieObject,
+        },
+      },
+    },
+    include: {
+      movies: true,
+    },
+  });
+
   return updated;
 }

@@ -1,6 +1,4 @@
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
-import { getServerSession } from "next-auth";
+import { validateRequest } from "./auth";
 
 export const revalidate = 10;
 
@@ -41,7 +39,11 @@ export async function getAdditionalInfo(tmdbId: number) {
 }
 
 export async function getWatchlist() {
-  const session = await getServerSession(authOptions);
+  const { user, session } = await validateRequest();
+
+  if (!user) {
+    return [];
+  }
 
   let pagesLeft = true;
   let page = 1;
@@ -49,7 +51,7 @@ export async function getWatchlist() {
 
   do {
     let watchlist = await fetch(
-      `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${session?.user.sessionId}&sort_by=created_at.asc`,
+      `https://api.themoviedb.org/3/account/${user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.sessionId}&sort_by=created_at.asc`,
       {
         method: "GET",
         headers: {
@@ -65,7 +67,7 @@ export async function getWatchlist() {
     movies.push(results);
 
     let pages = data && data.total_pages ? data.total_pages : "";
-    
+
     if (pages && pages >= page) {
       page++;
     } else {
