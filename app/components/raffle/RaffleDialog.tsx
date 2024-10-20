@@ -28,13 +28,12 @@ export default function RaffleDialog() {
   const [finished, setFinished] = useState(false);
   const { data: allShortlists, status } = useShortlistsQuery();
   const [shuffledMovies, setShuffledMovies] = useState<MovieWithUser[]>([]);
-  const { data: session } = useValidateSession();
   const { data, mutate: raffle } = useRaffle();
 
   const movies: MovieWithUser[] = useMemo(() => {
     return allShortlists
       ? Object.entries(allShortlists)
-          .filter(([shortlistId, shortlist]) => shortlist.participating)
+          .filter(([_, shortlist]) => shortlist.participating)
           .flatMap(([shortlistId, shortlist]) => {
             return shortlist.requiresSelection &&
               shortlist.selectedIndex !== null &&
@@ -51,8 +50,27 @@ export default function RaffleDialog() {
       : [];
   }, [allShortlists]);
 
+  const allReady = useMemo(() => {
+    return allShortlists
+      ? Object.values(allShortlists)
+          .filter((shortlist) => shortlist.participating)
+          .every(
+            (shortlist) =>
+              shortlist.isReady &&
+              (shortlist.requiresSelection
+                ? shortlist.selectedIndex !== null &&
+                  shortlist.selectedIndex !== undefined
+                : true)
+          )
+      : false;
+  }, [allShortlists]);
+
   const nextIndex = useCallback(() => {
     setCurrentIndex((currentIndex + 1) % movies.length);
+    const nextMovie = document.getElementById(
+      `movie-${movies[currentIndex].id}-${movies[currentIndex].user?.id}`
+    );
+    nextMovie?.scrollIntoView({ behavior: "smooth" });
   }, [currentIndex, movies]);
 
   const resetRaffle = useCallback(() => {
@@ -134,6 +152,7 @@ export default function RaffleDialog() {
               setShuffledMovies={setShuffledMovies}
               resetRaffle={resetRaffle}
               raffle={raffle}
+              disabled={!allReady}
             />
             <RaffleItems
               shuffledMovies={shuffledMovies}

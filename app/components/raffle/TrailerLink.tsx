@@ -23,9 +23,9 @@ export default function TrailerLink({
             <SiYoutube className="w-6 h-6" />
           </Link>
         </TooltipTrigger>
-        <TooltipContent className="bg-card">
+        <TooltipContent className="bg-card max-w-40">
           <div className="flex flex-col">
-            <span className="font-bold">{video.name}</span>
+            <span className="font-bold whitespace-pre-line">{video.name}</span>
           </div>
         </TooltipContent>
       </Tooltip>

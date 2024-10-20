@@ -18,10 +18,14 @@ export default function RaffleItems({
       >
         {shuffledMovies.map((movie, index) => {
           return (
-            <div key={`movie-${movie?.id}`} className="relative">
+            <div
+              key={`movie-${movie?.id}-${movie.user?.id}`}
+              className="relative"
+              id={`movie-${movie?.id}-${movie.user?.id}`}
+            >
               <img
                 src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
-                key={`movie-${movie?.id}`}
+                key={`movie-${movie?.id}-${movie.user?.id}`}
                 alt=""
                 width={"150"}
                 className={`w-[150px] h-auto 2xl:w-[150px] animate-slideLeftAndFade transition-all duration-300 ease-in-out rounded-md ${
