@@ -33,17 +33,21 @@ export default function RaffleDialog() {
 
   const movies: MovieWithUser[] = useMemo(() => {
     return allShortlists
-      ? Object.entries(allShortlists).flatMap(([shortlistId, shortlist]) => {
-          return shortlist?.requiresSelection && shortlist?.selectedIndex
-            ? {
-                ...shortlist?.movies[shortlist?.selectedIndex],
-                user: shortlist?.user,
-              }
-            : shortlist?.movies?.map((movie) => ({
-                ...movie,
-                user: shortlist?.user,
-              }));
-        })
+      ? Object.entries(allShortlists)
+          .filter(([shortlistId, shortlist]) => shortlist.participating)
+          .flatMap(([shortlistId, shortlist]) => {
+            return shortlist.requiresSelection &&
+              shortlist.selectedIndex !== null &&
+              shortlist.selectedIndex !== undefined
+              ? {
+                  ...shortlist?.movies[shortlist?.selectedIndex],
+                  user: shortlist?.user,
+                }
+              : shortlist?.movies?.map((movie) => ({
+                  ...movie,
+                  user: shortlist?.user,
+                }));
+          })
       : [];
   }, [allShortlists]);
 

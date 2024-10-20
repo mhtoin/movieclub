@@ -111,6 +111,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
           height={randomBackdrop?.height}
           className={`object-cover aspect-[${randomBackdrop?.aspect_ratio}]`}
           quality={100}
+          priority
         />
       </div>
       <div className="grid grid-cols-3 gap-5 items-center justify-center px-10 row-span-2 ">
@@ -122,6 +123,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
               width={randomPoster?.width}
               height={randomPoster?.height}
               className="object-contain w-4/5 rounded-sm aspect-[${randomPoster?.aspect_ratio}]"
+              priority
             />
             <div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">
               {watchproviders?.flatrate?.map((provider) => {
