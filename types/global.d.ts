@@ -179,16 +179,6 @@ declare global {
     movie: Movie;
   }
 
-  interface PusherMessage {
-    message: string;
-    data: PusherPayload;
-  }
-
-  interface PusherPayload {
-    userId: string;
-    payload: Shortlist | Movie | MovieOfTheWeek | string;
-  }
-
   interface Shortlist {
     id: string;
     isReady: boolean;

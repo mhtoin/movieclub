@@ -2,7 +2,6 @@
 
 import { validateRequest } from "@/lib/auth";
 import { createReview } from "@/lib/movies/movies";
-import { getServerSession } from "next-auth";
 
 export async function createReviewAction(review: string, movieId: string) {
   const { user, session } = await validateRequest();

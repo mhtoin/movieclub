@@ -1,22 +1,13 @@
 "server only";
 import prisma from "./prisma";
 import { getAdditionalInfo } from "./tmdb";
-import { endOfDay, isWednesday, nextWednesday, set } from "date-fns";
+import { isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
-import Pusher from "pusher";
 import { getMovie } from "./movies/queries";
 import { keyBy, omit } from "./utils";
 import { db } from "./db";
 
 export const revalidate = 10;
-
-const pusher = new Pusher({
-  appId: process.env.app_id!,
-  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
-  secret: process.env.secret!,
-  cluster: "eu",
-  useTLS: true,
-});
 
 export async function getChosenMovie() {
   // set today to 18:00:00 and check if it is a wednesday
@@ -139,18 +130,6 @@ export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
     },
   });
 
-  await pusher
-    .trigger("movieclub-shortlist", "shortlist-update", {
-      message: `movies`,
-      data: {
-        userId: updatedShortlist.userId,
-        payload: updatedShortlist,
-      },
-    })
-    .catch((err) => {
-      throw new Error(err.message);
-    });
-
   return updatedShortlist;
 }
 
@@ -172,18 +151,6 @@ export async function removeMovieFromShortlist(
         movies: true,
       },
     });
-
-    await pusher
-      .trigger("movieclub-shortlist", "shortlist-update", {
-        message: `movies`,
-        data: {
-          userId: updatedShortlist.userId,
-          payload: updatedShortlist,
-        },
-      })
-      .catch((err) => {
-        throw new Error(err.message);
-      });
 
     return updatedShortlist;
     //return NextResponse.json({ message: "Deleted succesfully" });
@@ -230,18 +197,6 @@ export async function updateShortlistState(
     },
   });
 
-  await pusher
-    .trigger("movieclub-shortlist", "shortlist-update", {
-      message: `ready`,
-      data: {
-        userId: updated.userId,
-        payload: updated,
-      },
-    })
-    .catch((err) => {
-      throw new Error(err.message);
-    });
-
   return updated;
 }
 
@@ -272,17 +227,6 @@ export async function updateShortlistSelection(
     },
   });
 
-  await pusher
-    .trigger("movieclub-shortlist", "shortlist-update", {
-      message: `selection`,
-      data: {
-        userId: updated.userId,
-        payload: updated,
-      },
-    })
-    .catch((err) => {
-      throw new Error(err.message);
-    });
   return updated;
 }
 
@@ -300,17 +244,6 @@ export async function updateShortlistSelectionStatus(
     },
   });
 
-  await pusher
-    .trigger("movieclub-shortlist", "shortlist-update", {
-      message: `selection`,
-      data: {
-        userId: updated.userId,
-        payload: updated,
-      },
-    })
-    .catch((err) => {
-      throw new Error(err.message);
-    });
   return updated;
 }
 

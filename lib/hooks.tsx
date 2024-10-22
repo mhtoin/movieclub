@@ -1,6 +1,4 @@
-import { PusherContext } from "@/utils/PusherProvider";
 import {
-  QueryClient,
   useInfiniteQuery,
   useMutation,
   useMutationState,
@@ -9,10 +7,9 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { produce } from "immer";
 import { useNotificationStore } from "@/stores/useNotificationStore";
-import { getSession } from "next-auth/react";
 import { User as DatabaseUser } from "@prisma/client";
 import {
   getAllShortlistsGroupedById,
@@ -27,7 +24,6 @@ import { useSearchParams } from "next/navigation";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { getMovie } from "./movies/queries";
 import { replaceShortlistItem } from "./actions/replaceShortlistItem";
-import { socket } from "./socket";
 import { sendShortlistUpdate } from "./utils";
 
 export const useValidateSession = () => {
@@ -36,7 +32,6 @@ export const useValidateSession = () => {
     queryFn: async () => {
       const response = await fetch("/api/auth/user");
       const data: DatabaseUser = await response.json();
-      console.log("data", data);
       return data;
     },
   });
@@ -137,7 +132,6 @@ export const useRaffle = () => {
       return data;
     },
     onSuccess: (data) => {
-      console.log("data", data);
       queryClient.setQueryData(["raffle"], data);
       queryClient.prefetchQuery({
         queryKey: ["movie", data.movie.tmdbId],
@@ -191,9 +185,8 @@ export const useGetLatestMutationState = (key: string[]) => {
       return mutation.state;
     },
   });
-
-  //return mutationState ? mutationState[mutationState.length - 1] : [];
 };
+
 export const useUpdateReadyStateMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -421,12 +414,7 @@ export const useAddToShortlistMutation = () => {
       sendShortlistUpdate(variables.userId);
     },
     onError: (error, variables) => {
-      console.log("error", error);
-
-      console.log("error isOpen", isOpen);
       if (!isOpen) {
-        console.log("setting isOpen to true");
-        console.log("variables", variables.movie);
         setIsOpen(true);
         setMovie(variables.movie);
       }
@@ -469,119 +457,6 @@ export const useReplaceShortlistMutation = () => {
       setMovie(null);
     },
   });
-};
-
-const handleShortlistMessage = (
-  eventName: string,
-  data: PusherMessage,
-  queryClient: QueryClient
-) => {
-  let messageData = data.data.payload as Shortlist;
-  let messageType = data.message;
-
-  queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-    return produce(oldData, (draft) => {
-      //console.log('draft is', JSON.parse(JSON.stringify(draft)))
-      let targetShortlist = draft[messageData.id];
-
-      switch (messageType) {
-        case "ready":
-          if (targetShortlist) {
-            targetShortlist.isReady = messageData.isReady;
-          }
-          break;
-        case "movies":
-          if (targetShortlist) {
-            targetShortlist.movies = messageData.movies;
-          }
-          break;
-        case "selection":
-          if (targetShortlist) {
-            targetShortlist.selectedIndex = messageData.selectedIndex;
-          }
-          break;
-      }
-    });
-  });
-};
-
-const handleMessage = (
-  eventName: string,
-  channelName: string,
-  data: PusherMessage,
-  queryClient: QueryClient
-) => {
-  switch (channelName) {
-    case "movieclub-shortlist":
-      handleShortlistMessage(eventName, data, queryClient);
-      break;
-  }
-};
-
-export const usePusher = (
-  channelName: string,
-  eventName: string,
-  userId?: string
-) => {
-  const pusher = useContext(PusherContext);
-  const isOpen = useRaffleStore.use.isOpen();
-  const setIsOpen = useRaffleStore.use.setIsOpen();
-  const setResult = useRaffleStore.use.setResult();
-  const isLoading = useRaffleStore.use.isLoading();
-  const setIsLoading = useRaffleStore.use.setIsLoading();
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    const bindPusher = async () => {
-      const session = await getSession();
-
-      const channel = pusher.subscribe(channelName);
-      channel.bind(eventName, (data: PusherMessage) => {
-        if (channelName === "movieclub-raffle") {
-          const messageType = data.message;
-          const messageData = data.data as PusherPayload;
-          if (messageData.userId !== session?.user?.userId) {
-            if (messageType === "result") {
-              const payload = messageData.payload as MovieOfTheWeek;
-
-              if (payload) {
-                setResult(payload);
-                setIsLoading(false);
-
-                if (!isOpen) {
-                  setIsOpen(true);
-                }
-              }
-            } else if (messageType === "request") {
-              if (!isOpen) {
-                //setIsOpen(!isOpen);
-              }
-
-              if (!isLoading) {
-                //setIsLoading(!isLoading);
-              }
-            } else if (messageType === "error") {
-              let errorData = messageData.payload as string;
-
-              setIsOpen(false);
-              setIsLoading(false);
-
-              if (errorData) {
-                toast.error(errorData);
-              }
-            }
-          }
-        } else {
-          handleMessage(eventName, channelName, data, queryClient);
-        }
-      });
-
-      return () => {
-        pusher.unsubscribe(channelName);
-      };
-    };
-    bindPusher();
-  }, []);
 };
 
 export const useGetWatchlistQuery = (user: DatabaseUser | null) => {

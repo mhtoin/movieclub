@@ -1,6 +1,5 @@
 "use server";
 
-//import { getServerSession } from "@/lib/deprecated_getServerSession";
 import {
   addMovieToShortlist,
   removeMovieFromShortlist,
@@ -9,11 +8,10 @@ import {
   updateShortlistSelection,
   updateShortlistState,
 } from "@/lib/shortlist";
-import { Shortlist, User, Prisma } from "@prisma/client";
+import { Shortlist, User } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import "dotenv/config";
 import { sample } from "@/lib/utils";
-import { getServerSession } from "next-auth";
 import { validateRequest } from "@/lib/auth";
 
 export async function addMovie(movie: Movie) {
