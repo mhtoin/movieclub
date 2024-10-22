@@ -29,6 +29,7 @@
     "@tanstack/react-query-devtools": "^5.0.3",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
+    "@vercel/speed-insights": "^1.0.13",
     "autoprefixer": "10.4.17",
     "chart.js": "^4.3.0",
     "class-variance-authority": "^0.7.0",
