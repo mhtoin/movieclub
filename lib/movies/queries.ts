@@ -144,7 +144,8 @@ export const getWatchProviders = async () => {
       provider.provider_id === 323 ||
       provider.provider_id === 337 ||
       provider.provider_id === 384 ||
-      provider.provider_id === 1773
+      provider.provider_id === 1773 ||
+      provider.provider_id === 496
     );
   });
   return providers;
