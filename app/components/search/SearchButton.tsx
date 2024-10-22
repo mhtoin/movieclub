@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/lib/hooks";
 import { Button } from "../ui/Button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { SEARCH_ROUTE } from "@/lib/globals";
 
 export default function SearchButton() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function SearchButton() {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        router.push("/search?with_watch_providers=8");
+        router.push(`/${SEARCH_ROUTE}`);
       }
     };
     document.addEventListener("keydown", down);
@@ -22,7 +23,7 @@ export default function SearchButton() {
   if (isMobile) {
     return (
       <Button
-        onClick={() => router.push("/search?with_watch_providers=8")}
+        onClick={() => router.push(`/${SEARCH_ROUTE}`)}
         variant={"ghost"}
         size={"icon"}
         className="rounded-full p-0"
@@ -35,15 +36,15 @@ export default function SearchButton() {
   return (
     <button
       className="border py-2 px-4 flex gap-5 items-center rounded-md bg-input hover:bg-input/80"
-      onClick={() => router.push("/search?with_watch_providers=8")}
+      onClick={() => router.push(`/${SEARCH_ROUTE}`)}
       onMouseEnter={() => {
-        router.prefetch("/search?with_watch_providers=8");
+        router.prefetch(`/${SEARCH_ROUTE}`);
       }}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          router.push("/search");
+          router.push(`/${SEARCH_ROUTE}`);
         }
       }}
     >

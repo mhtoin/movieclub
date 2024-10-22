@@ -15,6 +15,8 @@ import RangeSlider from "../ui/RangeSlider";
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SORT_OPTIONS } from "@/lib/constants";
+import { RadioGroup, RadioProvider } from "@ariakit/react";
+import Radio from "../ui/Radio";
 
 export default function SortDrawer() {
   const searchParams = useSearchParams();
@@ -26,6 +28,10 @@ export default function SortDrawer() {
   );
   const pathname = usePathname();
   const router = useRouter();
+
+  const handleDirectionChange = (direction: string) => {
+    setSelectedDirection(direction);
+  };
 
   const handleSortChange = (value?: string, direction?: string) => {
     if (value) {
@@ -55,22 +61,19 @@ export default function SortDrawer() {
           <div className="flex flex-col gap-2">
             <h3 className="text-sm font-medium mb-2">Direction</h3>
             <div className="flex flex-col gap-2">
-              <Checkbox>Ascending</Checkbox>
-              <Checkbox>Descending</Checkbox>
+              <Radio
+                values={["Ascending", "Descending"]}
+                onChange={handleSortChange}
+              />
             </div>
             <h3 className="text-sm font-medium mb-2">Sort by</h3>
             <div className="flex flex-col gap-2">
-              {Object.entries(SORT_OPTIONS).map(([key, value]) => (
-                <Checkbox
-                  key={key}
-                  defaultChecked={selectedValue === key}
-                  onChange={(event) => {
-                    handleSortChange(key, selectedDirection);
-                  }}
-                >
-                  {value.label}
-                </Checkbox>
-              ))}
+              <Radio
+                values={Object.values(SORT_OPTIONS).map(
+                  (option) => option.label
+                )}
+                onChange={handleSortChange}
+              />
             </div>
           </div>
         </div>

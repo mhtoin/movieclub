@@ -1,11 +1,12 @@
 import { Button } from "@/app/components/ui/Button";
+import { SEARCH_ROUTE } from "@/lib/globals";
 import Link from "next/link";
 
 export default function SearchButton() {
   return (
     <>
       <Button variant="ghost" size="icon">
-        <Link href="/home/search">
+        <Link href={`/home/${SEARCH_ROUTE}`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

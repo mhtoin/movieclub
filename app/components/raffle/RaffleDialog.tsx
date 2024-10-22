@@ -1,18 +1,9 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
 import { Button } from "../ui/Button";
-import {
-  useRaffle,
-  useShortlistsQuery,
-  useUpdateParticipationMutation,
-  useUpdateReadyStateMutation,
-  useValidateSession,
-} from "@/lib/hooks";
+import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Dices, PenOff, Shuffle, UserPen } from "lucide-react";
-import { shuffle } from "@/lib/utils";
-import { ParticipationButton } from "./ParticipationButton";
-import { motion } from "framer-motion";
+import { Dices } from "lucide-react";
 import ResultCard from "./ResultCard";
 import Participants from "./Participants";
 import ActionButtons from "./ActionButtons";
@@ -124,8 +115,7 @@ export default function RaffleDialog() {
         onClick={dialog.show}
         variant={"outline"}
         size={"iconLg"}
-        className="fixed bottom-10 right-16"
-        isLoading={status === "pending"}
+        className="fixed bottom-10 right-16 z-50"
       >
         <Dices className="w-6 h-6" />
       </Button>

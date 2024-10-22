@@ -7,6 +7,7 @@ import HamburgerMenu from "./HamburgerMenu";
 import { useIsMobile, useValidateSession } from "@/lib/hooks";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import { Button } from "../ui/Button";
+import { SEARCH_ROUTE } from "@/lib/globals";
 
 export default function Menubar() {
   const [open, setOpen] = useState(false);
@@ -53,7 +54,7 @@ export default function Menubar() {
               <span className="menu-label">View all shortlists</span>
             </Link>
             <Link
-              href={"/home/search"}
+              href={`/home/${SEARCH_ROUTE}`}
               className="flex flex-col ml-5 p-2 border-b"
               onClick={() => setOpen(false)}
             >
@@ -127,7 +128,7 @@ export default function Menubar() {
               </Link>
             </MenuItem>
             <MenuItem className="ml-6 " store={menu}>
-              <Link href={"/home/search"}>
+              <Link href={`/home/${SEARCH_ROUTE}`}>
                 <span className="text-foreground">Search</span>
                 <span className="menu-label">Search for movies</span>
               </Link>

@@ -1,6 +1,7 @@
 import { MenuItem, MenuStore, Menu } from "@ariakit/react";
 import { useValidateSession } from "@/lib/hooks";
 import Link from "next/link";
+import { SEARCH_ROUTE } from "@/lib/globals";
 
 export default function NavigationMenu({ menu }: { menu: MenuStore }) {
   const { data: session } = useValidateSession();
@@ -32,7 +33,7 @@ export default function NavigationMenu({ menu }: { menu: MenuStore }) {
             </Link>
           </MenuItem>
           <MenuItem className="ml-6 " store={menu}>
-            <Link href={"/home/search"}>
+            <Link href={`/home/${SEARCH_ROUTE}`}>
               <span className="text-foreground">Search</span>
               <span className="menu-label">Search for movies</span>
             </Link>

@@ -37,9 +37,7 @@ export default function SearchInput() {
     []
   );
 
-  const [type, setType] = useState<"title" | "keyword">(
-    query ? "title" : "keyword"
-  );
+  const [type, setType] = useState<"title" | "keyword">("title");
   const queryClient = useQueryClient();
 
   useEffect(() => {

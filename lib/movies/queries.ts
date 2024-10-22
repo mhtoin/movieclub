@@ -140,13 +140,24 @@ export const getWatchProviders = async () => {
   const providers = data.results.filter((provider: any) => {
     return (
       provider.provider_id === 8 ||
-      provider.provider_id === 119 ||
       provider.provider_id === 323 ||
+      provider.provider_id === 496 ||
+      provider.provider_id === 119 ||
       provider.provider_id === 337 ||
       provider.provider_id === 384 ||
-      provider.provider_id === 1773 ||
-      provider.provider_id === 496
+      provider.provider_id === 1773
     );
+  });
+
+  // sort so that netflix, yle and cineast are first
+  providers.sort((a: any, b: any) => {
+    if (a.provider_id === 8) return -1;
+    if (b.provider_id === 8) return 1;
+    if (a.provider_id === 323) return -1;
+    if (b.provider_id === 323) return 1;
+    if (a.provider_id === 496) return -1;
+    if (b.provider_id === 496) return 1;
+    return 0;
   });
   return providers;
 };
