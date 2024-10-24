@@ -117,7 +117,7 @@ export default function FilterBar() {
           </div>
           <SearchInput />
         </div>
-        <div className="flex flex-row justify-center gap-5 overflow-x-scroll w-full h-full no-scrollbar">
+        <div className="flex flex-row justify-center gap-2 overflow-x-scroll w-full h-full no-scrollbar">
           {providers && providersStatus === "success"
             ? providers?.map((provider: any) => {
                 return (

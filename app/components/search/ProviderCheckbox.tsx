@@ -20,7 +20,7 @@ export const ProviderCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <label
-        className="flex items-center gap-1 h-10 w-10 lg:h-12 lg:w-12 border border-ring rounded cursor-pointer hover:scale-110 transition-transform ease-in-out duration-200"
+        className="flex items-center gap-1 h-10 w-10 lg:h-12 lg:w-12 aspect-square border border-ring rounded cursor-pointer hover:scale-110 transition-transform ease-in-out duration-200"
         data-checked={checked}
         data-focus-visible={focusVisible || undefined}
       >
@@ -40,7 +40,7 @@ export const ProviderCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </Ariakit.VisuallyHidden>
         <img
           src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
-          className={`transition-opacity ease-in-out duration-200 object-fill object-center rounded opacity-10 ${
+          className={`transition-opacity ease-in-out duration-200 object-fill aspect-square object-center rounded opacity-10 ${
             checked ? "opacity-100" : ""
           }`}
           alt={provider.provider_name}
