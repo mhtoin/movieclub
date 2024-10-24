@@ -61,7 +61,7 @@ export default function SortMenu() {
         >
           <div className="flex flex-row gap-2 items-center">
             <p className="text-sm font-medium text-foreground">
-              {SORT_OPTIONS[selectedValue as keyof typeof SORT_OPTIONS].label}
+              {SORT_OPTIONS[selectedValue as keyof typeof SORT_OPTIONS]?.label}
             </p>
             {selectedDirection === "desc" ? (
               <ArrowDown className="w-4 h-4 text-foreground" />
@@ -105,7 +105,7 @@ export default function SortMenu() {
                 key={option.value}
                 value={key}
                 store={store}
-                className="flex cursor-default items-center gap-2 rounded p-2 !outline-[none] text-foreground hover:bg-accent/80 hover:text-accent-foreground"
+                className="flex cursor-pointer items-center gap-2 rounded p-2 !outline-[none] text-foreground hover:bg-accent/80 hover:text-accent-foreground"
               >
                 <SelectItemCheck />
                 {option.label}

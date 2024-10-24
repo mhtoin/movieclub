@@ -13,7 +13,7 @@ export default function FilterRange({ onChange }: FilterRangeProps) {
   return (
     <Popover label="Rating">
       <div className="flex flex-col gap-3">
-        <span className="text-foreground">Rating</span>
+        <span className="text-accent-foreground">Rating</span>
         <RangeSlider
           label="Rating"
           value={value}

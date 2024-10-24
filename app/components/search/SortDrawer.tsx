@@ -2,20 +2,14 @@ import { Button } from "@/app/components/ui/Button";
 import { ArrowUpDown, Filter } from "lucide-react";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/app/components/ui/Drawer";
-import { Checkbox } from "../ui/Checkbox";
-import RangeSlider from "../ui/RangeSlider";
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SORT_OPTIONS } from "@/lib/constants";
-import { RadioGroup, RadioProvider } from "@ariakit/react";
 import Radio from "../ui/Radio";
 
 export default function SortDrawer() {
@@ -29,19 +23,22 @@ export default function SortDrawer() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleDirectionChange = (direction: string) => {
+  const handleDirectionChange = (value: string) => {
+    const direction = value === "Ascending" ? "asc" : "desc";
     setSelectedDirection(direction);
+
+    const params = new URLSearchParams(searchParams);
+    params.set("sort_by", `${selectedValue}.${direction}`);
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
-  const handleSortChange = (value?: string, direction?: string) => {
-    if (value) {
-      setSelectedValue(value);
-    }
-    if (direction) {
-      setSelectedDirection(direction);
-    }
+  const handleSortChange = (value: string) => {
+    setSelectedValue(value);
+
     const params = new URLSearchParams(searchParams);
-    params.set("sort_by", `${value}.${direction}`);
+    params.set("sort_by", `${value}.${selectedDirection}`);
     router.push(`${pathname}?${params.toString()}`, {
       scroll: false,
     });
@@ -63,13 +60,13 @@ export default function SortDrawer() {
             <div className="flex flex-col gap-2">
               <Radio
                 values={["Ascending", "Descending"]}
-                onChange={handleSortChange}
+                onChange={handleDirectionChange}
               />
             </div>
             <h3 className="text-sm font-medium mb-2">Sort by</h3>
             <div className="flex flex-col gap-2">
               <Radio
-                values={Object.values(SORT_OPTIONS).map(
+                values={Object?.values(SORT_OPTIONS)?.map(
                   (option) => option.label
                 )}
                 onChange={handleSortChange}

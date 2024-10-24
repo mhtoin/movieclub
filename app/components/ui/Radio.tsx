@@ -7,7 +7,7 @@ export default function Radio({
 }: {
   values: string[];
   className?: string;
-  onChange?: (value: string, direction?: string) => void;
+  onChange?: (value: string) => void;
 }) {
   const [selectedValue, setSelectedValue] = useState(values[0]);
   const [focusVisible, setFocusVisible] = useState(false);
@@ -29,6 +29,7 @@ export default function Radio({
               onBlur={() => setFocusVisible(false)}
               onChange={(event) => {
                 setSelectedValue(event.target.value);
+                onChange?.(event.target.value);
               }}
             />
           </Ariakit.VisuallyHidden>

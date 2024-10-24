@@ -117,19 +117,26 @@ export default function FilterBar() {
           </div>
           <SearchInput />
         </div>
-        <div className="flex flex-row gap-5 justify-center overflow-x-scroll w-full h-full p-2 no-scrollbar">
-          {providers?.map((provider: any) => {
-            return (
-              <ProviderCheckbox
-                provider={provider}
-                key={provider.provider_id}
-                handleClick={handleProviderSelect}
-                defaultChecked={watchProviders.includes(
-                  provider.provider_id.toString()
-                )}
-              />
-            );
-          })}
+        <div className="flex flex-row justify-center gap-5 overflow-x-scroll w-full h-full no-scrollbar">
+          {providers && providersStatus === "success"
+            ? providers?.map((provider: any) => {
+                return (
+                  <ProviderCheckbox
+                    provider={provider}
+                    key={provider.provider_id}
+                    handleClick={handleProviderSelect}
+                    defaultChecked={watchProviders.includes(
+                      provider.provider_id.toString()
+                    )}
+                  />
+                );
+              })
+            : Array.from({ length: 7 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="w-10 h-10 lg:w-12 lg:h-12 bg-card rounded-md animate-pulse"
+                />
+              ))}
         </div>
         <div className="hidden lg:flex items-center gap-4 pb-2">
           <div className="flex flex-row gap-2 items-center">
