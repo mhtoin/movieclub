@@ -24,11 +24,10 @@ export default function SortDrawer() {
   const router = useRouter();
 
   const handleDirectionChange = (value: string) => {
-    const direction = value === "Ascending" ? "asc" : "desc";
-    setSelectedDirection(direction);
+    setSelectedDirection(value);
 
     const params = new URLSearchParams(searchParams);
-    params.set("sort_by", `${selectedValue}.${direction}`);
+    params.set("sort_by", `${selectedValue}.${value}`);
     router.push(`${pathname}?${params.toString()}`, {
       scroll: false,
     });
@@ -43,6 +42,8 @@ export default function SortDrawer() {
       scroll: false,
     });
   };
+
+  console.log(sortBy);
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -59,17 +60,23 @@ export default function SortDrawer() {
             <h3 className="text-sm font-medium mb-2">Direction</h3>
             <div className="flex flex-col gap-2">
               <Radio
-                values={["Ascending", "Descending"]}
+                values={[
+                  { value: "asc", label: "Ascending" },
+                  { value: "desc", label: "Descending" },
+                ]}
                 onChange={handleDirectionChange}
+                defaultValue={selectedDirection}
               />
             </div>
             <h3 className="text-sm font-medium mb-2">Sort by</h3>
             <div className="flex flex-col gap-2">
               <Radio
-                values={Object?.values(SORT_OPTIONS)?.map(
-                  (option) => option.label
-                )}
+                values={Object.entries(SORT_OPTIONS).map(([key, value]) => ({
+                  value: key,
+                  label: value.label,
+                }))}
                 onChange={handleSortChange}
+                defaultValue={sortBy}
               />
             </div>
           </div>
