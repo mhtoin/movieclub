@@ -1,10 +1,10 @@
 "use client";
+import MovieCard from "@/app/components/search/MovieCard";
 import {
   useGetWatchlistQuery,
   useShortlistQuery,
   useValidateSession,
 } from "@/lib/hooks";
-import MovieCard from "../../search/components/MovieCard";
 
 export default function WatchlistContainer() {
   const { data: session } = useValidateSession();
@@ -19,7 +19,7 @@ export default function WatchlistContainer() {
     ? watchlist?.map((movie: TMDBMovie) => movie.id)
     : [];
   return (
-    <div className="flex flex-col justify-center m-5 p-10 place-items-center">
+    <div className="flex flex-col justify-center m-5 p-10 place-items-center py-20">
       {session && !session.accountId && (
         <div className="alert alert-error w-1/3">
           <svg
@@ -50,6 +50,7 @@ export default function WatchlistContainer() {
                 movie={movie}
                 added={shortlistMovieIds?.includes(movie.id)}
                 inWatchlist={watchlistMovieIds?.includes(movie.id)}
+                showActions
               />
             </div>
           );

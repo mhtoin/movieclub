@@ -173,15 +173,17 @@ export default function DnDTierContainer({
   return (
     <>
       <div className="flex flex-row items-center gap-2 pt-10 lg:pt-0">
-        <Button onClick={handleSave} disabled={!authorized} variant="default">
-          {saveMutation.isPending ? (
-            <span className="loading loading-spinner"></span>
-          ) : (
-            <span>Save</span>
-          )}
+        <Button
+          onClick={handleSave}
+          disabled={!authorized}
+          variant="outline"
+          size={"default"}
+          isLoading={saveMutation.isPending}
+        >
+          Save
         </Button>
         <Button
-          variant="default"
+          variant="outline"
           onClick={() => {
             if (movieMatrix.length > 1) {
               deleteMutation.mutate(tierlist.id);
@@ -202,7 +204,7 @@ export default function DnDTierContainer({
           )}
         </Button>
       </div>
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-start gap-2">
         <CreateForm />
         <DragDropContext onDragEnd={onDragEnd}>
           {containerState.map((tier, tierIndex) => (
@@ -224,7 +226,7 @@ export default function DnDTierContainer({
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
-                    className="flex flex-row gap-5 p-2 m-2 max-w-xs overflow-y-auto lg:max-w-[1000px] xl:max-w-[1500px]"
+                    className="flex flex-row gap-5 p-2 m-2 overflow-auto"
                     {...provided.droppableProps}
                   >
                     {tier.map((item, index) => (
