@@ -7,22 +7,11 @@ import { useIsMobile } from "@/lib/hooks";
 import SearchDrawer from "./SearchDrawer";
 import FilterBar from "./FilterBar";
 import Results from "./Results";
+import SearchDialog from "./SearchDialog";
 
 export default function SearchModal() {
   const router = useRouter();
   const pathname = usePathname();
   const isMobile = useIsMobile();
-  return isMobile ? (
-    <SearchDrawer />
-  ) : (
-    <AriaDialog title="Search" onClose={() => router.back()}>
-      <div className="flex flex-col justify-center items-center gap-2 rounded-lg relative">
-        <div className="sticky z-40 top-0 w-full bg-background pb-2">
-          <FilterBar />
-        </div>
-
-        <Results />
-      </div>
-    </AriaDialog>
-  );
+  return isMobile ? <SearchDrawer /> : <SearchDialog />;
 }

@@ -1,18 +1,22 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useIsMobile } from "@/lib/hooks";
 import { Button } from "../ui/Button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { SEARCH_ROUTE } from "@/lib/globals";
+import { useDialogStore } from "@/stores/useDialogStore";
 
 export default function SearchButton() {
   const router = useRouter();
+  const pathname = usePathname();
   const isMobile = useIsMobile();
+  const { setInitialRoute } = useDialogStore();
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
+        setInitialRoute(pathname);
         router.push(`/${SEARCH_ROUTE}`);
       }
     };
@@ -23,7 +27,10 @@ export default function SearchButton() {
   if (isMobile) {
     return (
       <Button
-        onClick={() => router.push(`/${SEARCH_ROUTE}`)}
+        onClick={() => {
+          setInitialRoute(pathname);
+          router.push(`/${SEARCH_ROUTE}`);
+        }}
         variant={"ghost"}
         size={"icon"}
         className="rounded-full p-0"
@@ -36,7 +43,10 @@ export default function SearchButton() {
   return (
     <button
       className="border py-2 px-4 flex gap-5 items-center rounded-md bg-input hover:bg-input/80"
-      onClick={() => router.push(`/${SEARCH_ROUTE}`)}
+      onClick={() => {
+        setInitialRoute(pathname);
+        router.push(`/${SEARCH_ROUTE}`);
+      }}
       onMouseEnter={() => {
         router.prefetch(`/${SEARCH_ROUTE}`);
       }}
@@ -44,6 +54,7 @@ export default function SearchButton() {
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
+          setInitialRoute(pathname);
           router.push(`/${SEARCH_ROUTE}`);
         }
       }}
