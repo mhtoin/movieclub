@@ -1,10 +1,7 @@
 export const revalidate = 0;
 
 import { formatISO, nextWednesday } from "date-fns";
-import { Suspense } from "react";
-
 import { movieKeys } from "@/lib/movies/movieKeys";
-import CarouselSkeleton from "@/app/components/home/CarouselSkeleton";
 import MovieCarousel from "@/app/components/home/MovieCarousel";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
@@ -22,9 +19,7 @@ export default async function HomePage() {
         <h1 className="text-2xl font-bold text-center">
           Welcome to the Movie Club
         </h1>
-        <Suspense fallback={<CarouselSkeleton />}>
-          <MovieCarousel />
-        </Suspense>
+        <MovieCarousel />
       </div>
     </HydrationBoundary>
   );
