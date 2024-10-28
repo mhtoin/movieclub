@@ -1,11 +1,6 @@
 "use client";
-import {
-  useShortlistsQuery,
-  useSocket,
-  useSuspenseShortlistsQuery,
-  useValidateSession,
-} from "@/lib/hooks";
-import ShortlistCard from "./ShortlistCard";
+import { useSuspenseShortlistsQuery, useValidateSession } from "@/lib/hooks";
+import ShortlistCard from "components/shortlist/ShortlistCard";
 import { Suspense } from "react";
 
 export default function Shortlists() {

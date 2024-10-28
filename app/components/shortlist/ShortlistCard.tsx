@@ -1,6 +1,10 @@
 import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
-import { Button } from "../../ui/Button";
-import { useUpdateReadyStateMutation, useValidateSession } from "@/lib/hooks";
+import { Button } from "components/ui/Button";
+import {
+  useGetWatchlistQuery,
+  useUpdateReadyStateMutation,
+  useValidateSession,
+} from "@/lib/hooks";
 import { MessageCircleWarning } from "lucide-react";
 import ItemSkeleton from "@/app/(home)/home/shortlist/edit/components/ItemSkeleton";
 import WatchlistButton from "@/app/(home)/home/shortlist/edit/components/WatchlistButton";
@@ -14,6 +18,7 @@ export default function ShortlistCard({
   const readyStateMutation = useUpdateReadyStateMutation();
   const { data: user } = useValidateSession();
   const movies = (shortlist?.movies as Movie[]) || [];
+
   const skeletons =
     movies?.length < 3
       ? [...new Array(3 - movies.length)].map((element, index) => (

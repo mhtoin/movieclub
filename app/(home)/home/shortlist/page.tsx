@@ -1,6 +1,6 @@
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
-import Shortlists from "@/app/components/Navigation/shortlist/Shortlists";
+import Shortlists from "@/app/components/shortlist/Shortlists";
 import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 import { getQueryClient } from "@/lib/getQueryClient";
 

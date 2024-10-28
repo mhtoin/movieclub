@@ -13,6 +13,8 @@ import {
   BookmarkMinus,
   BookmarkPlus,
   ListPlus,
+  X,
+  Plus,
   ListX,
   Star,
   TicketCheck,
@@ -63,6 +65,7 @@ export default function ShortListItem({
             <Button
               variant={"ghost"}
               size={"iconSm"}
+              tooltip={highlight ? "Selected" : "Select"}
               onClick={() => {
                 selectionMutation.mutate({
                   userId: user?.id || "",
@@ -86,6 +89,7 @@ export default function ShortListItem({
             <Button
               variant={"ghost"}
               size={"iconXs"}
+              tooltip="Remove"
               onClick={() => {
                 removeMutation.mutate({
                   userId: user?.id || "",
@@ -95,12 +99,13 @@ export default function ShortListItem({
               }}
               isLoading={removeMutation.isPending}
             >
-              <ListX />
+              <X />
             </Button>
           ) : (
             <Button
               variant={"ghost"}
               size={"iconXs"}
+              tooltip="Add"
               onClick={() => {
                 addMutation.mutate({
                   userId: user?.id || "",
@@ -110,7 +115,7 @@ export default function ShortListItem({
               }}
               isLoading={addMutation.isPending}
             >
-              <ListPlus />
+              <Plus />
             </Button>
           )}
           <Button
@@ -122,6 +127,7 @@ export default function ShortListItem({
               });
             }}
             isLoading={watchlistMutation.isPending}
+            tooltip="Add to watchlist"
           >
             {true ? <BookmarkMinus /> : <BookmarkPlus />}
           </Button>

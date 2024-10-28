@@ -6,7 +6,7 @@ export default function SearchButton() {
   return (
     <>
       <Button variant="ghost" size="icon">
-        <Link href={`/home/${SEARCH_ROUTE}`}>
+        <Link href={`/home/${SEARCH_ROUTE}`} prefetch>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function WatchlistButton() {
   return (
-    <Button variant="ghost" size="icon">
-      <Link href="/home/shortlist/edit/watchlist">
+    <Button variant="ghost" size="icon" onMouseEnter={() => {}}>
+      <Link href="/home/shortlist/edit/watchlist" prefetch>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

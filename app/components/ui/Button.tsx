@@ -1,10 +1,15 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Button as AriaButton } from "@ariakit/react";
-
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import {
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+  Tooltip,
+  TooltipPortal,
+} from "components/ui/Tooltip";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -48,28 +53,54 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
+  tooltip?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, isLoading = false, ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      isLoading = false,
+      tooltip,
+      ...props
+    },
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    return asChild ? (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
+    return tooltip ? (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger className="cursor-not-allowed">
+            <Comp
+              className={cn(buttonVariants({ variant, size, className }))}
+              ref={ref}
+              {...props}
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                props.children
+              )}
+            </Comp>
+          </TooltipTrigger>
+          <TooltipPortal>
+            <TooltipContent className="bg-card max-w-20 whitespace-pre-wrap p-2 z-50">
+              {tooltip}
+            </TooltipContent>
+          </TooltipPortal>
+        </Tooltip>
+      </TooltipProvider>
     ) : (
-      <AriaButton
+      <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       >
         {isLoading ? <Loader2 className="animate-spin" /> : props.children}
-      </AriaButton>
+      </Comp>
     );
   }
 );
