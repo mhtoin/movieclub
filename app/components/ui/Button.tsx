@@ -10,6 +10,7 @@ import {
   Tooltip,
   TooltipPortal,
 } from "components/ui/Tooltip";
+import { useIsMobile } from "@/lib/hooks";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -69,8 +70,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const isMobile = useIsMobile();
     const Comp = asChild ? Slot : "button";
-    return tooltip ? (
+    return tooltip && !isMobile ? (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="cursor-not-allowed">
