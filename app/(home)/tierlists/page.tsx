@@ -20,7 +20,7 @@ export default async function Tierlists() {
       <div>
         {!usersWithTierlist.includes(user?.id || "") && (
           <form action={createNew}>
-            <Button variant="default" type="submit">
+            <Button variant="outline" type="submit">
               Create new
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -43,15 +43,19 @@ export default async function Tierlists() {
       <div className="grid grid-cols-2 gap-10">
         {allTierlists.map((tierlist) => {
           return (
-            <>
+            <div
+              className="border rounded-xl p-2 flex flex-col items-center gap-2"
+              key={tierlist.userId}
+            >
+              <span className="text-sm font-bold">{tierlist.user?.name}</span>
               <Link href={`/tierlists/${tierlist.userId}`}>
-                <div className="avatar">
-                  <div className="w-24 mask mask-heart">
+                <div className="border rounded-md overflow-hidden">
+                  <div className="w-24">
                     <img src={tierlist.user?.image} alt="user" />
                   </div>
                 </div>
               </Link>
-            </>
+            </div>
           );
         })}
       </div>
