@@ -204,7 +204,7 @@ export default function DnDTierContainer({
           )}
         </Button>
       </div>
-      <div className="flex flex-col items-start gap-2">
+      <div className="flex flex-col items-start gap-2 border max-w-xl">
         <CreateForm />
         <DragDropContext onDragEnd={onDragEnd}>
           {containerState.map((tier, tierIndex) => (

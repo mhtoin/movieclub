@@ -34,7 +34,7 @@ export default function ShortlistCard({
     >
       <div
         key={shortlist?.id + "-container"}
-        className="flex flex-row flex-wrap gap-3 h-full sm:w-auto items-center justify-center p-2 lg:p-3 border rounded-xl bg-background"
+        className="flex flex-row flex-wrap gap-1 lg:gap-3 h-full sm:w-auto items-center justify-center p-2 lg:p-3 border rounded-xl bg-background"
       >
         {shortlist?.movies.map((movie: Movie, index: number) => {
           return (

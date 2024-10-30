@@ -16,7 +16,7 @@ export default function Shortlists() {
     : null;
 
   return (
-    <div className="pt-20 flex flex-col justify-center items-center">
+    <div className="pt-20 flex flex-col justify-center items-center no-scrollbar">
       <main className="flex flex-col items-center gap-5 overflow-hidden p-2">
         <h3 className="text-2xl font-bold">Shortlists</h3>
         <Suspense fallback={<div>Loading...</div>}>
