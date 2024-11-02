@@ -90,6 +90,6 @@
     "@types/react-datepicker": "^4.19.1",
     "eslint-config-prettier": "^8.8.0",
     "knip": "^4.2.1",
-    "typescript": "5.0.4"
+    "typescript": "5.6.3"
   }
 }
