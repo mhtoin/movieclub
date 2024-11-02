@@ -1,0 +1,107 @@
+"use client";
+
+import { format, formatISO, nextWednesday } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
+import { movieKeys } from "lib/movies/movieKeys";
+import PosterCard from "./PosterCard";
+import { sortByISODate } from "@/lib/utils";
+import DateSelect from "./DateSelect";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function ListView() {
+  const nextMovieDate = formatISO(nextWednesday(new Date()), {
+    representation: "date",
+  });
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    nextMovieDate.split("-").slice(0, 2).join("-")
+  );
+
+  const { data, status } = useQuery(movieKeys.next(nextMovieDate));
+  const router = useRouter();
+
+  const dates = Object.keys(data || {}).map((date) => ({
+    date: date,
+    label: format(new Date(date), "MMMM"),
+  }));
+
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+    router.push(`#${date}`);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find the first entry that is intersecting
+        const visibleEntry = entries.find((entry) => entry.isIntersecting);
+
+        if (visibleEntry) {
+          const date = visibleEntry.target.id;
+          if (date !== selectedDate) {
+            setSelectedDate(date);
+          }
+        }
+      },
+      {
+        root: null, // Use viewport as root
+        threshold: 0.1, // Trigger when 10% of element is visible
+        rootMargin: "-45% 0px -45% 0px", // Creates a band in the middle of the viewport
+      }
+    );
+
+    // Observe all date container elements
+    const elements = document.querySelectorAll('[id^="20"]');
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [selectedDate]);
+  return (
+    <div className="flex flex-col gap-4 pt-20 overflow-hidden max-h-screen overscroll-none">
+      <div className="flex justify-center">
+        <DateSelect
+          dates={dates}
+          setSelectedDate={handleDateChange}
+          selectedDate={selectedDate || ""}
+        />
+      </div>
+      <div className="flex flex-col gap-4 p-10 max-h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
+        {data &&
+          Object.keys(data).map((date, index) => {
+            const movies: MovieOfTheWeek[] =
+              index % 2 === 0
+                ? data[date as keyof typeof data]
+                : data[date as keyof typeof data].toReversed();
+            const month = format(new Date(date), "MMMM");
+
+            return (
+              <div
+                key={index}
+                className="flex flex-col gap-4 relative snap-start"
+                id={date}
+              >
+                <h2 className="upright absolute top-1/2 left-0 -translate-y-1/2 text-2xl font-bold">
+                  {month}
+                </h2>
+                <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 px-20 snap-start">
+                  {movies.map((movie: MovieOfTheWeek) => (
+                    <div
+                      className="flex flex-col items-center justify-center h-full gap-2"
+                      key={movie.id}
+                      id={movie.id}
+                    >
+                      <h1 className="text-2xl font-bold">
+                        {new Date(movie.watchDate).toLocaleDateString("fi-FI")}
+                      </h1>
+                      <PosterCard movie={movie} key={movie?.id} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </div>
+  );
+}

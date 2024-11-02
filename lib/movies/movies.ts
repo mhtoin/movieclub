@@ -17,7 +17,15 @@ import {
   updateShortlistState,
 } from "../shortlist";
 import type { User } from "@prisma/client";
-import { countByKey, keyBy, sample, sendNotification, shuffle } from "../utils";
+import {
+  countByKey,
+  groupBy,
+  keyBy,
+  sample,
+  sendNotification,
+  shuffle,
+  sortByISODate,
+} from "../utils";
 
 export async function getMoviesUntil(date: string) {
   console.log("getting movies until", date);
@@ -34,10 +42,15 @@ export async function getMoviesUntil(date: string) {
     },
   });
 
-  return keyBy(
-    movies,
-    (movie: any) => movie?.watchDate
-  ) as MovieOfTheWeekQueryResult;
+  const sorted = movies.sort((a, b) =>
+    sortByISODate(a.watchDate, b.watchDate, "desc")
+  );
+
+  const grouped = groupBy(sorted, (movie: any) =>
+    movie?.watchDate.split("-").splice(0, 2).join("-")
+  );
+
+  return grouped;
 }
 
 export async function getAllMoviesOfTheWeek() {

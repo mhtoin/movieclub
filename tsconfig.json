@@ -22,7 +22,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "components/*": ["./app/components/*"]
+      "components/*": ["./app/components/*"],
+      "lib/*": ["./lib/*"]
     }
   },
   "include": [
@@ -31,7 +32,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/scripts/normalizeDates.msj",
-    "scripts/normalizeDates.js"
+    "scripts/normalizeDates.js",
+    "scripts/generateTestData.js"
   ],
   "exclude": ["node_modules"]
 }
