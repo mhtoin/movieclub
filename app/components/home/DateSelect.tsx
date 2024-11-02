@@ -28,13 +28,19 @@ export default function DateSelect({
     return dateObject?.date?.split("-")[0];
   });
 
+  console.log(selectedDate);
+
   return (
     <Select
       onValueChange={(value) => setSelectedDate(value)}
       value={selectedDate}
     >
       <SelectTrigger className="max-w-48">
-        <SelectValue placeholder={dates[0]?.label} />
+        <SelectValue placeholder={dates[0]?.label} asChild>
+          <span>{`${new Date(selectedDate).toLocaleDateString("en-US", {
+            month: "long",
+          })} ${selectedDate?.split("-")[0]}`}</span>
+        </SelectValue>
       </SelectTrigger>
       <SelectContent className="max-w-48 bg-background text-foreground">
         {Object.keys(groupedByYear)

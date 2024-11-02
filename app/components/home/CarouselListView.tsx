@@ -52,13 +52,13 @@ export default function ListView() {
 
     // Observe all date container elements
     const elements = document.querySelectorAll('[id^="20"]');
-    console.log(elements);
+
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
   }, [selectedDate]);
   return (
-    <div className="flex flex-col gap-4 overflow-hidden max-h-screen overscroll-none">
+    <div className="flex flex-col gap-4 pt-20 overflow-hidden max-h-screen overscroll-none">
       <div className="flex justify-center">
         <DateSelect
           dates={dates}
@@ -81,7 +81,7 @@ export default function ListView() {
                 className="flex flex-col gap-4 relative snap-start"
                 id={date}
               >
-                <h2 className="upright absolute top-1/2 left-0 -translate-y-1/2 text-2xl font-bold leading-none">
+                <h2 className="upright absolute top-1/2 left-0 -translate-y-1/2 text-2xl font-bold">
                   {month}
                 </h2>
                 <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 px-20 snap-start">
