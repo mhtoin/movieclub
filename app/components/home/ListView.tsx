@@ -8,6 +8,7 @@ import { sortByISODate } from "@/lib/utils";
 import DateSelect from "./DateSelect";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function ListView() {
   const nextMovieDate = formatISO(nextWednesday(new Date()), {
@@ -134,11 +135,23 @@ export default function ListView() {
                         key={movie.id}
                         id={movie.id}
                       >
-                        <h1 className="text-lg md:text-2xl font-bold">
-                          {new Date(movie.watchDate).toLocaleDateString(
-                            "fi-FI"
-                          )}
-                        </h1>
+                        <div className="flex items-center justify-center gap-3">
+                          <h1 className="text-lg md:text-2xl font-bold">
+                            {new Date(movie.watchDate).toLocaleDateString(
+                              "fi-FI"
+                            )}
+                          </h1>
+                          <div className="rounded-full w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
+                            <Image
+                              src={movie?.user?.image}
+                              width={500}
+                              height={900}
+                              alt="movie poster"
+                              priority={true}
+                              className="object-cover"
+                            />
+                          </div>
+                        </div>
                         <PosterCard movie={movie} key={movie?.id} />
                       </div>
                     );
