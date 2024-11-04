@@ -91,9 +91,21 @@ export default function ListView() {
                 key={nextMovie.id}
                 id={nextMovie.id}
               >
-                <h1 className="text-lg md:text-2xl font-bold">
-                  {new Date(nextMovie.watchDate).toLocaleDateString("fi-FI")}
-                </h1>
+                <div className="flex items-center justify-center gap-3">
+                  <h1 className="text-lg md:text-2xl font-bold">
+                    {new Date(nextMovie.watchDate).toLocaleDateString("fi-FI")}
+                  </h1>
+                  <div className="rounded-full w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
+                    <Image
+                      src={nextMovie?.user?.image}
+                      width={500}
+                      height={900}
+                      alt="movie poster"
+                      priority={true}
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
                 <PosterCard
                   movie={nextMovie}
                   key={nextMovie?.id}
