@@ -55,7 +55,7 @@ export default function ListView() {
       },
       {
         root: null, // Use viewport as root
-        threshold: 0.1, // Trigger when 10% of element is visible
+        threshold: 0.1,
         rootMargin: "-45% 0px -45% 0px", // Creates a band in the middle of the viewport
       }
     );
@@ -93,7 +93,11 @@ export default function ListView() {
                 <h1 className="text-lg md:text-2xl font-bold">
                   {new Date(nextMovie.watchDate).toLocaleDateString("fi-FI")}
                 </h1>
-                <PosterCard movie={nextMovie} key={nextMovie?.id} />
+                <PosterCard
+                  movie={nextMovie}
+                  key={nextMovie?.id}
+                  showOverview
+                />
               </div>
             </div>
           </div>
@@ -121,7 +125,7 @@ export default function ListView() {
                 <h2 className="upright absolute top-1/2 left-0 -translate-y-1/2 text-2xl font-bold leading-none hidden md:block">
                   {month}
                 </h2>
-                <div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 px-5 md:px-20 snap-start">
+                <div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 px-5 md:px-20 snap-start">
                   {movies.map((movie: MovieOfTheWeek) => {
                     if (movie.watchDate === nextMovie?.watchDate) return null;
                     return (

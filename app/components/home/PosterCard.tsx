@@ -1,13 +1,26 @@
 import Image from "next/image";
 import { Card, CardContent } from "components/ui/Card";
-import { Star, Users } from "lucide-react";
+import { Info, Star, Users } from "lucide-react";
 import { TrendingUp } from "lucide-react";
 import { Button } from "components/ui/Button";
 import Link from "next/link";
 import { SiThemoviedatabase } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip";
 
-export default function PosterCard({ movie }: { movie: MovieOfTheWeek }) {
+export default function PosterCard({
+  movie,
+  showOverview = false,
+}: {
+  movie: MovieOfTheWeek;
+  showOverview?: boolean;
+}) {
   return (
     <Card className="postercard">
       <CardContent className="flex aspect-square items-center justify-center p-0">
@@ -21,18 +34,20 @@ export default function PosterCard({ movie }: { movie: MovieOfTheWeek }) {
         />
       </CardContent>
       <div className="cardInfo">
-        <h1 className="title line-clamp-2">{movie.title}</h1>
+        <h1 className="title line-clamp-2 text-lg md:text-xl 2xl:text-2xl whitespace-pre-line max-w-full p-2 text-center">
+          {movie.title}
+        </h1>
         <div className="flex flex-row gap-2 flex-wrap">
           <span className="text-xs flex flex-row items-center gap-1">
-            <Star className="w-4 h-4" />
+            <Star className="w-4 h-4 md:w-6 md:h-6" />
             {movie.vote_average.toFixed(1)}
           </span>
           <span className="text-xs flex flex-row items-center gap-1">
-            <Users className="w-4 h-4" />
+            <Users className="w-4 h-4 md:w-6 md:h-6" />
             {movie.vote_count}
           </span>
           <span className="text-xs flex flex-row items-center gap-1">
-            <TrendingUp className="w-4 h-4" />
+            <TrendingUp className="w-4 h-4 md:w-6 md:h-6" />
             {movie.popularity.toFixed(1)}
           </span>
         </div>
@@ -45,17 +60,37 @@ export default function PosterCard({ movie }: { movie: MovieOfTheWeek }) {
                 target="_blank"
               >
                 <Button variant="ghost" size="icon">
-                  <SiThemoviedatabase className="w-6 h-6" />
+                  <SiThemoviedatabase className="w-6 h-6 md:w-8 md:h-8" />
                 </Button>
               </Link>
               <Link href={`https://www.imdb.com/title/${movie?.imdbId}`}>
                 <Button variant="ghost" size="icon">
-                  <FaImdb className="w-6 h-6" />
+                  <FaImdb className="w-6 h-6 md:w-8 md:h-8" />
                 </Button>
               </Link>
             </div>
           </div>
         </div>
+        {showOverview ? (
+          <div className="flex flex-row gap-2 p-2">
+            <span className="text-xs">{movie.overview}</span>
+          </div>
+        ) : (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button variant="ghost" size="icon">
+                  <Info className="w-6 h-6 2xl:w-8 2xl:h-8" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent className="whitespace-pre-wrap p-2 bg-card max-w-96">
+                  <p>{movie.overview}</p>
+                </TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     </Card>
   );
