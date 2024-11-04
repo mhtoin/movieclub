@@ -34,6 +34,16 @@ export default function PosterCard({
         />
       </CardContent>
       <div className="cardInfo">
+        <div className="rounded-full w-6 h-6  lg:w-10 lg:h-10 overflow-hidden">
+          <Image
+            src={movie?.user?.image}
+            width={500}
+            height={900}
+            alt="movie poster"
+            priority={true}
+            className="object-cover"
+          />
+        </div>
         <h1 className="title line-clamp-2 text-lg md:text-xl 2xl:text-2xl whitespace-pre-line max-w-full p-2 text-center">
           {movie.title}
         </h1>
@@ -73,7 +83,9 @@ export default function PosterCard({
         </div>
         {showOverview ? (
           <div className="flex flex-row gap-2 p-2">
-            <span className="text-xs">{movie.overview}</span>
+            <span className="text-md lg:text-lg text-center">
+              {movie.overview}
+            </span>
           </div>
         ) : (
           <TooltipProvider>
