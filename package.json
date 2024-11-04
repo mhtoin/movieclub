@@ -47,6 +47,7 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.1.4",
     "embla-carousel-react": "8.0.0-rc17",
+    "embla-carousel-wheel-gestures": "^8.0.1",
     "eslint": "8.41.0",
     "eslint-config-next": "13.5.1",
     "framer-motion": "^11.5.6",

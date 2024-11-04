@@ -6,6 +6,7 @@ import MovieCarousel from "@/app/components/home/MovieCarousel";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import ListView from "components/home/ListView";
+import CarouselListView from "@/app/components/home/CarouselListView";
 
 export default async function HomePage() {
   const queryClient = getQueryClient();

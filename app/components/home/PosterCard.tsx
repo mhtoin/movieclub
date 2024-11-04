@@ -14,7 +14,7 @@ export default function PosterCard({ movie }: { movie: MovieOfTheWeek }) {
         <Image
           src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
           width={500}
-          height={700}
+          height={900}
           alt="movie poster"
           priority={true}
           className="object-cover"
