@@ -78,6 +78,26 @@ export default function ListView() {
       </div>
 
       <div className="flex flex-col gap-10 md:p-10 max-h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
+        {nextMovie && (
+          <div
+            key={nextMovie.id}
+            className="flex flex-col gap-4 relative snap-start scroll-mb-20 px-2 md:px-20"
+            id={nextMovieMonth}
+          >
+            <div className="flex items-center justify-center snap-start">
+              <div
+                className="flex flex-col items-center justify-center h-full gap-2"
+                key={nextMovie.id}
+                id={nextMovie.id}
+              >
+                <h1 className="text-lg md:text-2xl font-bold">
+                  {new Date(nextMovie.watchDate).toLocaleDateString("fi-FI")}
+                </h1>
+                <PosterCard movie={nextMovie} key={nextMovie?.id} />
+              </div>
+            </div>
+          </div>
+        )}
         {data &&
           Object.keys(data).map((date, index) => {
             const movies: MovieOfTheWeek[] =
@@ -85,6 +105,12 @@ export default function ListView() {
                 ? data[date as keyof typeof data]
                 : data[date as keyof typeof data].toReversed();
             const month = format(new Date(date), "MMMM");
+
+            if (
+              data[date as keyof typeof data].length === 1 &&
+              nextMovieMonth === date
+            )
+              return null;
 
             return (
               <div
@@ -96,18 +122,23 @@ export default function ListView() {
                   {month}
                 </h2>
                 <div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 px-5 md:px-20 snap-start">
-                  {movies.map((movie: MovieOfTheWeek) => (
-                    <div
-                      className="flex flex-col items-center justify-center h-full gap-2"
-                      key={movie.id}
-                      id={movie.id}
-                    >
-                      <h1 className="text-lg md:text-2xl font-bold">
-                        {new Date(movie.watchDate).toLocaleDateString("fi-FI")}
-                      </h1>
-                      <PosterCard movie={movie} key={movie?.id} />
-                    </div>
-                  ))}
+                  {movies.map((movie: MovieOfTheWeek) => {
+                    if (movie.watchDate === nextMovie?.watchDate) return null;
+                    return (
+                      <div
+                        className="flex flex-col items-center justify-center h-full gap-2"
+                        key={movie.id}
+                        id={movie.id}
+                      >
+                        <h1 className="text-lg md:text-2xl font-bold">
+                          {new Date(movie.watchDate).toLocaleDateString(
+                            "fi-FI"
+                          )}
+                        </h1>
+                        <PosterCard movie={movie} key={movie?.id} />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );
