@@ -82,12 +82,12 @@ export default function ListView() {
         {nextMovie && (
           <div
             key={nextMovie.id}
-            className="flex flex-col gap-4 relative snap-start scroll-mb-20 px-2 md:px-20"
+            className="flex flex-col gap-4 relative snap-start  scroll-mb-20 px-2 md:px-20"
             id={nextMovieMonth}
           >
             <div className="flex items-center justify-center snap-start">
               <div
-                className="flex flex-col items-center justify-center h-full gap-2"
+                className="flex flex-col items-center justify-center gap-2 px-5"
                 key={nextMovie.id}
                 id={nextMovie.id}
               >
@@ -102,7 +102,7 @@ export default function ListView() {
                       height={900}
                       alt="movie poster"
                       priority={true}
-                      className="object-cover"
+                      className="object-cover "
                     />
                   </div>
                 </div>
