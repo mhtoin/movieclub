@@ -41,7 +41,7 @@ export default function SearchDrawer() {
         }
       }}
     >
-      <DrawerContent>
+      <DrawerContent className="max-h-[95dvh]">
         <Search />
       </DrawerContent>
     </Drawer>
