@@ -66,14 +66,17 @@ export default function PosterCard({
           <div className="description-links">
             <div className="flex flex-row items-center gap-2">
               <Link
-                href={`https://www.themoviedb.org/movie/${movie.id}`}
+                href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
                 target="_blank"
               >
                 <Button variant="ghost" size="icon">
                   <SiThemoviedatabase className="w-6 h-6 md:w-8 md:h-8" />
                 </Button>
               </Link>
-              <Link href={`https://www.imdb.com/title/${movie?.imdbId}`}>
+              <Link
+                href={`https://www.imdb.com/title/${movie?.imdbId}`}
+                target="_blank"
+              >
                 <Button variant="ghost" size="icon">
                   <FaImdb className="w-6 h-6 md:w-8 md:h-8" />
                 </Button>
