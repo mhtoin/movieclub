@@ -69,7 +69,7 @@ export default function ListView() {
     return () => observer.disconnect();
   }, [selectedDate, dates]);
   return (
-    <div className="flex flex-col gap-4 overflow-hidden max-h-screen overscroll-none">
+    <div className="flex flex-col gap-4 overflow-hidden max-h-[100dvh] overscroll-none">
       <div className="flex justify-center">
         <DateSelect
           dates={dates}
@@ -78,7 +78,7 @@ export default function ListView() {
         />
       </div>
 
-      <div className="flex flex-col gap-10 md:p-10 max-h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
+      <div className="flex flex-col gap-10 md:p-10 max-h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
         {nextMovie && (
           <div
             key={nextMovie.id}
