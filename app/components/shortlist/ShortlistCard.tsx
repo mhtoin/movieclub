@@ -30,36 +30,39 @@ export default function ShortlistCard({
   return (
     <div
       key={`fragment-${shortlist?.id}`}
-      className="flex flex-col justify-between border rounded-3xl p-3 gap-2 bg-card h-full"
+      className="flex flex-col justify-between border-[0.5px] border-border/50 rounded-xl bg-card h-full overflow-hidden"
     >
       <div
         key={shortlist?.id + "-container"}
-        className="flex flex-row flex-wrap gap-1 lg:gap-3 h-full sm:w-auto items-center justify-center p-2 lg:p-3 border rounded-xl bg-background"
+        className="flex flex-row flex-wrap h-full sm:w-auto items-center justify-center overflow-hidden bg-background"
       >
-        {shortlist?.movies.map((movie: Movie, index: number) => {
-          return (
-            <ShortListItem
-              key={shortlist.id + movie.id}
-              movie={movie}
-              shortlistId={shortlist.id}
-              highlight={
-                shortlist.requiresSelection && shortlist.selectedIndex === index
-                  ? true
-                  : false
-              }
-              requiresSelection={shortlist.requiresSelection}
-              removeFromShortList={user?.id === shortlist.userId}
-              index={index}
-              showActions={true}
-            />
-          );
-        })}
-        {skeletons.map((skeleton) => {
-          return skeleton;
-        })}
+        <div className="moviecard-gallery">
+          {shortlist?.movies.map((movie: Movie, index: number) => {
+            return (
+              <ShortListItem
+                key={shortlist.id + movie.id}
+                movie={movie}
+                shortlistId={shortlist.id}
+                highlight={
+                  shortlist.requiresSelection &&
+                  shortlist.selectedIndex === index
+                    ? true
+                    : false
+                }
+                requiresSelection={shortlist.requiresSelection}
+                removeFromShortList={user?.id === shortlist.userId}
+                index={index}
+                showActions={true}
+              />
+            );
+          })}
+          {skeletons.map((skeleton) => {
+            return skeleton;
+          })}
+        </div>
       </div>
       <div
-        className="flex flex-row w-full items-center justify-between gap-5 p-3 border rounded-xl bg-background h-[100px]"
+        className="flex flex-row w-full items-center justify-between gap-5 p-3  bg-background h-[100px]"
         key={`name-container-${shortlist?.id}`}
       >
         <div className="flex flex-row items-center gap-2">

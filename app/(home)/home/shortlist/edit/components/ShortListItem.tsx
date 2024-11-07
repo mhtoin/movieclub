@@ -61,7 +61,7 @@ export default function ShortListItem({
       {showActions &&
         requiresSelection &&
         shortlistId === user?.shortlistId && (
-          <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
+          <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card p-2">
             <Button
               variant={"ghost"}
               size={"iconSm"}
@@ -84,7 +84,7 @@ export default function ShortListItem({
           </div>
         )}
       {showActions && (
-        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card p-2">
           {removeFromShortList ? (
             <Button
               variant={"ghost"}
@@ -136,9 +136,9 @@ export default function ShortListItem({
       <Image
         src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
-        width={"150"}
-        height={"150"}
-        className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
+        width={"1000"}
+        height={"1000"}
+        className={`primary-img`}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
