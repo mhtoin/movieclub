@@ -135,9 +135,6 @@ export default function ListView() {
                 className="flex flex-col gap-4 relative snap-start scroll-mb-20"
                 id={date}
               >
-                <h2 className="upright absolute top-1/2 left-0 -translate-y-1/2 text-2xl font-bold leading-none hidden md:block">
-                  {month}
-                </h2>
                 <div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 px-5 md:px-20 snap-start">
                   {movies.map((movie: MovieOfTheWeek) => {
                     if (movie.watchDate === nextMovie?.watchDate) return null;
