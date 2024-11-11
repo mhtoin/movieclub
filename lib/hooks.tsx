@@ -468,6 +468,8 @@ export const useGetWatchlistQuery = (user: DatabaseUser | null) => {
       }
     },
     enabled: !!user && !!user.sessionId && !!user.accountId,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 

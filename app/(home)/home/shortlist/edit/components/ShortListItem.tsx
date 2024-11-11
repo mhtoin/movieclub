@@ -35,6 +35,7 @@ interface SearchResultCardProps {
   requiresSelection?: boolean;
   index?: number;
   showActions?: boolean;
+  isInWatchlist?: boolean;
 }
 
 export default function ShortListItem({
@@ -45,6 +46,7 @@ export default function ShortListItem({
   requiresSelection,
   index,
   showActions,
+  isInWatchlist,
 }: SearchResultCardProps) {
   const removeMutation = useRemoveFromShortlistMutation();
   const selectionMutation = useUpdateSelectionMutation();
@@ -127,9 +129,11 @@ export default function ShortListItem({
               });
             }}
             isLoading={watchlistMutation.isPending}
-            tooltip="Add to watchlist"
+            tooltip={
+              isInWatchlist ? "Remove from watchlist" : "Add to watchlist"
+            }
           >
-            {true ? <BookmarkMinus /> : <BookmarkPlus />}
+            {isInWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
           </Button>
         </div>
       )}

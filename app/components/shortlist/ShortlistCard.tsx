@@ -9,6 +9,7 @@ import { MessageCircleWarning } from "lucide-react";
 import ItemSkeleton from "@/app/(home)/home/shortlist/edit/components/ItemSkeleton";
 import WatchlistButton from "@/app/(home)/home/shortlist/edit/components/WatchlistButton";
 import SearchButton from "@/app/(home)/home/shortlist/edit/components/SearchButton";
+import { useEffect, useRef } from "react";
 
 export default function ShortlistCard({
   shortlist,
@@ -18,11 +19,17 @@ export default function ShortlistCard({
   const readyStateMutation = useUpdateReadyStateMutation();
   const { data: user } = useValidateSession();
   const movies = (shortlist?.movies as Movie[]) || [];
+  const { data: watchlist } = useGetWatchlistQuery(user || null);
+  const movieRefs = useRef<React.RefObject<HTMLDivElement>[]>();
 
   const skeletons =
     movies?.length < 3
       ? [...new Array(3 - movies.length)].map((element, index) => (
-          <ItemSkeleton key={index} />
+          <ItemSkeleton
+            key={index}
+            skeletonCount={3 - movies.length}
+            index={index}
+          />
         ))
       : [];
   const isEditable = shortlist && shortlist.userId === user?.id;
@@ -30,13 +37,17 @@ export default function ShortlistCard({
   return (
     <div
       key={`fragment-${shortlist?.id}`}
-      className="flex flex-col justify-between border rounded-3xl p-3 gap-2 bg-card h-full"
+      className="flex flex-col justify-between border rounded-xl p-3 gap-2 bg-card/20 h-full backdrop-blur-lg"
     >
       <div
         key={shortlist?.id + "-container"}
-        className="flex flex-row flex-wrap gap-1 lg:gap-3 h-full sm:w-auto items-center justify-center p-2 lg:p-3 border rounded-xl bg-background"
+        className="flex flex-row flex-wrap sm:w-auto items-center justify-center border rounded-md p-3 gap-2 bg-background  overflow-hidden"
       >
         {shortlist?.movies.map((movie: Movie, index: number) => {
+          const isInWatchlist = watchlist?.some(
+            (watchlistMovie) => watchlistMovie.id === movie.tmdbId
+          );
+          console.log("movie", movie.id, movie.title, isInWatchlist);
           return (
             <ShortListItem
               key={shortlist.id + movie.id}
@@ -51,6 +62,7 @@ export default function ShortlistCard({
               removeFromShortList={user?.id === shortlist.userId}
               index={index}
               showActions={true}
+              isInWatchlist={isInWatchlist}
             />
           );
         })}
@@ -59,10 +71,10 @@ export default function ShortlistCard({
         })}
       </div>
       <div
-        className="flex flex-row w-full items-center justify-between gap-5 p-3 border rounded-xl bg-background h-[100px]"
+        className="flex flex-row w-full items-center justify-between gap-5 p-3 border rounded-xl bg-background "
         key={`name-container-${shortlist?.id}`}
       >
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-3">
           <Button
             variant={"outline"}
             size={"avatarSm"}
@@ -93,12 +105,6 @@ export default function ShortlistCard({
             <span className="text-muted-foreground">
               {shortlist?.user?.name}
             </span>
-            {isEditable && (
-              <div className="flex flex-row">
-                <SearchButton />
-                <WatchlistButton />
-              </div>
-            )}
           </div>
         </div>
         {shortlist?.requiresSelection &&
