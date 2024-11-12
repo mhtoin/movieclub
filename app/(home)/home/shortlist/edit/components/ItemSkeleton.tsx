@@ -1,10 +1,4 @@
-export default function ItemSkeleton({
-  skeletonCount,
-  index,
-}: {
-  skeletonCount: number;
-  index: number;
-}) {
+export default function ItemSkeleton() {
   return (
     <div className={`moviecard items-center justify-center border`}>
       <div className="flex flex-col items-center justify-center h-full space-y-5 ">

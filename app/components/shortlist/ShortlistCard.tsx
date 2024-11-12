@@ -25,11 +25,7 @@ export default function ShortlistCard({
   const skeletons =
     movies?.length < 3
       ? [...new Array(3 - movies.length)].map((element, index) => (
-          <ItemSkeleton
-            key={index}
-            skeletonCount={3 - movies.length}
-            index={index}
-          />
+          <ItemSkeleton key={index} />
         ))
       : [];
   const isEditable = shortlist && shortlist.userId === user?.id;
