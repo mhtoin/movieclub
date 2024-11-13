@@ -117,10 +117,7 @@ export default function ListView() {
         )}
         {data &&
           Object.keys(data).map((date, index) => {
-            const movies: MovieOfTheWeek[] =
-              index % 2 === 0
-                ? data[date as keyof typeof data]
-                : data[date as keyof typeof data].toReversed();
+            const movies: MovieOfTheWeek[] = data[date as keyof typeof data];
             const month = format(new Date(date), "MMMM");
 
             if (
