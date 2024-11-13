@@ -77,6 +77,9 @@ dependencies:
   '@vercel/functions':
     specifier: ^1.4.2
     version: 1.4.2
+  '@vercel/speed-insights':
+    specifier: ^1.1.0
+    version: 1.1.0(next@14.2.15)(react@18.3.1)
   arctic:
     specifier: ^1.9.2
     version: 1.9.2
@@ -4058,6 +4061,34 @@ packages:
     peerDependenciesMeta:
       '@aws-sdk/credential-provider-web-identity':
         optional: true
+    dev: false
+
+  /@vercel/speed-insights@1.1.0(next@14.2.15)(react@18.3.1):
+    resolution: {integrity: sha512-rAXxuhhO4mlRGC9noa5F7HLMtGg8YF1zAN6Pjd1Ny4pII4cerhtwSG4vympbCl+pWkH7nBS9kVXRD4FAn54dlg==}
+    requiresBuild: true
+    peerDependencies:
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      react: ^18 || ^19 || ^19.0.0-rc
+      svelte: '>= 4'
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
+    dependencies:
+      next: 14.2.15(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
     dev: false
 
   /@zkochan/retry@0.2.0:

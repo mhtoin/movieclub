@@ -2,7 +2,7 @@ import Providers from "@/utils/provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 export const metadata = {
   title: "movieclub",
   description: "Th app for your long-distance movie club",
@@ -31,7 +31,10 @@ export default async function RootLayout({
       <body
         className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <SpeedInsights />
+        </Providers>
       </body>
     </html>
   );

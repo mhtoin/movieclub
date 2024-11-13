@@ -38,6 +38,7 @@
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "@vercel/functions": "^1.4.2",
+    "@vercel/speed-insights": "^1.1.0",
     "arctic": "^1.9.2",
     "autoprefixer": "10.4.17",
     "chart.js": "^4.3.0",
