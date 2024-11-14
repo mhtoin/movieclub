@@ -25,6 +25,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
   console.log("chosenIndex", chosenIndex);
   console.log("chosen", chosen);
-  //waitUntil(postRaffleWork({ movies, winner: chosen, startingUserId }));
+  waitUntil(postRaffleWork({ movies, winner: chosen, startingUserId }));
   return NextResponse.json({ chosenIndex, movie: chosen });
 }

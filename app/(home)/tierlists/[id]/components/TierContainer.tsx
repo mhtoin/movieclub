@@ -172,7 +172,7 @@ export default function DnDTierContainer({
 
   return (
     <>
-      <div className="flex flex-row items-center gap-2 pt-10 lg:pt-0">
+      <div className="flex flex-row items-center gap-5 w-full justify-center">
         <Button
           onClick={handleSave}
           disabled={!authorized}
@@ -204,7 +204,7 @@ export default function DnDTierContainer({
           )}
         </Button>
       </div>
-      <div className="flex flex-col items-start gap-2 border max-w-xl">
+      <div className="flex flex-col items-start gap-2 w-[90dvw] overflow-scroll">
         <CreateForm />
         <DragDropContext onDragEnd={onDragEnd}>
           {containerState.map((tier, tierIndex) => (

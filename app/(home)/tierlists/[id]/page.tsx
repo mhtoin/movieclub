@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }) as unknown as MovieOfTheWeek[];
   const authorized = params.id === user?.id;
   return (
-    <div className="flex flex-col items-center gap-5 pt-20 px-2 overflow-scroll">
+    <div className="flex flex-col gap-5 pt-20 px-10 ">
       <TierContainer
         tierlist={tierlist}
         authorized={authorized}
