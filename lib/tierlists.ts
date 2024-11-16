@@ -15,7 +15,7 @@ export async function getTierlists() {
 export async function getTierlist(id: string) {
   const tierlist = await prisma.tierlists.findUnique({
     where: {
-      userId: id,
+      id: id,
     },
   });
 

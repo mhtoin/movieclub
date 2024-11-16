@@ -11,7 +11,8 @@
     "knip": "knip",
     "watchdates-script": "tsx scripts/watchdates.ts",
     "migrate-users": "tsx scripts/migrateUsers.ts",
-    "generate-test-data": "tsx scripts/generateTestData.ts"
+    "generate-test-data": "tsx scripts/generateTestData.ts",
+    "generate-tierlists": "tsx scripts/generateTierlists.ts"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.11",

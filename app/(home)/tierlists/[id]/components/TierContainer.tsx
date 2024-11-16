@@ -1,8 +1,9 @@
 "use client";
 import { useNotificationStore } from "@/stores/useNotificationStore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { produce } from "immer";
-import { Fragment, useState } from "react";
+import { toast } from "sonner";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -15,6 +16,15 @@ import CreateForm from "./TierlistCreate";
 import { useRouter } from "next/navigation";
 import { ro } from "date-fns/locale";
 import { Button } from "@/app/components/ui/Button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Tier from "./Tier";
+import TierDateFilter from "./TierDateFilter";
+import TierCreate from "./TierCreate";
+import { tierlistKeys } from "@/lib/tierlist/tierlistKeys";
+import { movieKeys } from "@/lib/movies/movieKeys";
+import { formatISO, nextWednesday } from "date-fns";
+import { Toaster } from "@/app/components/ui/Toaster";
+import { getQueryClient } from "@/lib/getQueryClient";
 
 type MoveItemObject = {
   [x: string]: MovieOfTheWeek[];
@@ -51,20 +61,49 @@ const moveItem = (
 export default function DnDTierContainer({
   tierlist,
   authorized,
-  unranked,
+  allYears,
 }: {
   tierlist: Tierlist;
   authorized: boolean;
-  unranked: MovieOfTheWeek[];
+  allYears: string[];
 }) {
-  const tiers = ["Unranked"].concat(tierlist.tiers.map((tier) => tier.label));
-  const movieMatrix = tierlist.tiers.map((tier) => {
-    return tier.movies.map((movie) => movie);
+  const queryClient = getQueryClient();
+  const [selectedDate, setSelectedDate] = useState(allYears[0]);
+  const { data: tierlistData } = useQuery(tierlistKeys.byId(tierlist.id));
+  const nextMovieDate = formatISO(nextWednesday(new Date()), {
+    representation: "date",
   });
-  const router = useRouter();
+  const { data: moviesOfTheWeek } = useQuery({
+    queryKey: ["moviesOfTheWeek", nextMovieDate],
+    queryFn: async () => {
+      const res = await fetch(`/api/movies`);
+      const data: MovieOfTheWeek[] = await res.json();
+      return data;
+    },
+  });
+
+  const tiers = ["Unranked"].concat(
+    tierlistData?.tiers.map((tier) => tier.label) || []
+  );
+  const movieMatrix = tierlistData?.tiers.map((tier) => {
+    return tier.movies
+      .filter((movie) =>
+        selectedDate !== allYears[0]
+          ? movie.watchDate?.split("-")[0] === selectedDate
+          : true
+      )
+      .map((movie) => movie);
+  });
+
+  const unranked = moviesOfTheWeek?.filter((movie) => {
+    const movieInList = tierlist.tiers
+      .flatMap((tier) => tier.movies.map((movie) => movie.title))
+      .includes(movie.title);
+    return !movieInList;
+  }) as unknown as MovieOfTheWeek[];
 
   if (unranked) {
-    movieMatrix.unshift(unranked);
+    movieMatrix?.unshift(unranked);
   }
 
   const [containerState, setContainerState] = useState(movieMatrix);
@@ -72,8 +111,35 @@ export default function DnDTierContainer({
     (state) => state.setNotification
   );
 
+  useEffect(() => {
+    setContainerState(movieMatrix);
+  }, [tierlistData]);
+
+  const handleDateChange = (date: string) => {
+    console.log(date);
+    console.log(allYears[0]);
+    setSelectedDate(date);
+    const newUnranked = unranked.filter((movie) => {
+      return date !== allYears[0]
+        ? movie.watchDate?.split("-")[0] === date
+        : true;
+    });
+    const newState = tierlist.tiers.map((tier) => {
+      return tier.movies
+        .filter((movie) =>
+          date !== allYears[0] ? movie.watchDate?.split("-")[0] === date : true
+        )
+        .map((movie) => movie);
+    });
+
+    newState.unshift(newUnranked);
+    setContainerState(newState);
+  };
+
   function onDragEnd(result: DropResult) {
-    if (!authorized) {
+    console.log("onDragEnd", result);
+    if (!authorized || !containerState || !movieMatrix) {
+      console.log("not authorized or containerState or movieMatrix");
       return;
     }
 
@@ -85,30 +151,53 @@ export default function DnDTierContainer({
 
     const sInd = +source.droppableId;
     const dInd = +destination.droppableId;
+    console.log("sInd", sInd);
+    console.log("dInd", dInd);
     /**
      * !TODO refactor this to use immer
      */
     if (sInd === dInd) {
       const items = reorder(
-        containerState[sInd],
+        movieMatrix?.[sInd],
         source.index,
         destination.index
       );
-      const newState = [...containerState];
+      const newState = [...movieMatrix];
       newState[sInd] = items;
-      setContainerState(newState);
+
+      const saveState = produce(tierlist, (draft) => {
+        draft.tiers.forEach((tier) => {
+          tier.movies = newState[tier.value];
+        });
+      });
+      queryClient.setQueryData(["moviesOfTheWeek", nextMovieDate], newState[0]);
+      queryClient.setQueryData(["tierlists", tierlist.id], saveState);
+
+      saveMutation.mutate(saveState);
     } else {
+      console.log("moving item");
       const result = moveItem(
-        containerState[sInd],
-        containerState[dInd],
+        movieMatrix[sInd],
+        movieMatrix[dInd],
         source,
         destination
       );
-      const newState = [...containerState];
+      const newState = [...movieMatrix];
       newState[sInd] = result[sInd];
       newState[dInd] = result[dInd];
 
-      setContainerState(newState);
+      console.log("newState", newState);
+
+      // mutate the tierlist
+      const saveState = produce(tierlist, (draft) => {
+        draft.tiers.forEach((tier) => {
+          tier.movies = newState[tier.value];
+        });
+      });
+      queryClient.setQueryData(["moviesOfTheWeek", nextMovieDate], newState[0]);
+      queryClient.setQueryData(["tierlists", tierlist.id], saveState);
+
+      saveMutation.mutate(saveState);
     }
   }
 
@@ -127,8 +216,9 @@ export default function DnDTierContainer({
         throw new Error("Updating tierlist failed");
       }
     },
-    onSuccess: (data) => {
-      setNotification("Tierlist updated!", "success");
+    onSuccess: (data, variables, context) => {
+      console.log("onSuccess", data);
+      toast.success("Tierlist updated!");
     },
     onError: (error) => {
       setNotification("Updating tierlist failed!", "error");
@@ -162,7 +252,7 @@ export default function DnDTierContainer({
     // construct a tierlist from tiers and matrix
     const saveState = produce(tierlist, (draft) => {
       draft.tiers.forEach((tier) => {
-        tier.movies = containerState[tier.value];
+        tier.movies = containerState?.[tier.value] || [];
       });
       return draft;
     });
@@ -184,8 +274,9 @@ export default function DnDTierContainer({
         </Button>
         <Button
           variant="outline"
+          isLoading={deleteMutation.isPending}
           onClick={() => {
-            if (movieMatrix.length > 1) {
+            if (movieMatrix && movieMatrix?.length > 1) {
               deleteMutation.mutate(tierlist.id);
             } else {
               if (document) {
@@ -197,68 +288,28 @@ export default function DnDTierContainer({
           }}
           disabled={!authorized}
         >
-          {deleteMutation.isPending ? (
-            <span className="loading loading-spinner"></span>
-          ) : (
-            <span>{movieMatrix.length > 1 ? "Reset" : "Create"}</span>
-          )}
+          <span>
+            {movieMatrix && movieMatrix?.length > 1 ? "Reset" : "Create"}
+          </span>
         </Button>
+        <TierDateFilter
+          values={allYears}
+          selectedDate={selectedDate}
+          setSelectedDate={handleDateChange}
+        />
       </div>
-      <div className="flex flex-col items-start gap-2 w-[90dvw] overflow-scroll">
-        <CreateForm />
+      <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
         <DragDropContext onDragEnd={onDragEnd}>
-          {containerState.map((tier, tierIndex) => (
-            <Fragment key={tierIndex}>
-              {tierIndex === 0 && tier.length === 0 ? (
-                <div key={tierIndex}></div>
-              ) : (
-                <div className={`divider`}>
-                  <div className="badge badge-secondary badge-lg">
-                    {tiers[tierIndex]}
-                  </div>
-                </div>
-              )}
-              <Droppable
-                key={`droppable-${tierIndex}`}
-                droppableId={`${tierIndex}`}
-                direction="horizontal"
-              >
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    className="flex flex-row gap-5 p-2 m-2 overflow-auto"
-                    {...provided.droppableProps}
-                  >
-                    {tier.map((item, index) => (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id!}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            className="indicator mx-auto border-2 rounded-md max-w-[70px] md:max-w-[80px] lg:max-w-[90px] shrink-0"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <Link href={`/home/movies/${item.id}`}>
-                              <img
-                                src={`http://image.tmdb.org/t/p/original/${item["poster_path"]}`}
-                                alt=""
-                              />
-                            </Link>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </Fragment>
+          {movieMatrix?.map((tier, tierIndex) => (
+            <Tier
+              key={tierIndex}
+              tierIndex={tierIndex}
+              tier={tier}
+              tiers={tiers}
+            />
           ))}
         </DragDropContext>
+        {tierlist.tiers.length < 4 && <TierCreate tierlistId={tierlist.id} />}
       </div>
     </>
   );

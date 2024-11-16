@@ -2,12 +2,13 @@ import { getTierlist, getTierlists } from "@/lib/tierlists";
 import { getMoviesOfTheWeek } from "@/lib/movies/movies";
 import { validateRequest } from "@/lib/auth";
 import TierContainer from "./components/TierContainer";
-
+import { getQueryClient } from "@/lib/getQueryClient";
 async function staticParams() {
   const tierlists = await getTierlists();
+  console.log("tierlists", tierlists);
 
   return tierlists.map((tierlist) => ({
-    id: tierlist.userId,
+    id: tierlist.id,
   }));
 }
 
@@ -19,8 +20,11 @@ export const dynamic =
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { user, session } = await validateRequest();
+  const queryClient = getQueryClient();
   const tierlist = await getTierlist(params.id);
+  console.log("tierlist", tierlist);
   const moviesOfTheWeek = await getMoviesOfTheWeek();
+  queryClient.setQueryData(["tierlists", params.id], tierlist);
 
   const tierlistMovies = tierlist
     ? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
@@ -30,13 +34,19 @@ export default async function Page({ params }: { params: { id: string } }) {
     const movieInList = tierlistMovies.includes(movie.title);
     return !movieInList;
   }) as unknown as MovieOfTheWeek[];
-  const authorized = params.id === user?.id;
+
+  const allDates = moviesOfTheWeek.map((movie) => movie.watchDate);
+  const allYears = [...new Set(allDates.map((date) => date!.split("-")[0]))];
+  allYears.unshift(`${allYears[allYears.length - 1]}-${allYears[0]}`);
+
+  const authorized = tierlist.userId === user?.id;
+  console.log("authorized", authorized);
   return (
-    <div className="flex flex-col gap-5 pt-20 px-10 ">
+    <div className="flex flex-col gap-10 md:gap-5 py-20 items-center">
       <TierContainer
         tierlist={tierlist}
         authorized={authorized}
-        unranked={unrankedMovies}
+        allYears={allYears}
       />
     </div>
   );

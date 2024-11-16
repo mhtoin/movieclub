@@ -45,10 +45,10 @@ export default async function Tierlists() {
           return (
             <div
               className="border rounded-xl p-2 flex flex-col items-center gap-2"
-              key={tierlist.userId}
+              key={tierlist.id}
             >
               <span className="text-sm font-bold">{tierlist.user?.name}</span>
-              <Link href={`/tierlists/${tierlist.userId}`}>
+              <Link href={`/tierlists/${tierlist.id}`}>
                 <div className="border rounded-md overflow-hidden">
                   <div className="w-24">
                     <img src={tierlist.user?.image} alt="user" />
