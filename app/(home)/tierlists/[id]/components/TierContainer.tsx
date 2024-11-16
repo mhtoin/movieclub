@@ -85,41 +85,43 @@ export default function DnDTierContainer({
   const tiers = ["Unranked"].concat(
     tierlistData?.tiers.map((tier) => tier.label) || []
   );
-  const movieMatrix = tierlistData?.tiers.map((tier) => {
-    return tier.movies
-      .filter((movie) =>
-        selectedDate !== allYears[0]
-          ? movie.watchDate?.split("-")[0] === selectedDate
-          : true
-      )
-      .map((movie) => movie);
-  });
 
-  const unranked = moviesOfTheWeek?.filter((movie) => {
-    const movieInList = tierlist.tiers
-      .flatMap((tier) => tier.movies.map((movie) => movie.title))
-      .includes(movie.title);
-    return !movieInList;
-  }) as unknown as MovieOfTheWeek[];
-
-  if (unranked) {
-    movieMatrix?.unshift(unranked);
-  }
-
-  const [containerState, setContainerState] = useState(movieMatrix);
+  const [containerState, setContainerState] = useState<
+    MovieOfTheWeek[][] | undefined
+  >(undefined);
   const setNotification = useNotificationStore(
     (state) => state.setNotification
   );
 
   useEffect(() => {
+    const movieMatrix = tierlistData?.tiers.map((tier) => {
+      return tier.movies
+        .filter((movie) =>
+          selectedDate !== allYears[0]
+            ? movie.watchDate?.split("-")[0] === selectedDate
+            : true
+        )
+        .map((movie) => movie);
+    });
+
+    const unranked = moviesOfTheWeek?.filter((movie) => {
+      const movieInList = tierlist.tiers
+        .flatMap((tier) => tier.movies.map((movie) => movie.title))
+        .includes(movie.title);
+      return !movieInList;
+    }) as unknown as MovieOfTheWeek[];
+
+    if (unranked) {
+      movieMatrix?.unshift(unranked);
+    }
     setContainerState(movieMatrix);
-  }, [tierlistData]);
+  }, [tierlistData, moviesOfTheWeek]);
 
   const handleDateChange = (date: string) => {
     console.log(date);
     console.log(allYears[0]);
     setSelectedDate(date);
-    const newUnranked = unranked.filter((movie) => {
+    const newUnranked = moviesOfTheWeek?.filter((movie) => {
       return date !== allYears[0]
         ? movie.watchDate?.split("-")[0] === date
         : true;
@@ -132,14 +134,16 @@ export default function DnDTierContainer({
         .map((movie) => movie);
     });
 
-    newState.unshift(newUnranked);
+    if (newUnranked) {
+      newState.unshift(newUnranked);
+    }
     setContainerState(newState);
   };
 
   function onDragEnd(result: DropResult) {
     console.log("onDragEnd", result);
-    if (!authorized || !containerState || !movieMatrix) {
-      console.log("not authorized or containerState or movieMatrix");
+    if (!authorized || !containerState) {
+      console.log("not authorized or containerState");
       return;
     }
 
@@ -158,11 +162,11 @@ export default function DnDTierContainer({
      */
     if (sInd === dInd) {
       const items = reorder(
-        movieMatrix?.[sInd],
+        containerState?.[sInd],
         source.index,
         destination.index
       );
-      const newState = [...movieMatrix];
+      const newState = [...containerState];
       newState[sInd] = items;
 
       const saveState = produce(tierlist, (draft) => {
@@ -170,6 +174,7 @@ export default function DnDTierContainer({
           tier.movies = newState[tier.value];
         });
       });
+      setContainerState(newState);
       queryClient.setQueryData(["moviesOfTheWeek", nextMovieDate], newState[0]);
       queryClient.setQueryData(["tierlists", tierlist.id], saveState);
 
@@ -177,12 +182,12 @@ export default function DnDTierContainer({
     } else {
       console.log("moving item");
       const result = moveItem(
-        movieMatrix[sInd],
-        movieMatrix[dInd],
+        containerState[sInd],
+        containerState[dInd],
         source,
         destination
       );
-      const newState = [...movieMatrix];
+      const newState = [...containerState];
       newState[sInd] = result[sInd];
       newState[dInd] = result[dInd];
 
@@ -194,6 +199,7 @@ export default function DnDTierContainer({
           tier.movies = newState[tier.value];
         });
       });
+      setContainerState(newState);
       queryClient.setQueryData(["moviesOfTheWeek", nextMovieDate], newState[0]);
       queryClient.setQueryData(["tierlists", tierlist.id], saveState);
 
@@ -276,7 +282,7 @@ export default function DnDTierContainer({
           variant="outline"
           isLoading={deleteMutation.isPending}
           onClick={() => {
-            if (movieMatrix && movieMatrix?.length > 1) {
+            if (containerState && containerState?.length > 1) {
               deleteMutation.mutate(tierlist.id);
             } else {
               if (document) {
@@ -289,7 +295,7 @@ export default function DnDTierContainer({
           disabled={!authorized}
         >
           <span>
-            {movieMatrix && movieMatrix?.length > 1 ? "Reset" : "Create"}
+            {containerState && containerState?.length > 1 ? "Reset" : "Create"}
           </span>
         </Button>
         <TierDateFilter
@@ -300,7 +306,7 @@ export default function DnDTierContainer({
       </div>
       <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
         <DragDropContext onDragEnd={onDragEnd}>
-          {movieMatrix?.map((tier, tierIndex) => (
+          {containerState?.map((tier, tierIndex) => (
             <Tier
               key={tierIndex}
               tierIndex={tierIndex}
