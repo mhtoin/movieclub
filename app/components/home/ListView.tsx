@@ -22,6 +22,8 @@ export default function ListView() {
   const { data, status } = useQuery(movieKeys.next(nextMovieDate));
   const router = useRouter();
 
+  console.log("data", data);
+
   const dates = Object.keys(data || {}).map((date) => ({
     date: date,
     label: format(new Date(date), "MMMM"),

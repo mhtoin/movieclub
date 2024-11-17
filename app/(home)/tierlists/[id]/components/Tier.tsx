@@ -1,5 +1,6 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -117,15 +118,18 @@ export default function Tier({
                 <Draggable key={item.id} draggableId={item.id!} index={index}>
                   {(provided, snapshot) => (
                     <div
-                      className="indicator mx-auto border-2 rounded-md max-w-[80px] md:max-w-[150px] lg:max-w-[200px] shrink-0"
+                      className="indicator mx-auto border-2 rounded-md max-w-[120px] md:max-w-[150px] lg:max-w-[200px] shrink-0"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
                       <Link href={`/home/movies/${item.id}`}>
-                        <img
-                          src={`http://image.tmdb.org/t/p/original/${item["poster_path"]}`}
+                        <Image
+                          src={`https://image.tmdb.org/t/p/original/${item["poster_path"]}`}
+                          width={200}
+                          height={300}
                           alt=""
+                          className="h-full w-full object-cover"
                         />
                       </Link>
                     </div>

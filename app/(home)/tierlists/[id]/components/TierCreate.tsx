@@ -22,6 +22,8 @@ export default function TierCreate({ tierlistId }: { tierlistId: string }) {
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ["tierlists", tierlistId] });
+      setCreateFormState("closed");
+      setTierName("");
     },
   });
 
@@ -64,6 +66,8 @@ export default function TierCreate({ tierlistId }: { tierlistId: string }) {
           variant={createFormState === "open" ? "outline" : "ghost"}
           size={createFormState === "open" ? "sm" : "icon"}
           onClick={handleCreateTier}
+          disabled={tierlistMutate.isPending}
+          isLoading={tierlistMutate.isPending}
         >
           {createFormState === "open" ? (
             <span className="text-sm">Create</span>

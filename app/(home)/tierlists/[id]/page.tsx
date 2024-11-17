@@ -25,6 +25,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   console.log("tierlist", tierlist);
   const moviesOfTheWeek = await getMoviesOfTheWeek();
   queryClient.setQueryData(["tierlists", params.id], tierlist);
+  queryClient.setQueryData(["moviesOfTheWeek"], moviesOfTheWeek);
 
   const tierlistMovies = tierlist
     ? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))

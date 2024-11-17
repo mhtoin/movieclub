@@ -74,7 +74,7 @@ export default function DnDTierContainer({
     representation: "date",
   });
   const { data: moviesOfTheWeek } = useQuery({
-    queryKey: ["moviesOfTheWeek", nextMovieDate],
+    queryKey: ["moviesOfTheWeek"],
     queryFn: async () => {
       const res = await fetch(`/api/movies`);
       const data: MovieOfTheWeek[] = await res.json();
@@ -94,6 +94,7 @@ export default function DnDTierContainer({
   );
 
   useEffect(() => {
+    console.log("setting local state");
     const movieMatrix = tierlistData?.tiers.map((tier) => {
       return tier.movies
         .filter((movie) =>
@@ -142,7 +143,7 @@ export default function DnDTierContainer({
 
   function onDragEnd(result: DropResult) {
     console.log("onDragEnd", result);
-    if (!authorized || !containerState) {
+    if (!authorized || !containerState || !tierlistData) {
       console.log("not authorized or containerState");
       return;
     }
@@ -169,13 +170,12 @@ export default function DnDTierContainer({
       const newState = [...containerState];
       newState[sInd] = items;
 
-      const saveState = produce(tierlist, (draft) => {
+      const saveState = produce(tierlistData, (draft) => {
         draft.tiers.forEach((tier) => {
           tier.movies = newState[tier.value];
         });
       });
       setContainerState(newState);
-      queryClient.setQueryData(["moviesOfTheWeek", nextMovieDate], newState[0]);
       queryClient.setQueryData(["tierlists", tierlist.id], saveState);
 
       saveMutation.mutate(saveState);
@@ -191,16 +191,14 @@ export default function DnDTierContainer({
       newState[sInd] = result[sInd];
       newState[dInd] = result[dInd];
 
-      console.log("newState", newState);
-
       // mutate the tierlist
-      const saveState = produce(tierlist, (draft) => {
+      const saveState = produce(tierlistData, (draft) => {
         draft.tiers.forEach((tier) => {
           tier.movies = newState[tier.value];
         });
       });
       setContainerState(newState);
-      queryClient.setQueryData(["moviesOfTheWeek", nextMovieDate], newState[0]);
+      queryClient.setQueryData(["moviesOfTheWeek"], newState[0]);
       queryClient.setQueryData(["tierlists", tierlist.id], saveState);
 
       saveMutation.mutate(saveState);
@@ -315,7 +313,9 @@ export default function DnDTierContainer({
             />
           ))}
         </DragDropContext>
-        {tierlist.tiers.length < 4 && <TierCreate tierlistId={tierlist.id} />}
+        {tierlistData?.tiers && tierlistData?.tiers?.length <= 4 && (
+          <TierCreate tierlistId={tierlist.id} />
+        )}
       </div>
     </>
   );
