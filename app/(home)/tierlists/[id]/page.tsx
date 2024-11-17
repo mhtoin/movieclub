@@ -38,7 +38,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   const allDates = moviesOfTheWeek.map((movie) => movie.watchDate);
   const allYears = [...new Set(allDates.map((date) => date!.split("-")[0]))];
-  allYears.unshift(`${allYears[allYears.length - 1]}-${allYears[0]}`);
 
   const authorized = tierlist.userId === user?.id;
   console.log("authorized", authorized);

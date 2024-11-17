@@ -1,9 +1,11 @@
+import { Button } from "@/app/components/ui/Button";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "components/ui/Select";
@@ -23,7 +25,7 @@ export default function TierDateFilter({
       value={selectedDate}
     >
       <SelectTrigger className="max-w-48">
-        <SelectValue placeholder={values[0]} asChild>
+        <SelectValue placeholder={"Choose a date"} asChild>
           <span>{selectedDate}</span>
         </SelectValue>
       </SelectTrigger>
@@ -33,6 +35,18 @@ export default function TierDateFilter({
             {value}
           </SelectItem>
         ))}
+        <SelectSeparator />
+        <Button
+          className="w-full px-2"
+          variant="secondary"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedDate("");
+          }}
+        >
+          Clear
+        </Button>
       </SelectContent>
     </Select>
   );

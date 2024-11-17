@@ -67,7 +67,7 @@ export default function Tier({
   return (
     <div
       key={tierIndex}
-      className="flex gap-2 justify-center border border-border/70 rounded-md relative group max-w-[95dvw] min-h-[200px]"
+      className="flex gap-2 justify-center border border-border/70 rounded-md relative group max-w-[95dvw] min-h-[200px] min-w-[300px]"
     >
       <div className="flex md:hidden absolute -top-4 bg-background rounded-md px-2">
         <span className="text-lg font-bold whitespace-normal text-center">
@@ -118,7 +118,7 @@ export default function Tier({
                 <Draggable key={item.id} draggableId={item.id!} index={index}>
                   {(provided, snapshot) => (
                     <div
-                      className="indicator mx-auto border-2 rounded-md max-w-[120px] md:max-w-[150px] lg:max-w-[200px] shrink-0"
+                      className="indicator mx-auto border-2 rounded-md max-w-[120px] md:max-w-[150px] lg:max-w-[200px] min-w-[120px] md:min-w-[150px] lg:min-w-[200px] shrink-0"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}

@@ -13,10 +13,10 @@ import {
 } from "@hello-pangea/dnd";
 import Link from "next/link";
 import CreateForm from "./TierlistCreate";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ro } from "date-fns/locale";
 import { Button } from "@/app/components/ui/Button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import Tier from "./Tier";
 import TierDateFilter from "./TierDateFilter";
 import TierCreate from "./TierCreate";
@@ -68,12 +68,16 @@ export default function DnDTierContainer({
   allYears: string[];
 }) {
   const queryClient = getQueryClient();
-  const [selectedDate, setSelectedDate] = useState(allYears[0]);
-  const { data: tierlistData } = useQuery(tierlistKeys.byId(tierlist.id));
-  const nextMovieDate = formatISO(nextWednesday(new Date()), {
-    representation: "date",
-  });
-  const { data: moviesOfTheWeek } = useQuery({
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState(
+    searchParams.get("date") || ""
+  );
+  const { data: tierlistData, status: tierlistStatus } = useQuery(
+    tierlistKeys.byId(tierlist.id)
+  );
+  const { data: moviesOfTheWeek, status: moviesOfTheWeekStatus } = useQuery({
     queryKey: ["moviesOfTheWeek"],
     queryFn: async () => {
       const res = await fetch(`/api/movies`);
@@ -98,18 +102,18 @@ export default function DnDTierContainer({
     const movieMatrix = tierlistData?.tiers.map((tier) => {
       return tier.movies
         .filter((movie) =>
-          selectedDate !== allYears[0]
-            ? movie.watchDate?.split("-")[0] === selectedDate
-            : true
+          selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true
         )
         .map((movie) => movie);
     });
 
     const unranked = moviesOfTheWeek?.filter((movie) => {
-      const movieInList = tierlist.tiers
+      const movieInList = tierlistData?.tiers
         .flatMap((tier) => tier.movies.map((movie) => movie.title))
         .includes(movie.title);
-      return !movieInList;
+      return !movieInList && selectedDate
+        ? movie.watchDate?.split("-")[0] === selectedDate
+        : !movieInList;
     }) as unknown as MovieOfTheWeek[];
 
     if (unranked) {
@@ -119,32 +123,48 @@ export default function DnDTierContainer({
   }, [tierlistData, moviesOfTheWeek]);
 
   const handleDateChange = (date: string) => {
-    console.log(date);
-    console.log(allYears[0]);
-    setSelectedDate(date);
-    const newUnranked = moviesOfTheWeek?.filter((movie) => {
-      return date !== allYears[0]
-        ? movie.watchDate?.split("-")[0] === date
-        : true;
+    const params = new URLSearchParams(searchParams.toString());
+    if (date === "") {
+      params.delete("date");
+    } else {
+      params.set("date", date);
+    }
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
     });
-    const newState = tierlist.tiers.map((tier) => {
+    setSelectedDate(date);
+    const movieMatrix = tierlistData?.tiers.map((tier) => {
       return tier.movies
         .filter((movie) =>
-          date !== allYears[0] ? movie.watchDate?.split("-")[0] === date : true
+          date ? movie.watchDate?.split("-")[0] === date : true
         )
         .map((movie) => movie);
     });
 
-    if (newUnranked) {
-      newState.unshift(newUnranked);
+    const unranked = moviesOfTheWeek?.filter((movie) => {
+      const movieInList = tierlistData?.tiers
+        .flatMap((tier) => tier.movies.map((movie) => movie.title))
+        .includes(movie.title);
+      return !movieInList && date
+        ? movie.watchDate?.split("-")[0] === date
+        : !movieInList;
+    }) as unknown as MovieOfTheWeek[];
+
+    if (unranked) {
+      movieMatrix?.unshift(unranked);
     }
-    setContainerState(newState);
+    setContainerState(movieMatrix);
   };
 
   function onDragEnd(result: DropResult) {
     console.log("onDragEnd", result);
     if (!authorized || !containerState || !tierlistData) {
       console.log("not authorized or containerState");
+      return;
+    }
+
+    if (selectedDate) {
+      toast.error("Reset filters before moving items");
       return;
     }
 
@@ -161,6 +181,7 @@ export default function DnDTierContainer({
     /**
      * !TODO refactor this to use immer
      */
+
     if (sInd === dInd) {
       const items = reorder(
         containerState?.[sInd],
@@ -194,14 +215,18 @@ export default function DnDTierContainer({
       // mutate the tierlist
       const saveState = produce(tierlistData, (draft) => {
         draft.tiers.forEach((tier) => {
+          // need to merge states if we have filtered for a date
+
           tier.movies = newState[tier.value];
         });
       });
-      setContainerState(newState);
+
       queryClient.setQueryData(["moviesOfTheWeek"], newState[0]);
       queryClient.setQueryData(["tierlists", tierlist.id], saveState);
 
       saveMutation.mutate(saveState);
+
+      setContainerState(newState);
     }
   }
 
@@ -302,21 +327,25 @@ export default function DnDTierContainer({
           setSelectedDate={handleDateChange}
         />
       </div>
-      <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
-        <DragDropContext onDragEnd={onDragEnd}>
-          {containerState?.map((tier, tierIndex) => (
-            <Tier
-              key={tierIndex}
-              tierIndex={tierIndex}
-              tier={tier}
-              tiers={tiers}
-            />
-          ))}
-        </DragDropContext>
-        {tierlistData?.tiers && tierlistData?.tiers?.length <= 4 && (
-          <TierCreate tierlistId={tierlist.id} />
-        )}
-      </div>
+      {tierlistStatus === "pending" || moviesOfTheWeekStatus === "pending" ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
+          <DragDropContext onDragEnd={onDragEnd}>
+            {containerState?.map((tier, tierIndex) => (
+              <Tier
+                key={tierIndex}
+                tierIndex={tierIndex}
+                tier={tier}
+                tiers={tiers}
+              />
+            ))}
+          </DragDropContext>
+          {tierlistData?.tiers && tierlistData?.tiers?.length <= 4 && (
+            <TierCreate tierlistId={tierlist.id} />
+          )}
+        </div>
+      )}
     </>
   );
 }
