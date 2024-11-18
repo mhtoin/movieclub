@@ -81,36 +81,14 @@ export default function SearchInput() {
 
   return (
     <form
-      className="lg:py-7 relative lg:h-12 flex gap-2 border rounded-lg items-center px-2 group focus-visible:ring-offset-2 bg-input"
+      className="lg:py-7 relative lg:h-12 flex gap-2 border w-full rounded-lg rounded-tl-none items-center px-2 group focus-visible:ring-offset-2 bg-input"
       onSubmit={handleSubmit}
     >
-      <div className="flex gap-2">
-        <Button
-          variant={"secondary"}
-          size={"xs"}
-          className={`hover:bg-accent transition-opacity ${
-            type === "keyword" ? "opacity-100" : "opacity-40"
-          }`}
-          onClick={() => setType("keyword")}
-        >
-          Keyword
-        </Button>
-        <Button
-          variant={"secondary"}
-          size={"xs"}
-          className={`hover:bg-accent transition-opacity ${
-            type === "title" ? "opacity-100" : "opacity-40"
-          }`}
-          onClick={() => setType("title")}
-        >
-          Title
-        </Button>
-      </div>
       {type === "title" ? (
         <Input
           type="text"
           placeholder={`Search movies by ${type}`}
-          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-xs placeholder:text-xs"
+          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-xs placeholder:text-xs w-full"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
