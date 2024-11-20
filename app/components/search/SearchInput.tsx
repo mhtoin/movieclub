@@ -10,8 +10,15 @@ import router from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getKeyWord, searchKeywords } from "@/lib/movies/queries";
 import { set } from "date-fns";
+import KeywordTag from "./KeywordTag";
 
-export default function SearchInput() {
+export default function SearchInput({
+  type,
+  width,
+}: {
+  type: "discover" | "search";
+  width: number;
+}) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -37,7 +44,6 @@ export default function SearchInput() {
     []
   );
 
-  const [type, setType] = useState<"title" | "keyword">("title");
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -50,10 +56,11 @@ export default function SearchInput() {
       if (data) {
         if (keywords.find((kw) => kw.id === data?.id)) return;
         const updatedKeywords = keywords.concat(data);
+        console.log("updatedKeywords", updatedKeywords);
         setKeywords(updatedKeywords);
       }
     });
-  }, [keywordArr, queryClient, keywords]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,18 +68,47 @@ export default function SearchInput() {
      * Since searching by title uses a different endpoint, we need to wipe the search params clean and just provide the query
      */
     const params = new URLSearchParams();
-    if (type === "title") {
+    if (type === "search") {
       params.set("query", value);
     }
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleKeywordSelect = (value: string) => {
+  const handleKeywordSelect = async (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     const currentKeywords = searchParams.get("with_keywords")?.split(",") ?? [];
     params.set("with_keywords", [...currentKeywords, value].join(","));
     const queryString = params.toString();
+    const data = await queryClient.ensureQueryData({
+      queryKey: ["keywordSearch", value],
+      queryFn: () => getKeyWord(value),
+    });
+    console.log("data", data);
+    console.log("keywords", keywords);
+    if (data) {
+      setKeywords([...keywords, data]);
+    }
     //setKeywords([...keywords, value]);
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const handleKeywordRemove = (keyword: { id: number; name: string }) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentKeywords = searchParams.get("with_keywords")?.split(",") ?? [];
+
+    const updatedKeywords = currentKeywords.filter(
+      (kw) => kw !== keyword?.id.toString()
+    );
+
+    if (updatedKeywords.length === 0) {
+      params.delete("with_keywords");
+    } else {
+      params.set("with_keywords", updatedKeywords.join(","));
+    }
+    const updatedState = keywords.filter((kw) => kw.id !== keyword.id);
+    console.log("updatedState", updatedState);
+    setKeywords(updatedState);
 
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -81,16 +117,17 @@ export default function SearchInput() {
 
   return (
     <form
-      className="lg:py-7 relative lg:h-12 flex gap-2 border w-full rounded-lg rounded-tl-none items-center px-2 group focus-visible:ring-offset-2 bg-input"
+      className="lg:py-7 relative lg:h-12 flex gap-2 border lg:min-w-[400px] transition-all duration-300 w-full rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
       onSubmit={handleSubmit}
     >
-      {type === "title" ? (
+      {type === "search" ? (
         <Input
           type="text"
           placeholder={`Search movies by ${type}`}
           className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-xs placeholder:text-xs w-full"
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          style={{ width: `${width}px` }}
         />
       ) : (
         <KeywordCombobox handleSelect={handleKeywordSelect} />
@@ -98,41 +135,17 @@ export default function SearchInput() {
       <Button variant={"ghost"} type="submit">
         <MagnifyingGlassIcon />
       </Button>
-      <div className="absolute -top-3 left-2 flex gap-1 max-w-80 hover:max-w-fit">
-        {keywords.map((keyword) => (
-          <Button
-            variant={"outline"}
-            size={"xxs"}
-            className="text-[0.7rem] group/badge min-w-12"
-            key={keyword?.id}
-            onClick={() => {
-              const params = new URLSearchParams(searchParams.toString());
-              const currentKeywords =
-                searchParams.get("with_keywords")?.split(",") ?? [];
-
-              const updatedKeywords = currentKeywords.filter(
-                (kw) => kw !== keyword?.id.toString()
-              );
-
-              if (updatedKeywords.length === 0) {
-                params.delete("with_keywords");
-              } else {
-                params.set("with_keywords", updatedKeywords.join(","));
-              }
-              const updatedState = keywords.filter(
-                (kw) => kw.id !== keyword.id
-              );
-              console.log("updatedState", updatedState);
-              setKeywords(updatedState);
-
-              router.push(`${pathname}?${params.toString()}`);
-            }}
-          >
-            <span className="group-hover/badge:hidden">{keyword?.name}</span>
-            <TrashIcon className="hidden group-hover/badge:block" />
-          </Button>
-        ))}
-      </div>
+      {type === "discover" ? (
+        <div className="absolute top-1/2 -translate-y-1/2 right-1/4 flex gap-1">
+          {keywords.map((keyword) => (
+            <KeywordTag
+              key={keyword.id}
+              keyword={keyword}
+              handleClick={handleKeywordRemove}
+            />
+          ))}
+        </div>
+      ) : null}
     </form>
   );
 }

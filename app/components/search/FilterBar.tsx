@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import FilterSelect from "./FilterSelect";
 import FilterRange from "./FilterRange";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ProviderCheckbox } from "./ProviderCheckbox";
 import SearchInput from "./SearchInput";
 import FilterDrawer from "./FilterDrawer";
@@ -27,6 +27,8 @@ export default function FilterBar() {
     queryFn: getFilters,
   });
   const [tab, setTab] = useState<"discover" | "search">("discover");
+  const [barWidth, setBarWidth] = useState<number>(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
   const createQueryString = useCallback(
     (
@@ -106,66 +108,86 @@ export default function FilterBar() {
     }
   };
 
+  useEffect(() => {
+    if (barRef.current && tab === "discover") {
+      const barWidth = barRef.current.clientWidth;
+      setBarWidth(barWidth);
+      window.addEventListener("resize", () => {
+        setBarWidth(barWidth);
+      });
+    }
+  }, []);
+
   return (
-    <div className="min-h-[100px] w-full bg-background flex flex-col justify-center items-center gap-2 border-b z-40 pb-2">
-      <div className="relative flex flex-col gap-4 px-4 lg:w-1/2 w-full lg:items-center lg:justify-center mt-10">
-        <Tabs defaultValue={tab}>
-          <div className="flex flex-row gap-2 items-center justify-center">
-            <div className="flex flex-col items-start relative w-full">
+    <div className="min-h-[100px] bg-background flex flex-col justify-center items-center gap-2 border-b z-40 pb-2">
+      <div className="relative flex flex-col gap-4 px-4 w-full lg:items-center lg:justify-center mt-10">
+        <Tabs
+          defaultValue={tab}
+          onValueChange={(value) => setTab(value as "discover" | "search")}
+        >
+          <div className="flex flex-row gap-2 items-center justify-center w-full">
+            <div
+              className="flex flex-col items-start relative w-full"
+              ref={barRef}
+            >
               <div className="flex flex-row gap-2 w-full">
                 <TabsList className="rounded-bl-none rounded-br-none border border-b-0 h-auto">
                   <TabsTrigger value="discover">Discover</TabsTrigger>
                   <TabsTrigger value="search">Search</TabsTrigger>
                 </TabsList>
-                <div className="hidden lg:flex items-center gap-4">
-                  <div className="flex flex-row gap-2 items-center">
-                    <ArrowUpDown className="w-6 h-6 text-accent" />
-                    <p className="text-sm font-medium text-accent">Sorting</p>
-                    <SortMenu />
+                <TabsContent value="discover">
+                  <div className="hidden lg:flex items-center gap-4">
+                    <div className="flex flex-row gap-2 items-center">
+                      <ArrowUpDown className="w-6 h-6 text-accent" />
+                      <p className="text-sm font-medium text-accent">Sorting</p>
+                      <SortMenu />
+                    </div>
+                    <div className="flex flex-row gap-2 items-center">
+                      <Filter className="w-6 h-6 text-accent" />
+                      <p className="text-sm font-medium text-accent">Filters</p>
+                    </div>
+                    <FilterSelect
+                      label="Genres"
+                      options={genreOptions}
+                      onChange={handleGenreSelect}
+                    />
+                    <FilterRange onChange={handleRangeSelect} />
                   </div>
-                  <div className="flex flex-row gap-2 items-center">
-                    <Filter className="w-6 h-6 text-accent" />
-                    <p className="text-sm font-medium text-accent">Filters</p>
+                  <div className="flex flex-row gap-2 lg:hidden">
+                    <FilterDrawer
+                      genres={genreOptions}
+                      handleRangeSelect={handleRangeSelect}
+                    />
+                    <SortDrawer />
                   </div>
-                  <FilterSelect
-                    label="Genres"
-                    options={genreOptions}
-                    onChange={handleGenreSelect}
-                  />
-                  <FilterRange onChange={handleRangeSelect} />
-                </div>
-                <div className="flex flex-row gap-2 lg:hidden">
-                  <FilterDrawer
-                    genres={genreOptions}
-                    handleRangeSelect={handleRangeSelect}
-                  />
-                  <SortDrawer />
-                </div>
+                </TabsContent>
               </div>
-              <SearchInput />
+              <SearchInput type={tab} width={barWidth} />
             </div>
           </div>
-          <div className="flex flex-row gap-2 py-2 overflow-x-scroll w-full h-full no-scrollbar">
-            {providers && providersStatus === "success"
-              ? providers?.map((provider: any) => {
-                  return (
-                    <ProviderCheckbox
-                      provider={provider}
-                      key={provider.provider_id}
-                      handleClick={handleProviderSelect}
-                      defaultChecked={watchProviders.includes(
-                        provider.provider_id.toString()
-                      )}
+          <TabsContent value="discover">
+            <div className="flex flex-row gap-4 py-2 overflow-x-scroll w-full h-full no-scrollbar overflow-visible">
+              {providers && providersStatus === "success"
+                ? providers?.map((provider: any) => {
+                    return (
+                      <ProviderCheckbox
+                        provider={provider}
+                        key={provider.provider_id}
+                        handleClick={handleProviderSelect}
+                        defaultChecked={watchProviders.includes(
+                          provider.provider_id.toString()
+                        )}
+                      />
+                    );
+                  })
+                : Array.from({ length: 7 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-10 h-10 lg:w-12 lg:h-12 bg-card rounded-md animate-pulse"
                     />
-                  );
-                })
-              : Array.from({ length: 7 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="w-10 h-10 lg:w-12 lg:h-12 bg-card rounded-md animate-pulse"
-                  />
-                ))}
-          </div>
+                  ))}
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>

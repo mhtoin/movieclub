@@ -9,10 +9,12 @@ export default function KeywordCombobox({
   handleSelect: (value: string) => void;
 }) {
   const [value, setValue] = useState("");
+  const combobox = Ariakit.useComboboxStore();
+  const searchValue = Ariakit.useStoreState(combobox, "value");
   const { data: keywords, status } = useInfiniteQuery({
-    queryKey: ["keywords", value],
-    enabled: value.length > 2,
-    queryFn: () => searchKeywords(value),
+    queryKey: ["keywords", searchValue],
+    enabled: searchValue.length > 2,
+    queryFn: () => searchKeywords(searchValue),
     getNextPageParam: (lastPage) => {
       if (lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;
@@ -23,22 +25,25 @@ export default function KeywordCombobox({
 
   return (
     <Ariakit.ComboboxProvider
-      setValue={(value) => {
-        startTransition(() => {
-          setValue(value);
-        });
-      }}
       setSelectedValue={(value) => {
-        startTransition(() => {
-          handleSelect(value.toString());
-          setValue("");
-        });
+        console.log("selected value", value);
+        handleSelect(value.toString());
+        setValue("");
       }}
     >
       <Ariakit.Combobox
+        value={searchValue}
+        setValueOnChange={(value) => {
+          const target = value.target as HTMLInputElement;
+          console.log("target", target.value);
+          console.log("searchValue", searchValue);
+          combobox.setValue(target.value);
+          return true;
+        }}
         placeholder="Search for a keyword"
         className=" h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-xs lg:text-sm border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
       />
+
       <Ariakit.ComboboxPopover
         gutter={4}
         sameWidth
