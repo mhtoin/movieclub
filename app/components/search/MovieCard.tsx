@@ -150,7 +150,10 @@ export default function MovieCard({
                   <SiThemoviedatabase className="w-6 h-6" />
                 </Button>
               </Link>
-              <Link href={`https://www.imdb.com/title/${movieData?.imdb_id}`}>
+              <Link
+                href={`https://www.imdb.com/title/${movieData?.imdb_id}`}
+                target="_blank"
+              >
                 <Button
                   variant="ghost"
                   size="icon"

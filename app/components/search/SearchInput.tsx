@@ -115,27 +115,13 @@ export default function SearchInput({
 
   console.log("keywords", keywords);
 
-  return (
-    <form
-      className="lg:py-7 relative lg:h-12 flex gap-2 border lg:min-w-[400px] transition-all duration-300 w-full rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
-      onSubmit={handleSubmit}
-    >
-      {type === "search" ? (
-        <Input
-          type="text"
-          placeholder={`Search movies by ${type}`}
-          className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-xs placeholder:text-xs w-full"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          style={{ width: `${width}px` }}
-        />
-      ) : (
+  if (type === "discover") {
+    return (
+      <form
+        onSubmit={handleSubmit}
+        className="lg:py-7 relative lg:h-12 flex gap-2 border lg:min-w-[400px] transition-all duration-300 w-full rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
+      >
         <KeywordCombobox handleSelect={handleKeywordSelect} />
-      )}
-      <Button variant={"ghost"} type="submit">
-        <MagnifyingGlassIcon />
-      </Button>
-      {type === "discover" ? (
         <div className="absolute top-1/2 -translate-y-1/2 right-1/4 flex gap-1">
           {keywords.map((keyword) => (
             <KeywordTag
@@ -145,7 +131,27 @@ export default function SearchInput({
             />
           ))}
         </div>
-      ) : null}
+      </form>
+    );
+  }
+
+  return (
+    <form
+      className="lg:py-7 relative lg:h-12 flex gap-2 border rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
+      onSubmit={handleSubmit}
+      style={{ width: `${width}px` }}
+    >
+      <Input
+        type="text"
+        placeholder={`Search movies by title`}
+        className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-sm placeholder:text-sm w-full"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+
+      <Button variant={"ghost"} type="submit">
+        <MagnifyingGlassIcon />
+      </Button>
     </form>
   );
 }
