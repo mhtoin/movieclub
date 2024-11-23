@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 
+/scripts
 # testing
 /coverage
 
@@ -74,3 +75,5 @@ data/diagnostic.data/metrics.2023-10-04T11-21-16Z-00000
 data/journal/WiredTigerLog.0000000009
 data/journal/WiredTigerPreplog.0000000001
 data/journal/WiredTigerPreplog.0000000002
+
+
