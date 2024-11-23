@@ -56,7 +56,7 @@ export default function SearchInput({
       if (data) {
         if (keywords.find((kw) => kw.id === data?.id)) return;
         const updatedKeywords = keywords.concat(data);
-        console.log("updatedKeywords", updatedKeywords);
+
         setKeywords(updatedKeywords);
       }
     });
@@ -83,8 +83,7 @@ export default function SearchInput({
       queryKey: ["keywordSearch", value],
       queryFn: () => getKeyWord(value),
     });
-    console.log("data", data);
-    console.log("keywords", keywords);
+
     if (data) {
       setKeywords([...keywords, data]);
     }
@@ -107,13 +106,11 @@ export default function SearchInput({
       params.set("with_keywords", updatedKeywords.join(","));
     }
     const updatedState = keywords.filter((kw) => kw.id !== keyword.id);
-    console.log("updatedState", updatedState);
+
     setKeywords(updatedState);
 
     router.push(`${pathname}?${params.toString()}`);
   };
-
-  console.log("keywords", keywords);
 
   if (type === "discover") {
     return (

@@ -1,9 +1,8 @@
-import { validateRequest } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { getCurrentSession } from "@/lib/authentication/session";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const { user, session } = await validateRequest();
+  const { user, session } = await getCurrentSession();
 
   if (!user) {
     return NextResponse.json(

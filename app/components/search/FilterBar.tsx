@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import FilterSelect from "./FilterSelect";
 import FilterRange from "./FilterRange";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { ProviderCheckbox } from "./ProviderCheckbox";
 import SearchInput from "./SearchInput";
 import FilterDrawer from "./FilterDrawer";
@@ -129,8 +129,6 @@ export default function FilterBar() {
       });
     }
   };
-
-  console.log("barWidth", barWidth);
 
   return (
     <div className="min-h-[100px] bg-background flex flex-col justify-center items-center gap-2 border-b z-40 pb-2 px-10">

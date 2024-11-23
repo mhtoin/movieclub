@@ -4,9 +4,8 @@ import { cookies } from "next/headers";
 
 export async function GET(): Promise<Response> {
   const state = generateState();
-  const url = await discord.createAuthorizationURL(state, {
-    scopes: ["identify", "email", "guilds"],
-  });
+  const scopes = ["identify", "email", "guilds"];
+  const url = discord.createAuthorizationURL(state, scopes);
 
   cookies().set("discord_oauth_state", state, {
     path: "/",
@@ -16,5 +15,10 @@ export async function GET(): Promise<Response> {
     sameSite: "lax",
   });
 
-  return Response.redirect(url);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: url.toString(),
+    },
+  });
 }

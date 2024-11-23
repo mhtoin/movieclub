@@ -2,10 +2,16 @@ import WatchlistContainer from "./components/WatchlistContainer";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getUserShortlist, getWatchlist } from "@/lib/movies/queries";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { validateRequest } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/authentication/session";
+import { redirect } from "next/navigation";
+
 export default async function Watchlist() {
+  const { user } = await getCurrentSession();
+
+  if (!user) {
+    redirect("/");
+  }
   const queryClient = getQueryClient();
-  const { user, session } = await validateRequest();
 
   await queryClient.prefetchQuery({
     queryKey: ["watchlist"],

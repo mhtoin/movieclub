@@ -7,8 +7,16 @@ import { getQueryClient } from "@/lib/getQueryClient";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import ListView from "components/home/ListView";
 import CarouselListView from "@/app/components/home/CarouselListView";
+import { getCurrentSession } from "@/lib/authentication/session";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
+  const { user } = await getCurrentSession();
+
+  if (!user) {
+    redirect("/");
+  }
+
   const queryClient = getQueryClient();
   const nextMovieDate = formatISO(nextWednesday(new Date()), {
     representation: "date",

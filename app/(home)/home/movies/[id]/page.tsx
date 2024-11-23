@@ -2,6 +2,8 @@ import { getAllMoviesOfTheWeek, getMovie } from "@/lib/movies/movies";
 import MovieCard from "../components/MovieCard";
 import { getTierlist } from "@/lib/tierlists";
 import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { getCurrentSession } from "@/lib/authentication/session";
 
 async function staticParams() {
   const movies = await getAllMoviesOfTheWeek();
@@ -22,8 +24,13 @@ export default async function MoviePage({
 }: {
   params: { id: string };
 }) {
+  const { user } = await getCurrentSession();
+
+  if (!user) {
+    redirect("/");
+  }
   const movie = await getMovie(params.id);
-  const { user } = await validateRequest();
+
   const tierlist = await getTierlist(user?.id ?? "");
 
   if (movie) {
