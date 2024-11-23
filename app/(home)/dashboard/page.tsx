@@ -19,14 +19,14 @@ export default async function Dashboard() {
   });
 
   return (
-    <div className="flex flex-col items-center gap-5 py-20 h-screen w-screen">
+    <div className="flex flex-col items-center gap-5 py-20 px-2 h-screen w-screen">
       <div className="flex flex-col items-center gap-5">
         <h1 className="text-2xl">Dashboard</h1>
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-xl">Total movies watched:</h2>
           <p className="text-2xl">{watchedMovies.length}</p>
         </div>
-        <div className="flex flex-row items-center gap-5 border rounded-md p-5">
+        <div className="flex flex-row flex-wrap justify-center items-center gap-5 border rounded-md p-5">
           {Object.keys(moviesGroupedByUser).map((user) => (
             <div
               key={user}
