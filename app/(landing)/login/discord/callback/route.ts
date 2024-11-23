@@ -40,7 +40,25 @@ export async function GET(request: Request): Promise<Response> {
     },
   });
 
+  const discordUserGuildsResponse = await fetch(
+    "https://discord.com/api/users/@me/guilds",
+    {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken()}`,
+      },
+    }
+  );
+
   const discordUser: DiscordUser = await discordUserResponse.json();
+  const discordUserGuilds = await discordUserGuildsResponse.json();
+
+  const allowedGuilds = process.env.DISCORD_ALLOWED_GUILDS;
+
+  if (
+    !discordUserGuilds.find((guild: any) => allowedGuilds?.includes(guild.id))
+  ) {
+    return new Response(null, { status: 403 });
+  }
 
   const existingUser = await db?.account.findUnique({
     where: {

@@ -13,7 +13,7 @@ export default function Menubar() {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
   const menu = Ariakit.useMenuStore({ open, setOpen });
-  const { data: session, status } = useValidateSession();
+  const { data: user, status } = useValidateSession();
 
   if (isMobile) {
     return (
@@ -78,7 +78,7 @@ export default function Menubar() {
               <span className="menu-label">View all tierlists from users</span>
             </Link>
             <Link
-              href={`/tierlists/${session?.id}`}
+              href={`/tierlists/${user?.tierlistId}`}
               className="flex flex-col ml-5 p-2 border-b"
               onClick={() => setOpen(false)}
             >
@@ -148,7 +148,7 @@ export default function Menubar() {
               </Link>
             </MenuItem>
             <MenuItem className="ml-6" store={menu}>
-              <Link href={`/tierlists/${session?.id}`}>
+              <Link href={`/tierlists/${user?.tierlistId}`}>
                 <span className="text-foreground">Edit</span>
                 <span className="menu-label">Edit your tierlist</span>
               </Link>

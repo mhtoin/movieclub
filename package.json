@@ -12,7 +12,9 @@
     "watchdates-script": "tsx scripts/watchdates.ts",
     "migrate-users": "tsx scripts/migrateUsers.ts",
     "generate-test-data": "tsx scripts/generateTestData.ts",
-    "generate-tierlists": "tsx scripts/generateTierlists.ts"
+    "generate-tierlists": "tsx scripts/generateTierlists.ts",
+    "add-tierlist-id": "tsx scripts/addTierlistId.ts",
+    "insert-imdb-id": "tsx scripts/insertImdbId.ts"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.11",

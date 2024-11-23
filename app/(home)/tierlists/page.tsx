@@ -1,5 +1,6 @@
 import { Button } from "@/app/components/ui/Button";
 import { validateRequest } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/authentication/session";
 import { getTierlists } from "@/lib/tierlists";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -10,9 +11,12 @@ async function createNew() {
 }
 
 export default async function Tierlists() {
+  const { user } = await getCurrentSession();
+  if (!user) {
+    redirect("/");
+  }
   const allTierlists = await getTierlists();
   const usersWithTierlist = allTierlists.map((tierlist) => tierlist.userId);
-  const { user } = await validateRequest();
 
   return (
     <div className="flex flex-col items-center gap-10 pt-20">
