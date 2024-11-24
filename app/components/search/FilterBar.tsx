@@ -158,7 +158,7 @@ export default function FilterBar() {
           >
             <div className="flex flex-col items-start relative w-full">
               <div className="flex flex-row gap-2 w-full">
-                <TabsList className="rounded-bl-none rounded-br-none border border-b-0 h-auto">
+                <TabsList className="rounded-bl-none rounded-br-none border border-b-0 h-auto bg-input">
                   <TabsTrigger value="discover">Discover</TabsTrigger>
                   <TabsTrigger value="search">Search</TabsTrigger>
                 </TabsList>
@@ -166,15 +166,15 @@ export default function FilterBar() {
                   <div ref={measuredTabRef}>
                     <div className="hidden lg:flex items-center gap-4">
                       <div className="flex flex-row gap-2 items-center">
-                        <ArrowUpDown className="w-6 h-6 text-accent" />
-                        <p className="text-sm font-medium text-accent">
+                        <ArrowUpDown className="w-6 h-6 text-accent/80" />
+                        <p className="text-sm font-medium text-accent/80">
                           Sorting
                         </p>
                         <SortMenu />
                       </div>
                       <div className="flex flex-row gap-2 items-center">
-                        <Filter className="w-6 h-6 text-accent" />
-                        <p className="text-sm font-medium text-accent">
+                        <Filter className="w-6 h-6 text-accent/80" />
+                        <p className="text-sm font-medium text-accent/80">
                           Filters
                         </p>
                       </div>

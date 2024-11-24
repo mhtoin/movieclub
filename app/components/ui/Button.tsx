@@ -86,7 +86,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </Comp>
           </TooltipTrigger>
           <TooltipPortal>
-            <TooltipContent className="bg-card max-w-20 whitespace-pre-wrap p-2 z-50 hidden lg:block">
+            <TooltipContent className="bg-card max-w-20 whitespace-pre-wrap p-2 z-50 hidden lg:block text-foreground">
               {tooltip}
             </TooltipContent>
           </TooltipPortal>

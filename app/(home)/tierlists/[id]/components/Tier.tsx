@@ -67,7 +67,7 @@ export default function Tier({
   return (
     <div
       key={tierIndex}
-      className="flex gap-2 justify-center border border-border/70 rounded-md relative group max-w-[95dvw] min-h-[200px] min-w-[300px]"
+      className="flex gap-2 justify-start border border-border/70 rounded-md relative group max-w-[95dvw] min-h-[200px] min-w-[95dvw]"
     >
       <div className="flex md:hidden absolute -top-4 bg-background rounded-md px-2">
         <span className="text-lg font-bold whitespace-normal text-center">

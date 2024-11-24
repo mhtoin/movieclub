@@ -141,7 +141,7 @@ export default function SearchInput({
       <Input
         type="text"
         placeholder={`Search movies by title`}
-        className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-sm placeholder:text-sm w-full"
+        className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-sm placeholder:text-sm w-full text-foreground"
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />

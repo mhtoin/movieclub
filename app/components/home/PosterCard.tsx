@@ -27,20 +27,21 @@ export default function PosterCard({
         <Image
           src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
           width={500}
-          height={900}
+          height={700}
           alt="movie poster"
           priority={true}
           className="object-cover"
         />
       </CardContent>
-      <div className="cardInfo">
+      <div className="cardInfo text-primary-foreground">
         <div className="rounded-full w-6 h-6  lg:w-10 lg:h-10 overflow-hidden">
           <Image
             src={movie?.user?.image}
             width={500}
             height={900}
             alt="movie poster"
-            priority={true}
+            priority={showOverview ? true : false}
+            loading={showOverview ? "eager" : "lazy"}
             className="object-cover"
           />
         </div>
@@ -99,7 +100,7 @@ export default function PosterCard({
                 </Button>
               </TooltipTrigger>
               <TooltipPortal>
-                <TooltipContent className="whitespace-pre-wrap p-2 bg-card max-w-96">
+                <TooltipContent className="whitespace-pre-wrap p-2 bg-card max-w-96 text-accent-foreground">
                   <p>{movie.overview}</p>
                 </TooltipContent>
               </TooltipPortal>

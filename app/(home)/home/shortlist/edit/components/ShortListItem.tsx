@@ -86,7 +86,7 @@ export default function ShortListItem({
           </div>
         )}
       {showActions && (
-        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card/80 rounded-bl-lg rounded-tr-lg p-2">
           {removeFromShortList ? (
             <Button
               variant={"ghost"}

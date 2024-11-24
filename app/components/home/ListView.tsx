@@ -97,11 +97,11 @@ export default function ListView() {
                   <h1 className="text-lg md:text-2xl font-bold">
                     {new Date(nextMovie.watchDate).toLocaleDateString("fi-FI")}
                   </h1>
-                  <div className="rounded-full w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
+                  <div className="rounded-full border w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
                     <Image
                       src={nextMovie?.user?.image}
-                      width={500}
-                      height={900}
+                      width={50}
+                      height={50}
                       alt="movie poster"
                       priority={true}
                       className="object-cover "
@@ -149,11 +149,11 @@ export default function ListView() {
                               "fi-FI"
                             )}
                           </h1>
-                          <div className="rounded-full w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
+                          <div className="rounded-full border w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
                             <Image
                               src={movie?.user?.image}
-                              width={500}
-                              height={900}
+                              width={50}
+                              height={50}
                               alt="movie poster"
                               priority={true}
                               className="object-cover"

@@ -41,7 +41,7 @@ export default function KeywordCombobox({
           return true;
         }}
         placeholder="Search for a keyword"
-        className=" h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-xs lg:text-sm border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+        className=" h-10 text-foreground placeholder:text-foreground/70 w-full rounded-md border bg-input px-3 py-2 text-xs lg:text-sm border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
       />
 
       <Ariakit.ComboboxPopover

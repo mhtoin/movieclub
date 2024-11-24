@@ -43,7 +43,7 @@ export default function ShortlistCard({
           const isInWatchlist = watchlist?.some(
             (watchlistMovie) => watchlistMovie.id === movie.tmdbId
           );
-          console.log("movie", movie.id, movie.title, isInWatchlist);
+
           return (
             <ShortListItem
               key={shortlist.id + movie.id}
