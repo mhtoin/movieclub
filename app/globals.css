@@ -16,7 +16,7 @@
     --secondary-foreground: hsl(240 5.9% 10%);
     --muted: hsl(240 4.8% 95.9%);
     --muted-foreground: hsl(240 3.8% 46.1%);
-    --accent: hsl(240 4.8% 95.9%);
+    --accent: hsl(0, 0%, 40%);
     --accent-foreground: hsl(240 5.9% 10%);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
@@ -387,7 +387,7 @@
     opacity: var(--intent, 0);
     z-index: -1;
     border-radius: 6px;
-    background: hsl(var(--accent));
+    background: var(--accent);
     transition: all var(--transition), top var(--transition),
       left var(--transition), height var(--transition),
       opacity var(--transition), color var(--transition),
@@ -446,6 +446,9 @@
     nav li:nth-of-type(6) {
       anchor-name: --item-6;
     }
+    nav li:nth-of-type(7) {
+      anchor-name: --item-7;
+    }
 
     nav:has(li:nth-of-type(1) a:is(:hover, :focus-visible)) {
       --anchor: --item-1;
@@ -465,6 +468,9 @@
     nav:has(li:nth-of-type(6) a:is(:hover, :focus-visible)) {
       --anchor: --item-6;
     }
+    nav:has(li:nth-of-type(7) a:is(:hover, :focus-visible)) {
+      --anchor: --item-7;
+    }
 
     nav:has(li:nth-of-type(1) a:target) {
       --target: --item-1;
@@ -483,6 +489,9 @@
     }
     nav:has(li:nth-of-type(6) a:target) {
       --target: --item-6;
+    }
+    nav:has(li:nth-of-type(7) a:target) {
+      --target: --item-7;
     }
 
     ul::before {
@@ -539,7 +548,14 @@
   }
 
   .menu-label {
-    @apply text-xs text-foreground/40;
+    font-size: 0.8rem;
+    color: var(--foreground);
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
+  }
+  a:hover .menu-label {
+    color: var(--secondary-foreground);
+    transition: color 0.3s ease-in-out;
   }
 
   .popover {

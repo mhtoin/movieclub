@@ -29,8 +29,9 @@ export default function PosterCard({
           width={500}
           height={700}
           alt="movie poster"
-          priority={true}
           className="object-cover"
+          priority={showOverview ? true : false}
+          loading={showOverview ? "eager" : "lazy"}
         />
       </CardContent>
       <div className="cardInfo text-primary-foreground">
@@ -40,8 +41,6 @@ export default function PosterCard({
             width={500}
             height={900}
             alt="movie poster"
-            priority={showOverview ? true : false}
-            loading={showOverview ? "eager" : "lazy"}
             className="object-cover"
           />
         </div>
