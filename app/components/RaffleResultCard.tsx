@@ -7,7 +7,7 @@ export default function RaffleResultCard({
     <div className="card bg-base-100 shadow-xl image-full">
       <figure className="rounded-2xl">
         <img
-          src={`http://image.tmdb.org/t/p/original${chosenMovie?.["poster_path"]}`}
+          src={`https://image.tmdb.org/t/p/original${chosenMovie?.["poster_path"]}`}
           alt="Shoes"
           className=""
         />
@@ -60,7 +60,7 @@ export default function RaffleResultCard({
                   <div className="avatar join-item" key={item.provider_id}>
                     <div className="w-10 rounded">
                       <img
-                        src={`http://image.tmdb.org/t/p/original${item["logo_path"]}`}
+                        src={`https://image.tmdb.org/t/p/original${item["logo_path"]}`}
                         alt="logo"
                       />
                     </div>

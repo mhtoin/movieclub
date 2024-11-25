@@ -12,7 +12,7 @@ export const Toast = (message: string, shortlistId: string, movie: Movie) => {
         <div className="flex gap-5 ">
           <div className="flex flex-col">
             <img
-              src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+              src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
               alt=""
               width={"150"}
               className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}

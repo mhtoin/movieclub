@@ -117,7 +117,7 @@ export default function MovieCard({
       )}
 
       <img
-        src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+        src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt=""
         width={"150"}
         className={`w-[150px] h-auto 2xl:w-[150px]`}

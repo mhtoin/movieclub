@@ -24,7 +24,7 @@ export default function RaffleItems({
               id={`movie-${movie?.id}-${movie.user?.id}`}
             >
               <img
-                src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+                src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
                 key={`movie-${movie?.id}-${movie.user?.id}`}
                 alt=""
                 width={"150"}

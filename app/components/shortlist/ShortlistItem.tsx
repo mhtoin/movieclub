@@ -20,7 +20,7 @@ export default function ShortlistItem({
   return (
     <article className="shortlist__card">
       <Image
-        src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+        src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt="Movie poster"
         width={1150}
         height={180}
@@ -31,7 +31,7 @@ export default function ShortlistItem({
         loading="eager"
         style={{ objectFit: "cover" }}
         placeholder="blur"
-        blurDataURL={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+        blurDataURL={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
       />
       <div className="shortlist__card__content | flow">
         <div className="shortlist__card__content--container | flow">

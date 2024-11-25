@@ -37,7 +37,7 @@ export default function MovieCard({
       //onClick={() => setIsHovering(!isHovering)}
     >
       <img
-        src={`http://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
+        src={`https://image.tmdb.org/t/p/original/${movie["poster_path"]}`}
         alt={movie.title}
         width={"150"}
         className={`${
