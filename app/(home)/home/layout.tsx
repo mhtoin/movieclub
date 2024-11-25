@@ -1,4 +1,4 @@
-import RaffleDialog from "@/app/components/raffle/RaffleDialog";
+import Raffle from "@/app/components/raffle/Raffle";
 
 export default function HomeLayout({
   children, // will be a page or nested layout
@@ -7,7 +7,7 @@ export default function HomeLayout({
 }) {
   return (
     <>
-      <RaffleDialog />
+      <Raffle />
       {children}
     </>
   );
