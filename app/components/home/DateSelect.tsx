@@ -28,8 +28,6 @@ export default function DateSelect({
     return dateObject?.date?.split("-")[0];
   });
 
-  console.log(selectedDate);
-
   return (
     <Select
       onValueChange={(value) => setSelectedDate(value)}
@@ -43,23 +41,25 @@ export default function DateSelect({
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="max-w-48 bg-background text-foreground">
-        {Object.keys(groupedByYear)
-          .toSorted((a, b) => Number(b) - Number(a))
-          .map((year) => (
-            <SelectGroup
-              key={year}
-              className="flex flex-col gap-2 justify-center items-center"
-            >
-              <SelectLabel className="text-lg font-bold">{year}</SelectLabel>
-              {groupedByYear[year].map(
-                (date: { date: string; label: string }) => (
-                  <SelectItem key={date.date} value={date.date}>
-                    {date.label}
-                  </SelectItem>
-                )
-              )}
-            </SelectGroup>
-          ))}
+        {groupedByYear &&
+          Object.keys(groupedByYear).length > 0 &&
+          Object.keys(groupedByYear)
+            ?.toSorted((a, b) => Number(b) - Number(a))
+            ?.map((year) => (
+              <SelectGroup
+                key={year}
+                className="flex flex-col gap-2 justify-center items-center"
+              >
+                <SelectLabel className="text-lg font-bold">{year}</SelectLabel>
+                {groupedByYear[year].map(
+                  (date: { date: string; label: string }) => (
+                    <SelectItem key={date.date} value={date.date}>
+                      {date.label}
+                    </SelectItem>
+                  )
+                )}
+              </SelectGroup>
+            ))}
       </SelectContent>
     </Select>
   );
