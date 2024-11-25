@@ -32,6 +32,7 @@ export default function PosterCard({
           className="object-cover"
           priority={showOverview ? true : false}
           loading={showOverview ? "eager" : "lazy"}
+          sizes="(max-width: 768px) 70vw, (max-width: 1200px) 60vw, 33vw"
         />
       </CardContent>
       <div className="cardInfo text-primary-foreground">
