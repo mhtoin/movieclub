@@ -131,7 +131,7 @@ export default function ListView() {
             return (
               <div
                 key={index}
-                className="flex flex-col gap-4 relative snap-start scroll-mb-20"
+                className="flex flex-col gap-4 relative snap-start scroll-mb-20 listview-section"
                 id={date}
               >
                 <div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 px-5 md:px-20 snap-start">

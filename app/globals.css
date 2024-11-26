@@ -177,6 +177,11 @@
     @apply relative gap-2 flex z-50 min-w-[180px] flex-col overflow-auto overscroll-contain rounded border bg-popover p-5 text-foreground;
   }
 
+  .listview-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1000px;
+  }
+
   /**
    * Checkbox
    */
@@ -267,13 +272,14 @@
     text-decoration: none;
   }
 
+  /*
   @supports not (anchor-name: --a) {
     li a:hover {
       background: color-mix(in lch, var(--accent), transparent 20%);
       border-radius: 6px;
       transition: background-color 0.3s ease-in-out;
     }
-  }
+  }*/
 
   :is(a, button) {
     outline-color: color-mix(in lch, canvasText, transparent 50%);
