@@ -7,7 +7,6 @@ import { getCurrentSession } from "@/lib/authentication/session";
 import { redirect } from "next/navigation";
 async function staticParams() {
   const tierlists = await getTierlists();
-  console.log("tierlists", tierlists);
 
   return tierlists.map((tierlist) => ({
     id: tierlist.id,

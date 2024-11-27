@@ -51,7 +51,6 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  console.log("POST", params.id);
   const body = await request.json();
   const tierlist = await getTierlist(params.id);
   const tierlistTiers = tierlist.tiers;

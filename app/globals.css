@@ -148,6 +148,13 @@
     --secondary: hsl(265, 48%, 70%);
     --secondary-foreground: hsl(240 10% 3.9%);
   }
+
+  .dark[data-accent="orange"] {
+    --accent: hsl(25, 97%, 53%);
+    --accent-foreground: hsl(0, 0%, 100%);
+    --secondary: hsl(25, 97%, 53%);
+    --secondary-foreground: hsl(0, 0%, 100%);
+  }
 }
 
 @layer base {
@@ -272,14 +279,13 @@
     text-decoration: none;
   }
 
-  /*
   @supports not (anchor-name: --a) {
     li a:hover {
       background: color-mix(in lch, var(--accent), transparent 20%);
       border-radius: 6px;
       transition: background-color 0.3s ease-in-out;
     }
-  }*/
+  }
 
   :is(a, button) {
     outline-color: color-mix(in lch, canvasText, transparent 50%);

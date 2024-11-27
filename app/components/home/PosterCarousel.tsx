@@ -40,7 +40,7 @@ export default function PosterCarousel() {
 
   const onScroll = useCallback(() => {
     if (!api) return;
-    console.log("onScroll");
+
     const engine = api.internalEngine();
     const scrollProgress = api.scrollProgress();
 

@@ -98,7 +98,6 @@ export default function DnDTierContainer({
   );
 
   useEffect(() => {
-    console.log("setting local state");
     const movieMatrix = tierlistData?.tiers.map((tier) => {
       return tier.movies
         .filter((movie) =>
@@ -157,9 +156,7 @@ export default function DnDTierContainer({
   };
 
   function onDragEnd(result: DropResult) {
-    console.log("onDragEnd", result);
     if (!authorized || !containerState || !tierlistData) {
-      console.log("not authorized or containerState");
       return;
     }
 
@@ -176,8 +173,6 @@ export default function DnDTierContainer({
 
     const sInd = +source.droppableId;
     const dInd = +destination.droppableId;
-    console.log("sInd", sInd);
-    console.log("dInd", dInd);
     /**
      * !TODO refactor this to use immer
      */
@@ -201,7 +196,6 @@ export default function DnDTierContainer({
 
       saveMutation.mutate(saveState);
     } else {
-      console.log("moving item");
       const result = moveItem(
         containerState[sInd],
         containerState[dInd],
@@ -246,7 +240,6 @@ export default function DnDTierContainer({
       }
     },
     onSuccess: (data, variables, context) => {
-      console.log("onSuccess", data);
       toast.success("Tierlist updated!");
     },
     onError: (error) => {

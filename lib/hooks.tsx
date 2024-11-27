@@ -699,3 +699,124 @@ export function useSocket() {
 
   return { connection };
 }
+
+export function useMagneticHover() {
+  const navRef = useRef<HTMLElement>(null);
+  const sheetRef = useRef<HTMLStyleElement | null>(null);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    console.log("nav", nav);
+
+    const supportsAnchorPos = "anchorName" in document.documentElement.style;
+
+    // Create or get style sheet
+    if (!sheetRef.current) {
+      sheetRef.current = document.createElement("style");
+      nav.appendChild(sheetRef.current);
+    }
+    const sheet = sheetRef.current;
+
+    const anchors = Array.from(nav.querySelectorAll("a")) as HTMLElement[];
+
+    const sync = () => {
+      const styles = anchors
+        .map((anchor, i) => {
+          const bounds = anchor.getBoundingClientRect();
+          return `
+          [data-no-anchor] ul:has(li:nth-of-type(${
+            i + 1
+          }) a:is(:hover, :focus-visible)) {
+            --item-active-y: ${bounds.top}px;
+            --item-active-x: ${bounds.left}px;
+            --item-active-width: ${bounds.width}px;
+            --item-active-height: ${bounds.height}px;
+          }
+          [data-no-anchor] ul:has(li:nth-of-type(${i + 1}) a:target) {
+            --target-y: ${bounds.top}px;
+            --target-x: ${bounds.left}px;
+            --target-width: ${bounds.width}px;
+            --target-height: ${bounds.height}px;
+          }
+        `;
+        })
+        .join("\n");
+
+      sheet.textContent = styles; // Use textContent instead of innerHTML
+    };
+
+    const falloff = (index: number) => () => {
+      if (supportsAnchorPos) {
+        nav.style.setProperty("--item-active", `--item-${index + 1}`);
+      } else {
+        console.log("falloff", index);
+        nav.style.setProperty("--item-active-x", `var(--item-${index + 1}-x)`);
+
+        nav.style.setProperty("--item-active-y", `var(--item-${index + 1}-y)`);
+        nav.style.setProperty(
+          "--item-active-width",
+          `var(--item-${index + 1}-width)`
+        );
+        nav.style.setProperty(
+          "--item-active-height",
+          `var(--item-${index + 1}-height)`
+        );
+        console.log("nav", nav.style);
+      }
+    };
+
+    const deactivate = async () => {
+      const transitions = document.getAnimations();
+      if (transitions.length) {
+        const fade = transitions.find((t) => {
+          const effect = t?.effect as unknown as { target: Element };
+          return (
+            effect?.target === nav.firstElementChild &&
+            (effect as KeyframeEffect)?.getKeyframes()[0].property === "opacity"
+          );
+        });
+        if (fade) {
+          await Promise.allSettled([fade.finished]);
+          if (supportsAnchorPos) {
+            nav.style.removeProperty("--item-active");
+          } else {
+            nav.style.removeProperty("--item-active-x");
+            nav.style.removeProperty("--item-active-y");
+            nav.style.removeProperty("--item-active-width");
+            nav.style.removeProperty("--item-active-height");
+          }
+        }
+      }
+    };
+
+    // Initial setup
+    if (!supportsAnchorPos) {
+      document.documentElement.dataset.noAnchor = "true";
+      sync();
+      window.addEventListener("resize", sync);
+    }
+
+    // Add event listeners
+    anchors.forEach((anchor, i) => {
+      anchor.addEventListener("pointerenter", falloff(i));
+    });
+    nav.addEventListener("pointerleave", deactivate);
+    nav.addEventListener("blur", deactivate);
+
+    // Cleanup
+    return () => {
+      if (!supportsAnchorPos) {
+        window.removeEventListener("resize", sync);
+      }
+      anchors.forEach((anchor, i) => {
+        anchor.removeEventListener("pointerenter", falloff(i));
+      });
+      nav.removeEventListener("pointerleave", deactivate);
+      nav.removeEventListener("blur", deactivate);
+      sheet.remove();
+    };
+  }, []); // Empty dependency array since we only want this to run once
+
+  return navRef;
+}

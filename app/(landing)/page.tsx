@@ -7,8 +7,6 @@ import { getCurrentSession } from "@/lib/authentication/session";
 export default async function Home() {
   const { user, session } = await getCurrentSession();
 
-  console.log(user, session);
-
   if (user) {
     redirect("/home");
   }

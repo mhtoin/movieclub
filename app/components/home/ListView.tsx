@@ -6,7 +6,7 @@ import { movieKeys } from "lib/movies/movieKeys";
 import PosterCard from "./PosterCard";
 import { sortByISODate } from "@/lib/utils";
 import DateSelect from "./DateSelect";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -14,22 +14,25 @@ export default function ListView() {
   const nextMovieDate = formatISO(nextWednesday(new Date()), {
     representation: "date",
   });
+  const currentDate = formatISO(new Date(), {
+    representation: "date",
+  });
   const nextMovieMonth = nextMovieDate.split("-").slice(0, 2).join("-");
-  const [selectedDate, setSelectedDate] = useState<string | null>(
-    nextMovieDate.split("-").slice(0, 2).join("-")
-  );
-
+  const currentMonth = currentDate.split("-").slice(0, 2).join("-");
   const { data, status } = useQuery(movieKeys.next(nextMovieDate));
+  const nextMovie = data?.[nextMovieMonth]?.[0];
+  const mostRecentMovie = data?.[currentMonth]?.[0];
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    nextMovie ? nextMovieMonth : currentMonth
+  );
   const router = useRouter();
-
-  console.log("data", data);
 
   const dates = Object.keys(data || {}).map((date) => ({
     date: date,
     label: format(new Date(date), "MMMM"),
   }));
 
-  const nextMovie = data?.[nextMovieMonth]?.[0];
+  console.log("nextMovie", nextMovie);
   const isScrolling = useRef(false);
 
   const handleDateChange = (date: string) => {
@@ -65,7 +68,7 @@ export default function ListView() {
 
     // Observe all date container elements
     const elements = document.querySelectorAll('[id^="20"]');
-    console.log(elements);
+
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
@@ -81,25 +84,29 @@ export default function ListView() {
       </div>
 
       <div className="flex flex-col gap-10 md:p-10 max-h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
-        {nextMovie && (
+        {(nextMovie || mostRecentMovie) && (
           <div
-            key={nextMovie.id}
+            key={nextMovie?.id || mostRecentMovie?.id}
             className="flex flex-col gap-4 relative snap-start  scroll-mb-20 px-2 md:px-20"
-            id={nextMovieMonth}
+            id={nextMovie ? nextMovieMonth : currentMonth}
           >
             <div className="flex items-center justify-center snap-start">
               <div
                 className="flex flex-col items-center justify-center gap-2 px-5"
-                key={nextMovie.id}
-                id={nextMovie.id}
+                key={nextMovie?.id || mostRecentMovie?.id}
+                id={nextMovie?.id || mostRecentMovie?.id}
               >
                 <div className="flex items-center justify-center gap-3">
                   <h1 className="text-lg md:text-2xl font-bold">
-                    {new Date(nextMovie.watchDate).toLocaleDateString("fi-FI")}
+                    {new Date(
+                      nextMovie?.watchDate || mostRecentMovie?.watchDate
+                    ).toLocaleDateString("fi-FI")}
                   </h1>
                   <div className="rounded-full border w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
                     <Image
-                      src={nextMovie?.user?.image}
+                      src={
+                        nextMovie?.user?.image || mostRecentMovie?.user?.image
+                      }
                       width={50}
                       height={50}
                       alt="movie poster"
@@ -109,8 +116,8 @@ export default function ListView() {
                   </div>
                 </div>
                 <PosterCard
-                  movie={nextMovie}
-                  key={nextMovie?.id}
+                  movie={nextMovie || mostRecentMovie}
+                  key={nextMovie?.id || mostRecentMovie?.id}
                   showOverview
                 />
               </div>
@@ -131,12 +138,17 @@ export default function ListView() {
             return (
               <div
                 key={index}
-                className="flex flex-col gap-4 relative snap-start scroll-mb-20"
+                className="flex flex-col gap-4 relative snap-start scroll-mb-20 listview-section"
                 id={date}
               >
                 <div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 px-5 md:px-20 snap-start">
                   {movies.map((movie: MovieOfTheWeek) => {
-                    if (movie.watchDate === nextMovie?.watchDate) return null;
+                    if (
+                      movie.watchDate === nextMovie?.watchDate ||
+                      (!nextMovie &&
+                        movie.watchDate === mostRecentMovie?.watchDate)
+                    )
+                      return null;
                     return (
                       <div
                         className="flex flex-col items-center justify-center h-full gap-2"

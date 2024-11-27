@@ -1,10 +1,10 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuItem from "./MenuItem";
 import HamburgerMenu from "./HamburgerMenu";
-import { useIsMobile, useValidateSession } from "@/lib/hooks";
+import { useIsMobile, useMagneticHover, useValidateSession } from "@/lib/hooks";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import { Button } from "../ui/Button";
 import { SEARCH_ROUTE } from "@/lib/globals";
@@ -14,6 +14,8 @@ export default function Menubar() {
   const isMobile = useIsMobile();
   const menu = Ariakit.useMenuStore({ open, setOpen });
   const { data: user, status } = useValidateSession();
+
+  const navRef = useMagneticHover();
 
   if (isMobile) {
     return (
@@ -107,7 +109,7 @@ export default function Menubar() {
         store={menu}
         onMouseLeave={() => menu.hide()}
       >
-        <nav data-magnetic className="z-[9999]">
+        <nav data-magnetic className="z-[9999]" ref={navRef}>
           <ul>
             <MenuItem store={menu}>
               <Link href={"/home"}>
