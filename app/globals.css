@@ -280,10 +280,23 @@
   }
 
   @supports not (anchor-name: --a) {
+    li a {
+      background-image: linear-gradient(
+        to right,
+        var(--accent) 50%,
+        transparent 50%
+      );
+      background-position: 100% 0;
+      background-size: 200% 100%;
+      transition: background-position 0.5s;
+      border-radius: 0.5rem;
+    }
     li a:hover {
-      background: color-mix(in lch, var(--accent), transparent 20%);
-      border-radius: 6px;
-      transition: background-color 0.3s ease-in-out;
+      border-radius: 0.5rem;
+      transition: background-position 0.5s;
+      background-size: 200% 100%;
+
+      background-position: 0 0;
     }
   }
 
