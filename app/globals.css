@@ -1048,13 +1048,13 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    transition: 0.7s ease-in-out;
     box-shadow: 0px 7px 10px rgba(black, 0.5);
     container-type: normal;
   }
 
   .postercard:hover {
     transform: translateY(2px);
+    transition: transform 0.4s ease-out;
   }
 
   .cardInfo {
