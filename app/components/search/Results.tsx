@@ -23,16 +23,20 @@ export default function Results() {
   const { data, hasNextPage, fetchNextPage } = useSearchSuspenseInfiniteQuery();
 
   useEffect(() => {
+    console.log(hasNextPage);
     if (!hasNextPage) {
       return;
     }
 
-    const observer = new IntersectionObserver((entries) =>
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          fetchNextPage();
-        }
-      })
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((entry) => {
+          console.log(entry);
+          if (entry.isIntersecting) {
+            fetchNextPage();
+          }
+        }),
+      { root: null, rootMargin: "10px", threshold: 0.1 }
     );
     const el = loadMoreButtonRef && loadMoreButtonRef.current;
     if (!el) {
@@ -50,7 +54,7 @@ export default function Results() {
 
   const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? [];
   return (
-    <div className="h-[calc(100vh-210px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background justify-items-center">
+    <div className="h-[calc(100vh-310px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background justify-items-center">
       {data
         ? data?.pages?.map((page) => (
             <Fragment key={page.page}>
@@ -72,7 +76,7 @@ export default function Results() {
         <Button
           variant="outline"
           size="lg"
-          className="max-w-sm m-auto"
+          className="max-w-sm m-auto invisible"
           ref={loadMoreButtonRef}
           onClick={() => fetchNextPage()}
         >

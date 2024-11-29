@@ -9,6 +9,7 @@ import DateSelect from "./DateSelect";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useIsMobile } from "@/lib/hooks";
 
 export default function ListView() {
   const nextMovieDate = formatISO(nextWednesday(new Date()), {
@@ -22,6 +23,7 @@ export default function ListView() {
   const { data, status } = useQuery(movieKeys.next(nextMovieDate));
   const nextMovie = data?.[nextMovieMonth]?.[0];
   const mostRecentMovie = data?.[currentMonth]?.[0];
+  const isMobile = useIsMobile();
   const [selectedDate, setSelectedDate] = useState<string | null>(
     nextMovie ? nextMovieMonth : currentMonth
   );
@@ -32,7 +34,6 @@ export default function ListView() {
     label: format(new Date(date), "MMMM"),
   }));
 
-  console.log("nextMovie", nextMovie);
   const isScrolling = useRef(false);
 
   const handleDateChange = (date: string) => {
@@ -54,6 +55,7 @@ export default function ListView() {
 
         if (visibleEntry) {
           const date = visibleEntry.target.id;
+          console.log("date", date);
           if (date !== selectedDate) {
             setSelectedDate(date);
           }
@@ -62,7 +64,7 @@ export default function ListView() {
       {
         root: null, // Use viewport as root
         threshold: 0.1,
-        rootMargin: "-45% 0px -45% 0px", // Creates a band in the middle of the viewport
+        rootMargin: "-40% 0px -40% 0px", // Creates a band in the middle of the viewport
       }
     );
 
@@ -84,10 +86,13 @@ export default function ListView() {
       </div>
 
       <div className="flex flex-col gap-10 md:p-10 max-h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
+        <h1 className="text-2xl font-bold text-center">
+          Welcome to the Movie Club
+        </h1>
         {(nextMovie || mostRecentMovie) && (
           <div
             key={nextMovie?.id || mostRecentMovie?.id}
-            className="flex flex-col gap-4 relative snap-start  scroll-mb-20 px-2 md:px-20"
+            className="flex flex-col gap-4 relative snap-start lg:scroll-mb-20 px-2 md:px-20"
             id={nextMovie ? nextMovieMonth : currentMonth}
           >
             <div className="flex items-center justify-center snap-start">

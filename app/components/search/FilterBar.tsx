@@ -131,7 +131,7 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="min-h-[100px] bg-background flex flex-col justify-center items-center gap-2 border-b z-40 pb-2 px-10">
+    <div className="lg:min-h-[100px] w-full bg-background flex flex-col gap-2 border-b z-40 pb-2 md:px-10">
       <div className="relative flex flex-col gap-4 px-4 w-full lg:items-center lg:justify-center mt-10">
         <Tabs
           defaultValue={tab}
@@ -158,23 +158,33 @@ export default function FilterBar() {
           >
             <div className="flex flex-col items-start relative w-full">
               <div className="flex flex-row gap-2 w-full">
-                <TabsList className="rounded-bl-none rounded-br-none border border-b-0 h-auto bg-input">
-                  <TabsTrigger value="discover">Discover</TabsTrigger>
-                  <TabsTrigger value="search">Search</TabsTrigger>
+                <TabsList className="rounded-bl-none rounded-br-none border border-b-0 h-auto bg-input border-border/80">
+                  <TabsTrigger
+                    value="discover"
+                    className="data-[state=active]:bg-accent "
+                  >
+                    Discover
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="search"
+                    className="data-[state=active]:bg-accent"
+                  >
+                    Search
+                  </TabsTrigger>
                 </TabsList>
                 <TabsContent value="discover">
                   <div ref={measuredTabRef}>
                     <div className="hidden lg:flex items-center gap-4">
                       <div className="flex flex-row gap-2 items-center">
                         <ArrowUpDown className="w-6 h-6 text-accent/80" />
-                        <p className="text-sm font-medium text-accent/80">
+                        <p className="text-sm font-medium text-foreground/80">
                           Sorting
                         </p>
                         <SortMenu />
                       </div>
                       <div className="flex flex-row gap-2 items-center">
                         <Filter className="w-6 h-6 text-accent/80" />
-                        <p className="text-sm font-medium text-accent/80">
+                        <p className="text-sm font-medium text-foreground/80">
                           Filters
                         </p>
                       </div>

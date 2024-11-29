@@ -49,7 +49,7 @@
     --muted: hsl(240 4.8% 95.9%);
     --muted-foreground: hsl(240, 4%, 33%);
     --accent: hsl(0, 0%, 20%);
-    --accent-foreground: hsl(240 5.9% 10%);
+    --accent-foreground: hsl(0, 0%, 100%);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
     --border: hsl(240, 2%, 21%);
@@ -281,22 +281,15 @@
 
   @supports not (anchor-name: --a) {
     li a {
-      background-image: linear-gradient(
-        to right,
-        var(--accent) 50%,
-        transparent 50%
-      );
-      background-position: 100% 0;
-      background-size: 200% 100%;
-      transition: background-position 0.5s;
-      border-radius: 0.5rem;
+      border-radius: var(--radius);
     }
     li a:hover {
-      border-radius: 0.5rem;
-      transition: background-position 0.5s;
-      background-size: 200% 100%;
+      background-color: color-mix(in lch, var(--accent), transparent 20%);
+    }
 
-      background-position: 0 0;
+    li a:hover .menu-label,
+    li a:hover span {
+      color: var(--accent-foreground);
     }
   }
 

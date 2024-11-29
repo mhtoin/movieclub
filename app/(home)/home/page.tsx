@@ -26,9 +26,6 @@ export default async function HomePage() {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col justify-center gap-5 pt-20 overflow-hidden max-h-screen overscroll-none">
-        <h1 className="text-2xl font-bold text-center">
-          Welcome to the Movie Club
-        </h1>
         <ListView />
       </div>
     </HydrationBoundary>

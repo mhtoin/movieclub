@@ -43,7 +43,6 @@ export default function SortDrawer() {
     });
   };
 
-  console.log(sortBy);
   return (
     <Drawer>
       <DrawerTrigger asChild>

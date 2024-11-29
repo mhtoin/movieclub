@@ -31,7 +31,7 @@ export default function SearchDialog() {
         }
       }}
     >
-      <div className="flex flex-col justify-center items-center gap-2 rounded-lg relative">
+      <div className="flex flex-col justify-center items-center gap-2 rounded-lg relative h-full">
         <div className="sticky z-40 top-0 w-full bg-background pb-2">
           <FilterBar />
         </div>

@@ -1,19 +1,9 @@
 import { Button } from "@/app/components/ui/Button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/app/components/ui/Drawer";
+import { Drawer, DrawerContent } from "@/app/components/ui/Drawer";
 import Search from "./Search";
 import { usePathname, useRouter } from "next/navigation";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { useEffect, useState } from "react";
-import { SEARCH_ROUTE } from "@/lib/globals";
 
 export default function SearchDrawer() {
   const router = useRouter();
@@ -41,7 +31,7 @@ export default function SearchDrawer() {
         }
       }}
     >
-      <DrawerContent className="max-h-[95dvh]">
+      <DrawerContent className="max-h-[97dvh]">
         <Search />
       </DrawerContent>
     </Drawer>

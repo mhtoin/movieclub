@@ -18,7 +18,6 @@ export const ProviderCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
   function ProviderCheckbox({ children, provider, isLoading, ...props }, ref) {
     const [checked, setChecked] = useState(props.defaultChecked ?? false);
     const [focusVisible, setFocusVisible] = useState(false);
-    console.log("provider", provider.provider_name, props.defaultChecked);
 
     useEffect(() => {
       setChecked(props.defaultChecked ?? false);
