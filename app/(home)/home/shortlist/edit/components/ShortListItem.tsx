@@ -143,6 +143,8 @@ export default function ShortListItem({
         width={"150"}
         height={"150"}
         className={`primary-img w-[150px] h-auto 2xl:w-[150px]`}
+        priority={removeFromShortList}
+        loading={removeFromShortList ? "eager" : "lazy"}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40"></span>
