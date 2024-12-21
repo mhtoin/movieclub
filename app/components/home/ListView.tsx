@@ -22,10 +22,20 @@ export default function ListView() {
   const currentMonth = currentDate.split("-").slice(0, 2).join("-");
   const { data, status } = useQuery(movieKeys.next(nextMovieDate));
   const nextMovie = data?.[nextMovieMonth]?.[0];
-  const mostRecentMovie = data?.[currentMonth]?.[0];
+
   const isMobile = useIsMobile();
+
+  // Find most recent month with data if no activity
+  const mostRecentMonth = Object.keys(data || {}).sort((a, b) =>
+    sortByISODate(a, b, "desc")
+  )[0];
+
+  console.log("mostRecentMonth", mostRecentMonth);
+
+  const mostRecentMovie = data?.[mostRecentMonth]?.[0];
+
   const [selectedDate, setSelectedDate] = useState<string | null>(
-    nextMovie ? nextMovieMonth : currentMonth
+    nextMovie ? nextMovieMonth : mostRecentMonth || currentMonth
   );
   const router = useRouter();
 
@@ -75,6 +85,9 @@ export default function ListView() {
 
     return () => observer.disconnect();
   }, [selectedDate, dates]);
+
+  console.log("nextMovie", nextMovie);
+  console.log("mostRecentMovie", mostRecentMovie);
   return (
     <div className="flex flex-col gap-4 overflow-hidden max-h-[100dvh] overscroll-none">
       <div className="flex justify-center">
@@ -86,9 +99,6 @@ export default function ListView() {
       </div>
 
       <div className="flex flex-col gap-10 md:p-10 max-h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
-        <h1 className="text-2xl font-bold text-center">
-          Welcome to the Movie Club
-        </h1>
         {(nextMovie || mostRecentMovie) && (
           <div
             key={nextMovie?.id || mostRecentMovie?.id}

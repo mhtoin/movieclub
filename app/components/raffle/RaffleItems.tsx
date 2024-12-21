@@ -11,11 +11,10 @@ export default function RaffleItems({
   started: boolean;
 }): JSX.Element {
   return (
-    <>
-      <h3 className="text-lg font-bold">Movies</h3>
+    <div className="flex flex-col gap-5 items-center justify-center">
       <motion.div
         layout
-        className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-7 p-5"
+        className="grid @5xl/items:grid-cols-6 @4xl/items:grid-cols-5 @3xl/items:grid-cols-4 @2xl/items:grid-cols-3 @lg/items:grid-cols-2 @xl/items:grid-cols-3 @xs/items:grid-cols-2 gap-7 p-5"
       >
         {shuffledMovies.map((movie, index) => {
           return (
@@ -43,6 +42,6 @@ export default function RaffleItems({
           );
         })}
       </motion.div>
-    </>
+    </div>
   );
 }

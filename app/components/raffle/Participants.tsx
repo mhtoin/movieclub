@@ -1,4 +1,4 @@
-import { PenOff, UserPen } from "lucide-react";
+import { Lock, LockOpen, PenOff, UserPen } from "lucide-react";
 import { Button } from "../ui/Button";
 import { User as DatabaseUser } from "@prisma/client";
 import { ParticipationButton } from "./ParticipationButton";
@@ -26,22 +26,24 @@ export default function Participants({
   const { data: allShortlists, status } = useShortlistsQuery();
   const { data: currentUser } = useValidateSession();
   return (
-    <>
-      <div className="flex flex-row justify-center items-center gap-5 ">
+    <div className="flex flex-col gap-10 items-center w-full h-full">
+      <div className="flex flex-col justify-center items-center gap-5 ">
         <h3 className="text-lg font-bold">Participants</h3>
         <Button
           variant={"outline"}
-          size={"iconSm"}
+          size={"default"}
           onClick={() => setIsEditing(!isEditing)}
+          className="flex flex-row gap-2 items-center justify-center py-5"
         >
+          <span className="text-md">{!isEditing ? "Edit" : "Done"}</span>
           {isEditing ? (
-            <UserPen className="w-4 h-4" />
+            <Lock className="w-4 h-4" />
           ) : (
-            <PenOff className="w-4 h-4" />
+            <LockOpen className="w-4 h-4" />
           )}
         </Button>
       </div>
-      <div className="flex flex-row gap-5">
+      <div className="flex flex-col gap-5">
         {allShortlists &&
           Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
             const participating = shortlist?.participating;
@@ -50,8 +52,15 @@ export default function Participants({
             return (
               <div
                 key={`avatar-${user?.id}-${participating}-${shortlist?.isReady}`}
-                className="flex flex-col gap-3 items-center justify-center border rounded-md px-10 py-5"
+                className="flex flex-col gap-3 items-center justify-center border rounded-md px-10 py-5 relative"
               >
+                <div className="absolute top-2 right-2">
+                  {!isEditing ? (
+                    <Lock className="h-5 w-5" />
+                  ) : (
+                    <LockOpen className="h-5 w-5" />
+                  )}
+                </div>
                 <span
                   className={`text-xs text-center font-semibold`}
                   style={{ color: user?.color }}
@@ -99,6 +108,6 @@ export default function Participants({
             );
           })}
       </div>
-    </>
+    </div>
   );
 }

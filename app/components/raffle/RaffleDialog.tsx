@@ -3,7 +3,7 @@ import * as Ariakit from "@ariakit/react";
 import { Button } from "../ui/Button";
 import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Dices } from "lucide-react";
+import { ChevronRight, Dices } from "lucide-react";
 import ResultCard from "./ResultCard";
 import Participants from "./Participants";
 import ActionButtons from "./ActionButtons";
@@ -17,9 +17,12 @@ export default function RaffleDialog() {
   const [isEditing, setIsEditing] = useState(false);
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const { data: allShortlists, status } = useShortlistsQuery();
   const [shuffledMovies, setShuffledMovies] = useState<MovieWithUser[]>([]);
   const { data, mutate: raffle } = useRaffle();
+
+  const isDev = process.env.NODE_ENV === "development";
 
   const movies: MovieWithUser[] = useMemo(() => {
     return allShortlists
@@ -132,23 +135,58 @@ export default function RaffleDialog() {
             <ResultCard movie={data?.movie} />
           </div>
         ) : (
-          <div className="flex flex-col gap-5 justify-center items-center p-5">
-            <Participants isEditing={isEditing} setIsEditing={setIsEditing} />
-            <ActionButtons
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-              setStarted={setStarted}
-              shuffledMovies={shuffledMovies}
-              setShuffledMovies={setShuffledMovies}
-              resetRaffle={resetRaffle}
-              raffle={raffle}
-              disabled={!allReady}
-            />
-            <RaffleItems
-              shuffledMovies={shuffledMovies}
-              currentIndex={currentIndex}
-              started={started}
-            />
+          <div className="flex flex-row gap-5 justify-center items-center h-full w-full">
+            <div
+              className={`flex flex-col justify-start gap-5 h-full border-r border-border pt-5 relative transition-all duration-300 ${
+                sidebarExpanded ? "w-[250px]" : "w-[0px]"
+              }`}
+            >
+              <div
+                className={`absolute top-1/2 -translate-y-1/2 ${
+                  sidebarExpanded ? "-right-3" : "-right-5"
+                }`}
+              >
+                <Button
+                  variant={"outline"}
+                  size={"iconSm"}
+                  onClick={() => setSidebarExpanded(!sidebarExpanded)}
+                >
+                  <ChevronRight
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      sidebarExpanded ? "rotate-180" : ""
+                    }`}
+                  />
+                </Button>
+              </div>
+              <div
+                className={`overflow-hidden ${
+                  sidebarExpanded ? "opacity-100" : "opacity-100"
+                }`}
+              >
+                <Participants
+                  isEditing={isEditing}
+                  setIsEditing={setIsEditing}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-5 items-center h-full flex-1  @container/items pt-5 ">
+              <h3 className="text-lg font-bold">Movies</h3>
+              <ActionButtons
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+                setStarted={setStarted}
+                shuffledMovies={shuffledMovies}
+                setShuffledMovies={setShuffledMovies}
+                resetRaffle={resetRaffle}
+                raffle={raffle}
+                disabled={!allReady}
+              />
+              <RaffleItems
+                shuffledMovies={shuffledMovies}
+                currentIndex={currentIndex}
+                started={started}
+              />
+            </div>
           </div>
         )}
       </Ariakit.Dialog>
