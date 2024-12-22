@@ -47,7 +47,9 @@ export default function ActionButtons({
   const { data: user } = useValidateSession();
   const [noSave, setNoSave] = useState(false);
   const [resultScreen, setResultScreen] = useState(false);
-  const isDev = process.env.NODE_ENV === "development";
+  const isDev =
+    process.env.NODE_ENV === "development" ||
+    process.env.VERCEL_ENV === "preview";
   return (
     <div className="flex flex-row gap-2 items-center justify-center">
       <TooltipProvider>
