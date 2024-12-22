@@ -9,17 +9,10 @@ import {
   Tooltip,
   TooltipContent,
 } from "../ui/Tooltip";
+import { useState } from "react";
+import DevTools from "./DevTools";
 
-export default function ActionButtons({
-  isPlaying,
-  setIsPlaying,
-  setStarted,
-  shuffledMovies,
-  setShuffledMovies,
-  resetRaffle,
-  raffle,
-  disabled,
-}: {
+interface ActionButtonsProps {
   isPlaying: boolean;
   setIsPlaying: (isPlaying: boolean) => void;
   setStarted: (started: boolean) => void;
@@ -39,10 +32,24 @@ export default function ActionButtons({
     unknown
   >;
   disabled: boolean;
-}): JSX.Element {
+}
+
+export default function ActionButtons({
+  isPlaying,
+  setIsPlaying,
+  setStarted,
+  shuffledMovies,
+  setShuffledMovies,
+  resetRaffle,
+  raffle,
+  disabled,
+}: ActionButtonsProps) {
   const { data: user } = useValidateSession();
+  const [noSave, setNoSave] = useState(false);
+  const [resultScreen, setResultScreen] = useState(false);
+  const isDev = process.env.NODE_ENV === "development";
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 items-center justify-center">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger className="cursor-not-allowed">
@@ -81,18 +88,14 @@ export default function ActionButtons({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      {/*<Button
-        variant={"outline"}
-        size={"iconLg"}
-        onClick={() => {
-          const currentMovies = [...shuffledMovies];
-          const shuffled = shuffle(currentMovies);
-          setShuffledMovies(shuffled);
-          resetRaffle();
-        }}
-      >
-        <Shuffle className="w-6 h-6" />
-      </Button>*/}
+      {isDev && (
+        <DevTools
+          noSave={noSave}
+          setNoSave={setNoSave}
+          resultScreen={resultScreen}
+          setResultScreen={setResultScreen}
+        />
+      )}
     </div>
   );
 }

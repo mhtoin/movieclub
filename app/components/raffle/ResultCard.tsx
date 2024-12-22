@@ -117,11 +117,11 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
         <div className="flex flex-col col-span-1 h-full relative ">
           <div className="flex flex-col justify-center items-center absolute -top-[85%] left-0 gap-5 py-2">
             <Image
-              src={`https://image.tmdb.org/t/p/original${posters?.[0].file_path}`}
+              src={`https://image.tmdb.org/t/p/original${posters?.[0]?.file_path}`}
               alt={movie.title}
-              width={posters?.[0].width}
-              height={posters?.[0].height}
-              className="object-contain w-4/5 rounded-sm aspect-[${posters?.[0].aspect_ratio}]"
+              width={posters?.[0]?.width}
+              height={posters?.[0]?.height}
+              className="object-contain w-4/5 rounded-sm aspect-[${posters?.[0]?.aspect_ratio}]"
               priority
             />
             <div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">

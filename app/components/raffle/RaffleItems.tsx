@@ -11,7 +11,7 @@ export default function RaffleItems({
   started: boolean;
 }): JSX.Element {
   return (
-    <div className="flex flex-col gap-5 items-center justify-center">
+    <div className="flex flex-col gap-5 items-center  overflow-scroll">
       <motion.div
         layout
         className="grid @5xl/items:grid-cols-6 @4xl/items:grid-cols-5 @3xl/items:grid-cols-4 @2xl/items:grid-cols-3 @lg/items:grid-cols-2 @xl/items:grid-cols-3 @xs/items:grid-cols-2 gap-7 p-5"

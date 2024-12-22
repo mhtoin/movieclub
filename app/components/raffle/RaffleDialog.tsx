@@ -8,6 +8,7 @@ import ResultCard from "./ResultCard";
 import Participants from "./Participants";
 import ActionButtons from "./ActionButtons";
 import RaffleItems from "./RaffleItems";
+import DevTools from "./DevTools";
 
 export default function RaffleDialog() {
   const dialog = Ariakit.useDialogStore();
@@ -17,12 +18,11 @@ export default function RaffleDialog() {
   const [isEditing, setIsEditing] = useState(false);
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
+
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const { data: allShortlists, status } = useShortlistsQuery();
   const [shuffledMovies, setShuffledMovies] = useState<MovieWithUser[]>([]);
   const { data, mutate: raffle } = useRaffle();
-
-  const isDev = process.env.NODE_ENV === "development";
 
   const movies: MovieWithUser[] = useMemo(() => {
     return allShortlists
@@ -169,7 +169,7 @@ export default function RaffleDialog() {
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-5 items-center h-full flex-1  @container/items pt-5 ">
+            <div className="flex flex-col gap-5 items-center h-full flex-1 @container/items pt-5 ">
               <h3 className="text-lg font-bold">Movies</h3>
               <ActionButtons
                 isPlaying={isPlaying}
@@ -181,6 +181,7 @@ export default function RaffleDialog() {
                 raffle={raffle}
                 disabled={!allReady}
               />
+
               <RaffleItems
                 shuffledMovies={shuffledMovies}
                 currentIndex={currentIndex}
