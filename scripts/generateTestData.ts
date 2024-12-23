@@ -133,10 +133,10 @@ async function generateTestData() {
   const users = await prisma.user.findMany();
   // delete all movies
   await prisma.movie.deleteMany();
-
+  await prisma.shortlist.deleteMany();
   const movies: TMDBMovie[] = [];
 
-  for (let i = 1; i < 10; i++) {
+  for (let i = 1; i < 8; i++) {
     const response = await fetch(
       `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${i}&sort_by=popularity.desc&watch_region=FI&with_watch_providers=8%7C323%7C496`,
       {
@@ -154,7 +154,81 @@ async function generateTestData() {
 
   const watchDates = generateWatchDates(movies.length);
 
-  for (const [index, movie] of movies.entries()) {
+  // take 3 * users.length movies out of the movies array and allocate them to shortlists
+  const shortlistMovies = movies.slice(0, 3 * users.length);
+  console.log(shortlistMovies.length);
+  console.log(shortlistMovies);
+  const shortlists: Array<Array<string>> = Array.from(
+    { length: users.length },
+    () => []
+  );
+  console.log(shortlists);
+  for (const [index, movie] of shortlistMovies.entries()) {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/movie/${movie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+        },
+      }
+    );
+    const data = await res.json();
+
+    const createdMovie = await prisma.movie.create({
+      data: {
+        tmdbId: data.id,
+        adult: data.adult,
+        original_language: data.original_language,
+        popularity: data.popularity,
+        video: data.video,
+        vote_average: data.vote_average,
+        vote_count: data.vote_count,
+        backdrop_path: data.backdrop_path,
+        poster_path: data.poster_path,
+        title: data.title,
+        original_title: data.original_title,
+        release_date: data.release_date,
+        overview: data.overview,
+        imdbId: data.external_ids?.imdb_id,
+        genre_ids: data.genres?.map((g: any) => g.id) || [],
+      },
+    });
+
+    shortlists[index % users.length].push(createdMovie.id);
+  }
+
+  const createdShortlists: Array<{
+    id: string;
+    userId: string;
+    movieIDs: string[];
+    isReady: boolean;
+    requiresSelection: boolean | null;
+    selectedIndex: number | null;
+    participating: boolean;
+  }> = [];
+
+  for (const [index, shortlist] of shortlists.entries()) {
+    const createdShortlist = await prisma.shortlist.create({
+      data: {
+        movieIDs: shortlist,
+        userId: users[index].id,
+      },
+    });
+    createdShortlists.push(createdShortlist);
+  }
+
+  for (const shortlist of createdShortlists) {
+    await prisma.user.update({
+      where: { id: shortlist.userId },
+      data: { shortlistId: shortlist.id },
+    });
+  }
+  let watchedMovies = movies.slice(3 * users.length + 1);
+
+  for (const [index, movie] of watchedMovies.entries()) {
     // get the details
     const res = await fetch(
       `https://api.themoviedb.org/3/movie/${movie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
@@ -171,28 +245,34 @@ async function generateTestData() {
 
     const randomUser = users[Math.floor(Math.random() * users.length)];
 
+    console.log("pushing to db", data.id, data.title);
+
     // save to db
-    await prisma.movie.create({
-      data: {
-        tmdbId: data.id,
-        adult: data.adult,
-        original_language: data.original_language,
-        popularity: data.popularity,
-        video: data.video,
-        vote_average: data.vote_average,
-        vote_count: data.vote_count,
-        backdrop_path: data.backdrop_path,
-        poster_path: data.poster_path,
-        title: data.title,
-        original_title: data.original_title,
-        release_date: data.release_date,
-        overview: data.overview,
-        imdbId: data.external_ids?.imdb_id,
-        watchDate: watchDates[index],
-        userId: randomUser.id,
-        genre_ids: data.genres?.map((g: any) => g.id) || [],
-      },
-    });
+    try {
+      await prisma.movie.create({
+        data: {
+          tmdbId: data.id,
+          adult: data.adult,
+          original_language: data.original_language,
+          popularity: data.popularity,
+          video: data.video,
+          vote_average: data.vote_average,
+          vote_count: data.vote_count,
+          backdrop_path: data.backdrop_path,
+          poster_path: data.poster_path,
+          title: data.title,
+          original_title: data.original_title,
+          release_date: data.release_date,
+          overview: data.overview,
+          imdbId: data.external_ids?.imdb_id,
+          watchDate: watchDates[index],
+          userId: randomUser.id,
+          genre_ids: data.genres?.map((g: any) => g.id) || [],
+        },
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 }
 
