@@ -166,7 +166,7 @@ export default function ListView() {
                       return null;
                     return (
                       <div
-                        className="flex flex-col items-center justify-center h-full gap-2"
+                        className="flex flex-col items-center justify-center h-full gap-2 py-5"
                         key={movie.id}
                         id={movie.id}
                       >
