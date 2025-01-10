@@ -99,13 +99,14 @@ export default function Menubar() {
         store={menu}
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
+        className="focus:outline-none"
       >
         <HamburgerMenu open={open} />
       </Ariakit.MenuButton>
 
       <Ariakit.Menu
         gutter={10}
-        className="menu z-[9999]"
+        className="menu z-[9999] focus:outline-none"
         store={menu}
         onMouseLeave={() => menu.hide()}
       >

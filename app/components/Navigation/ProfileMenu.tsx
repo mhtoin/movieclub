@@ -14,7 +14,7 @@ export default function ProfileMenu() {
   return (
     <Ariakit.MenuProvider>
       <Ariakit.MenuButton
-        className="relative w-12 h-12 border rounded-full overflow-hidden flex items-center justify-center"
+        className="relative w-12 h-12 border rounded-full overflow-hidden flex items-center justify-center focus:outline-none"
         store={menu}
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
@@ -26,7 +26,7 @@ export default function ProfileMenu() {
         )}
       </Ariakit.MenuButton>
       <Ariakit.Menu
-        className="menu z-[9999]"
+        className="menu z-[9999] focus:outline-none"
         shift={-70}
         gutter={10}
         onMouseLeave={() => menu.hide()}

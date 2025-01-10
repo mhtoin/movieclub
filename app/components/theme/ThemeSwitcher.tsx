@@ -151,11 +151,12 @@ export default function ThemeSwitcher({
         store={menu}
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
+        className="focus:outline-none"
       >
         {theme === "light" ? <SunIcon /> : <MoonIcon />}
       </Ariakit.MenuButton>
       <Ariakit.Menu
-        className="menu popover z-[9990]"
+        className="menu popover z-[9990] focus:outline-none"
         store={menu}
         onMouseLeave={() => menu.hide()}
       >
