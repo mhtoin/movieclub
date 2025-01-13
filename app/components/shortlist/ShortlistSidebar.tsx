@@ -59,7 +59,7 @@ export default function ShortlistSidebar() {
           <div className="flex flex-col items-center gap-2">
             <h3 className="text-xs font-semibold">Participating</h3>
             <ParticipationButton
-              defaultChecked={userShortlist?.participating}
+              defaultChecked={userShortlist?.participating || true}
               onChange={(e) => {
                 participationMutation.mutate({
                   userId: user?.id || "",
@@ -72,7 +72,7 @@ export default function ShortlistSidebar() {
           <div className="flex flex-col items-center gap-2">
             <h3 className="text-xs font-semibold">Ready</h3>
             <ParticipationButton
-              defaultChecked={userShortlist?.isReady}
+              defaultChecked={userShortlist?.isReady || true}
               onChange={(e) => {
                 readyStateMutation.mutate({
                   userId: user?.id || "",
