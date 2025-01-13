@@ -23,7 +23,12 @@ export default function ShortlistSidebar() {
   const readyStateMutation = useUpdateReadyStateMutation();
   const participationMutation = useUpdateParticipationMutation();
   return (
-    <aside className="flex flex-col h-full w-96 border pt-20 gap-5">
+    <aside className="flex flex-col h-full w-96 border-r border-border pt-20 gap-5 items-center">
+      <div className="w-1/2 h-[1px] bg-secondary relative">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+          {userShortlist?.user?.name}
+        </span>
+      </div>
       <div className="flex flex-col items-center justify-center gap-5">
         <Button
           variant={"outline"}
@@ -79,7 +84,12 @@ export default function ShortlistSidebar() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-2">
+      <div className="w-1/2 h-[1px] bg-secondary relative">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+          Movies
+        </span>
+      </div>
+      <div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar max-h-[calc(100vh-200px)]">
         {userShortlist
           ? userShortlist.movies.map((movie, index) => (
               <ShortListItem

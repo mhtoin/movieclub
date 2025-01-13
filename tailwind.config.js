@@ -18,6 +18,7 @@ module.exports = {
     extend: {
       screens: {
         "2xl": "1400px",
+        "4xl": "2000px",
       },
       colors: {
         border: mix("--border"),
