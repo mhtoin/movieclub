@@ -1,11 +1,10 @@
-"use client";
+import React from "react";
 import { useSuspenseShortlistsQuery, useValidateSession } from "@/lib/hooks";
 import ShortlistCard from "components/shortlist/ShortlistCard";
-import { Suspense } from "react";
 import ShortlistSidebar from "./ShortlistSidebar";
 import { useIsMobile } from "@/lib/hooks";
 import ShortlistDrawer from "./ShortlistDrawer";
-import { LoaderCircle } from "lucide-react";
+import LoadingSpinner from "components/ui/LoadingSpinner"; // Assume you have a loading spinner component
 
 export default function Shortlists() {
   const { data: user } = useValidateSession();
@@ -17,14 +16,16 @@ export default function Shortlists() {
     status,
   } = useSuspenseShortlistsQuery();
 
-  if (isMobile === undefined) {
+  // Show loading state while determining device type or data is loading
+  if (isLoading || isMobile === undefined) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <LoaderCircle className="animate-spin" />
+        <LoadingSpinner />
       </div>
     );
   }
 
+  // Mobile Layout
   if (isMobile) {
     return (
       <div className="pt-16 flex flex-row no-scrollbar h-screen overflow-hidden">
@@ -45,6 +46,7 @@ export default function Shortlists() {
                     <ShortlistCard key={shortlistId} shortlist={shortlist} />
                   );
                 }
+                return null; // Ensure a return for all code paths
               })}
             </div>
           )}
@@ -53,6 +55,7 @@ export default function Shortlists() {
     );
   }
 
+  // Desktop Layout
   return (
     <div className="pt-16 flex flex-row h-screen overflow-hidden">
       <ShortlistSidebar />
@@ -70,6 +73,7 @@ export default function Shortlists() {
                   <ShortlistCard key={shortlistId} shortlist={shortlist} />
                 );
               }
+              return null; // Ensure a return for all code paths
             })}
           </div>
         )}

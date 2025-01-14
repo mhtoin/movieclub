@@ -578,23 +578,21 @@ export const useDebounce = (callback: Function, delay: number) => {
   return debouncedCallback;
 };
 
-export const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
+export function useIsMobile() {
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.matchMedia("(max-width: 768px)").matches;
-      setIsMobile(mobile);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Example breakpoint
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
+    handleResize(); // Set initial value
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return isMobile;
-};
+}
 export function useCreateQueryString(searchParams: URLSearchParams) {
   return useCallback(
     (
