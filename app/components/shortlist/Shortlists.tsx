@@ -17,7 +17,7 @@ export default function Shortlists() {
     status,
   } = useSuspenseShortlistsQuery();
 
-  if (isMobile === undefined) {
+  if (isMobile === undefined || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <LoaderCircle className="animate-spin" />
