@@ -38,7 +38,7 @@ export default function Shortlists() {
             </h3>
           </div>
           {user && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4 overflow-y-auto no-scrollbar p-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4 overflow-y-auto no-scrollbar">
               {Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
                 if (shortlistId !== user?.shortlistId) {
                   return (

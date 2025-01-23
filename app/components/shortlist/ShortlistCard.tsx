@@ -33,11 +33,11 @@ export default function ShortlistCard({
   return (
     <div
       key={`fragment-${shortlist?.id}`}
-      className="flex flex-col justify-between border rounded-xl p-3 gap-2 bg-card/20 h-full backdrop-blur-lg"
+      className="flex flex-col justify-between border rounded-xl p-2 gap-2 bg-card/20 h-full backdrop-blur-lg"
     >
       <div
         key={shortlist?.id + "-container"}
-        className="flex flex-row flex-wrap sm:w-auto items-center justify-center border rounded-md p-3 gap-2 bg-background  overflow-hidden"
+        className="flex flex-row flex-wrap sm:w-auto items-center justify-center border rounded-md p-1 gap-2 bg-background  overflow-hidden"
       >
         {shortlist?.movies.map((movie: Movie, index: number) => {
           const isInWatchlist = watchlist?.some(
@@ -103,13 +103,6 @@ export default function ShortlistCard({
             </span>
           </div>
         </div>
-        {shortlist?.requiresSelection &&
-        (shortlist.selectedIndex === -1 || shortlist.selectedIndex === null) ? (
-          <div className="flex flex-row border rounded-xl p-3 items-center justify-center">
-            <MessageCircleWarning className="w-4 h-4 mr-2 " />
-            <span>Select a movie!!</span>
-          </div>
-        ) : null}
       </div>
     </div>
   );
