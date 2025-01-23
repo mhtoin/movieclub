@@ -23,9 +23,9 @@ export default function ShortlistSidebar() {
   const readyStateMutation = useUpdateReadyStateMutation();
   const participationMutation = useUpdateParticipationMutation();
   return (
-    <aside className="w-96 border-r border-border gap-5 h-[calc(100dvh-70px)] overflow-y-auto no-scrollbar pt-[70px]">
+    <aside className="w-96 border-r border-border gap-5 h-[calc(100dvh-70px)] overflow-y-auto no-scrollbar pt-[20px]">
       <div className="flex flex-col items-center justify-center gap-5 ">
-        <div className="sticky top-0 bg-background flex flex-col items-center justify-center gap-10 z-10 w-full py-5">
+        <div className="sticky top-0 bg-background flex flex-col items-center justify-center gap-10 z-20 w-full py-5">
           <div className="w-1/2 h-[1px] bg-secondary relative">
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
               {userShortlist?.user?.name}
@@ -95,7 +95,7 @@ export default function ShortlistSidebar() {
         </div>
         {/* Sticky Header End */}
 
-        <div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar max-h-[calc(100vh-200px)]">
+        <div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar ">
           {userShortlist
             ? userShortlist.movies.map((movie, index) => (
                 <ShortListItem

@@ -26,7 +26,7 @@ export default function Participants({
   const { data: allShortlists, status } = useShortlistsQuery();
   const { data: currentUser } = useValidateSession();
   return (
-    <div className="flex flex-col gap-10 items-center w-full h-full">
+    <div className="flex flex-col gap-10 items-center w-full h-full overflow-y-auto py-5">
       <div className="flex flex-col justify-center items-center gap-5 ">
         <h3 className="text-lg font-bold">Participants</h3>
         <Button
