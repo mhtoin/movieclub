@@ -27,8 +27,8 @@ export default function ProfileMenu() {
       </Ariakit.MenuButton>
       <Ariakit.Menu
         className="menu z-[9999] focus:outline-none"
-        shift={-70}
-        gutter={10}
+        shift={-60}
+        gutter={12}
         onMouseLeave={() => menu.hide()}
         store={menu}
       >

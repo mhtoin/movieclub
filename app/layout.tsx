@@ -28,6 +28,27 @@ export default async function RootLayout({
       className={theme ? theme.value : ""}
       data-accent={accent ? accent.value : ""}
     >
+      <head>
+        <script
+          id="theme-script"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = document.documentElement.className || 
+                  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                const accent = document.documentElement.getAttribute('data-accent') || '';
+                
+                document.documentElement.classList.toggle('light', theme === 'light');
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+                
+                if (accent) {
+                  document.documentElement.setAttribute('data-accent', accent);
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
       >

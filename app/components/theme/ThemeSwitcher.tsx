@@ -50,24 +50,14 @@ export default function ThemeSwitcher({
   ];
 
   useEffect(() => {
-    if (document !== undefined) {
-      if (!userTheme && !theme) {
-        const newTheme = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
-          ? "dark"
-          : "light";
-        setTheme(newTheme);
-        createThemeCookie("theme", newTheme);
-      }
-
-      document.documentElement.classList.toggle("light", theme === "light");
-      document.documentElement.classList.toggle("dark", theme === "dark");
+    if (theme) {
+      createThemeCookie("theme", theme);
     }
-  }, [theme, userTheme]);
+  }, [theme]);
 
   useEffect(() => {
-    if (document !== undefined) {
-      document.documentElement.setAttribute("data-accent", accentColor);
+    if (accentColor !== undefined) {
+      createThemeCookie("accent", accentColor);
     }
   }, [accentColor]);
   const handleThemeSwitch = async (theme: "light" | "dark") => {
@@ -157,6 +147,8 @@ export default function ThemeSwitcher({
       </Ariakit.MenuButton>
       <Ariakit.Menu
         className="menu popover z-[9990] focus:outline-none"
+        gutter={12}
+        shift={-60}
         store={menu}
         onMouseLeave={() => menu.hide()}
       >
