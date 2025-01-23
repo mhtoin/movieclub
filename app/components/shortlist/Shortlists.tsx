@@ -28,7 +28,7 @@ export default function Shortlists() {
   if (isMobile) {
     return (
       <div className="pt-16 flex flex-row no-scrollbar h-dvh overflow-hidden">
-        <div className="absolute bottom-0 left-0 z-10">
+        <div className="fixed bottom-0 left-0 z-10">
           <ShortlistDrawer />
         </div>
         <main className="flex flex-col items-center justify-center gap-5 p-2 pt-10 w-full h-full">
