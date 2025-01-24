@@ -4,6 +4,8 @@ import Menubar from "./Menubar";
 import ProfileMenu from "./ProfileMenu";
 import ThemeSwitcher from "../theme/ThemeSwitcher";
 import { useIsMobile } from "@/lib/hooks";
+import { useEffect } from "react";
+import { useState } from "react";
 export const NavBar = ({
   theme,
   accent,
@@ -12,6 +14,18 @@ export const NavBar = ({
   accent: { value: string; name: string };
 }) => {
   const isMobile = useIsMobile();
+
+  // detect if the user has scrolled down
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    // detect if the user has scrolled down an entire screen
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > window.innerHeight);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   if (isMobile) {
     return (
@@ -34,7 +48,13 @@ export const NavBar = ({
     );
   }
   return (
-    <div className="min-w-screen w-screen flex items-center justify-center border-b p-2 z-50 bg-background/80 backdrop-blur-md fixed top-0 h-[70px] min-h-[70px]">
+    <div
+      className={`min-w-screen w-screen flex items-center justify-center p-2 z-50 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+        isScrolled
+          ? "bg-background/80 backdrop-blur-md border-b"
+          : "bg-transparent"
+      }`}
+    >
       <div className="w-[90%] h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5">

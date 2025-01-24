@@ -9,6 +9,7 @@ import ListView from "components/home/ListView";
 import CarouselListView from "@/app/components/home/CarouselListView";
 import { getCurrentSession } from "@/lib/authentication/session";
 import { redirect } from "next/navigation";
+import CurrentMoviePoster from "@/app/components/home/CurrentMoviePoster";
 
 export default async function HomePage() {
   const { user } = await getCurrentSession();
@@ -25,7 +26,8 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col justify-center gap-5 pt-20 overflow-hidden max-h-screen overscroll-none">
+      <div className="flex flex-col justify-center gap-5 overflow-hidden overscroll-none">
+        <CurrentMoviePoster />
         <ListView />
       </div>
     </HydrationBoundary>
