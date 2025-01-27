@@ -28,17 +28,17 @@ export default function CurrentMoviePoster() {
         <Image
           src={`https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`}
           alt={mostRecentMovie?.title}
-          className="object-cover absolute inset-0 contrast-70"
+          className="object-cover absolute inset-0"
           quality={100}
           priority
           fill
         />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-black opacity-30"></div>
       </div>
-      <div className="absolute bottom-1/2 left-1/3 p-5">
-        <h1 className="text-4xl text-background">{mostRecentMovie?.title}</h1>
-        <p className="text-xl text-background max-w-[500px]">
-          {mostRecentMovie?.overview}
-        </p>
+      <div className="absolute bottom-1/2 left-1/4 p-5">
+        <h1 className="text-4xl">{mostRecentMovie?.title}</h1>
+        <p className="text-xl max-w-[500px]">{mostRecentMovie?.overview}</p>
       </div>
     </div>
   );
