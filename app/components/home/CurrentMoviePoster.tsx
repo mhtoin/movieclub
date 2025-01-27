@@ -23,7 +23,7 @@ export default function CurrentMoviePoster() {
   const mostRecentMovie = data?.[mostRecentMonth]?.[0];
   console.log("nextMovie", mostRecentMovie);
   return (
-    <div className="w-screen h-screen border flex items-center justify-center relative">
+    <div className="w-screen h-screen border flex items-center justify-center relative snap-start">
       <div className="relative w-full h-full">
         <Image
           src={`https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`}
@@ -34,11 +34,13 @@ export default function CurrentMoviePoster() {
           fill
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-black opacity-30"></div>
+        <div className="absolute inset-0 bg-background/40"></div>
       </div>
-      <div className="absolute bottom-1/2 left-1/4 p-5">
+      <div className="absolute lg:bottom-1/2 lg:left-1/4 p-5 flex flex-col gap-2">
         <h1 className="text-4xl">{mostRecentMovie?.title}</h1>
-        <p className="text-xl max-w-[500px]">{mostRecentMovie?.overview}</p>
+        <p className="text-lg max-w-[500px] text-foreground/60">
+          {mostRecentMovie?.overview}
+        </p>
       </div>
     </div>
   );

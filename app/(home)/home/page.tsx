@@ -26,7 +26,7 @@ export default async function HomePage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col justify-center gap-5 overflow-hidden overscroll-none">
+      <div className="flex flex-col justify-center gap-5 overflow-hidden overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
         <CurrentMoviePoster />
         <ListView />
       </div>
