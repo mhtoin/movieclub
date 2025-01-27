@@ -58,7 +58,18 @@ export default function PosterCarousel() {
     <Carousel
       orientation="vertical"
       setApi={setApi}
-      plugins={[WheelGesturesPlugin()]}
+      plugins={[
+        {
+          name: "wheelGestures",
+          options: {},
+          init: (embla, optionsHandler) => {
+            const wheelGestures = WheelGesturesPlugin();
+            wheelGestures.init(embla as any, optionsHandler);
+            return wheelGestures.destroy;
+          },
+          destroy: () => {},
+        },
+      ]}
     >
       <CarouselContent>
         {data &&
