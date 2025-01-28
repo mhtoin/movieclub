@@ -194,6 +194,7 @@ declare global {
   interface Genre {
     label: string;
     value: number;
+    [x: string]: any;
   }
 
   interface MovieGenre {

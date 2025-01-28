@@ -93,6 +93,9 @@ export default function MovieCard({
                     ...omit(movie, ["id"]),
                     tmdbId: movie.id,
                     imdbId: movieData?.imdb_id,
+                    runtime: movieData?.runtime,
+                    genres: movieData?.genres,
+                    tagline: movieData?.tagline,
                   } as Movie,
                 });
               }}

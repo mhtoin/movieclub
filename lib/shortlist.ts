@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 import { getMovie } from "./movies/queries";
 import { keyBy, omit } from "./utils";
 import { db } from "./db";
+import { Prisma } from "@prisma/client";
 
 export const revalidate = 10;
 
@@ -121,7 +122,7 @@ export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
           where: {
             tmdbId: movie.tmdbId,
           },
-          create: movie,
+          create: movie as unknown as Prisma.MovieCreateInput,
         },
       },
     },
@@ -262,7 +263,10 @@ export async function replaceShortlistMovie(
     ...omit(replacingWithMovie, ["id"]),
     tmdbId: movie.id,
     imdbId: movie?.imdb_id,
-  } as Movie;
+    genres: replacingWithMovie.genres || null, // Remove JSON.stringify
+    runtime: replacingWithMovie.runtime,
+    tagline: replacingWithMovie.tagline,
+  } as unknown as Prisma.MovieCreateInput;
   const updated = await prisma.shortlist.update({
     where: {
       id: shortlistId,

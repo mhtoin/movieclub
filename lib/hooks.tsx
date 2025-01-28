@@ -449,7 +449,7 @@ export const useReplaceShortlistMutation = () => {
             ...movie,
             watchDate: movie.watchDate || undefined,
             imdbId: movie.imdbId || undefined,
-          }));
+          })) as unknown as Movie[];
         });
       });
       toast.success("Movie replaced in shortlist");

@@ -78,6 +78,9 @@ model Movie {
   userId            String?     @db.ObjectId
   raffles           Raffle[]    @relation(fields: [raffleIDs], references: [id])
   raffleIDs         String[]    @db.ObjectId
+  runtime           Int?
+  genres            Json?
+  tagline           String?
 
   @@map("movies")
 }
