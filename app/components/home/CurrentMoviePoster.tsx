@@ -1,42 +1,30 @@
-"use client";
-import { movieKeys } from "@/lib/movies/movieKeys";
-import { sortByISODate } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { formatISO, nextWednesday } from "date-fns";
 import { Star, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
 import CastPortrait from "../raffle/CastPortrait";
 import CastPopover from "../raffle/CastPopover";
 import { MovieOfTheWeek } from "@/types/movie.type";
-import TrailerLink from "../raffle/TrailerLink";
 import Link from "next/link";
-export default function CurrentMoviePoster() {
-  const nextMovieDate = formatISO(nextWednesday(new Date()), {
-    representation: "date",
-  });
-  const currentDate = formatISO(new Date(), {
-    representation: "date",
-  });
-  const nextMovieMonth = nextMovieDate.split("-").slice(0, 2).join("-");
-  const currentMonth = currentDate.split("-").slice(0, 2).join("-");
-  const { data, status } = useQuery(movieKeys.next(nextMovieDate));
-  const nextMovie = data?.[nextMovieMonth]?.[0];
-  const mostRecentMonth = Object.keys(data || {}).sort((a, b) =>
-    sortByISODate(a, b, "desc")
-  )[0];
+import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies";
+import { getBlurDataUrl } from "@/lib/utils";
+export default async function CurrentMoviePoster() {
+  const mostRecentMovie = await getMostRecentMovieOfTheWeek();
+  const backgroundImage = `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
+  const blurDataUrl = await getBlurDataUrl(
+    `https://image.tmdb.org/t/p/w500/${mostRecentMovie?.backdrop_path}`
+  );
 
-  const mostRecentMovie: MovieOfTheWeek = data?.[mostRecentMonth]?.[0];
-  console.log("nextMovie", mostRecentMovie);
   return (
     <div className="w-screen h-screen border flex items-center justify-center relative snap-start">
       <div className="relative w-full h-full">
         <Image
-          src={`https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`}
+          src={backgroundImage}
           alt={mostRecentMovie?.title}
           className="object-cover absolute inset-0"
           quality={100}
           priority
           fill
+          placeholder="blur"
+          blurDataURL={blurDataUrl}
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]"></div>

@@ -17,6 +17,7 @@ import {
   updateShortlistState,
 } from "../shortlist";
 import type { User } from "@prisma/client";
+import { MovieOfTheWeek } from "@/types/movie.type";
 import {
   countByKey,
   groupBy,
@@ -26,6 +27,22 @@ import {
   shuffle,
   sortByISODate,
 } from "../utils";
+
+export async function getMostRecentMovieOfTheWeek() {
+  const movies = await prisma.movie.findMany({
+    where: {
+      watchDate: {
+        not: null,
+      },
+    },
+    orderBy: {
+      watchDate: "desc",
+    },
+    take: 1,
+  });
+
+  return movies[0] as unknown as MovieOfTheWeek;
+}
 
 export async function getMoviesUntil(date: string) {
   console.log("getting movies until", date);
