@@ -14,7 +14,8 @@
     "generate-test-data": "tsx scripts/generateTestData.ts",
     "generate-tierlists": "tsx scripts/generateTierlists.ts",
     "add-tierlist-id": "tsx scripts/addTierlistId.ts",
-    "insert-imdb-id": "tsx scripts/insertImdbId.ts"
+    "insert-imdb-id": "tsx scripts/insertImdbId.ts",
+    "update-movies": "tsx scripts/updateMovies.ts"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.11",

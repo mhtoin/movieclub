@@ -76,4 +76,5 @@ data/journal/WiredTigerLog.0000000009
 data/journal/WiredTigerPreplog.0000000001
 data/journal/WiredTigerPreplog.0000000002
 
-
+dump/
+log.txt

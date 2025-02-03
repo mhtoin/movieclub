@@ -6,7 +6,8 @@ import {
   Tooltip,
 } from "../ui/Tooltip";
 import Image from "next/image";
-export default function CastPortrait({ cast }: { cast: Cast }) {
+import { CastMember } from "@/types/tmdb.type";
+export default function CastPortrait({ cast }: { cast: CastMember }) {
   return (
     <TooltipProvider>
       <Tooltip>

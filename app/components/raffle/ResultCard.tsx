@@ -16,6 +16,7 @@ import CastPortrait from "./CastPortrait";
 import CastPopover from "./CastPopover";
 import UserPortrait from "./UserPortrait";
 import TrailerLink from "./TrailerLink";
+import { CastMember } from "@/types/tmdb.type";
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
   const { data: movieData, status } = useMovieQuery(
@@ -163,10 +164,10 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
           </span>
           <div className="flex flex-row gap-2 justify-start items-center">
             {movieData?.credits?.cast?.slice(0, 6).map((cast) => {
-              return <CastPortrait cast={cast} key={cast.id} />;
+              return <CastPortrait cast={cast as CastMember} key={cast.id} />;
             })}
             {movieData?.credits?.cast && (
-              <CastPopover cast={movieData?.credits?.cast} />
+              <CastPopover cast={movieData?.credits?.cast as CastMember[]} />
             )}
           </div>
           <p className="text-foreground/50 ">{movie.overview}</p>

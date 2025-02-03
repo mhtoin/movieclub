@@ -52,17 +52,17 @@ model Shortlist {
 }
 
 model Movie {
-  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
   adult             Boolean
-  backdrop_path     String?     @default("")
+  backdrop_path     String?        @default("")
   genre_ids         Int[]
-  tmdbId            Int         @unique
+  tmdbId            Int            @unique
   imdbId            String?
   original_language String
   original_title    String
   overview          String
   popularity        Float
-  poster_path       String?     @default("")
+  poster_path       String?        @default("")
   release_date      String
   title             String
   video             Boolean
@@ -70,19 +70,79 @@ model Movie {
   vote_count        Int
   movieOfTheWeek    DateTime?
   watchDate         String?
-  user              User?       @relation(fields: [userId], references: [id])
-  shortlists        Shortlist[] @relation(fields: [shortlistIDs], references: [id])
-  shortlistIDs      String[]    @db.ObjectId
+  user              User?          @relation(fields: [userId], references: [id])
+  shortlists        Shortlist[]    @relation(fields: [shortlistIDs], references: [id])
+  shortlistIDs      String[]       @db.ObjectId
   ratings           Rating[]
   reviews           Review[]
-  userId            String?     @db.ObjectId
-  raffles           Raffle[]    @relation(fields: [raffleIDs], references: [id])
-  raffleIDs         String[]    @db.ObjectId
+  userId            String?        @db.ObjectId
+  raffles           Raffle[]       @relation(fields: [raffleIDs], references: [id])
+  raffleIDs         String[]       @db.ObjectId
   runtime           Int?
-  genres            Json?
+  genres            Genre[]
   tagline           String?
+  watchProviders    WatchProvider?
+  images            Images?
+  videos            Video[]
+  cast              CastMember[]
 
   @@map("movies")
+}
+
+type CastMember {
+  adult                Boolean
+  gender               Int
+  id                   Int
+  known_for_department String
+  name                 String
+  original_name        String
+  popularity           Float
+  profile_path         String?
+  cast_id              Int
+  character            String
+  credit_id            String
+  order                Int
+}
+
+type WatchProvider {
+  flatrate Provider[]
+  link     String
+}
+
+type Provider {
+  logo_path        String
+  provider_id      Int
+  provider_name    String
+  display_priority Int
+}
+
+type Images {
+  backdrops SingleImage[]
+  posters   SingleImage[]
+  logos     SingleImage[]
+}
+
+type SingleImage {
+  aspect_ratio Float
+  file_path    String
+  height       Int
+  width        Int
+  iso_639_1    String?
+  vote_average Float
+  vote_count   Int
+}
+
+type Video {
+  iso_639_1    String
+  iso_3166_1   String
+  name         String
+  key          String
+  site         String
+  size         Int
+  type         String
+  official     Boolean
+  published_at String
+  id           String
 }
 
 model Rating {
@@ -104,9 +164,9 @@ model Review {
   timestamp String
 }
 
-enum Genre {
-  id
-  name
+type Genre {
+  id   Int
+  name String
 }
 
 enum Trailer {

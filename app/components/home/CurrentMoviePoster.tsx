@@ -5,7 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { formatISO, nextWednesday } from "date-fns";
 import { Star, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
-
+import CastPortrait from "../raffle/CastPortrait";
+import CastPopover from "../raffle/CastPopover";
+import { MovieOfTheWeek } from "@/types/movie.type";
+import TrailerLink from "../raffle/TrailerLink";
+import Link from "next/link";
 export default function CurrentMoviePoster() {
   const nextMovieDate = formatISO(nextWednesday(new Date()), {
     representation: "date",
@@ -35,13 +39,13 @@ export default function CurrentMoviePoster() {
           fill
         />
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.5)_50%,rgba(0,0,0,0)_100%)]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]"></div>
 
         {/* Grid Overlay */}
         <div className="absolute inset-0 top-16 grid grid-cols-2 grid-rows-2 gap-4 p-4">
           {/* Top-left cell */}
           <div className="flex items-center justify-center p-4">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <p className="text-lg max-w-[500px] text-foreground/60">
                 {mostRecentMovie?.tagline}
               </p>
@@ -70,17 +74,57 @@ export default function CurrentMoviePoster() {
                   {mostRecentMovie?.popularity.toFixed(1)}
                 </span>
               </div>
+              <div className="flex flex-row gap-2">
+                {mostRecentMovie?.watchProviders?.flatrate?.map((provider) => {
+                  return (
+                    <Link
+                      href={mostRecentMovie?.watchProviders?.link}
+                      target="_blank"
+                      key={provider.provider_id}
+                      className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
+                    >
+                      <Image
+                        src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+                        alt={provider.provider_name}
+                        width={50}
+                        height={50}
+                        className="rounded-md"
+                      />
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Top-right cell */}
-          <div className="flex items-start justify-end p-4 ">
-            {/* Add your content here */}
+          <div className="flex items-center justify-start p-4 ">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-2xl font-bold">Cast</h1>
+              <div className="flex flex-row gap-2 justify-start items-center">
+                {mostRecentMovie?.cast?.slice(0, 6).map((cast) => {
+                  return <CastPortrait cast={cast} key={cast.id} />;
+                })}
+                {mostRecentMovie?.cast && (
+                  <CastPopover cast={mostRecentMovie?.cast} />
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Bottom-left cell */}
-          <div className="flex items-end justify-start p-4 ">
-            {/* Add your content here */}
+          <div className="flex items-start justify-center p-4 ">
+            <div className="flex flex-col gap-2">
+              {mostRecentMovie?.videos?.[0]?.key && (
+                <iframe
+                  className="w-full aspect-video rounded-md border border-accent/50 lg:h-[500px]"
+                  src={`https://www.youtube.com/embed/${mostRecentMovie.videos[0].key}`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
+            </div>
           </div>
 
           {/* Bottom-right cell */}
