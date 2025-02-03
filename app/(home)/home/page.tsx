@@ -26,12 +26,12 @@ export default async function HomePage() {
   queryClient.prefetchQuery(movieKeys.next(nextMovieDate));
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="flex flex-col justify-center gap-5 overflow-hidden overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
-        {/* @ts-expect-error Server Component */}
-        <CurrentMoviePoster />
+    <div className="flex flex-col justify-center gap-5 overflow-hidden overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
+      {/* @ts-expect-error Server Component */}
+      <CurrentMoviePoster />
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <ListView />
-      </div>
-    </HydrationBoundary>
+      </HydrationBoundary>
+    </div>
   );
 }
