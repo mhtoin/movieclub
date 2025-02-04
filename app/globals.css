@@ -1100,6 +1100,48 @@
       backdrop-filter: blur(10px);
     }
   }
+
+  .gallery {
+    --s: 50px; /* control the slanted part */
+    display: grid;
+    height: 100vh; /* Fill viewport height */
+    width: 100vw; /* Fill viewport width */
+    gap: 8px;
+    grid-auto-flow: column;
+    place-items: center;
+    margin: 0; /* Remove any default margins */
+    padding: 0; /* Remove any default padding */
+    overflow: hidden; /* Prevent scrolling */
+  }
+
+  .gallery-item {
+    --s: 50px;
+    width: 0;
+    min-width: calc(100% + var(--s));
+    height: 100vh; /* Fill viewport height */
+    object-fit: cover;
+    clip-path: polygon(var(--s) 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
+    cursor: pointer;
+    transition: 0.5s;
+  }
+
+  .gallery-item:hover {
+    width: 80vw; /* Increased width on hover for better visibility at full viewport */
+  }
+
+  .gallery-item:first-child {
+    --s: 50px;
+    min-width: calc(100% + var(--s) / 2);
+    place-self: start;
+    clip-path: polygon(0 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
+  }
+
+  .gallery-item:last-child {
+    --s: 50px;
+    min-width: calc(100% + var(--s) / 2);
+    place-self: end;
+    clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%);
+  }
 }
 
 /*

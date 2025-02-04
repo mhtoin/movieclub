@@ -1,35 +1,30 @@
-import { Star, TrendingUp, Users } from "lucide-react";
+import { MovieOfTheWeek } from "@/types/movie.type";
 import Image from "next/image";
+import UserPortrait from "../raffle/UserPortrait";
+import Link from "next/link";
+import { Star, TrendingUp, Users } from "lucide-react";
 import CastPortrait from "../raffle/CastPortrait";
 import CastPopover from "../raffle/CastPopover";
-import { MovieOfTheWeek } from "@/types/movie.type";
-import Link from "next/link";
-import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies";
-import { getBlurDataUrl } from "@/lib/utils";
 import { SiThemoviedatabase } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
-import UserPortrait from "../raffle/UserPortrait";
-export default async function CurrentMoviePoster() {
-  const mostRecentMovie = await getMostRecentMovieOfTheWeek();
-  const backgroundImage = `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
-  const blurDataUrl = await getBlurDataUrl(
-    `https://image.tmdb.org/t/p/w500/${mostRecentMovie?.backdrop_path}`
-  );
 
+export default function MovieGalleryItem({ movie }: { movie: MovieOfTheWeek }) {
+  const backgroundImage = movie?.images?.backdrops[0];
   return (
-    <div className="w-screen h-screen border flex items-center justify-center relative snap-start">
-      <div className="relative w-full h-full">
+    <div className="gallery-item snap-start" key={movie.id}>
+      <div className="relative h-full w-full">
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 z-50">
+          <h1 className="text-white text-2xl font-bold">
+            {new Date(movie.watchDate).toLocaleDateString("fi-FI")}
+          </h1>
+        </div>
         <Image
-          src={backgroundImage}
-          alt={mostRecentMovie?.title}
-          className="object-cover absolute inset-0"
-          quality={100}
-          priority
-          fill
-          placeholder="blur"
-          blurDataURL={blurDataUrl}
+          src={`https://image.tmdb.org/t/p/original/${backgroundImage?.file_path}`}
+          alt={movie.title}
+          width={backgroundImage?.width}
+          height={backgroundImage?.height}
+          className="object-cover h-full w-full absolute inset-0"
         />
-        {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]"></div>
 
         {/* Grid Overlay */}
@@ -38,41 +33,37 @@ export default async function CurrentMoviePoster() {
           <div className="flex items-center justify-center p-4">
             <div className="flex flex-col gap-4">
               <div className="flex flex-row gap-2">
-                <UserPortrait user={mostRecentMovie?.user} />
+                <UserPortrait user={movie?.user} />
               </div>
               <p className="text-lg max-w-[500px] text-foreground/60">
-                {mostRecentMovie?.tagline}
+                {movie?.tagline}
               </p>
-              <h1 className="text-5xl font-bold underline">
-                {mostRecentMovie?.title}
-              </h1>
+              <h1 className="text-5xl font-bold underline">{movie?.title}</h1>
               <div className="flex flex-row gap-2">
                 <p className="text-lg max-w-[500px] text-foreground/60">
-                  {new Date(mostRecentMovie?.watchDate).toLocaleDateString(
-                    "fi-FI"
-                  )}
+                  {new Date(movie?.watchDate).toLocaleDateString("fi-FI")}
                 </p>
                 <span>|</span>
                 <span className="text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
                   <Star className="w-6 h-6" />
-                  {mostRecentMovie?.vote_average.toFixed(1)}
+                  {movie?.vote_average.toFixed(1)}
                 </span>
                 <span>|</span>
                 <span className="text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
                   <Users className="w-6 h-6" />
-                  {mostRecentMovie?.vote_count}
+                  {movie?.vote_count}
                 </span>
                 <span>|</span>
                 <span className="text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
                   <TrendingUp className="w-6 h-6" />
-                  {mostRecentMovie?.popularity.toFixed(1)}
+                  {movie?.popularity.toFixed(1)}
                 </span>
               </div>
               <div className="flex flex-row gap-2">
-                {mostRecentMovie?.watchProviders?.flatrate?.map((provider) => {
+                {movie?.watchProviders?.flatrate?.map((provider) => {
                   return (
                     <Link
-                      href={mostRecentMovie?.watchProviders?.link}
+                      href={movie?.watchProviders?.link}
                       target="_blank"
                       key={provider.provider_id}
                       className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
@@ -96,12 +87,10 @@ export default async function CurrentMoviePoster() {
             <div className="flex flex-col gap-2">
               <h1 className="text-2xl font-bold">Cast</h1>
               <div className="flex flex-row gap-2 justify-start items-center">
-                {mostRecentMovie?.cast?.slice(0, 6).map((cast) => {
+                {movie?.cast?.slice(0, 6).map((cast) => {
                   return <CastPortrait cast={cast} key={cast.id} />;
                 })}
-                {mostRecentMovie?.cast && (
-                  <CastPopover cast={mostRecentMovie?.cast} />
-                )}
+                {movie?.cast && <CastPopover cast={movie?.cast} />}
               </div>
             </div>
           </div>
@@ -109,10 +98,10 @@ export default async function CurrentMoviePoster() {
           {/* Bottom-left cell */}
           <div className="flex items-start justify-center p-4 ">
             <div className="flex flex-col gap-2">
-              {mostRecentMovie?.videos?.[0]?.key && (
+              {movie?.videos?.[0]?.key && (
                 <iframe
                   className="w-full aspect-video rounded-md border border-accent/50 lg:h-[400px]"
-                  src={`https://www.youtube.com/embed/${mostRecentMovie.videos[0].key}`}
+                  src={`https://www.youtube.com/embed/${movie.videos[0].key}`}
                   title="YouTube video player"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -126,34 +115,32 @@ export default async function CurrentMoviePoster() {
             <div className="flex flex-col gap-2">
               <div className="flex flex-row gap-2">
                 <div className="text-sm bg-background/40 rounded-md px-2 py-1">
-                  {mostRecentMovie?.genres
-                    ?.map((genre) => genre.name)
-                    .join("/")}
+                  {movie?.genres?.map((genre) => genre.name).join("/")}
                 </div>
                 <div className="text-sm bg-background/40 rounded-md px-2 py-1">
-                  {mostRecentMovie?.runtime
-                    ? `${Math.floor(mostRecentMovie?.runtime / 60)}h ${
-                        mostRecentMovie?.runtime % 60
+                  {movie?.runtime
+                    ? `${Math.floor(movie?.runtime / 60)}h ${
+                        movie?.runtime % 60
                       }m`
                     : ""}
                 </div>
               </div>
               <div className="flex flex-row gap-2 rounded-md w-fit px-2 py-1">
                 <Link
-                  href={`https://www.themoviedb.org/movie/${mostRecentMovie?.tmdbId}`}
+                  href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
                   target="_blank"
                 >
                   <SiThemoviedatabase className="w-6 h-6 hover:text-accent" />
                 </Link>
                 <Link
-                  href={`https://www.imdb.com/title/${mostRecentMovie?.imdbId}`}
+                  href={`https://www.imdb.com/title/${movie?.imdbId}`}
                   target="_blank"
                 >
                   <FaImdb className="w-6 h-6 hover:text-accent" />
                 </Link>
               </div>
               <p className="text-lg max-w-[500px] text-foreground/60">
-                {mostRecentMovie?.overview}
+                {movie?.overview}
               </p>
             </div>
           </div>

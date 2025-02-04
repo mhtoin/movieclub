@@ -11,6 +11,7 @@ import { getCurrentSession } from "@/lib/authentication/session";
 import { redirect } from "next/navigation";
 import CurrentMoviePoster from "@/app/components/home/CurrentMoviePoster";
 import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies";
+import MoviesOfTheMonth from "@/app/components/home/MoviesOfTheMonth";
 
 export default async function HomePage() {
   const { user } = await getCurrentSession();
@@ -26,12 +27,11 @@ export default async function HomePage() {
   queryClient.prefetchQuery(movieKeys.next(nextMovieDate));
 
   return (
-    <div className="flex flex-col justify-center gap-5 overflow-hidden overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
+    <div className="h-full flex flex-col justify-center overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
       {/* @ts-expect-error Server Component */}
       <CurrentMoviePoster />
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <ListView />
-      </HydrationBoundary>
+      {/* @ts-expect-error Server Component */}
+      <MoviesOfTheMonth />
     </div>
   );
 }

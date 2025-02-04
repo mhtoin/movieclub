@@ -24,6 +24,23 @@ export interface Movie {
   runtime?: number;
   tagline?: string;
   videos?: Array<Trailer>;
+  images?: Images;
+}
+
+export interface Images {
+  backdrops: Array<Image>;
+  posters: Array<Image>;
+  logos: Array<Image>;
+}
+
+export interface Image {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string | null;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
 }
 
 export interface MovieOfTheWeek extends Movie {

@@ -38,10 +38,35 @@ export async function getMostRecentMovieOfTheWeek() {
     orderBy: {
       watchDate: "desc",
     },
+    include: {
+      user: true,
+    },
     take: 1,
   });
 
   return movies[0] as unknown as MovieOfTheWeek;
+}
+
+export async function getMoviesOfOfTheWeekByMonth() {
+  const movies = await prisma.movie.findMany({
+    where: {
+      watchDate: {
+        not: null,
+      },
+    },
+    orderBy: {
+      watchDate: "desc",
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  const grouped = groupBy(movies.slice(1), (movie: any) =>
+    movie?.watchDate.split("-").splice(0, 2).join("-")
+  );
+
+  return grouped;
 }
 
 export async function getMoviesUntil(date: string) {
