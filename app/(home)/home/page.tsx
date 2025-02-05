@@ -30,8 +30,6 @@ export default async function HomePage() {
     <div className="h-full flex flex-col justify-center overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
       {/* @ts-expect-error Server Component */}
       <CurrentMoviePoster />
-      {/* @ts-expect-error Server Component */}
-      <MoviesOfTheMonth />
     </div>
   );
 }
