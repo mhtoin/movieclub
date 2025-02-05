@@ -11,7 +11,9 @@ import { FaImdb } from "react-icons/fa";
 import UserPortrait from "../raffle/UserPortrait";
 export default async function CurrentMoviePoster() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek();
-  const backgroundImage = `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
+  const backgroundImage = mostRecentMovie?.images?.backdrops[0]?.file_path
+    ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
+    : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
   const blurDataUrl = await getBlurDataUrl(
     `https://image.tmdb.org/t/p/w500/${mostRecentMovie?.backdrop_path}`
   );
