@@ -39,7 +39,7 @@ export default async function CurrentMoviePoster() {
         {/* Grid Overlay */}
         <div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
           <div className="flex flex-col md:flex-row md:gap-12 w-full h-full justify-evenly md:items-center ">
-            <div className="flex items-center justify-center p-4  w-1/2 h-full">
+            <div className="flex items-center justify-start md:justify-center p-4 w-full md:w-1/2 h-full">
               <div className="flex flex-col gap-4 justify-center ">
                 <div className="flex flex-row gap-2 ">
                   <UserPortrait user={mostRecentMovie?.user} />
@@ -98,7 +98,7 @@ export default async function CurrentMoviePoster() {
             </div>
 
             {/* Top-right cell */}
-            <div className="flex items-center justify-start p-4 w-1/2 h-full">
+            <div className="flex items-center justify-start p-4 md:w-1/2 h-full">
               <div className="flex flex-col gap-2">
                 <h1 className="text-xl md:text-2xl font-bold">Cast</h1>
                 <div className="flex flex-row gap-2 justify-start items-center">
@@ -115,7 +115,7 @@ export default async function CurrentMoviePoster() {
 
           {/* Bottom-left cell */}
           <div className="flex flex-col md:flex-row gap-12 w-full h-full md:justify-evenly ">
-            <div className="hidden md:flex items-start justify-center p-4 w-1/2 h-full">
+            <div className="hidden md:flex items-start justify-center p-4 w-full md:w-1/2 h-full">
               <div className="flex flex-col gap-2 w-full h-full items-center">
                 {mostRecentMovie?.videos?.[0]?.key && (
                   <iframe
@@ -130,7 +130,7 @@ export default async function CurrentMoviePoster() {
             </div>
 
             {/* Bottom-right cell */}
-            <div className="flex items-start justify-start p-4  w-1/2">
+            <div className="flex items-start justify-start p-4 w-full md:w-1/2">
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row gap-2">
                   <div className="text-sm bg-background/40 rounded-md px-2 py-1">
