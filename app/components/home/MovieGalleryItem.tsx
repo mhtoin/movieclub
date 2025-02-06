@@ -60,7 +60,7 @@ export default function MovieGalleryItem({ movie }: { movie: MovieOfTheWeek }) {
                 </span>
               </div>
               <div className="flex flex-row gap-2">
-                {movie?.watchProviders?.flatrate?.map((provider) => {
+                {movie?.watchProviders?.providers?.map((provider) => {
                   return (
                     <Link
                       href={movie?.watchProviders?.link}
