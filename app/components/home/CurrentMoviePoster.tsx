@@ -18,6 +18,8 @@ export default async function CurrentMoviePoster() {
     `https://image.tmdb.org/t/p/w500/${mostRecentMovie?.backdrop_path}`
   );
 
+  console.log(mostRecentMovie);
+
   return (
     <div className="w-screen h-screen border flex items-center justify-center relative snap-start">
       <div className="relative w-full h-full">
@@ -36,10 +38,10 @@ export default async function CurrentMoviePoster() {
 
         {/* Grid Overlay */}
         <div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
-          <div className="flex flex-col md:flex-row md:gap-12 w-full h-full justify-evenly md:items-center">
-            <div className="flex items-center justify-center p-4">
-              <div className="flex flex-col gap-4 w-full h-full">
-                <div className="flex flex-row gap-2">
+          <div className="flex flex-col md:flex-row md:gap-12 w-full h-full justify-evenly md:items-center ">
+            <div className="flex items-center justify-center p-4  w-1/2 h-full">
+              <div className="flex flex-col gap-4 justify-center ">
+                <div className="flex flex-row gap-2 ">
                   <UserPortrait user={mostRecentMovie?.user} />
                 </div>
                 <p className="text-lg max-w-[500px] text-foreground/60">
@@ -71,7 +73,7 @@ export default async function CurrentMoviePoster() {
                   </span>
                 </div>
                 <div className="flex flex-row gap-2">
-                  {mostRecentMovie?.watchProviders?.flatrate?.map(
+                  {mostRecentMovie?.watchProviders?.providers?.map(
                     (provider) => {
                       return (
                         <Link
@@ -96,7 +98,7 @@ export default async function CurrentMoviePoster() {
             </div>
 
             {/* Top-right cell */}
-            <div className="flex items-center justify-start p-4 ">
+            <div className="flex items-center justify-start p-4 w-1/2 h-full">
               <div className="flex flex-col gap-2">
                 <h1 className="text-xl md:text-2xl font-bold">Cast</h1>
                 <div className="flex flex-row gap-2 justify-start items-center">
@@ -112,12 +114,12 @@ export default async function CurrentMoviePoster() {
           </div>
 
           {/* Bottom-left cell */}
-          <div className="flex flex-col md:flex-row gap-12 w-full h-full md:justify-evenly">
-            <div className="hidden md:flex items-start justify-center p-4 ">
-              <div className="flex flex-col gap-2">
+          <div className="flex flex-col md:flex-row gap-12 w-full h-full md:justify-evenly ">
+            <div className="hidden md:flex items-start justify-center p-4 w-1/2 h-full">
+              <div className="flex flex-col gap-2 w-full h-full items-center">
                 {mostRecentMovie?.videos?.[0]?.key && (
                   <iframe
-                    className="w-full aspect-video rounded-md border border-accent/50 lg:h-[400px]"
+                    className="aspect-video rounded-lg h-1/2"
                     src={`https://www.youtube.com/embed/${mostRecentMovie.videos[0].key}`}
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -128,7 +130,7 @@ export default async function CurrentMoviePoster() {
             </div>
 
             {/* Bottom-right cell */}
-            <div className="flex items-start justify-start p-4">
+            <div className="flex items-start justify-start p-4  w-1/2">
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row gap-2">
                   <div className="text-sm bg-background/40 rounded-md px-2 py-1">

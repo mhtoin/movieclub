@@ -194,6 +194,9 @@ async function generateTestData() {
         overview: data.overview,
         imdbId: data.external_ids?.imdb_id,
         genre_ids: data.genres?.map((g: any) => g.id) || [],
+        runtime: data.runtime,
+        genres: data.genres,
+        tagline: data.tagline,
       },
     });
 
@@ -268,6 +271,9 @@ async function generateTestData() {
           watchDate: watchDates[index],
           userId: randomUser.id,
           genre_ids: data.genres?.map((g: any) => g.id) || [],
+          runtime: data.runtime,
+          genres: data.genres,
+          tagline: data.tagline,
         },
       });
     } catch (error) {

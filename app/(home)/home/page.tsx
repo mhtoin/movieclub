@@ -26,10 +26,19 @@ export default async function HomePage() {
   });
   queryClient.prefetchQuery(movieKeys.next(nextMovieDate));
 
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <div className="h-full flex flex-col justify-center overscroll-none overflow-y-auto snap-y snap-mandatory scroll-smooth">
-      {/* @ts-expect-error Server Component */}
-      <CurrentMoviePoster />
+    <div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
+      <div className="snap-start min-h-screen shrink-0">
+        {/* @ts-expect-error Server Component */}
+        <CurrentMoviePoster />
+      </div>
+      <div className="snap-start min-h-screen shrink-0">
+        <HydrationBoundary state={dehydratedState}>
+          <ListView />
+        </HydrationBoundary>
+      </div>
     </div>
   );
 }

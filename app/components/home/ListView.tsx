@@ -87,11 +87,9 @@ export default function ListView() {
     return () => observer.disconnect();
   }, [selectedDate, dates]);
 
-  console.log("nextMovie", nextMovie);
-  console.log("mostRecentMovie", mostRecentMovie);
   return (
-    <div className="flex flex-col gap-4 overflow-hidden max-h-[100dvh] overscroll-none">
-      <div className="flex justify-center">
+    <div className="flex flex-col gap-4 min-h-screen w-[95%] mx-auto">
+      <div className="flex justify-center sticky top-0 bg-background/80 backdrop-blur-sm z-10 py-4">
         <DateSelect
           dates={dates}
           setSelectedDate={handleDateChange}

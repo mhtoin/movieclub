@@ -153,6 +153,7 @@ export interface WatchProviders {
     [key: string]: {
       link: string;
       flatrate: Provider[];
+      free: Provider[];
     };
   };
 }

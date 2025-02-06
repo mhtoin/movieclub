@@ -57,5 +57,5 @@ export interface MovieOfTheWeek extends Movie {
 
 export interface WatchProviders {
   link: string;
-  flatrate: Array<Provider>;
+  providers: Array<Provider>;
 }

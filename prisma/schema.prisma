@@ -105,8 +105,8 @@ type CastMember {
 }
 
 type WatchProvider {
-  flatrate Provider[]
-  link     String
+  providers Provider[]
+  link      String
 }
 
 type Provider {
