@@ -1102,9 +1102,9 @@
   }
 
   .gallery {
-    --s: 50px; /* control the slanted part */
+    --s: 0px; /* control the slanted part */
     display: grid;
-    height: 100vh; /* Fill viewport height */
+    height: 80vh; /* Fill viewport height */
     width: 100vw; /* Fill viewport width */
     gap: 8px;
     grid-auto-flow: column;
@@ -1115,10 +1115,10 @@
   }
 
   .gallery-item {
-    --s: 50px;
+    --s: 0px;
     width: 0;
     min-width: calc(100% + var(--s));
-    height: 100vh; /* Fill viewport height */
+    height: 80vh; /* Fill viewport height */
     object-fit: cover;
     clip-path: polygon(var(--s) 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
     cursor: pointer;
@@ -1130,16 +1130,15 @@
   }
 
   .gallery-item:first-child {
-    --s: 50px;
+    --s: 0px;
     min-width: calc(100% + var(--s) / 2);
-    place-self: start;
     clip-path: polygon(0 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
   }
 
   .gallery-item:last-child {
-    --s: 50px;
+    --s: 0px;
     min-width: calc(100% + var(--s) / 2);
-    place-self: end;
+
     clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%);
   }
 }

@@ -34,11 +34,13 @@ export default async function HomePage() {
         {/* @ts-expect-error Server Component */}
         <CurrentMoviePoster />
       </div>
-      <div className="snap-start min-h-screen shrink-0">
+      {/* @ts-expect-error Server Component */}
+      <MoviesOfTheMonth />
+      {/*<div className="snap-start min-h-screen shrink-0">
         <HydrationBoundary state={dehydratedState}>
           <ListView />
         </HydrationBoundary>
-      </div>
+      </div>*/}
     </div>
   );
 }

@@ -88,7 +88,7 @@ export default function ListView() {
   }, [selectedDate, dates]);
 
   return (
-    <div className="flex flex-col gap-4 min-h-screen w-[95%] mx-auto">
+    <div className="flex flex-col gap-4 h-[90%] w-[90%]  mx-auto border">
       <div className="flex justify-center sticky top-0 bg-background/80 backdrop-blur-sm z-10 py-4">
         <DateSelect
           dates={dates}
