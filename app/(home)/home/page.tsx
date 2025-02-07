@@ -29,7 +29,7 @@ export default async function HomePage() {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
+    <div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth relative">
       <div className="snap-start min-h-screen shrink-0">
         {/* @ts-expect-error Server Component */}
         <CurrentMoviePoster />

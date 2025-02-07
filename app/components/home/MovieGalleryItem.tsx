@@ -39,35 +39,35 @@ export default async function MovieGalleryItem({
 
         {/* Grid Overlay */}
         <div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
-          <div className="flex flex-col @2xl:flex-row @2xl:gap-12 w-full h-full justify-evenly @2xl:items-center ">
-            <div className="flex items-center justify-start @2xl:justify-center p-4 w-full @2xl:w-1/2 h-full">
+          <div className="flex flex-col @4xl:flex-row @4xl:gap-12 w-full h-full justify-evenly @4xl:items-center ">
+            <div className="flex items-center justify-start @4xl:justify-center p-4 w-full @4xl:w-1/2 h-full">
               <div className="flex flex-col gap-4 justify-center">
                 <div className="flex flex-row gap-2 ">
                   <UserPortrait user={movie?.user} />
                 </div>
-                <p className="text-lg @2xl:text-xl max-w-[500px] text-foreground/60">
+                <p className="text-lg @4xl:text-xl max-w-[500px] text-foreground/60">
                   {movie?.tagline}
                 </p>
-                <h1 className="text-2xl @2xl:text-5xl font-bold underline">
+                <h1 className="text-2xl @4xl:text-5xl font-bold underline">
                   {movie?.title}
                 </h1>
                 <div className="flex flex-row gap-2 flex-wrap items-center">
-                  <p className="text-sm @2xl:text-lg max-w-[500px] text-foreground/60">
+                  <p className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60">
                     {new Date(movie?.watchDate).toLocaleDateString("fi-FI")}
                   </p>
                   <span>|</span>
-                  <span className="text-sm @2xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
-                    <Star className="w-4 h-4 @2xl:w-6 @2xl:h-6" />
+                  <span className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
+                    <Star className="w-4 h-4 @4xl:w-6 @4xl:h-6" />
                     {movie?.vote_average.toFixed(1)}
                   </span>
                   <span>|</span>
-                  <span className="text-sm @2xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
-                    <Users className="w-4 h-4 @2xl:w-6 @2xl:h-6" />
+                  <span className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
+                    <Users className="w-4 h-4 @4xl:w-6 @4xl:h-6" />
                     {movie?.vote_count}
                   </span>
                   <span>|</span>
-                  <span className="text-sm @2xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
-                    <TrendingUp className="w-4 h-4 @2xl:w-6 @2xl:h-6" />
+                  <span className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
+                    <TrendingUp className="w-4 h-4 @4xl:w-6 @4xl:h-6" />
                     {movie?.popularity.toFixed(1)}
                   </span>
                 </div>
@@ -85,7 +85,7 @@ export default async function MovieGalleryItem({
                           alt={provider.provider_name}
                           width={50}
                           height={50}
-                          className="rounded-md w-8 h-8 @2xl:w-10 @2xl:h-10"
+                          className="rounded-md w-8 h-8 @4xl:w-10 @4xl:h-10"
                         />
                       </Link>
                     );
@@ -95,9 +95,9 @@ export default async function MovieGalleryItem({
             </div>
 
             {/* Top-right cell */}
-            <div className="flex items-center justify-start p-4 @2xl:w-1/2 h-full">
+            <div className="flex items-center justify-start p-4 @4xl:w-1/2 h-full">
               <div className="flex flex-col gap-2">
-                <h1 className="text-xl @2xl:text-2xl font-bold">Cast</h1>
+                <h1 className="text-xl @4xl:text-2xl font-bold">Cast</h1>
                 <div className="flex flex-row gap-2 justify-start items-center">
                   {movie?.cast?.slice(0, 6).map((cast) => {
                     return <CastPortrait cast={cast} key={cast.id} />;
@@ -109,8 +109,8 @@ export default async function MovieGalleryItem({
           </div>
 
           {/* Bottom-left cell */}
-          <div className="flex flex-col @2xl:flex-row gap-12 w-full h-full @2xl:justify-evenly ">
-            <div className="hidden @2xl:flex items-start justify-center p-4 w-full @2xl:w-1/2 h-full">
+          <div className="flex flex-col @4xl:flex-row gap-12 w-full h-full @4xl:justify-evenly ">
+            <div className="hidden @4xl:flex items-start justify-center p-4 w-full @4xl:w-1/2 h-full">
               <div className="flex flex-col gap-2 w-full h-full items-center">
                 {movie?.videos?.[0]?.key && (
                   <iframe
@@ -126,7 +126,7 @@ export default async function MovieGalleryItem({
             </div>
 
             {/* Bottom-right cell */}
-            <div className="flex items-start justify-start p-4 w-full @2xl:w-1/2">
+            <div className="flex items-start justify-start p-4 w-full @4xl:w-1/2">
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row gap-2">
                   <div className="text-sm bg-background/40 rounded-md px-2 py-1">
@@ -145,16 +145,16 @@ export default async function MovieGalleryItem({
                     href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
                     target="_blank"
                   >
-                    <SiThemoviedatabase className="w-4 h-4 @2xl:w-6 @2xl:h-6 hover:text-accent" />
+                    <SiThemoviedatabase className="w-4 h-4 @4xl:w-6 @4xl:h-6 hover:text-accent" />
                   </Link>
                   <Link
                     href={`https://www.imdb.com/title/${movie?.imdbId}`}
                     target="_blank"
                   >
-                    <FaImdb className="w-4 h-4 @2xl:w-6 @2xl:h-6 hover:text-accent" />
+                    <FaImdb className="w-4 h-4 @4xl:w-6 @4xl:h-6 hover:text-accent" />
                   </Link>
                 </div>
-                <p className="text-sm @2xl:text-lg max-w-[500px] text-foreground/60 px-2">
+                <p className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60 px-2">
                   {movie?.overview}
                 </p>
               </div>
