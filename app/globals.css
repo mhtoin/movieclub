@@ -1126,7 +1126,7 @@
   }
 
   .gallery-item:hover {
-    width: 80vw; /* Increased width on hover for better visibility at full viewport */
+    width: 98vw; /* Increased width on hover for better visibility at full viewport */
   }
 
   .gallery-item:first-child {
