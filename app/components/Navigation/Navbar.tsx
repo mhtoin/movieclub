@@ -30,7 +30,7 @@ export const NavBar = ({
   if (isMobile) {
     return (
       <div
-        className={`min-w-screen w-screen flex items-center justify-center p-2 z-50 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+        className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
           isScrolled
             ? "bg-background/80 backdrop-blur-md border-b"
             : "bg-transparent"
@@ -55,7 +55,7 @@ export const NavBar = ({
   }
   return (
     <div
-      className={`min-w-screen w-screen flex items-center justify-center p-2 z-50 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+      className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
         isScrolled
           ? "bg-background/80 backdrop-blur-md border-b"
           : "bg-transparent"

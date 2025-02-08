@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import CurrentMoviePoster from "@/app/components/home/CurrentMoviePoster";
 import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies";
 import MoviesOfTheMonth from "@/app/components/home/MoviesOfTheMonth";
+import { Suspense } from "react";
 
 export default async function HomePage() {
   const { user } = await getCurrentSession();
@@ -31,11 +32,15 @@ export default async function HomePage() {
   return (
     <div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth relative">
       <div className="snap-start min-h-screen shrink-0">
-        {/* @ts-expect-error Server Component */}
-        <CurrentMoviePoster />
+        <Suspense fallback={null}>
+          {/* @ts-expect-error Server Component */}
+          <CurrentMoviePoster />
+        </Suspense>
       </div>
-      {/* @ts-expect-error Server Component */}
-      <MoviesOfTheMonth />
+      <Suspense fallback={null}>
+        {/* @ts-expect-error Server Component */}
+        <MoviesOfTheMonth />
+      </Suspense>
       {/*<div className="snap-start min-h-screen shrink-0">
         <HydrationBoundary state={dehydratedState}>
           <ListView />

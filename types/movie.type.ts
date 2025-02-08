@@ -41,6 +41,7 @@ export interface Image {
   vote_average: number;
   vote_count: number;
   width: number;
+  blurDataUrl: string;
 }
 
 export interface MovieOfTheWeek extends Movie {

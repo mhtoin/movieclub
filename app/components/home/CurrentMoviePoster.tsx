@@ -9,29 +9,32 @@ import { getBlurDataUrl } from "@/lib/utils";
 import { SiThemoviedatabase } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
 import UserPortrait from "../raffle/UserPortrait";
+import { isServerMobile } from "@/lib/isServerMobile";
+
 export default async function CurrentMoviePoster() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek();
+  const isMobile = await isServerMobile();
   const backgroundImage = mostRecentMovie?.images?.backdrops[0]?.file_path
     ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
     : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
-  const blurDataUrl = await getBlurDataUrl(
-    `https://image.tmdb.org/t/p/w500/${mostRecentMovie?.backdrop_path}`
-  );
-
-  console.log(mostRecentMovie);
+  const posterImage = mostRecentMovie?.images?.posters[0]?.file_path
+    ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.posters[0]?.file_path}`
+    : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.poster_path}`;
+  const blurDataUrl = mostRecentMovie?.images?.backdrops[0]?.blurDataUrl;
+  const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl;
 
   return (
     <div className="w-screen h-screen border flex items-center justify-center relative snap-start">
       <div className="relative w-full h-full">
         <Image
-          src={backgroundImage}
+          src={isMobile ? posterImage : backgroundImage}
           alt={mostRecentMovie?.title}
           className="object-cover absolute inset-0"
           quality={100}
           priority
           fill
           placeholder="blur"
-          blurDataURL={blurDataUrl}
+          blurDataURL={isMobile ? posterBlurDataUrl : blurDataUrl}
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]"></div>
@@ -122,8 +125,8 @@ export default async function CurrentMoviePoster() {
                     className="aspect-video rounded-lg h-1/2"
                     src={`https://www.youtube.com/embed/${mostRecentMovie.videos[0].key}`}
                     title="YouTube video player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
+                    loading="lazy"
                   />
                 )}
               </div>

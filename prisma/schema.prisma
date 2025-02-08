@@ -130,6 +130,7 @@ type SingleImage {
   iso_639_1    String?
   vote_average Float
   vote_count   Int
+  blurDataUrl  String?
 }
 
 type Video {

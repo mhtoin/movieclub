@@ -1104,9 +1104,9 @@
   .gallery {
     --s: 0px; /* control the slanted part */
     display: grid;
-    height: 80vh; /* Fill viewport height */
+    height: 100vh; /* Fill viewport height */
     width: 100vw; /* Fill viewport width */
-    gap: 8px;
+    gap: 0px;
     grid-auto-flow: column;
     place-items: center;
     margin: 0; /* Remove any default margins */
@@ -1118,14 +1118,14 @@
     --s: 0px;
     width: 0;
     min-width: calc(100% + var(--s));
-    height: 80vh; /* Fill viewport height */
+    height: 100vh; /* Fill viewport height */
     object-fit: cover;
     clip-path: polygon(var(--s) 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
     cursor: pointer;
     transition: 0.5s;
   }
 
-  .gallery-item:hover {
+  .gallery-item[data-expanded="true"] {
     width: 98vw; /* Increased width on hover for better visibility at full viewport */
   }
 
@@ -1140,6 +1140,46 @@
     min-width: calc(100% + var(--s) / 2);
 
     clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  @media (max-width: 768px) {
+    .gallery {
+      --s: 0px;
+      grid-auto-flow: row;
+      height: 100vh;
+      width: 100%;
+      overflow-y: auto;
+    }
+
+    .gallery-item {
+      --s: 0px;
+      width: 100vw;
+      height: 0;
+      min-height: calc(100% + var(--s));
+      min-width: auto;
+      clip-path: polygon(
+        0 var(--s),
+        0 100%,
+        100% calc(100% - var(--s)),
+        100% 0
+      );
+    }
+
+    .gallery-item[data-expanded="true"] {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .gallery-item:first-child {
+      --s: 0px;
+      min-height: calc(100% + var(--s) / 2);
+      clip-path: polygon(0 0, 0 100%, 100% calc(100% - var(--s)), 100% 0);
+    }
+
+    .gallery-item:last-child {
+      --s: 0px;
+      min-height: calc(100% + var(--s) / 2);
+      clip-path: polygon(0 var(--s), 0 100%, 100% 100%, 100% 0);
+    }
   }
 }
 

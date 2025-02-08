@@ -5,8 +5,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip";
+import { cn } from "@/lib/utils";
 
-export default function UserPortrait({ user }: { user: User }) {
+export default function UserPortrait({
+  user,
+  className,
+}: {
+  user: User;
+  className?: string;
+}) {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -16,7 +23,7 @@ export default function UserPortrait({ user }: { user: User }) {
             alt={user?.name}
             width={40}
             height={40}
-            className="rounded-full object-cover"
+            className={cn("rounded-full object-cover", className)}
           />
         </TooltipTrigger>
         <TooltipContent className="bg-card">
