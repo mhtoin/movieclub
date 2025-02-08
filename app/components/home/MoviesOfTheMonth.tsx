@@ -11,7 +11,10 @@ export default async function MoviesOfTheMonth() {
       {Object.keys(movies).map((month) => {
         const moviesOfTheMonth = movies[month];
         return (
-          <div className="gallery snap-start min-h-screen shrink-0" key={month}>
+          <div
+            className="gallery snap-start min-h-screen shrink-0 listview-section"
+            key={month}
+          >
             {moviesOfTheMonth.map(async (movie: MovieOfTheWeek) => {
               return <MovieGalleryItem movie={movie} key={movie.id} />;
             })}
