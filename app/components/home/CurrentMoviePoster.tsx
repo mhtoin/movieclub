@@ -15,11 +15,11 @@ export default async function CurrentMoviePoster() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek();
   const isMobile = await isServerMobile();
   const backgroundImage = mostRecentMovie?.images?.backdrops[0]?.file_path
-    ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
-    : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
+    ? `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
+    : `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.backdrop_path}`;
   const posterImage = mostRecentMovie?.images?.posters[0]?.file_path
-    ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.posters[0]?.file_path}`
-    : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.poster_path}`;
+    ? `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.images?.posters[0]?.file_path}`
+    : `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.poster_path}`;
   const blurDataUrl = mostRecentMovie?.images?.backdrops[0]?.blurDataUrl;
   const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl;
 
