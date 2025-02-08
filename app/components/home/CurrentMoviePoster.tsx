@@ -30,7 +30,7 @@ export default async function CurrentMoviePoster() {
           src={isMobile ? posterImage : backgroundImage}
           alt={mostRecentMovie?.title}
           className="object-cover absolute inset-0"
-          quality={100}
+          quality={75}
           priority
           fill
           placeholder="blur"
