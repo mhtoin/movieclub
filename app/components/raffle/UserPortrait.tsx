@@ -23,6 +23,8 @@ export default function UserPortrait({
             alt={user?.name}
             width={40}
             height={40}
+            quality={75}
+            priority={false}
             className={cn("rounded-full object-cover", className)}
           />
         </TooltipTrigger>
