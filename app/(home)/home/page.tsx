@@ -37,10 +37,7 @@ export default async function HomePage() {
           <CurrentMoviePoster />
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        {/* @ts-expect-error Server Component */}
-        <MoviesOfTheMonth />
-      </Suspense>
+
       {/*<div className="snap-start min-h-screen shrink-0">
         <HydrationBoundary state={dehydratedState}>
           <ListView />
