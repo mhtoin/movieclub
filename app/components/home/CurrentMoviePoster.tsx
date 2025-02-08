@@ -119,17 +119,7 @@ export default async function CurrentMoviePoster() {
           {/* Bottom-left cell */}
           <div className="flex flex-col md:flex-row gap-12 w-full h-full md:justify-evenly ">
             <div className="hidden md:flex items-start justify-center p-4 w-full md:w-1/2 h-full">
-              <div className="flex flex-col gap-2 w-full h-full items-center">
-                {mostRecentMovie?.videos?.[0]?.key && (
-                  <iframe
-                    className="aspect-video rounded-lg h-1/2"
-                    src={`https://www.youtube.com/embed/${mostRecentMovie.videos[0].key}`}
-                    title="YouTube video player"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                )}
-              </div>
+              <div className="flex flex-col gap-2 w-full h-full items-center"></div>
             </div>
 
             {/* Bottom-right cell */}
