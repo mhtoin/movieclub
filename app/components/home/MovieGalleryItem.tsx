@@ -53,7 +53,7 @@ export default function MovieGalleryItem({ movie }: { movie: MovieOfTheWeek }) {
           src={backgroundImage}
           alt={movie?.title}
           className="object-cover absolute inset-0"
-          quality={75}
+          quality={50}
           fill
           placeholder="blur"
           blurDataURL={movie?.images?.backdrops[0]?.blurDataUrl}

@@ -2,10 +2,8 @@ import { Star, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
 import CastPortrait from "../raffle/CastPortrait";
 import CastPopover from "../raffle/CastPopover";
-import { MovieOfTheWeek } from "@/types/movie.type";
 import Link from "next/link";
 import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies";
-import { getBlurDataUrl } from "@/lib/utils";
 import { SiThemoviedatabase } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
 import UserPortrait from "../raffle/UserPortrait";
@@ -15,11 +13,11 @@ export default async function CurrentMoviePoster() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek();
   const isMobile = await isServerMobile();
   const backgroundImage = mostRecentMovie?.images?.backdrops[0]?.file_path
-    ? `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
-    : `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.backdrop_path}`;
+    ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
+    : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
   const posterImage = mostRecentMovie?.images?.posters[0]?.file_path
-    ? `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.images?.posters[0]?.file_path}`
-    : `https://image.tmdb.org/t/p/w1280/${mostRecentMovie?.poster_path}`;
+    ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.posters[0]?.file_path}`
+    : `https://image.tmdb.org/t/p/original/${mostRecentMovie?.poster_path}`;
   const blurDataUrl = mostRecentMovie?.images?.backdrops[0]?.blurDataUrl;
   const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl;
 
@@ -30,7 +28,7 @@ export default async function CurrentMoviePoster() {
           src={isMobile ? posterImage : backgroundImage}
           alt={mostRecentMovie?.title}
           className="object-cover absolute inset-0"
-          quality={75}
+          quality={50}
           priority={false}
           fill
           placeholder="blur"
@@ -119,7 +117,17 @@ export default async function CurrentMoviePoster() {
           {/* Bottom-left cell */}
           <div className="flex flex-col md:flex-row gap-12 w-full h-full md:justify-evenly ">
             <div className="hidden md:flex items-start justify-center p-4 w-full md:w-1/2 h-full">
-              <div className="flex flex-col gap-2 w-full h-full items-center"></div>
+              <div className="flex flex-col gap-2 w-full h-full items-center">
+                {mostRecentMovie?.videos?.[0]?.key && (
+                  <iframe
+                    className="aspect-video rounded-lg h-1/2"
+                    src={`https://www.youtube.com/embed/${mostRecentMovie.videos[0].key}`}
+                    title="YouTube video player"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                )}
+              </div>
             </div>
 
             {/* Bottom-right cell */}
