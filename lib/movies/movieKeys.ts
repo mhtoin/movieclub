@@ -1,5 +1,9 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getMoviesOfTheWeek, getMoviesUntil } from "./movies";
+import {
+  getMoviesOfOfTheWeekByMonth,
+  getMoviesOfTheWeek,
+  getMoviesUntil,
+} from "./movies";
 
 export const movieKeys = {
   all: () =>
@@ -17,5 +21,10 @@ export const movieKeys = {
     queryOptions({
       queryKey: ["moviesOfTheWeek", date],
       queryFn: () => getMoviesUntil(date),
+    }),
+  pastMovies: () =>
+    queryOptions({
+      queryKey: ["pastMovies"],
+      queryFn: () => getMoviesOfOfTheWeekByMonth(),
     }),
 };

@@ -27,6 +27,7 @@ import {
   shuffle,
   sortByISODate,
 } from "../utils";
+import { MoviesOfTheWeekByMonth } from "@/types/query.type";
 
 export async function getMostRecentMovieOfTheWeek() {
   const movies = await prisma.movie.findMany({
@@ -62,8 +63,9 @@ export async function getMoviesOfOfTheWeekByMonth() {
     },
   });
 
-  const grouped = groupBy(movies.slice(1), (movie: any) =>
-    movie?.watchDate.split("-").splice(0, 2).join("-")
+  const grouped: MoviesOfTheWeekByMonth = groupBy(
+    movies.slice(1),
+    (movie: any) => movie?.watchDate.split("-").splice(0, 2).join("-")
   );
 
   return grouped;
