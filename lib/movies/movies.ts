@@ -48,7 +48,7 @@ export async function getMostRecentMovieOfTheWeek() {
   return movies[0] as unknown as MovieOfTheWeek;
 }
 
-export async function getMoviesOfOfTheWeekByMonth() {
+export async function getMoviesOfOfTheWeekByMonthGrouped() {
   const movies = await prisma.movie.findMany({
     where: {
       watchDate: {
@@ -69,6 +69,36 @@ export async function getMoviesOfOfTheWeekByMonth() {
   );
 
   return grouped;
+}
+
+export async function getMoviesOfTheWeekByMonth(month: string) {
+  const currentMonth = format(new Date(), "yyyy-MM");
+  if (!month) {
+    month = currentMonth;
+  }
+  const movies = await prisma.movie.findMany({
+    where: {
+      watchDate: {
+        contains: month,
+      },
+    },
+    orderBy: {
+      watchDate: "desc",
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  return currentMonth === month
+    ? {
+        month,
+        movies: movies.slice(1),
+      }
+    : {
+        month,
+        movies: movies,
+      };
 }
 
 export async function getMoviesUntil(date: string) {

@@ -286,3 +286,8 @@ export async function getAllShortlistsGroupedById(): Promise<ShortlistsById> {
     return {};
   }
 }
+
+export const getMoviesOfTheMonth = async (month: string) => {
+  const response = await fetch(`${getBaseURL()}/api/movies?month=${month}`);
+  return await response.json();
+};
