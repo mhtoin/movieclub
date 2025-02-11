@@ -29,7 +29,7 @@ export default async function CurrentMoviePoster() {
           alt={mostRecentMovie?.title}
           className="object-cover absolute inset-0"
           quality={50}
-          priority={false}
+          priority={true}
           fill
           placeholder="blur"
           blurDataURL={isMobile ? posterBlurDataUrl : blurDataUrl}
