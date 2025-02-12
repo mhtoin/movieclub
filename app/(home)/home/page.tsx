@@ -16,6 +16,7 @@ import {
 } from "@/lib/movies/movies";
 import MoviesOfTheMonth from "@/app/components/home/MoviesOfTheMonth";
 import { Suspense } from "react";
+import WatchDate from "@/app/components/home/WatchDate";
 
 export default async function HomePage() {
   const queryClient = getQueryClient();
@@ -46,11 +47,11 @@ export default async function HomePage() {
           <MoviesOfTheMonth />
         </Suspense>
       </HydrationBoundary>
-      {/*<div className="snap-start min-h-screen shrink-0">
-        
-          <ListView />
-        </HydrationBoundary>
-      </div>*/}
+      <div className="fixed bottom-14 left-1/2 -translate-x-1/2">
+        <Suspense fallback={null}>
+          <WatchDate />
+        </Suspense>
+      </div>
     </div>
   );
 }
