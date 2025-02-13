@@ -5,11 +5,12 @@ import { format } from "date-fns";
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useRef, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
 import { Loader2Icon } from "lucide-react";
 export default function MoviesOfTheMonth() {
   const router = useRouter();
+  const pathname = usePathname();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const currentMonth =
     useSearchParams().get("month") || format(new Date(), "yyyy-MM");
@@ -63,7 +64,9 @@ export default function MoviesOfTheMonth() {
           if (entry.isIntersecting) {
             const month = entry.target.getAttribute("data-month");
             if (month) {
-              router.replace(`?month=${month}`, { scroll: false });
+              const params = new URLSearchParams(window.location.search);
+              params.set("month", month);
+              window.history.replaceState({}, "", `${pathname}?${params}`);
             }
           }
         });
