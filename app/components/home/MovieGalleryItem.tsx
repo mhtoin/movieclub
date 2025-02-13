@@ -18,9 +18,11 @@ import { FaImdb } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Button } from "components/ui/Button";
 import { createPortal } from "react-dom";
-
+import { usePathname, useRouter } from "next/navigation";
 export default function MovieGalleryItem({ movie }: { movie: MovieOfTheWeek }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
   const backgroundImage = movie?.images?.backdrops[0]?.file_path
     ? `https://image.tmdb.org/t/p/original/${movie?.images?.backdrops[0]?.file_path}`
     : `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`;
@@ -42,11 +44,20 @@ export default function MovieGalleryItem({ movie }: { movie: MovieOfTheWeek }) {
     };
   }, [isExpanded]);
 
+  const handleHover = () => {
+    const params = new URLSearchParams(window.location.search);
+    const dateParts = movie.watchDate.split("-");
+    const day = dateParts[2];
+    params.set("date", day);
+    window.history.replaceState({}, "", `${pathname}?${params}`);
+  };
+
   return (
     <div
       className="gallery-item @container group"
       key={movie.id}
       data-expanded={isExpanded}
+      onMouseEnter={() => handleHover()}
     >
       <div className="relative w-full h-full">
         <Image

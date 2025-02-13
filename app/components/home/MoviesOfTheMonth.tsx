@@ -1,19 +1,11 @@
 "use client";
 import type { MovieOfTheWeek } from "@/types/movie.type";
 import MovieGalleryItem from "./MovieGalleryItem";
-import { format, nextWednesday } from "date-fns";
-import { movieKeys } from "@/lib/movies/movieKeys";
-import { getQueryClient } from "@/lib/getQueryClient";
-import {
-  HydrationBoundary,
-  dehydrate,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { format } from "date-fns";
+
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getMoviesOfTheWeekByMonth } from "@/lib/movies/movies";
-import { Button } from "../ui/Button";
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
 import { Loader2Icon } from "lucide-react";
 export default function MoviesOfTheMonth() {

@@ -532,6 +532,70 @@
     mix-blend-mode: normal;
   }
 
+  .flip-letter {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    position: relative;
+  }
+
+  .flip-inner {
+    font-weight: bold;
+    transform-style: preserve-3d;
+    animation: flip 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+  }
+
+  @keyframes flip {
+    from {
+      transform: rotateX(90deg);
+    }
+    to {
+      transform: rotateX(0deg);
+    }
+  }
+  .flip-letter::before {
+    background-color: var(--background);
+    border-bottom: 1px solid var(--border);
+    font-size: 40px;
+    height: 20px;
+    line-height: 40px;
+    overflow: hidden;
+    width: 100%;
+    z-index: 20;
+  }
+
+  .flip-letter::after {
+    background-color: var(--background);
+    flex-grow: 0;
+    font-size: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin-top: -50%;
+    overflow: hidden;
+    width: 100%;
+    z-index: 10;
+  }
+  /*
+  .flip-letter:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
+  }
+
+  .flip-letter:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }*/
+
   /* Menu */
 
   .menu-item {
@@ -1179,27 +1243,6 @@
       --s: 0px;
       min-height: calc(100% + var(--s) / 2);
       clip-path: polygon(0 var(--s), 0 100%, 100% 100%, 100% 0);
-    }
-
-    .flipLetter {
-      background-color: var(--background);
-      border: 1px solid var(--background);
-      padding: 0.5rem;
-      height: 2rem;
-      width: 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .flipLetter:first-child {
-      border-top-right-radius: var(--radius);
-      border-bottom-right-radius: var(--radius);
-    }
-
-    .flipLetter:last-child {
-      border-top-left-radius: var(--radius);
-      border-bottom-left-radius: var(--radius);
     }
   }
 }

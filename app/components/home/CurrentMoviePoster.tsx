@@ -8,6 +8,7 @@ import { SiThemoviedatabase } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
 import UserPortrait from "../raffle/UserPortrait";
 import { isServerMobile } from "@/lib/isServerMobile";
+import URLSearchUpdater from "./URLSearchUpdater";
 
 export default async function CurrentMoviePoster() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek();
@@ -39,6 +40,9 @@ export default async function CurrentMoviePoster() {
 
         {/* Grid Overlay */}
         <div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
+          {mostRecentMovie?.watchDate && (
+            <URLSearchUpdater watchDate={mostRecentMovie.watchDate} />
+          )}
           <div className="flex flex-col md:flex-row md:gap-12 w-full h-full justify-evenly md:items-center ">
             <div className="flex items-center justify-start md:justify-center p-4 w-full md:w-1/2 h-full">
               <div className="flex flex-col gap-4 justify-center ">
