@@ -17,7 +17,8 @@ export default function CastPortrait({ cast }: { cast: CastMember }) {
             target="_blank"
           >
             <Image
-              src={`https://image.tmdb.org/t/p/original${cast.profile_path}`}
+              src={`https://image.tmdb.org/t/p/w45${cast.profile_path}`}
+              unoptimized
               alt={cast.name}
               width={40}
               height={40}
