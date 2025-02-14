@@ -6,7 +6,7 @@ import {
   modifyTierlist,
   updateTierlist,
 } from "@/lib/tierlists";
-import { TierlistsTier } from "@prisma/client";
+import type { TierlistsTier } from "@prisma/client";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";

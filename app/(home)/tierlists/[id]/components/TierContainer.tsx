@@ -8,8 +8,8 @@ import {
   DragDropContext,
   Droppable,
   Draggable,
-  DropResult,
-  DraggableLocation,
+  type DropResult,
+  type DraggableLocation,
 } from "@hello-pangea/dnd";
 import Link from "next/link";
 import CreateForm from "./TierlistCreate";
@@ -226,12 +226,12 @@ export default function DnDTierContainer({
 
   const saveMutation = useMutation({
     mutationFn: async (saveState: Tierlist) => {
-      let res = await fetch(`/api/tierlists/${saveState.id}`, {
+      const res = await fetch(`/api/tierlists/${saveState.id}`, {
         method: "PUT",
         body: JSON.stringify(saveState),
       });
 
-      let body = await res.json();
+      const body = await res.json();
 
       if (body.ok) {
         return body;
@@ -249,11 +249,11 @@ export default function DnDTierContainer({
 
   const deleteMutation = useMutation({
     mutationFn: async (tierlistId: string) => {
-      let res = await fetch(`/api/tierlists/${tierlistId}`, {
+      const res = await fetch(`/api/tierlists/${tierlistId}`, {
         method: "DELETE",
       });
 
-      let body = await res.json();
+      const body = await res.json();
 
       if (body.ok) {
         return body;

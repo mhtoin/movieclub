@@ -1,4 +1,4 @@
-import { MenuItem, MenuStore, Menu } from "@ariakit/react";
+import { MenuItem, type MenuStore, Menu } from "@ariakit/react";
 import { useValidateSession } from "@/lib/hooks";
 import Link from "next/link";
 import { SEARCH_ROUTE } from "@/lib/globals";

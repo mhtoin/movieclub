@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import {
   addMovieToShortlist,
   getShortList,
@@ -13,7 +13,7 @@ export async function GET(
 ) {
   try {
     const id = params.id;
-    let shortlist = await getShortList(id);
+    const shortlist = await getShortList(id);
     return NextResponse.json(shortlist, { status: 200 });
   } catch (e) {
     if (e instanceof Error) {
@@ -33,8 +33,8 @@ export async function POST(
 ) {
   try {
     const id = params.id;
-    let body = await request.json();
-    let updatedShortlist = await addMovieToShortlist(body.movie, id);
+    const body = await request.json();
+    const updatedShortlist = await addMovieToShortlist(body.movie, id);
 
     revalidatePath("/home/shortlist");
     return NextResponse.json(updatedShortlist);
@@ -54,9 +54,9 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  let body = await request.json();
+  const body = await request.json();
   const movieId = body.movieId;
-  let res = await removeMovieFromShortlist(movieId, params.id);
+  const res = await removeMovieFromShortlist(movieId, params.id);
 
   return NextResponse.json(res);
 }

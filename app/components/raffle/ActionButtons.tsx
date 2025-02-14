@@ -2,7 +2,7 @@ import { Dices, Shuffle } from "lucide-react";
 import { Button } from "../ui/Button";
 import { shuffle } from "@/lib/utils";
 import { useRaffle, useValidateSession } from "@/lib/hooks";
-import { UseMutateFunction } from "@tanstack/react-query";
+import type { UseMutateFunction } from "@tanstack/react-query";
 import {
   TooltipProvider,
   TooltipTrigger,

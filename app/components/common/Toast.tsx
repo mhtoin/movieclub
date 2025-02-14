@@ -25,7 +25,7 @@ export const Toast = (message: string, shortlistId: string, movie: Movie) => {
       </div>
     ),
     {
-      duration: Infinity,
+      duration: Number.POSITIVE_INFINITY,
     }
   );
 };

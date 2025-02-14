@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { type Dispatch, type SetStateAction, useState } from "react"
 
 export default function ProviderToggle({handleProviderToggle}: {handleProviderToggle: Dispatch<SetStateAction<boolean>>}) {
     const [toggled, setToggled] = useState(true)

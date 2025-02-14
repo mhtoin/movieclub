@@ -1,6 +1,6 @@
 import { getMovie, postRaffleWork } from "@/lib/movies/movies";
 import { sample } from "@/lib/utils";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import { getAllShortLists } from "@/lib/shortlist";
 import { cookies } from "next/headers";

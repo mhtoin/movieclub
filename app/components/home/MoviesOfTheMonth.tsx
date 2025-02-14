@@ -24,8 +24,8 @@ export default function MoviesOfTheMonth() {
         const { month } = lastPage;
         // Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
         const dateParts = month.split("-");
-        const monthNumber = parseInt(dateParts[1]);
-        const yearNumber = parseInt(dateParts[0]);
+        const monthNumber = Number.parseInt(dateParts[1]);
+        const yearNumber = Number.parseInt(dateParts[0]);
         const nextMonthNumber =
           monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
         const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;

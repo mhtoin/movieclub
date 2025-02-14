@@ -4,7 +4,7 @@ import { sortByISODate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   Carousel,
-  CarouselApi,
+  type CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -35,7 +35,7 @@ export default function MovieCarousel() {
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const { data, status } = useQuery(movieKeys.next(nextMovieDate));
 
-  let sortedData = data
+  const sortedData = data
     ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
     : null;
 
@@ -47,7 +47,7 @@ export default function MovieCarousel() {
     (api: CarouselApi) => {
       const selected = api.selectedScrollSnap();
 
-      let sortedData = data
+      const sortedData = data
         ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
         : null;
       const movieDate = sortedData ? new Date(sortedData[selected]) : null;
@@ -64,7 +64,7 @@ export default function MovieCarousel() {
     (date: Date) => {
       setMovieDate(date);
       const ISODate = formatISO(date, { representation: "date" });
-      let sortedData = data
+      const sortedData = data
         ? Object.keys(data).sort((a, b) => sortByISODate(a, b, "desc"))
         : null;
       const index = sortedData ? sortedData.indexOf(ISODate) : 0;

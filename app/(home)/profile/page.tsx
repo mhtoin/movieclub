@@ -7,7 +7,7 @@ import { useGetTMDBSession, useValidateSession } from "@/lib/hooks";
 import { Button } from "@/app/components/ui/Button";
 
 export default function Profile() {
-  let [isPending, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const { data: session, status } = useValidateSession();
   const [sessionId, setSessionId] = useState(session?.sessionId);
   const [accountId, setAccountId] = useState(session?.accountId);
@@ -49,7 +49,7 @@ export default function Profile() {
     const { success, request_token } = await res.json();
 
     if (success && request_token) {
-      let redirectUrl =
+      const redirectUrl =
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
           : "https://movieclub-seven.vercel.app";

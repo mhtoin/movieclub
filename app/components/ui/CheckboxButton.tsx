@@ -1,6 +1,6 @@
 import { Checkbox, useCheckboxStore, useStoreState } from "@ariakit/react";
 import { Button } from "./Button";
-import React from "react";
+import type React from "react";
 
 export default function CheckboxButton({ icon }: { icon: React.ReactNode }) {
   const checkbox = useCheckboxStore();

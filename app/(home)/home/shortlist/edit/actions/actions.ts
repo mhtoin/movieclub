@@ -8,7 +8,7 @@ import {
   updateShortlistSelection,
   updateShortlistState,
 } from "@/lib/shortlist";
-import { Shortlist, User } from "@prisma/client";
+import type { Shortlist, User } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import "dotenv/config";
 import { sample } from "@/lib/utils";
@@ -18,7 +18,7 @@ export async function addMovie(movie: Movie) {
   const { user } = await validateRequest();
 
   if (user && user.shortlistId) {
-    let res = await addMovieToShortlist({ ...movie }, user.shortlistId);
+    const res = await addMovieToShortlist({ ...movie }, user.shortlistId);
     revalidate("shortlist");
     //return res;
   } else {
@@ -27,7 +27,7 @@ export async function addMovie(movie: Movie) {
 }
 
 export async function removeFromShortList(id: string, shortlistId: string) {
-  let res = await removeMovieFromShortlist(id, shortlistId);
+  const res = await removeMovieFromShortlist(id, shortlistId);
   //revalidateTag("shortlist");
   revalidate("shortlist");
 }
@@ -43,7 +43,7 @@ export async function startRaffle(
   })[]
 ) {
   const movies = shortlists
-    .map((shortlist) =>
+    .flatMap((shortlist) =>
       shortlist.movies.map((movie) =>
         Object.assign(
           {},
@@ -53,13 +53,12 @@ export async function startRaffle(
           }
         )
       )
-    )
-    .flat();
+    );
   const movieChoice = sample(movies, true) ?? "";
 
   if (movieChoice) {
     // update movie in db
-    let chosenMovie = await updateChosenMovie(movieChoice.movie);
+    const chosenMovie = await updateChosenMovie(movieChoice.movie);
   }
 }
 

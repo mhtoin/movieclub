@@ -16,7 +16,7 @@ import CastPortrait from "./CastPortrait";
 import CastPopover from "./CastPopover";
 import UserPortrait from "./UserPortrait";
 import TrailerLink from "./TrailerLink";
-import { CastMember } from "@/types/tmdb.type";
+import type { CastMember } from "@/types/tmdb.type";
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
   const { data: movieData, status } = useMovieQuery(

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { simulateRaffle } from "@/lib/movies/movies";
 
 export async function POST(request: NextRequest, response: NextResponse) {

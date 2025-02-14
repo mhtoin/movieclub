@@ -1,6 +1,6 @@
 "use client";
 
-import { Tierlists, TierlistsTier } from "@prisma/client";
+import { Tierlists, type TierlistsTier } from "@prisma/client";
 import { startTransition, useState } from "react";
 import { addMovieToTier } from "../../actions/actions";
 import { range } from "@/lib/utils";
@@ -36,7 +36,7 @@ export default function TierAdd({
   const handleAdd = () => {
     // need new object for converted tierlist
     if (currentTier && selectedMovie) {
-      let currentTierMoviesWithIds = currentTier.movies.map(
+      const currentTierMoviesWithIds = currentTier.movies.map(
         (movie) => movie.id
       ) as Array<string>;
       currentTierMoviesWithIds.splice(movieIndex, 0, selectedMovie.id ?? "");
@@ -50,12 +50,12 @@ export default function TierAdd({
       // need to convert the movielists in tiers back to contain only the id
       // !TODO honestly this needs a better solution
 
-      let tiers = tierlist.tiers.map((tier) => {
+      const tiers = tierlist.tiers.map((tier) => {
         const tierMovies = tier.movies.map((movie) => movie.id);
         return { ...tier, movies: tierMovies } as TierlistsTier;
       }) as Array<TierlistsTier>;
 
-      let currentTierIndex = tiers.findIndex((tier) => {
+      const currentTierIndex = tiers.findIndex((tier) => {
         return tier.label === tierName;
       });
 
@@ -90,7 +90,7 @@ export default function TierAdd({
       </select>
       <select
         className="select select-bordered max-w-xs"
-        onChange={(event) => setMovieIndex(parseInt(event.target.value) - 1)}
+        onChange={(event) => setMovieIndex(Number.parseInt(event.target.value) - 1)}
       >
         {currentTier && currentTier?.movies?.length > 0 ? (
           range(currentTier.movies.length + 1).map((index) => {

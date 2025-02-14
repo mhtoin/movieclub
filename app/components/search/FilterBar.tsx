@@ -56,7 +56,7 @@ export default function FilterBar() {
     (
       name: string,
       value: string[] | string | number[],
-      isRange: boolean = false
+      isRange = false
     ) => {
       const params = new URLSearchParams(searchParams.toString());
       params.delete("query");

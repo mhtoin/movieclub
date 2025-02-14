@@ -6,9 +6,9 @@ import {
 } from "@ariakit/react";
 import { Button } from "../ui/Button";
 import React, {
-  ComponentPropsWithoutRef,
+  type ComponentPropsWithoutRef,
   forwardRef,
-  ReactNode,
+  type ReactNode,
   useState,
 } from "react";
 import { Calendar } from "lucide-react";
