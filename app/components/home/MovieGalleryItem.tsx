@@ -1,5 +1,5 @@
 "use client";
-import { MovieOfTheWeek } from "@/types/movie.type";
+import type { MovieOfTheWeek } from "@/types/movie.type";
 import Image from "next/image";
 import UserPortrait from "../raffle/UserPortrait";
 import Link from "next/link";

@@ -7,8 +7,8 @@ export async function PUT(
     { params }: { params: { id: string } }
   ) {
   
-    let { isReady } = await request.json();
-    let res = await updateShortlistState(isReady, params.id);
+    const { isReady } = await request.json();
+    const res = await updateShortlistState(isReady, params.id);
     //const movieId = body.movieId;
     //let res = await removeMovieFromShortlist(movieId, params.id);
   

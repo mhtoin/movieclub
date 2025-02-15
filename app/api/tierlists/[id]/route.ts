@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getTierlist, updateTierlist } from "@/lib/tierlists";
-import { TierlistsTier } from "@prisma/client";
+import type { TierlistsTier } from "@prisma/client";
 import prisma from "@/lib/prisma";
 
 export async function GET(
@@ -15,7 +15,7 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  let tierlist: Tierlist = await request.json();
+  const tierlist: Tierlist = await request.json();
 
   const tiers = tierlist.tiers.map((tier) => {
     const movieIds = tier.movies.map((movie) => movie.id);
@@ -26,10 +26,10 @@ export async function PUT(
     };
   }) as Array<TierlistsTier>;
   try {
-    let res = await updateTierlist(params.id, tiers);
+    const res = await updateTierlist(params.id, tiers);
     return NextResponse.json({ ok: true, data: res });
   } catch (e) {
-    let error = e as Error;
+    const error = e as Error;
     return NextResponse.json({ ok: false, message: error }, { status: 500 });
   }
 }
@@ -39,10 +39,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    let res = await updateTierlist(params.id, []);
+    const res = await updateTierlist(params.id, []);
     return NextResponse.json({ ok: true });
   } catch (e) {
-    let error = e as Error;
+    const error = e as Error;
     return NextResponse.json({ ok: false, message: error }, { status: 500 });
   }
 }

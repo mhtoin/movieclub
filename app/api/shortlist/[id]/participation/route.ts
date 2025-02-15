@@ -8,8 +8,8 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  let { participating } = await request.json();
-  let res = await updateShortlistParticipationState(participating, params.id);
+  const { participating } = await request.json();
+  const res = await updateShortlistParticipationState(participating, params.id);
 
   return NextResponse.json(res);
 }

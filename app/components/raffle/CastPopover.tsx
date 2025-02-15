@@ -6,7 +6,7 @@ import {
 import { Button } from "../ui/Button";
 import { List } from "lucide-react";
 import CastPortrait from "./CastPortrait";
-import { CastMember } from "@/types/tmdb.type";
+import type { CastMember } from "@/types/tmdb.type";
 
 export default function CastPopover({ cast }: { cast: Array<CastMember> }) {
   return (

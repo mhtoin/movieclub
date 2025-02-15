@@ -7,8 +7,8 @@ export async function PUT(
     { params }: { params: { id: string } }
   ) {
 
-    let { selectedIndex } = await request.json();
-    let res = await updateShortlistSelection(selectedIndex, params.id);
+    const { selectedIndex } = await request.json();
+    const res = await updateShortlistSelection(selectedIndex, params.id);
   
     return NextResponse.json(res);
   }

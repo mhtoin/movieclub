@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getAllShortLists } from "@/lib/shortlist";
 export const dynamic = "force-dynamic";

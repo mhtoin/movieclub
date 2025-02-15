@@ -1,45 +1,51 @@
-import { Toaster } from "sonner";
-import { cookies } from "next/headers";
-import { NavBar } from "../components/Navigation/Navbar";
-import ReplaceDialog from "../components/search/ReplaceDialog";
-import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getAllShortlistsGroupedById } from "@/lib/shortlist";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
+import { cookies } from "next/headers";
+import { Toaster } from "sonner";
 import { SocketClient } from "../components/common/SocketClient";
-import Chat from "../components/common/Chat";
+import ReplaceDialog from "../components/search/ReplaceDialog";
+
+const NavBar = dynamic(
+	() => import("../components/Navigation/Navbar").then((mod) => mod.NavBar),
+	{
+		ssr: false,
+	},
+);
 
 export default async function HomeLayout({
-  searchModal,
-  children,
+	searchModal,
+	children,
 }: {
-  searchModal: React.ReactNode;
-  children: React.ReactNode;
+	searchModal: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const theme = cookieStore.get("theme");
-  const accent = cookieStore.get("accent");
+	const cookieStore = cookies();
+	const theme = cookieStore.get("theme");
+	const accent = cookieStore.get("accent");
 
-  const queryClient = getQueryClient();
+	const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery({
-    queryKey: ["shortlists"],
-    queryFn: getAllShortlistsGroupedById,
-  });
-  return (
-    <>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <NavBar
-          theme={theme as { value: string; name: string }}
-          accent={accent as { value: string; name: string }}
-        />
-        <SocketClient />
+	queryClient.prefetchQuery({
+		queryKey: ["shortlists"],
+		queryFn: getAllShortlistsGroupedById,
+	});
+	return (
+		<>
+			<HydrationBoundary state={dehydrate(queryClient)}>
+				<NavBar
+					theme={theme as { value: string; name: string }}
+					accent={accent as { value: string; name: string }}
+				/>
+				<SocketClient />
 
-        <Toaster position="top-center" />
-        <ReplaceDialog />
-        {searchModal}
+				<Toaster position="top-center" />
+				<ReplaceDialog />
+				{searchModal}
 
-        {children}
-      </HydrationBoundary>
-    </>
-  );
+				{children}
+			</HydrationBoundary>
+		</>
+	);
 }
