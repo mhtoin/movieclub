@@ -52,13 +52,9 @@ const moveItem = (
 };
 
 export default function DnDTierContainer({
-	tierlist,
-	authorized,
-	allYears,
+	tierlistId,
 }: {
-	tierlist: Tierlist;
-	authorized: boolean;
-	allYears: string[];
+	tierlistId: string;
 }) {
 	const queryClient = getQueryClient();
 	const pathname = usePathname();
@@ -68,7 +64,7 @@ export default function DnDTierContainer({
 		searchParams.get("date") || "",
 	);
 	const { data: tierlistData, status: tierlistStatus } = useQuery(
-		tierlistKeys.byId(tierlist.id),
+		tierlistKeys.byId(tierlistId),
 	);
 	const { data: moviesOfTheWeek, status: moviesOfTheWeekStatus } = useQuery({
 		queryKey: ["moviesOfTheWeek"],

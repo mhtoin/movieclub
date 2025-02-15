@@ -1,22 +1,10 @@
 import { getCurrentSession } from "@/lib/authentication/session";
 import { getQueryClient } from "@/lib/getQueryClient";
-import { getMoviesOfTheWeek } from "@/lib/movies/movies";
-import { getTierlist, getTierlists } from "@/lib/tierlists";
+import { getTierlist } from "@/lib/tierlists";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import TierContainer from "components/tierlist/TierContainer";
 import { redirect } from "next/navigation";
-async function staticParams() {
-	const tierlists = await getTierlists();
-
-	return tierlists.map((tierlist) => ({
-		id: tierlist.id,
-	}));
-}
-
-// fix "dynamic server usage" errors in dev mode by turning off static generation and forcing dynamic rendering
-export const generateStaticParams =
-	process.env.NODE_ENV === "production" ? staticParams : undefined;
-export const dynamic =
-	process.env.NODE_ENV === "production" ? "auto" : "force-dynamic";
+import { Suspense } from "react";
 
 export default async function Page({ params }: { params: { id: string } }) {
 	const { user } = await getCurrentSession();
@@ -24,30 +12,21 @@ export default async function Page({ params }: { params: { id: string } }) {
 		redirect("/");
 	}
 	const queryClient = getQueryClient();
-	const tierlist = await getTierlist(params.id);
 
-	const moviesOfTheWeek = await getMoviesOfTheWeek();
-	queryClient.setQueryData(["tierlists", params.id], tierlist);
-	queryClient.setQueryData(["moviesOfTheWeek"], moviesOfTheWeek);
+	queryClient.prefetchQuery({
+		queryKey: ["tierlists", params.id],
+		queryFn: () => getTierlist(params.id),
+	});
 
-	const allDates = moviesOfTheWeek.map((movie) => movie.watchDate);
-	const allYears = [
-		...new Set(
-			allDates
-				.filter((date): date is string => Boolean(date))
-				.map((date) => date.split("-")[0]),
-		),
-	];
-
-	const authorized = tierlist.userId === user?.id;
+	const dehydratedState = dehydrate(queryClient);
 
 	return (
 		<div className="flex flex-col gap-10 md:gap-5 py-20 items-center">
-			<TierContainer
-				tierlist={tierlist}
-				authorized={authorized}
-				allYears={allYears}
-			/>
+			<HydrationBoundary state={dehydratedState}>
+				<Suspense fallback={<div>Loading...</div>}>
+					<TierContainer tierlistId={params.id} />
+				</Suspense>
+			</HydrationBoundary>
 		</div>
 	);
 }

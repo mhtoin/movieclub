@@ -14,11 +14,41 @@ async function migrateTierlists() {
 			},
 		},
 	});
-	console.dir(existingTierlists, { depth: null });
-	/*
+
+	const watchedMovies = await prisma.movie.findMany({
+		where: {
+			watchDate: {
+				not: null,
+			},
+		},
+	});
+
+	const watchedMoviesIds = watchedMovies.map((movie) => movie.id);
+
 	for (const tierlist of existingTierlists) {
-		console.dir(tierlist, { depth: null });
+		//console.dir(tierlist, { depth: null });
 		const tierIds = [];
+		const moviesInTiers = tierlist.tiers.flatMap((tier) => tier.movies);
+		const unrankedMovies = watchedMoviesIds.filter(
+			(movie) => !moviesInTiers.includes(movie),
+		);
+
+		console.log(moviesInTiers);
+		console.log(unrankedMovies);
+
+		const unrankedTier = await prisma.tier.create({
+			data: {
+				label: "Unranked",
+				value: 0,
+				tierlist: {
+					connect: { id: tierlist.id },
+				},
+				movies: {
+					connect: unrankedMovies.map((movie) => ({ id: movie })),
+				},
+			},
+		});
+		tierIds.push(unrankedTier.id);
 
 		for (const tier of tierlist.tiers) {
 			console.dir(tier, { depth: null });
@@ -36,7 +66,7 @@ async function migrateTierlists() {
 			});
 			tierIds.push(newTier.id);
 		}
-	}*/
+	}
 	/*
 	for (const tierlist of existingTierlists) {
 		// 2. For each tierlist, create new Tier records
