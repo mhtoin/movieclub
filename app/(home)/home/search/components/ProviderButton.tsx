@@ -1,7 +1,6 @@
-import { Button } from "@/app/components/ui/Button";
-import { useFilterStore } from "@/stores/useFilterStore";
-import { de } from "date-fns/locale";
-import { use, useEffect, useState } from "react";
+import { Button } from "components/ui/Button";
+import { useEffect } from "react";
+import { useFilterStore } from "stores/useFilterStore";
 
 export default function ProviderButton({
 	provider,

@@ -1,14 +1,12 @@
-import { Button } from "@/app/components/ui/Button";
+import { Button } from "components/ui/Button";
 import {
 	Drawer,
 	DrawerClose,
 	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
-} from "@/app/components/ui/Drawer";
+} from "components/ui/Drawer";
 import { Filter } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";

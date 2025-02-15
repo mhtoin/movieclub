@@ -1,11 +1,11 @@
 "use client";
-import { Button } from "@/app/components/ui/Button";
 import {
 	useGetWatchlistQuery,
 	useSearchSuspenseInfiniteQuery,
 	useShortlistQuery,
 	useValidateSession,
 } from "@/lib/hooks";
+import { Button } from "components/ui/Button";
 import { Fragment, useEffect, useRef } from "react";
 import MovieCard from "./MovieCard";
 

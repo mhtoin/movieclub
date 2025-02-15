@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/app/components/ui/Button";
-import { range } from "@/lib/utils";
-import { Tierlists, type TierlistsTier } from "@prisma/client";
+import type { TierlistsTier } from "@prisma/client";
+import { Button } from "components/ui/Button";
+import { range } from "lib/utils";
 import { startTransition, useState } from "react";
 import { addMovieToTier } from "../../actions/actions";
 

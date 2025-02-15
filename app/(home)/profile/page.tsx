@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/app/components/ui/Button";
-import { useGetTMDBSession, useValidateSession } from "@/lib/hooks";
+import { Button } from "components/ui/Button";
+import { useGetTMDBSession, useValidateSession } from "lib/hooks";
 import { useEffect, useState } from "react";
 import { useTransition } from "react";
 import { saveProfile } from "./actions/action";
@@ -20,7 +20,9 @@ export default function Profile() {
 
 		setAccountId(session?.accountId);
 	}, [session]);
-	useGetTMDBSession(session?.id || "", setSessionId, setAccountId);
+	useGetTMDBSession(session?.id || "", setSessionId, (value: string) =>
+		setAccountId(value ? Number.parseInt(value) : null),
+	);
 
 	if (status === "pending") {
 		return (
@@ -106,14 +108,14 @@ export default function Profile() {
 						type="text"
 						placeholder="TMDB Account ID - link by pressing the above button"
 						className="input input-bordered max-w-xs"
-						value={accountId ? accountId : "No valid Account Id"}
+						value={accountId ? accountId.toString() : "No valid Account Id"}
 						readOnly
 					/>
 					<input
 						type="text"
 						placeholder="Approved TMDB Session Id"
 						className="input input-bordered w-full max-w-xs"
-						value={sessionId ? sessionId : "No valid id"}
+						value={sessionId ? sessionId.toString() : "No valid id"}
 						readOnly
 					/>
 				</div>

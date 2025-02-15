@@ -1,4 +1,4 @@
-import SearchModal from "@/app/components/search/SearchModal";
+import SearchModal from "components/search/SearchModal";
 
 import {
 	HydrationBoundary,

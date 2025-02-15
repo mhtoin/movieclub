@@ -25,6 +25,10 @@
 			},
 			"security": {
 				"noDangerouslySetInnerHtml": "off"
+			},
+			"correctness": {
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error"
 			}
 		}
 	},

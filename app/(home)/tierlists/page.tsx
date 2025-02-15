@@ -1,7 +1,6 @@
-import { Button } from "@/app/components/ui/Button";
-import { validateRequest } from "@/lib/auth";
-import { getCurrentSession } from "@/lib/authentication/session";
-import { getTierlists } from "@/lib/tierlists";
+import { Button } from "components/ui/Button";
+import { getCurrentSession } from "lib/authentication/session";
+import { getTierlists } from "lib/tierlists";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

@@ -1,5 +1,5 @@
-import { Button } from "@/app/components/ui/Button";
-import { SEARCH_ROUTE } from "@/lib/globals";
+import { Button } from "components/ui/Button";
+import { SEARCH_ROUTE } from "lib/globals";
 import Link from "next/link";
 
 export default function SearchButton() {

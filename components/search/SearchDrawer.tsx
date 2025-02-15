@@ -1,8 +1,8 @@
-import { Button } from "@/app/components/ui/Button";
-import { Drawer, DrawerContent } from "@/app/components/ui/Drawer";
-import { useDialogStore } from "@/stores/useDialogStore";
+import { Button } from "components/ui/Button";
+import { Drawer, DrawerContent } from "components/ui/Drawer";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useDialogStore } from "stores/useDialogStore";
 import Search from "./Search";
 
 export default function SearchDrawer() {

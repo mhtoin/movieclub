@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@/app/components/ui/Button";
+import { omit } from "@/lib/utils";
+import { Button } from "components/ui/Button";
+import { set } from "date-fns";
 import {
 	useAddToShortlistMutation,
 	useAddToWatchlistMutation,
 	useValidateSession,
-} from "@/lib/hooks";
-import { omit } from "@/lib/utils";
-import { set } from "date-fns";
+} from "lib/hooks";
 import Link from "next/link";
 import { useState } from "react";
 import AddButton from "./AddButton";

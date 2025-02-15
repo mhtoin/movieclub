@@ -1,12 +1,12 @@
 "use client";
 
-import { RaffleClient } from "@/app/components/RaffleClient";
-import { Button } from "@/app/components/ui/Button";
 import {
 	useShortlistsQuery,
 	useUpdateReadyStateMutation,
 	useValidateSession,
 } from "@/lib/hooks";
+import { RaffleClient } from "components/RaffleClient";
+import { Button } from "components/ui/Button";
 import ItemSkeleton from "../edit/components/ItemSkeleton";
 import SearchButton from "../edit/components/SearchButton";
 import SelectionAlert from "../edit/components/SelectionAlert";

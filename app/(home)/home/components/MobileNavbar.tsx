@@ -1,7 +1,7 @@
 "use client";
-import { MobileRaffleButton } from "@/app/components/MobileRaffleButton";
-import { Button } from "@/app/components/ui/Button";
-import { useDebounce, useValidateSession } from "@/lib/hooks";
+import { MobileRaffleButton } from "components/MobileRaffleButton";
+import { Button } from "components/ui/Button";
+import { useDebounce, useValidateSession } from "lib/hooks";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

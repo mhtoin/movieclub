@@ -1,10 +1,10 @@
 "use client";
-import MovieCard from "@/app/components/search/MovieCard";
+import MovieCard from "components/search/MovieCard";
 import {
 	useGetWatchlistQuery,
 	useShortlistQuery,
 	useValidateSession,
-} from "@/lib/hooks";
+} from "lib/hooks";
 
 export default function WatchlistContainer() {
 	const { data: session } = useValidateSession();

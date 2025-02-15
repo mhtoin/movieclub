@@ -1,14 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { Button } from "@/app/components/ui/Button";
+import { Button } from "components/ui/Button";
 import {
 	useAddToShortlistMutation,
 	useAddToWatchlistMutation,
 	useRemoveFromShortlistMutation,
 	useUpdateSelectionMutation,
 	useValidateSession,
-} from "@/lib/hooks";
+} from "lib/hooks";
 import {
 	BookmarkMinus,
 	BookmarkPlus,

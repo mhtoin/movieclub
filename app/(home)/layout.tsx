@@ -1,14 +1,14 @@
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { SocketClient } from "components/common/SocketClient";
+import ReplaceDialog from "components/search/ReplaceDialog";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
-import { SocketClient } from "../components/common/SocketClient";
-import ReplaceDialog from "../components/search/ReplaceDialog";
 
 const NavBar = dynamic(
-	() => import("../components/Navigation/Navbar").then((mod) => mod.NavBar),
+	() => import("components/Navigation/Navbar").then((mod) => mod.NavBar),
 	{
 		ssr: false,
 	},
