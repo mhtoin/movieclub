@@ -1,4 +1,5 @@
 "use client";
+import type { MovieWithUser } from "@/types/movie.type";
 import {
 	DragDropContext,
 	type DraggableLocation,
@@ -19,10 +20,10 @@ import TierCreate from "./TierCreate";
 import TierDateFilter from "./TierDateFilter";
 
 type MoveItemObject = {
-	[x: string]: MovieOfTheWeek[];
+	[x: string]: MovieWithUser[];
 };
 const reorder = (
-	tier: MovieOfTheWeek[],
+	tier: MovieWithUser[],
 	startIndex: number,
 	endIndex: number,
 ) => {
@@ -33,8 +34,8 @@ const reorder = (
 };
 
 const moveItem = (
-	sourceTier: MovieOfTheWeek[],
-	destinationTier: MovieOfTheWeek[],
+	sourceTier: MovieWithUser[],
+	destinationTier: MovieWithUser[],
 	droppableSource: DraggableLocation,
 	droppableDestination: DraggableLocation,
 ) => {
@@ -73,7 +74,7 @@ export default function DnDTierContainer({
 		queryKey: ["moviesOfTheWeek"],
 		queryFn: async () => {
 			const res = await fetch("/api/movies");
-			const data: MovieOfTheWeek[] = await res.json();
+			const data: MovieWithUser[] = await res.json();
 			return data;
 		},
 	});

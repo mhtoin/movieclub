@@ -7,17 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-type TierlistsTier {
-  label  String
-  value  Int
-  movies String[]
+type TierlistTier {
+  label String
+  value Int
+  movies String[] @db.ObjectId
 }
 
 model Tierlists {
-  id     String          @id @default(auto()) @map("_id") @db.ObjectId
-  tiers  TierlistsTier[]
-  userId String          @unique @db.ObjectId
-  user   User?           @relation(fields: [userId], references: [id])
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  tiers  TierlistTier[]
+  tierlistTiers  Tier[]
+  userId String @unique @db.ObjectId
+  user   User?  @relation(fields: [userId], references: [id])
+}
+
+model Tier {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  label      String
+  value      Int
+  movies     Movie[]   @relation(fields: [movieIds], references: [id])
+  movieIds   String[]  @db.ObjectId
+  tierlist   Tierlists @relation(fields: [tierlistId], references: [id])
+  tierlistId String    @db.ObjectId
 }
 
 model Account {
@@ -85,6 +96,8 @@ model Movie {
   images            Images?
   videos            Video[]
   cast              CastMember[]
+  tiers             Tier[]         @relation(fields: [tierIds], references: [id])
+  tierIds           String[]       @db.ObjectId
 
   @@map("movies")
 }

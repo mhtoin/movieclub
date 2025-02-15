@@ -1,10 +1,9 @@
-
 import { getCurrentSession } from "@/lib/authentication/session";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getMoviesOfTheWeek } from "@/lib/movies/movies";
 import { getTierlist, getTierlists } from "@/lib/tierlists";
+import TierContainer from "components/tierlist/TierContainer";
 import { redirect } from "next/navigation";
-import TierContainer from "./components/TierContainer";
 async function staticParams() {
 	const tierlists = await getTierlists();
 
@@ -30,15 +29,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 	const moviesOfTheWeek = await getMoviesOfTheWeek();
 	queryClient.setQueryData(["tierlists", params.id], tierlist);
 	queryClient.setQueryData(["moviesOfTheWeek"], moviesOfTheWeek);
-
-	const tierlistMovies = tierlist
-		? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
-		: [];
-
-	const _unrankedMovies = moviesOfTheWeek.filter((movie) => {
-		const movieInList = tierlistMovies.includes(movie.title);
-		return !movieInList;
-	}) as unknown as MovieOfTheWeek[];
 
 	const allDates = moviesOfTheWeek.map((movie) => movie.watchDate);
 	const allYears = [

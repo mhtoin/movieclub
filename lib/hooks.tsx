@@ -6,7 +6,8 @@ import type {
 	ShortlistWithMovies,
 	ShortlistWithMoviesById,
 } from "@/types/shortlist.type";
-import type { User as DatabaseUser } from "@prisma/client";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
+import type { User as DatabaseUser, Shortlist } from "@prisma/client";
 import {
 	useInfiniteQuery,
 	useMutation,
@@ -207,8 +208,8 @@ export const useUpdateReadyStateMutation = () => {
 				method: "PUT",
 				body: JSON.stringify({ isReady }),
 			});
-
-			return await response.json();
+			const data: Shortlist = await response.json();
+			return data;
 		},
 		onSuccess: (data, variables) => {
 			queryClient.setQueryData(
@@ -243,8 +244,9 @@ export const useUpdateParticipationMutation = () => {
 					body: JSON.stringify({ participating }),
 				},
 			);
+			const data: Shortlist = await response.json();
 
-			return await response.json();
+			return data;
 		},
 		onSuccess: (data, variables) => {
 			queryClient.setQueryData(
@@ -326,7 +328,7 @@ export const useAddToWatchlistMutation = () => {
 /**
  * TODO: Remove
  */
-export const useUpdateShortlistMutation = (method: string) => {
+export const useUpdateShortlistMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
@@ -336,12 +338,18 @@ export const useUpdateShortlistMutation = (method: string) => {
 			movieId: string;
 			shortlistId: string;
 		}) => {
-			const response = await fetch(`/api/shortlist/${shortlistId}`, {
-				method: method,
+			const response = await fetch(`/api/shortlist/${shortlistId}/update`, {
+				method: "PUT",
 				body: JSON.stringify({ movieId }),
 			});
 
-			return await response.json();
+			if (!response.ok) {
+				throw new Error("Failed to update shortlist");
+			}
+
+			const data: ShortlistWithMovies = await response.json();
+
+			return data;
 		},
 		onSuccess: (data, variables) => {
 			queryClient.setQueryData(
@@ -397,13 +405,13 @@ export const useAddToShortlistMutation = () => {
 	const queryClient = useQueryClient();
 	const isOpen = useDialogStore.use.isOpen();
 	const setIsOpen = useDialogStore.use.setIsOpen();
-	const setMovie = useDialogStore.use.setMovie();
+	//const setMovie = useDialogStore.use.setMovie();
 	return useMutation({
 		mutationFn: async ({
 			movie,
 			shortlistId,
 		}: {
-			movie: Movie;
+			movie: TMDBMovieResponse;
 			shortlistId: string;
 			userId: string;
 		}) => {
@@ -430,10 +438,10 @@ export const useAddToShortlistMutation = () => {
 			);
 			sendShortlistUpdate(variables.userId);
 		},
-		onError: (_error, variables) => {
+		onError: (_error, _variables) => {
 			if (!isOpen) {
 				setIsOpen(true);
-				setMovie(variables.movie);
+				//setMovie(variables.movie);
 			}
 		},
 	});

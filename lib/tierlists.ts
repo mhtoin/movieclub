@@ -1,4 +1,3 @@
-import type { TierlistsTier } from "@prisma/client";
 import { validateRequest } from "./auth";
 import prisma from "./prisma";
 
@@ -8,6 +7,11 @@ export async function getTierlists() {
 	return await prisma.tierlists.findMany({
 		include: {
 			user: true,
+			tierlistTiers: {
+				include: {
+					movies: true,
+				},
+			},
 		},
 	});
 }
@@ -17,38 +21,18 @@ export async function getTierlist(id: string) {
 		where: {
 			id: id,
 		},
+		include: {
+			tierlistTiers: {
+				include: {
+					movies: true,
+				},
+			},
+		},
 	});
 
-	const tiersWithMovies = [];
-
-	if (tierlist) {
-		for (const tier of tierlist.tiers) {
-			const tierObj = {
-				label: tier.label,
-				value: tier.value,
-				movies: [],
-			} as Tier;
-			const movies = [];
-			for (const movie of tier.movies) {
-				// get the movie from db
-				const movieInDb = await prisma.movie.findUnique({
-					where: {
-						id: movie,
-					},
-				});
-
-				if (movieInDb) {
-					movies.push(movieInDb);
-				}
-			}
-			tierObj.movies = movies as unknown as Array<MovieOfTheWeek>;
-			tiersWithMovies.push(tierObj);
-		}
+	if (tierlist?.tierlistTiers) {
+		return tierlist;
 	}
-
-	// need to fetch all the movies in the tiers
-
-	return { ...tierlist, tiers: tiersWithMovies } as Tierlist;
 }
 
 export async function createTierlist(formData: FormData) {

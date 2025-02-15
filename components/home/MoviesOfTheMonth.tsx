@@ -1,5 +1,5 @@
 "use client";
-import type { MovieOfTheWeek } from "@/types/movie.type";
+import type { MovieWithUser } from "@/types/movie.type";
 import { format } from "date-fns";
 import MovieGalleryItem from "./MovieGalleryItem";
 
@@ -90,7 +90,7 @@ export default function MoviesOfTheMonth() {
 					data-month={page.month}
 					className="gallery snap-start min-h-screen shrink-0 listview-section relative"
 				>
-					{page.movies.map((movie: MovieOfTheWeek) => (
+					{page.movies.map((movie: MovieWithUser) => (
 						<MovieGalleryItem key={movie.id} movie={movie} />
 					))}
 					{isFetchingNextPage && (

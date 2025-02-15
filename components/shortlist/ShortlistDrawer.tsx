@@ -1,6 +1,5 @@
 "use client";
 
-import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
 import {
 	useUpdateParticipationMutation,
 	useUpdateReadyStateMutation,
@@ -8,6 +7,7 @@ import {
 } from "@/lib/hooks";
 import { useSuspenseShortlistsQuery } from "@/lib/hooks";
 import { ParticipationButton } from "components/raffle/ParticipationButton";
+import ShortListItem from "components/shortlist/ShortlistItem";
 import { Button } from "components/ui/Button";
 import {
 	Drawer,
@@ -124,10 +124,13 @@ export default function ShortlistDrawer() {
 											movie={movie}
 											shortlistId={userShortlist.id}
 											highlight={
-												userShortlist.requiresSelection &&
-												userShortlist.selectedIndex === index
+												(userShortlist.requiresSelection &&
+													userShortlist.selectedIndex === index) ||
+												false
 											}
-											requiresSelection={userShortlist.requiresSelection}
+											requiresSelection={
+												userShortlist.requiresSelection || false
+											}
 											removeFromShortList={user?.id === userShortlist.userId}
 											index={index}
 											showActions={true}

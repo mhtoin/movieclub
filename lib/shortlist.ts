@@ -1,5 +1,7 @@
 "server only";
+import { createDbMovie } from "@/lib/createDbMovie";
 import type { MovieWithUser } from "@/types/movie.type";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import type { Movie, Prisma } from "@prisma/client";
 import { isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
@@ -63,6 +65,7 @@ export async function getShortList(id: string) {
 					user: true,
 				},
 			},
+			user: true,
 		},
 	});
 
@@ -98,7 +101,34 @@ export async function findOrCreateShortList(userId: string) {
 	return shortlist;
 }
 
-export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
+export async function connectMovieToShortlist(
+	movieId: string,
+	shortlistId: string,
+) {
+	const updatedShortlist = await prisma.shortlist.update({
+		where: {
+			id: shortlistId,
+		},
+		data: {
+			movies: { connect: { id: movieId } },
+		},
+		include: {
+			movies: {
+				include: {
+					user: true,
+				},
+			},
+			user: true,
+		},
+	});
+
+	return updatedShortlist;
+}
+
+export async function addMovieToShortlist(
+	movie: TMDBMovieResponse,
+	shortlistId: string,
+) {
 	// check if user has shortlist, create if absent
 	const shortlist = await prisma.shortlist.findFirst({
 		where: {
@@ -113,6 +143,8 @@ export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
 		throw new Error("Only 3 movies allowed, remove to make room");
 	}
 
+	const movieObject = await createDbMovie(movie);
+
 	const updatedShortlist = await prisma.shortlist.update({
 		where: {
 			id: shortlistId,
@@ -121,9 +153,9 @@ export async function addMovieToShortlist(movie: Movie, shortlistId: string) {
 			movies: {
 				connectOrCreate: {
 					where: {
-						tmdbId: movie.tmdbId,
+						tmdbId: movieObject.tmdbId,
 					},
-					create: movie as unknown as Prisma.MovieCreateInput,
+					create: movieObject,
 				},
 			},
 		},

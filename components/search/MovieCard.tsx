@@ -8,9 +8,7 @@ import {
 	useValidateSession,
 } from "@/lib/hooks";
 import { getMovie } from "@/lib/movies/queries";
-import { omit } from "@/lib/utils";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import {
 	BookmarkMinus,
@@ -88,20 +86,13 @@ export default function MovieCard({
 							variant={"ghost"}
 							size={"iconXs"}
 							onClick={() => {
-								addMutation.mutate({
-									userId: user?.id ?? "",
-									shortlistId: user?.shortlistId ?? "",
-									movie: {
-										...omit(movie, ["id"]),
-										tmdbId: movie.id,
-										imdbId: movieData?.imdb_id,
-										runtime: movieData?.runtime,
-										genres: movieData?.genres,
-										tagline: movieData?.tagline,
-										cast: movieData?.credits?.cast,
-										videos: movieData?.videos,
-									} as Prisma.MovieCreateInput,
-								});
+								if (movieData) {
+									addMutation.mutate({
+										userId: user?.id ?? "",
+										shortlistId: user?.shortlistId ?? "",
+										movie: movieData,
+									});
+								}
 							}}
 							isLoading={addMutation.isPending}
 						>

@@ -6,7 +6,7 @@ import {
 	modifyTierlist,
 	updateTierlist,
 } from "@/lib/tierlists";
-import type { TierlistsTier } from "@prisma/client";
+import type { Tierlists, TierlistsTier } from "@prisma/client";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -23,9 +23,9 @@ export async function addMovieToTier(id: string, tiers: Array<TierlistsTier>) {
 	revalidatePath("tierlists");
 }
 
-export async function saveTierlist(tierlist: Tierlist) {
+export async function saveTierlist(tierlist: Tierlists) {
 	const tiers = tierlist.tiers.map((tier) => {
-		const movieIds = tier.movies.map((movie) => movie.id);
+		const movieIds = tier.movies.map((movie) => movie);
 
 		return {
 			...tier,

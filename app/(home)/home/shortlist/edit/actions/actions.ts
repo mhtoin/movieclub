@@ -1,30 +1,17 @@
 "use server";
 
 import {
-	addMovieToShortlist,
 	removeMovieFromShortlist,
 	updateChosenMovie,
 	updateShortlistParticipationState,
 	updateShortlistSelection,
 	updateShortlistState,
 } from "@/lib/shortlist";
-import type { Shortlist, User } from "@prisma/client";
+import type { Movie, Shortlist, User } from "@prisma/client";
 import { revalidateTag } from "next/cache";
 import "dotenv/config";
 import { validateRequest } from "@/lib/auth";
 import { sample } from "@/lib/utils";
-
-export async function addMovie(movie: Movie) {
-	const { user } = await validateRequest();
-
-	if (user?.shortlistId) {
-		const _res = await addMovieToShortlist({ ...movie }, user.shortlistId);
-		revalidate("shortlist");
-		//return res;
-	} else {
-		throw new Error("not properly authenticated!");
-	}
-}
 
 export async function removeFromShortList(id: string, shortlistId: string) {
 	const _res = await removeMovieFromShortlist(id, shortlistId);

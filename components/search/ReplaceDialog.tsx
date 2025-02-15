@@ -10,7 +10,7 @@ import * as Ariakit from "@ariakit/react";
 import { ArrowRightLeft } from "lucide-react";
 import { Button } from "../ui/Button";
 
-import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
+import ShortListItem from "components/shortlist/ShortlistItem";
 import { Drawer, DrawerContent } from "../ui/Drawer";
 
 export default function ReplaceDialog() {
@@ -33,7 +33,7 @@ export default function ReplaceDialog() {
 				<DrawerContent>
 					<div className="flex flex-col gap-5 max-h-[90dvh] p-5 overflow-auto items-center">
 						<div className="flex flex-col gap-2 justify-center items-center">
-							{movie && (
+							{movie && shortlist && (
 								<ShortListItem movie={movie} shortlistId={shortlist?.id} />
 							)}
 						</div>
@@ -44,7 +44,7 @@ export default function ReplaceDialog() {
 						</span>
 
 						<div className="flex flex-row items-center gap-2 flex-wrap justify-center">
-							{shortlist?.movies?.map((shortlistMovie: Movie) => (
+							{shortlist?.movies?.map((shortlistMovie) => (
 								<div
 									className="flex flex-col gap-2 justify-center items-center"
 									key={shortlistMovie.id}
@@ -70,7 +70,7 @@ export default function ReplaceDialog() {
 										<ArrowRightLeft />
 									</Button>
 									<ShortListItem
-										movie={shortlistMovie as Movie}
+										movie={shortlistMovie}
 										shortlistId={shortlist.id}
 									/>
 								</div>
@@ -92,7 +92,9 @@ export default function ReplaceDialog() {
 		>
 			<div className="flex flex-col gap-5 overflow-auto w-full h-full items-center justify-center p-5">
 				<div className="flex flex-col gap-2 justify-center items-center">
-					{movie && <ShortListItem movie={movie} shortlistId={shortlist?.id} />}
+					{movie && shortlist && (
+						<ShortListItem movie={movie} shortlistId={shortlist?.id} />
+					)}
 				</div>
 
 				<span className="text-sm text-muted-foreground">
@@ -100,7 +102,7 @@ export default function ReplaceDialog() {
 				</span>
 
 				<div className="flex flex-row items-center gap-2 p-2">
-					{shortlist?.movies?.map((shortlistMovie: Movie) => (
+					{shortlist?.movies?.map((shortlistMovie) => (
 						<div
 							className="flex flex-col gap-2 justify-center items-center"
 							key={shortlistMovie.id}
@@ -126,7 +128,7 @@ export default function ReplaceDialog() {
 								<ArrowRightLeft />
 							</Button>
 							<ShortListItem
-								movie={shortlistMovie as Movie}
+								movie={shortlistMovie}
 								shortlistId={shortlist.id}
 							/>
 						</div>

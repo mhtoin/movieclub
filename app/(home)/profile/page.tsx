@@ -126,7 +126,7 @@ export default function Profile() {
 						saveProfile({
 							sessionId: sessionId,
 							accountId: accountId ? accountId : null,
-						} as User),
+						}),
 					)
 				}
 			>

@@ -1,9 +1,9 @@
-import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
 import {
 	useUpdateParticipationMutation,
 	useUpdateReadyStateMutation,
 	useValidateSession,
 } from "@/lib/hooks";
+import ShortListItem from "components/shortlist/ShortlistItem";
 import { Button } from "components/ui/Button";
 
 import { useSuspenseShortlistsQuery } from "@/lib/hooks";
@@ -99,10 +99,11 @@ export default function ShortlistSidebar() {
 									movie={movie}
 									shortlistId={userShortlist.id}
 									highlight={
-										userShortlist.requiresSelection &&
-										userShortlist.selectedIndex === index
+										(userShortlist.requiresSelection &&
+											userShortlist.selectedIndex === index) ||
+										false
 									}
-									requiresSelection={userShortlist.requiresSelection}
+									requiresSelection={userShortlist.requiresSelection || false}
 									removeFromShortList={user?.id === userShortlist.userId}
 									index={index}
 									showActions={true}

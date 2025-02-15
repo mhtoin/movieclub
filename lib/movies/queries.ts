@@ -3,8 +3,9 @@
  */
 
 import type { MovieWithUser } from "@/types/movie.type";
+import type { ShortlistWithMovies } from "@/types/shortlist.type";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import type { Provider, Shortlist } from "@prisma/client";
+import type { Provider } from "@prisma/client";
 import type { User as DatabaseUser } from "@prisma/client";
 import { formatISO, nextWednesday, previousWednesday, set } from "date-fns";
 import { getBaseURL, keyBy } from "lib/utils";
@@ -137,7 +138,7 @@ export const getWatchProviders = async () => {
 	/**
 	 * We should provide some reasonable defaults here and store them somewhere
 	 */
-	const providers = data.results.filter((provider: Provider) => {
+	const providers: Provider[] = data.results.filter((provider: Provider) => {
 		return (
 			provider.provider_id === 8 ||
 			provider.provider_id === 323 ||
@@ -249,14 +250,14 @@ export function findMovieDate(
 }
 
 export async function getAllShortlistsGroupedById(): Promise<
-	Record<string, Shortlist>
+	Record<string, ShortlistWithMovies>
 > {
 	const fetchUrl = `${getBaseURL()}/api/shortlist`;
 	//console.log("fetchUrl", fetchUrl);
 	const response = await fetch(fetchUrl);
 	//console.log("response", response.body);
 	try {
-		const data: Shortlist[] = await response.json();
+		const data: ShortlistWithMovies[] = await response.json();
 		//console.log("data", data);
 		const groupedData = keyBy(data, (shortlist) => shortlist.id);
 		return groupedData;
@@ -268,5 +269,7 @@ export async function getAllShortlistsGroupedById(): Promise<
 
 export const getMoviesOfTheMonth = async (month: string) => {
 	const response = await fetch(`${getBaseURL()}/api/movies?month=${month}`);
-	return await response.json();
+	const data: { month: string; movies: MovieWithUser[] } =
+		await response.json();
+	return data;
 };

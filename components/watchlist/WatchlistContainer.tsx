@@ -12,11 +12,11 @@ export default function WatchlistContainer() {
 	const { data: shortlistData } = useShortlistQuery(session?.shortlistId || "");
 
 	const shortlistMovieIds = shortlistData
-		? shortlistData?.movies?.map((movie: Movie) => movie.tmdbId)
+		? shortlistData?.movies?.map((movie) => movie.tmdbId)
 		: [];
 
 	const watchlistMovieIds = watchlist
-		? watchlist?.map((movie: TMDBMovie) => movie.id)
+		? watchlist?.map((movie) => movie.id)
 		: [];
 	return (
 		<div className="flex flex-col justify-center m-5 p-10 place-items-center py-20">
@@ -40,7 +40,7 @@ export default function WatchlistContainer() {
 				</div>
 			)}
 			<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-				{watchlist?.map((movie: TMDBMovie) => {
+				{watchlist?.map((movie) => {
 					return (
 						<div
 							key={`container-${movie.id}`}

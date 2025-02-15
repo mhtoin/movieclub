@@ -1,9 +1,8 @@
-import type { MovieWithUser } from "@/types/movie.type";
-import type { Shortlist } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
-export interface ShortlistWithMovies extends Shortlist {
-	movies: MovieWithUser[];
-}
+export type ShortlistWithMovies = Prisma.ShortlistGetPayload<{
+	include: { movies: { include: { user: true } }; user: true };
+}>;
 
 export interface ShortlistWithMoviesById
 	extends Record<string, ShortlistWithMovies> {}

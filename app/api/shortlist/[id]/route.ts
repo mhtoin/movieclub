@@ -4,6 +4,7 @@ import {
 	removeMovieFromShortlist,
 } from "@/lib/shortlist";
 import type { ShortlistWithMovies } from "@/types/shortlist.type";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import { revalidatePath } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
@@ -43,8 +44,8 @@ export async function POST(
 ) {
 	try {
 		const id = params.id;
-		const body = await request.json();
-		const updatedShortlist = await addMovieToShortlist(body.movie, id);
+		const { movie }: { movie: TMDBMovieResponse } = await request.json();
+		const updatedShortlist = await addMovieToShortlist(movie, id);
 
 		revalidatePath("/home/shortlist");
 		return NextResponse.json(updatedShortlist);

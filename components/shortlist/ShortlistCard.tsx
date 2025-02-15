@@ -1,20 +1,21 @@
-import ItemSkeleton from "@/app/(home)/home/shortlist/edit/components/ItemSkeleton";
-import ShortListItem from "@/app/(home)/home/shortlist/edit/components/ShortListItem";
+import ItemSkeleton from "@/components/shortlist/ItemSkeleton";
+import ShortListItem from "@/components/shortlist/ShortlistItem";
 import {
 	useGetWatchlistQuery,
 	useUpdateReadyStateMutation,
 	useValidateSession,
 } from "@/lib/hooks";
+import type { ShortlistWithMovies } from "@/types/shortlist.type";
 import { Button } from "components/ui/Button";
 
 export default function ShortlistCard({
 	shortlist,
 }: {
-	shortlist: Shortlist | null;
+	shortlist: ShortlistWithMovies | null;
 }) {
 	const readyStateMutation = useUpdateReadyStateMutation();
 	const { data: user } = useValidateSession();
-	const movies = (shortlist?.movies as Movie[]) || [];
+	const movies = shortlist?.movies || [];
 	const { data: watchlist } = useGetWatchlistQuery(user || null);
 
 	const skeletons =
@@ -34,7 +35,7 @@ export default function ShortlistCard({
 				key={`${shortlist?.id}-container`}
 				className="flex flex-row flex-wrap sm:w-auto items-center justify-center border rounded-md p-1 gap-2 bg-background  overflow-hidden"
 			>
-				{shortlist?.movies.map((movie: Movie, index: number) => {
+				{shortlist?.movies.map((movie, index: number) => {
 					const isInWatchlist = watchlist?.some(
 						(watchlistMovie) => watchlistMovie.id === movie.tmdbId,
 					);
@@ -45,9 +46,11 @@ export default function ShortlistCard({
 							movie={movie}
 							shortlistId={shortlist.id}
 							highlight={
-								shortlist.requiresSelection && shortlist.selectedIndex === index
+								(shortlist.requiresSelection &&
+									shortlist.selectedIndex === index) ||
+								false
 							}
-							requiresSelection={shortlist.requiresSelection}
+							requiresSelection={shortlist.requiresSelection || false}
 							removeFromShortList={user?.id === shortlist.userId}
 							index={index}
 							showActions={true}
@@ -70,8 +73,7 @@ export default function ShortlistCard({
 						className={`flex justify-center ${"hover:opacity-70"} transition-colors outline ${
 							shortlist?.isReady ? "outline-success" : "outline-error"
 						}
-        ${isEditable && readyStateMutation.isPending ? "animate-pulse" : ""}
-        }`}
+        ${isEditable && readyStateMutation.isPending ? "animate-pulse" : ""}`}
 						key={`avatar-${shortlist?.userId}`}
 						onClick={() => {
 							if (isEditable && shortlist) {
