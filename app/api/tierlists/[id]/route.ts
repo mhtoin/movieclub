@@ -4,7 +4,7 @@ import type { TierlistsTier } from "@prisma/client";
 import prisma from "@/lib/prisma";
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
   const tierlist = await getTierlist(params.id);
@@ -35,11 +35,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const res = await updateTierlist(params.id, []);
+    const _res = await updateTierlist(params.id, []);
     return NextResponse.json({ ok: true });
   } catch (e) {
     const error = e as Error;

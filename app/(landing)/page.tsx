@@ -1,4 +1,4 @@
-import { validateRequest } from "@/lib/auth";
+
 import { redirect } from "next/navigation";
 import { Button } from "components/ui/Button";
 import Link from "next/link";

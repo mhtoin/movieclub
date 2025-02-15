@@ -6,8 +6,6 @@ import {
 } from "@/lib/authentication/session";
 import { db } from "@/lib/db";
 import { cookies } from "next/headers";
-
-import { lucia } from "@/lib/auth";
 import type { OAuth2Tokens } from "arctic";
 
 export async function GET(request: Request): Promise<Response> {
@@ -90,7 +88,7 @@ export async function GET(request: Request): Promise<Response> {
 		},
 	});
 
-	const account = await db?.account.create({
+	const _account = await db?.account.create({
 		data: {
 			userId: user.id,
 			provider: "discord",

@@ -110,7 +110,7 @@ export default function Tier({
 				droppableId={`${tierIndex}`}
 				direction="horizontal"
 			>
-				{(provided, snapshot) => {
+				{(provided, _snapshot) => {
 					return (
 						<div
 							ref={provided.innerRef}

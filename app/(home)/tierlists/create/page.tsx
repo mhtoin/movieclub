@@ -2,12 +2,12 @@
 
 import { Button } from "components/ui/Button";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { createNewTierlist } from "../actions/actions";
 
 export default function Page() {
-	const [tiers, setTiers] = useState(
-		[...new Array(5)].map((value, index) => {
+	const [tiers, _setTiers] = useState(
+		[...new Array(5)].map((_value, index) => {
 			return { value: index + 1, label: "" };
 		}),
 	);

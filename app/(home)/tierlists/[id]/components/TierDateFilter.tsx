@@ -2,9 +2,7 @@ import { Button } from "components/ui/Button";
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,

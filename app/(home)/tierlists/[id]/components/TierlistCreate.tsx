@@ -1,12 +1,12 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { createNewTierlist, recreateTierlist } from "../../actions/actions";
+import { useForm } from "react-hook-form";
+import { recreateTierlist } from "../../actions/actions";
 
 export default function CreateForm() {
-	const [tiers, setTiers] = useState(
-		[...new Array(5)].map((value, index) => {
+	const [tiers, _setTiers] = useState(
+		[...new Array(5)].map((_value, index) => {
 			return { value: index + 1, label: "" };
 		}),
 	);

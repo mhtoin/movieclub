@@ -7,11 +7,11 @@ import { useTransition } from "react";
 import { saveProfile } from "./actions/action";
 
 export default function Profile() {
-	const [isPending, startTransition] = useTransition();
+	const [_isPending, startTransition] = useTransition();
 	const { data: session, status } = useValidateSession();
 	const [sessionId, setSessionId] = useState(session?.sessionId);
 	const [accountId, setAccountId] = useState(session?.accountId);
-	const [notification, setNotification] = useState("");
+	const [notification, _setNotification] = useState("");
 
 	useEffect(() => {
 		if (session?.sessionId) {

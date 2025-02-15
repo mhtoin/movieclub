@@ -1,6 +1,5 @@
 import {
   updateShortlistParticipationState,
-  updateShortlistState,
 } from "@/lib/shortlist";
 import { NextResponse } from "next/server";
 

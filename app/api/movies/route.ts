@@ -1,5 +1,4 @@
 import {
-  getAllMoviesOfTheWeek,
   getMoviesOfTheWeek,
   getMoviesOfTheWeekByMonth,
 } from "@/lib/movies/movies";

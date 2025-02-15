@@ -1,4 +1,4 @@
-import { validateRequest } from "@/lib/auth";
+
 import { getCurrentSession } from "@/lib/authentication/session";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getMoviesOfTheWeek } from "@/lib/movies/movies";
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 		? tierlist.tiers.flatMap((tier) => tier.movies.map((movie) => movie.title))
 		: [];
 
-	const unrankedMovies = moviesOfTheWeek.filter((movie) => {
+	const _unrankedMovies = moviesOfTheWeek.filter((movie) => {
 		const movieInList = tierlistMovies.includes(movie.title);
 		return !movieInList;
 	}) as unknown as MovieOfTheWeek[];

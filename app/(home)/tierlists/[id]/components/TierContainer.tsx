@@ -229,10 +229,10 @@ export default function DnDTierContainer({
 			}
 			throw new Error("Updating tierlist failed");
 		},
-		onSuccess: (data, variables, context) => {
+		onSuccess: (_data, _variables, _context) => {
 			toast.success("Tierlist updated!");
 		},
-		onError: (error) => {
+		onError: (_error) => {
 			setNotification("Updating tierlist failed!", "error");
 		},
 	});
@@ -250,11 +250,11 @@ export default function DnDTierContainer({
 			}
 			throw new Error("Deleting tierlist failed");
 		},
-		onSuccess: (data) => {
+		onSuccess: (_data) => {
 			setNotification("Tierlist cleared!", "success");
 			window.location.reload();
 		},
-		onError: (error) => {
+		onError: (_error) => {
 			setNotification("Deleting tierlist failed!", "error");
 		},
 	});

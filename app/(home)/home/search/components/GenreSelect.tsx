@@ -22,7 +22,7 @@ export default function GenreSelect() {
           setGenres([...selections]);
         }}
         styles={{
-          control: (baseStyles, state) => ({
+          control: (baseStyles, _state) => ({
             ...baseStyles,
             margin: "auto",
             backgroundColor: "#2a2a33",
@@ -33,7 +33,7 @@ export default function GenreSelect() {
             color: "white",
             background: "red",
           }),
-          option: (defaultStyles, state) => ({
+          option: (defaultStyles, _state) => ({
             ...defaultStyles,
             backgroundColor: "#2a2a33",
           }),

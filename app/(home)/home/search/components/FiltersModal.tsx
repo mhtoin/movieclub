@@ -1,10 +1,8 @@
 "use client";
 
 import { Button } from "components/ui/Button";
-import { Dispatch, SetStateAction, useState } from "react";
 import { useFilterStore } from "stores/useFilterStore";
 import GenreSelect from "./GenreSelect";
-import ProviderToggle from "./ProviderToggle";
 import RangeSlider from "./RangeSlider";
 
 interface modalProps {

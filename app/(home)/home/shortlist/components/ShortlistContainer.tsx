@@ -47,7 +47,7 @@ export default function ShortlistContainer() {
 	const movies = (shortlist?.movies as Movie[]) || [];
 	const skeletons =
 		movies?.length < 3
-			? [...new Array(3 - movies.length)].map((element, index) => (
+			? [...new Array(3 - movies.length)].map((_element, index) => (
 					<ItemSkeleton key={index} />
 				))
 			: [];

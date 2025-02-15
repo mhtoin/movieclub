@@ -18,7 +18,7 @@ export async function addMovie(movie: Movie) {
 	const { user } = await validateRequest();
 
 	if (user?.shortlistId) {
-		const res = await addMovieToShortlist({ ...movie }, user.shortlistId);
+		const _res = await addMovieToShortlist({ ...movie }, user.shortlistId);
 		revalidate("shortlist");
 		//return res;
 	} else {
@@ -27,7 +27,7 @@ export async function addMovie(movie: Movie) {
 }
 
 export async function removeFromShortList(id: string, shortlistId: string) {
-	const res = await removeMovieFromShortlist(id, shortlistId);
+	const _res = await removeMovieFromShortlist(id, shortlistId);
 	//revalidateTag("shortlist");
 	revalidate("shortlist");
 }
@@ -57,12 +57,12 @@ export async function startRaffle(
 
 	if (movieChoice) {
 		// update movie in db
-		const chosenMovie = await updateChosenMovie(movieChoice.movie);
+		const _chosenMovie = await updateChosenMovie(movieChoice.movie);
 	}
 }
 
 export async function getColours(img: string) {
-	const imageData = await fetch(img);
+	const _imageData = await fetch(img);
 }
 
 export async function updateShortlistReadyState(ready: boolean) {

@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createNewTierlist(formData: FormData) {
-	const createdList = await createTierlist(formData);
+	const _createdList = await createTierlist(formData);
 	redirect("/tierlists/");
 	//return createTierlist
 }
@@ -40,6 +40,6 @@ export async function recreateTierlist(formData: FormData) {
 	const { user, session } = await validateRequest();
 
 	const userId = user?.id;
-	const modified = await modifyTierlist(formData);
+	const _modified = await modifyTierlist(formData);
 	redirect(`/tierlists/${userId}`);
 }
