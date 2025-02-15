@@ -45,15 +45,15 @@ export interface Image {
 }
 
 export interface MovieOfTheWeek extends Movie {
-	trailers: Trailer[];
-	watchProviders: WatchProviders;
-	tagline: string;
-	reviews: Array<ReviewWithUser>;
-	ratings: Array<Rating>;
+	trailers?: Trailer[];
+	watchProviders?: WatchProviders;
+	tagline?: string;
+	reviews?: Array<ReviewWithUser>;
+	ratings?: Array<Rating>;
 	owner?: string;
-	user: User;
+	user?: User;
 	watchDate: string;
-	cast: Array<CastMember>;
+	cast?: Array<CastMember>;
 }
 
 export interface WatchProviders {
