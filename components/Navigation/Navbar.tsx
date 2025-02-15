@@ -11,13 +11,7 @@ const ThemeSwitcher = dynamic(() => import("../theme/ThemeSwitcher"), {
 	ssr: false,
 });
 
-export const NavBar = ({
-	theme,
-	accent,
-}: {
-	theme: { value: string; name: string };
-	accent: { value: string; name: string };
-}) => {
+export const NavBar = () => {
 	const isMobile = useIsMobile();
 
 	// detect if the user has scrolled down
@@ -47,10 +41,7 @@ export const NavBar = ({
 						<span className="font-bold">leffaseura</span>
 					</div>
 					<div className="flex gap-2 h-full items-center">
-						<ThemeSwitcher
-							userTheme={theme?.value as "light" | "dark" | undefined}
-							userAccentColor={accent?.value}
-						/>
+						<ThemeSwitcher />
 						<SearchButton />
 						<Menubar />
 					</div>
@@ -74,10 +65,7 @@ export const NavBar = ({
 				</div>
 				<div className="flex gap-10 h-full items-center">
 					<SearchButton />
-					<ThemeSwitcher
-						userTheme={theme?.value as "light" | "dark" | undefined}
-						userAccentColor={accent?.value}
-					/>
+					<ThemeSwitcher />
 					<ProfileMenu />
 				</div>
 			</div>

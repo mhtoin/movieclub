@@ -1,14 +1,12 @@
 "use client";
 
-import { useIsMobile } from "@/lib/hooks";
 import { sortByISODate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { format, formatISO, nextWednesday } from "date-fns";
 import { movieKeys } from "lib/movies/movieKeys";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import CurrentMoviePoster from "./CurrentMoviePoster";
+import { useEffect, useRef, useState } from "react";
 import DateSelect from "./DateSelect";
 import PosterCard from "./PosterCard";
 
@@ -21,17 +19,13 @@ export default function ListView() {
 	});
 	const nextMovieMonth = nextMovieDate.split("-").slice(0, 2).join("-");
 	const currentMonth = currentDate.split("-").slice(0, 2).join("-");
-	const { data, status } = useQuery(movieKeys.next(nextMovieDate));
+	const { data } = useQuery(movieKeys.next(nextMovieDate));
 	const nextMovie = data?.[nextMovieMonth]?.[0];
-
-	const isMobile = useIsMobile();
 
 	// Find most recent month with data if no activity
 	const mostRecentMonth = Object.keys(data || {}).sort((a, b) =>
 		sortByISODate(a, b, "desc"),
 	)[0];
-
-	console.log("mostRecentMonth", mostRecentMonth);
 
 	const mostRecentMovie = data?.[mostRecentMonth]?.[0];
 
@@ -102,8 +96,7 @@ export default function ListView() {
 			<div className="flex flex-col gap-10 md:p-10 max-h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
 				{data &&
 					Object.keys(data).map((date, index) => {
-						const movies: MovieOfTheWeek[] = data[date as keyof typeof data];
-						const month = format(new Date(date), "MMMM");
+						const movies = data[date as keyof typeof data];
 
 						if (
 							data[date as keyof typeof data].length === 1 &&
@@ -118,7 +111,7 @@ export default function ListView() {
 								id={date}
 							>
 								<div className="grid grid-cols-2 gap-5 md:gap-10 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 px-5 md:px-20 snap-start">
-									{movies.map((movie: MovieOfTheWeek) => {
+									{movies.map((movie) => {
 										if (
 											movie.watchDate === nextMovie?.watchDate ||
 											(!nextMovie &&
@@ -133,13 +126,13 @@ export default function ListView() {
 											>
 												<div className="flex items-center justify-center gap-3">
 													<h1 className="text-lg md:text-2xl font-bold">
-														{new Date(movie.watchDate).toLocaleDateString(
+														{new Date(movie.watchDate || "").toLocaleDateString(
 															"fi-FI",
 														)}
 													</h1>
 													<div className="rounded-full border w-6 h-6 lg:w-10 lg:h-10 overflow-hidden">
 														<Image
-															src={movie?.user?.image}
+															src={movie?.user?.image || ""}
 															width={50}
 															height={50}
 															alt="movie poster"

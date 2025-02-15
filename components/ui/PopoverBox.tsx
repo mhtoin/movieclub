@@ -1,4 +1,4 @@
-import { inter } from "@/app/fonts";
+
 import useMedia from "@/lib/useMedia";
 import { cn } from "@/lib/utils";
 import * as Ariakit from "@ariakit/react";
@@ -11,7 +11,7 @@ interface PopoverProps {
 
 export default function Popover({ label, children }: PopoverProps) {
   const popover = Ariakit.usePopoverStore();
-  const [value, setValue] = useState<string[]>([]);
+  const [_value, _setValue] = useState<string[]>([]);
   const isLarge = useMedia("(min-width: 640px)", true);
   const isOpen = popover.useState("open");
 

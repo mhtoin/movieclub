@@ -1,15 +1,16 @@
 "use server";
 
-import { replaceShortlistMovie } from "../shortlist";
+import type { MovieWithUser } from "@/types/movie.type";
+import { replaceShortlistMovie } from "lib/shortlist";
 
 export async function replaceShortlistItem(
-  replacedMovie: Movie,
-  replacingWithMovie: Movie,
-  shortlistId: string
+	replacedMovie: MovieWithUser,
+	replacingWithMovie: MovieWithUser,
+	shortlistId: string,
 ) {
-  return await replaceShortlistMovie(
-    replacedMovie,
-    replacingWithMovie,
-    shortlistId
-  );
+	return await replaceShortlistMovie(
+		replacedMovie,
+		replacingWithMovie,
+		shortlistId,
+	);
 }

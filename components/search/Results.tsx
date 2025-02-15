@@ -5,6 +5,8 @@ import {
 	useShortlistQuery,
 	useValidateSession,
 } from "@/lib/hooks";
+import type { MovieWithUser } from "@/types/movie.type";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import { Button } from "components/ui/Button";
 import { Fragment, useEffect, useRef } from "react";
 import MovieCard from "./MovieCard";
@@ -13,17 +15,12 @@ export default function Results() {
 	const { data: user } = useValidateSession();
 	const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
-	const { data: shortlist, status: shortlistStatus } = useShortlistQuery(
-		user?.shortlistId ?? "",
-	);
-	const { data: watchlist, status: watchlistStatus } = useGetWatchlistQuery(
-		user ? user : null,
-	);
+	const { data: shortlist } = useShortlistQuery(user?.shortlistId ?? "");
+	const { data: watchlist } = useGetWatchlistQuery(user ? user : null);
 
 	const { data, hasNextPage, fetchNextPage } = useSearchSuspenseInfiniteQuery();
 
 	useEffect(() => {
-		console.log(hasNextPage);
 		if (!hasNextPage) {
 			return;
 		}
@@ -51,7 +48,7 @@ export default function Results() {
 		};
 	}, [hasNextPage, fetchNextPage]);
 	const shortlistMovieIds =
-		shortlist?.movies?.map((movie: Movie) => movie.tmdbId) ?? [];
+		shortlist?.movies?.map((movie: MovieWithUser) => movie.tmdbId) ?? [];
 
 	const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? [];
 	return (
@@ -59,7 +56,7 @@ export default function Results() {
 			{data
 				? data?.pages?.map((page) => (
 						<Fragment key={page.page}>
-							{page.results.map((movie: TMDBMovie) => {
+							{page.results.map((movie: TMDBMovieResponse) => {
 								return (
 									<MovieCard
 										key={movie.id}

@@ -1,4 +1,4 @@
-import { TrashIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "../ui/Button";
 
 export default function KeywordTag({

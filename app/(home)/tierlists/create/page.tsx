@@ -11,7 +11,7 @@ export default function Page() {
 			return { value: index + 1, label: "" };
 		}),
 	);
-	const { register, handleSubmit } = useForm();
+	const { register } = useForm();
 
 	return (
 		<div className="flex flex-col items center">

@@ -22,7 +22,7 @@ import { usePathname, useRouter } from "next/navigation";
 export default function MovieGalleryItem({ movie }: { movie: MovieOfTheWeek }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+  const _router = useRouter();
   const backgroundImage = movie?.images?.backdrops[0]?.file_path
     ? `https://image.tmdb.org/t/p/original/${movie?.images?.backdrops[0]?.file_path}`
     : `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`;

@@ -3,16 +3,13 @@ import {
 	type CarouselApi,
 	CarouselContent,
 	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
 } from "@/app/components/ui/Carousel";
 import { movieKeys } from "@/lib/movies/movieKeys";
 import { useQuery } from "@tanstack/react-query";
 import { format, formatISO, nextWednesday } from "date-fns";
 import type { EmblaCarouselType } from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
-import { ReactNode, useCallback, useEffect, useState } from "react";
-import { flushSync } from "react-dom";
+import { useCallback, useEffect, useState } from "react";
 import PosterCard from "./PosterCard";
 
 export default function PosterCarousel() {
@@ -20,9 +17,9 @@ export default function PosterCarousel() {
 	const nextMovieDate = formatISO(nextWednesday(new Date()), {
 		representation: "date",
 	});
-	const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+	const [_scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 	const { data, status } = useQuery(movieKeys.next(nextMovieDate));
-	const dates = Object.keys(data || {}).map((date) => ({
+	const _dates = Object.keys(data || {}).map((date) => ({
 		date: date,
 		label: format(new Date(date), "MMMM"),
 	}));
@@ -31,19 +28,19 @@ export default function PosterCarousel() {
 		setScrollSnaps(api.scrollSnapList());
 	}, []);
 
-	const scrollPrev = useCallback(() => {
+	const _scrollPrev = useCallback(() => {
 		api?.scrollPrev();
 	}, [api]);
 
-	const scrollNext = useCallback(() => {
+	const _scrollNext = useCallback(() => {
 		api?.scrollNext();
 	}, [api]);
 
 	const onScroll = useCallback(() => {
 		if (!api) return;
 
-		const engine = api.internalEngine();
-		const scrollProgress = api.scrollProgress();
+		const _engine = api.internalEngine();
+		const _scrollProgress = api.scrollProgress();
 
 		// Get the current slide index based on scroll progress
 	}, [api]);

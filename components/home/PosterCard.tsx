@@ -1,24 +1,25 @@
+import type { MovieWithUser } from "@/types/movie.type";
 import { Button } from "components/ui/Button";
 import { Card, CardContent } from "components/ui/Card";
-import { Info, Star, Users } from "lucide-react";
-import { TrendingUp } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { FaImdb } from "react-icons/fa";
-import { SiThemoviedatabase } from "react-icons/si";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipPortal,
 	TooltipProvider,
 	TooltipTrigger,
-} from "../ui/Tooltip";
+} from "components/ui/Tooltip";
+import { Info, Star, Users } from "lucide-react";
+import { TrendingUp } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { FaImdb } from "react-icons/fa";
+import { SiThemoviedatabase } from "react-icons/si";
 
 export default function PosterCard({
 	movie,
 	showOverview = false,
 }: {
-	movie: MovieOfTheWeek;
+	movie: MovieWithUser;
 	showOverview?: boolean;
 }) {
 	return (
@@ -38,7 +39,7 @@ export default function PosterCard({
 			<div className="cardInfo text-primary-foreground">
 				<div className="rounded-full w-6 h-6  lg:w-10 lg:h-10 overflow-hidden">
 					<Image
-						src={movie?.user?.image}
+						src={movie?.user?.image || ""}
 						width={500}
 						height={900}
 						alt="movie poster"

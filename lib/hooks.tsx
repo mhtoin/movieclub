@@ -1,6 +1,11 @@
 import { useDialogStore } from "@/stores/useDialogStore";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useRaffleStore } from "@/stores/useRaffleStore";
+import type { MovieWithUser } from "@/types/movie.type";
+import type {
+	ShortlistWithMovies,
+	ShortlistWithMoviesById,
+} from "@/types/shortlist.type";
 import type { User as DatabaseUser } from "@prisma/client";
 import {
 	useInfiniteQuery,
@@ -54,7 +59,7 @@ export const useSuspenseShortlistsQuery = () => {
 export const useShortlistQuery = (id: string) => {
 	return useQuery({
 		queryKey: ["shortlist", id],
-		queryFn: () => getShortlist(id),
+		queryFn: (): Promise<ShortlistWithMovies> => getShortlist(id),
 		enabled: !!id,
 	});
 };
@@ -192,7 +197,6 @@ export const useUpdateReadyStateMutation = () => {
 	return useMutation({
 		mutationFn: async ({
 			shortlistId,
-			userId,
 			isReady,
 		}: {
 			shortlistId: string;
@@ -207,11 +211,14 @@ export const useUpdateReadyStateMutation = () => {
 			return await response.json();
 		},
 		onSuccess: (data, variables) => {
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].isReady = data.isReady;
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].isReady = data.isReady;
+					});
+				},
+			);
 			sendShortlistUpdate(variables.userId);
 		},
 	});
@@ -222,7 +229,6 @@ export const useUpdateParticipationMutation = () => {
 
 	return useMutation({
 		mutationFn: async ({
-			userId,
 			shortlistId,
 			participating,
 		}: {
@@ -241,11 +247,14 @@ export const useUpdateParticipationMutation = () => {
 			return await response.json();
 		},
 		onSuccess: (data, variables) => {
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].participating = data.participating;
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].participating = data.participating;
+					});
+				},
+			);
 			sendShortlistUpdate(variables.userId);
 		},
 	});
@@ -255,7 +264,6 @@ export const useUpdateSelectionMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
-			userId,
 			shortlistId,
 			selectedIndex,
 		}: {
@@ -271,11 +279,14 @@ export const useUpdateSelectionMutation = () => {
 			return await response.json();
 		},
 		onSuccess: (data, variables) => {
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].selectedIndex = data.selectedIndex;
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].selectedIndex = data.selectedIndex;
+					});
+				},
+			);
 			sendShortlistUpdate(variables.userId);
 		},
 	});
@@ -333,11 +344,14 @@ export const useUpdateShortlistMutation = (method: string) => {
 			return await response.json();
 		},
 		onSuccess: (data, variables) => {
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].movies = data.movies;
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].movies = data.movies;
+					});
+				},
+			);
 			/*
       queryClient.invalidateQueries({
         queryKey: ["shortlist"],
@@ -350,7 +364,6 @@ export const useRemoveFromShortlistMutation = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
-			userId,
 			movieId,
 			shortlistId,
 		}: {
@@ -367,11 +380,14 @@ export const useRemoveFromShortlistMutation = () => {
 		},
 		onSuccess: (data, variables) => {
 			toast.success("Movie removed from shortlist");
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].movies = data.movies;
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].movies = data.movies;
+					});
+				},
+			);
 			sendShortlistUpdate(variables.userId);
 		},
 	});
@@ -384,13 +400,12 @@ export const useAddToShortlistMutation = () => {
 	const setMovie = useDialogStore.use.setMovie();
 	return useMutation({
 		mutationFn: async ({
-			userId,
 			movie,
 			shortlistId,
 		}: {
-			userId: string;
 			movie: Movie;
 			shortlistId: string;
+			userId: string;
 		}) => {
 			const response = await fetch(`/api/shortlist/${shortlistId}`, {
 				method: "POST",
@@ -405,14 +420,17 @@ export const useAddToShortlistMutation = () => {
 		},
 		onSuccess: (data, variables) => {
 			toast.success("Movie added to shortlist");
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].movies = data.movies;
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].movies = data.movies;
+					});
+				},
+			);
 			sendShortlistUpdate(variables.userId);
 		},
-		onError: (error, variables) => {
+		onError: (_error, variables) => {
 			if (!isOpen) {
 				setIsOpen(true);
 				setMovie(variables.movie);
@@ -431,8 +449,8 @@ export const useReplaceShortlistMutation = () => {
 			replacingWithMovie,
 			shortlistId,
 		}: {
-			replacedMovie: Movie; // always guaranteed to be of type Movie
-			replacingWithMovie: Movie;
+			replacedMovie: MovieWithUser; // always guaranteed to be of type Movie
+			replacingWithMovie: MovieWithUser;
 			shortlistId: string;
 		}) => {
 			return await replaceShortlistItem(
@@ -442,15 +460,18 @@ export const useReplaceShortlistMutation = () => {
 			);
 		},
 		onSuccess: (data, variables) => {
-			queryClient.setQueryData(["shortlists"], (oldData: ShortlistsById) => {
-				return produce(oldData, (draft) => {
-					draft[variables.shortlistId].movies = data.movies.map((movie) => ({
-						...movie,
-						watchDate: movie.watchDate || undefined,
-						imdbId: movie.imdbId || undefined,
-					})) as unknown as Movie[];
-				});
-			});
+			queryClient.setQueryData(
+				["shortlists"],
+				(oldData: ShortlistWithMoviesById) => {
+					return produce(oldData, (draft) => {
+						draft[variables.shortlistId].movies = data.movies.map((movie) => ({
+							...movie,
+							watchDate: movie.watchDate || undefined,
+							imdbId: movie.imdbId || undefined,
+						}));
+					});
+				},
+			);
 			toast.success("Movie replaced in shortlist");
 			setIsOpen(false);
 			setMovie(null);
@@ -491,7 +512,7 @@ export const useGetWatchProvidersQuery = () => {
 };
 
 export const useGetTMDBSession = (
-	userId: string,
+	_userId: string,
 	setSessionId: (value: string) => void,
 	setAccountId: (value: string) => void,
 ) => {
@@ -629,7 +650,7 @@ export function useCreateQueryString(searchParams: URLSearchParams) {
 
 export function useSocket() {
 	const [isRegistered, setIsRegistered] = useState(false);
-	const [isConnected, setIsConnected] = useState(false);
+	const [_isConnected, _setIsConnected] = useState(false);
 	const [connection, setConnection] = useState<WebSocket | null>(null);
 	const { data: user } = useValidateSession();
 	const queryClient = useQueryClient();

@@ -1,4 +1,4 @@
-import { Label, Radio, RadioGroup } from "react-aria-components";
+import { Radio, RadioGroup } from "react-aria-components";
 
 export default function LogicToggle() {
   return (

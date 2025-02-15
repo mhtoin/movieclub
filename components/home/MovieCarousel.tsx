@@ -31,8 +31,8 @@ export default function MovieCarousel() {
 
 	const [api, setApi] = useState<CarouselApi>();
 	const [tweenValues, setTweenValues] = useState<number[]>([]);
-	const [selectedIndex, setSelectedIndex] = useState(0);
-	const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+	const [_selectedIndex, setSelectedIndex] = useState(0);
+	const [_scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 	const { data, status } = useQuery(movieKeys.next(nextMovieDate));
 
 	const sortedData = data
@@ -87,12 +87,12 @@ export default function MovieCarousel() {
 
 	const onScroll = useCallback(() => {
 		if (!api) return;
-		const engine = api.internalEngine();
+		const _engine = api.internalEngine();
 		const scrollProgress = api.scrollProgress();
 
 		const tweenFactor = (1.5 * api.scrollSnapList().length) / 2;
 
-		const styles = api.scrollSnapList().map((snap, index) => {
+		const styles = api.scrollSnapList().map((snap, _index) => {
 			const diff = snap - scrollProgress;
 			//console.log("diff", diff);
 			const tweenValue = 1 - Math.abs(diff * tweenFactor);

@@ -1,10 +1,8 @@
-import { useState } from "react";
+import type { Movie } from "@prisma/client";
+import { Button } from "components/ui/Button";
 import { toast } from "sonner";
-import MovieCard from "../search/MovieCard";
-import ReplaceDialog from "../search/ReplaceDialog";
-import { Button } from "../ui/Button";
 
-export const Toast = (message: string, shortlistId: string, movie: Movie) => {
+export const Toast = (message: string, _shortlistId: string, movie: Movie) => {
 	return toast.custom(
 		(t) => (
 			<div className="z-50 h-[500px] w-[500px] bg-background border text-foreground text-sm p-5 rounded-md flex flex-col justify-between items-center gap-5">

@@ -9,7 +9,7 @@ export function RaffleClient() {
   const setIsLoading = useRaffleStore.use.setIsLoading();
   const setIsOpen = useRaffleStore.use.setIsOpen();
   const setSenderIsCurrentUser = useRaffleStore.use.setSenderIsCurrentUser();
-  const sender = useRaffleStore((state) => state.senderIsCurrentUser);
+  const _sender = useRaffleStore((state) => state.senderIsCurrentUser);
   //const allShortlists = await getAllShortLists()
   const raffle = useRaffleMutation();
 

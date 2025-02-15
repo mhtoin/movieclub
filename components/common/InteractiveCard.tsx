@@ -1,7 +1,7 @@
+import type { Movie } from "@prisma/client";
+import { Button } from "components/ui/Button";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/Button";
-
 export default function InteractiveCard({
 	children,
 	highlight,

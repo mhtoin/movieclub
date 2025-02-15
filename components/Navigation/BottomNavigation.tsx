@@ -4,10 +4,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BottomNavigation() {
-	const pathname = usePathname();
-	const router = useRouter();
+	const _pathname = usePathname();
+	const _router = useRouter();
 	const [prevScrollPos, setPrevScrollPos] = useState(0);
-	const [visible, setVisible] = useState(true);
+	const [_visible, setVisible] = useState(true);
 
 	const handleScroll = useDebounce(() => {
 		const currentScrollPos = window.scrollY;

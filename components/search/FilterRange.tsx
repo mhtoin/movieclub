@@ -9,7 +9,7 @@ interface FilterRangeProps {
 export default function FilterRange({ onChange }: FilterRangeProps) {
   const [value, setValue] = useState([0, 10]);
 
-  const handleRangeSelect = (value: string) => {};
+  const _handleRangeSelect = (_value: string) => {};
   return (
     <Popover label="Rating">
       <div className="flex flex-col gap-3">

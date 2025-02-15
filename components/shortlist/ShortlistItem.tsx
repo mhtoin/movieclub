@@ -9,14 +9,7 @@ interface SearchResultCardProps {
 	index?: number;
 }
 
-export default function ShortlistItem({
-	movie,
-	shortlistId,
-	removeFromShortList,
-	highlight,
-	requiresSelection,
-	index,
-}: SearchResultCardProps) {
+export default function ShortlistItem({ movie }: SearchResultCardProps) {
 	return (
 		<article className="shortlist__card">
 			<Image

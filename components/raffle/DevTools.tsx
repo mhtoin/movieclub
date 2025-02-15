@@ -1,7 +1,6 @@
 import { createDevCookie } from "@/lib/actions/setDevCookie";
 import { Input } from "../ui/Input";
 import { useTransition } from "react";
-import { cookies } from "next/headers";
 
 interface DevToolsProps {
   noSave: boolean;
@@ -16,7 +15,7 @@ export default function DevTools({
   resultScreen,
   setResultScreen,
 }: DevToolsProps) {
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, startTransition] = useTransition();
 
   return (
     <div className="flex flex-row gap-5">

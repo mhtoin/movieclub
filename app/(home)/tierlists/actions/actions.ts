@@ -37,7 +37,7 @@ export async function saveTierlist(tierlist: Tierlist) {
 }
 
 export async function recreateTierlist(formData: FormData) {
-	const { user, session } = await validateRequest();
+	const { user } = await validateRequest();
 
 	const userId = user?.id;
 	const _modified = await modifyTierlist(formData);

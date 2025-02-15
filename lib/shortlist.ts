@@ -1,5 +1,6 @@
 "server only";
-import type { Prisma } from "@prisma/client";
+import type { MovieWithUser } from "@/types/movie.type";
+import type { Movie, Prisma } from "@prisma/client";
 import { isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
 import { db } from "./db";
@@ -45,10 +46,7 @@ export async function getChosenMovie() {
 
 	const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
 	if (movie) {
-		const movieObject = Object.assign(
-			movie,
-			details,
-		) as unknown as MovieOfTheWeek;
+		const movieObject = Object.assign(movie, details);
 
 		return movieObject;
 	}
@@ -60,7 +58,11 @@ export async function getShortList(id: string) {
 			id: id,
 		},
 		include: {
-			movies: true,
+			movies: {
+				include: {
+					user: true,
+				},
+			},
 		},
 	});
 
@@ -154,7 +156,7 @@ export async function removeMovieFromShortlist(
 
 		return updatedShortlist;
 		//return NextResponse.json({ message: "Deleted succesfully" });
-	} catch (e) {
+	} catch (_e) {
 		return NextResponse.json(
 			{ message: "Something went wrong" },
 			{ status: 500 },
@@ -249,8 +251,8 @@ export async function updateShortlistSelectionStatus(
 }
 
 export async function replaceShortlistMovie(
-	replacedMovie: Movie,
-	replacingWithMovie: Movie,
+	replacedMovie: MovieWithUser,
+	replacingWithMovie: MovieWithUser,
 	shortlistId: string,
 ) {
 	// try to fetch the movie from the db to check if it exists
@@ -266,7 +268,7 @@ export async function replaceShortlistMovie(
 		genres: replacingWithMovie.genres || null, // Remove JSON.stringify
 		runtime: replacingWithMovie.runtime,
 		tagline: replacingWithMovie.tagline,
-	} as unknown as Prisma.MovieCreateInput;
+	} as Prisma.MovieCreateInput;
 	const updated = await prisma.shortlist.update({
 		where: {
 			id: shortlistId,

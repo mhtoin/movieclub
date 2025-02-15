@@ -1,17 +1,13 @@
 import {
 	Checkbox,
 	VisuallyHidden,
-	useCheckboxStore,
-	useStoreState,
 } from "@ariakit/react";
-import { Calendar } from "lucide-react";
-import React, {
+import {
 	type ComponentPropsWithoutRef,
 	forwardRef,
 	type ReactNode,
 	useState,
 } from "react";
-import { Button } from "../ui/Button";
 
 interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
 	children?: ReactNode;

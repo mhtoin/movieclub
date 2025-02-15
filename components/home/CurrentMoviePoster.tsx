@@ -33,7 +33,7 @@ export default async function CurrentMoviePoster() {
 					priority={true}
 					fill
 					placeholder="blur"
-					blurDataURL={isMobile ? posterBlurDataUrl : blurDataUrl}
+					blurDataURL={isMobile ? posterBlurDataUrl || "" : blurDataUrl || ""}
 				/>
 				{/* Gradient Overlay */}
 				<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />
@@ -56,9 +56,11 @@ export default async function CurrentMoviePoster() {
 								</h1>
 								<div className="flex flex-row gap-2 flex-wrap">
 									<p className="text-sm md:text-lg max-w-[500px] text-foreground/60">
-										{new Date(mostRecentMovie?.watchDate).toLocaleDateString(
-											"fi-FI",
-										)}
+										{mostRecentMovie?.watchDate
+											? new Date(mostRecentMovie?.watchDate).toLocaleDateString(
+													"fi-FI",
+												)
+											: ""}
 									</p>
 									<span>|</span>
 									<span className="text-sm md:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
@@ -81,7 +83,7 @@ export default async function CurrentMoviePoster() {
 										(provider) => {
 											return (
 												<Link
-													href={mostRecentMovie?.watchProviders?.link}
+													href={mostRecentMovie?.watchProviders?.link || ""}
 													target="_blank"
 													key={provider.provider_id}
 													className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"

@@ -9,6 +9,8 @@ import {
 } from "@/lib/hooks";
 import { getMovie } from "@/lib/movies/queries";
 import { omit } from "@/lib/utils";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
+import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import {
 	BookmarkMinus,
@@ -22,7 +24,7 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { FaImdb } from "react-icons/fa";
-import { SiImdb, SiThemoviedatabase } from "react-icons/si";
+import { SiThemoviedatabase } from "react-icons/si";
 import { Button } from "../ui/Button";
 
 export default function MovieCard({
@@ -31,7 +33,7 @@ export default function MovieCard({
 	inWatchlist,
 	showActions,
 }: {
-	movie: TMDBMovie;
+	movie: TMDBMovieResponse;
 	added?: boolean;
 	inWatchlist?: boolean;
 	showActions?: boolean;
@@ -96,7 +98,9 @@ export default function MovieCard({
 										runtime: movieData?.runtime,
 										genres: movieData?.genres,
 										tagline: movieData?.tagline,
-									} as Movie,
+										cast: movieData?.credits?.cast,
+										videos: movieData?.videos,
+									} as Prisma.MovieCreateInput,
 								});
 							}}
 							isLoading={addMutation.isPending}

@@ -24,7 +24,7 @@ export default function SearchInput({
 	 * Get the query params for each part of the search
 	 */
 	const searchParams = useSearchParams();
-	const query = searchParams.get("query");
+	const _query = searchParams.get("query");
 	const keywordArr = useMemo(
 		() => searchParams.get("with_keywords")?.split(",") ?? [],
 		[searchParams],
@@ -77,7 +77,7 @@ export default function SearchInput({
 		const params = new URLSearchParams(searchParams.toString());
 		const currentKeywords = searchParams.get("with_keywords")?.split(",") ?? [];
 		params.set("with_keywords", [...currentKeywords, value].join(","));
-		const queryString = params.toString();
+		const _queryString = params.toString();
 		const data = await queryClient.ensureQueryData({
 			queryKey: ["keywordSearch", value],
 			queryFn: () => getKeyWord(value),

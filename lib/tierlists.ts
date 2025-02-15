@@ -52,7 +52,7 @@ export async function getTierlist(id: string) {
 }
 
 export async function createTierlist(formData: FormData) {
-	const { user, session } = await validateRequest();
+	const { user } = await validateRequest();
 
 	const userId = user?.id;
 
@@ -93,7 +93,7 @@ export async function updateTierlist(id: string, tiers: Array<TierlistsTier>) {
 }
 
 export async function modifyTierlist(formData: FormData) {
-	const { user, session } = await validateRequest();
+	const { user } = await validateRequest();
 
 	const userId = user?.id;
 	const tierlistTiers = parseTiers(formData);

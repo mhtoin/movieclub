@@ -1,28 +1,18 @@
 "use server";
-import type { Movie, MovieOfTheWeek } from "@/types/movie.type";
-import { MoviesOfTheWeekByMonth } from "@/types/query.type";
-import type { User } from "@prisma/client";
-import {
-	endOfDay,
-	format,
-	formatISO,
-	isWednesday,
-	nextWednesday,
-	set,
-	startOfDay,
-} from "date-fns";
-import prisma from "../prisma";
+import type { UserChartData } from "@/types/common.type";
+import type { MovieWithUser } from "@/types/movie.type";
+import type { Movie, User } from "@prisma/client";
+import { format, formatISO, isWednesday, nextWednesday, set } from "date-fns";
+import prisma from "lib/prisma";
 import {
 	getAllShortLists,
 	removeMovieFromShortlist,
 	updateShortlistSelectionStatus,
 	updateShortlistState,
 } from "../shortlist";
-import { getAdditionalInfo } from "../tmdb";
 import {
 	countByKey,
 	groupBy,
-	keyBy,
 	sample,
 	sendNotification,
 	shuffle,
@@ -51,7 +41,7 @@ export async function getMostRecentMovieOfTheWeek() {
 		take: 1,
 	});
 
-	return movies[0] as unknown as MovieOfTheWeek;
+	return movies[0];
 }
 
 export async function getMoviesOfOfTheWeekByMonthGrouped() {
@@ -176,34 +166,6 @@ export async function getMoviesOfTheWeek() {
 	});
 }
 
-export async function getMovie(id: string) {
-	const movie = await prisma.movie.findUnique({
-		where: {
-			id: id,
-		},
-		include: {
-			reviews: {
-				include: {
-					user: true,
-				},
-			},
-			ratings: true,
-			user: true,
-		},
-	});
-
-	const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
-
-	if (movie) {
-		const movieObject = Object.assign(
-			movie,
-			details,
-		) as unknown as MovieOfTheWeek;
-
-		return movieObject;
-	}
-}
-
 export async function createReview(
 	review: string,
 	userId: string,
@@ -293,130 +255,6 @@ export async function simulateRaffle(repetitions: number) {
 	return dataObj;
 }
 
-export async function chooseMovieOfTheWeek() {
-	// get an array of all the movies and the user - Array<{user, movie}>
-	let shortlists = await getAllShortLists();
-	shortlists = shortlists.filter((shortlist) => shortlist.participating);
-
-	const selectionRequired = shortlists.filter(
-		(shortlist) => !!shortlist.requiresSelection,
-	);
-
-	if (selectionRequired.length > 0) {
-		for (const listItem of selectionRequired) {
-			if (
-				listItem.selectedIndex === undefined ||
-				listItem.selectedIndex === null
-			) {
-				throw new Error(
-					`${listItem.user.name} needs to select a movie to include`,
-				);
-			}
-		}
-	}
-
-	const notReady = shortlists.filter((shortlist) => !shortlist.isReady);
-	//const allReady = every(shortlists, (shortlist) => shortlist.isReady)
-
-	if (notReady.length > 0) {
-		throw new Error(
-			`Not all users are ready: ${notReady
-				.map((item) => item.user.name)
-				.join(", ")}`,
-		);
-	}
-
-	const movies = shortlists.flatMap((shortlist) => {
-		if (shortlist.requiresSelection) {
-			return {
-				user: shortlist.user,
-				shortlistId: shortlist.id,
-				movie: shortlist.movies[shortlist.selectedIndex ?? 0],
-			};
-		}
-
-		return shortlist.movies.map((movie) =>
-			Object.assign(
-				{},
-				{
-					user: shortlist.user,
-					shortlistId: shortlist.id,
-					movie: movie,
-				},
-			),
-		);
-	});
-	// shuffle a few times
-	const shuffledMovies = shuffle(movies);
-	const chosen = sample(shuffledMovies, true);
-
-	let movieObject = await getMovie(chosen?.movie.id ?? "");
-
-	/**
-	 * For some reason some times including the user in the movie retrieved from db fails
-	 * so we need to add it manually just in case
-	 */
-
-	if (!movieObject?.user) {
-		movieObject = {
-			...movieObject,
-			user: chosen?.user,
-		} as MovieOfTheWeek;
-	}
-
-	// update movie with the date
-	// reset selection state for the current week's winner
-	// set restrictions to new winner
-
-	await updateChosenMovie(movieObject, chosen?.user.id ?? "");
-
-	const raffle = await prisma.raffle.create({
-		data: {
-			participants: {
-				connect: shortlists.map((shortlist) => ({ id: shortlist.user.id })),
-			},
-			movies: {
-				connect: movies.map((movie) => ({ id: movie.movie.id })),
-			},
-			winningMovieID: chosen?.movie.id ?? "",
-			date: formatISO(new Date(), {
-				representation: "date",
-			}),
-		},
-	});
-
-	for (const item of shortlists) {
-		await updateShortlistState(false, item.id);
-
-		const inSelectionRequired = selectionRequired.find(
-			(listItem) => listItem.id === item.id,
-		);
-		if (inSelectionRequired) {
-			await updateShortlistSelectionStatus(false, item.id);
-		}
-
-		if (item.id === chosen?.shortlistId) {
-			await updateShortlistSelectionStatus(true, item.id);
-		}
-
-		// finally, wipe the chosen movie from all shortlists
-		const movieInShortlist = item.movies.find(
-			(movie) => movie.id === chosen?.movie.id,
-		);
-
-		if (movieInShortlist) {
-			await removeMovieFromShortlist(movieInShortlist.id, item.id);
-		}
-	}
-
-	return {
-		...movieObject,
-		movieOfTheWeek: getNextDate(),
-		watchDate: getNextDate(),
-		owner: chosen?.user.name,
-	} as MovieOfTheWeek;
-}
-
 export async function postRaffleWork({
 	movies,
 	winner,
@@ -434,7 +272,9 @@ export async function postRaffleWork({
 	await new Promise((resolve) => setTimeout(resolve, runtime));
 	console.log("Raffle finished");
 
-	const participants = [...new Set(movies.map((movie) => movie.user.id))];
+	const participants = [
+		...new Set(movies.map((movie) => movie.user?.id ?? "")),
+	];
 
 	// create a raffle record
 	await prisma.raffle.create({
@@ -453,7 +293,7 @@ export async function postRaffleWork({
 	});
 
 	// update the winner with the watch date
-	await updateChosenMovie(winner, winner.user.id);
+	await updateChosenMovie(winner, winner.user?.id ?? "");
 
 	// update shortlist states, remove the winning movie from all shortlists
 	for (const participant of participants) {
@@ -471,7 +311,7 @@ export async function postRaffleWork({
 
 		await updateShortlistState(false, shortlist?.id ?? "");
 		await updateShortlistSelectionStatus(
-			participant === winner.user.id,
+			participant === winner?.user?.id,
 			shortlist?.id ?? "",
 		);
 		if (movieInShortlist) {
@@ -480,7 +320,7 @@ export async function postRaffleWork({
 	}
 	console.log("sending notification");
 	sendNotification(
-		{ message: `${winner.user.name} won the raffle!` },
+		{ message: `${winner.user?.name} won the raffle!` },
 		startingUserId,
 	);
 }
@@ -524,7 +364,7 @@ export async function connectChosenMovies(movies: ChosenMovie[]) {
 			});
 
 			if (!movieData?.userId) {
-				const res = await prisma.movie.update({
+				const _res = await prisma.movie.update({
 					where: {
 						id: movieData?.id,
 					},

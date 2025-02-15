@@ -1,7 +1,6 @@
 import { Button } from "components/ui/Button";
 import {
 	Drawer,
-	DrawerClose,
 	DrawerContent,
 	DrawerHeader,
 	DrawerTitle,
@@ -58,7 +57,7 @@ export default function FilterDrawer({
 									defaultChecked={selectedGenres.includes(
 										genre.value.toString(),
 									)}
-									onChange={(event) => {
+									onChange={(_event) => {
 										handleGenreSelect(genre.value.toString());
 									}}
 								>

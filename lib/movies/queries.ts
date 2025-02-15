@@ -2,13 +2,13 @@
  * Queries
  */
 
-import type { Provider } from "@/types/tmdb.type";
+import type { MovieWithUser } from "@/types/movie.type";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
+import type { Provider, Shortlist } from "@prisma/client";
 import type { User as DatabaseUser } from "@prisma/client";
-import type { QueryClient } from "@tanstack/react-query";
 import { formatISO, nextWednesday, previousWednesday, set } from "date-fns";
-import { produce } from "immer";
+import { getBaseURL, keyBy } from "lib/utils";
 import type { User } from "lucia";
-import { getBaseURL, keyBy } from "../utils";
 
 export const searchKeywords = async (value: string) => {
 	const res = await fetch(
@@ -49,7 +49,7 @@ export const getMovie = async (id: number) => {
 			},
 		},
 	);
-	const data: TMDBMovie = await res.json();
+	const data: TMDBMovieResponse = await res.json();
 	return data;
 };
 
@@ -91,7 +91,7 @@ export const getUserShortlist = async (id: string) => {
 export const getWatchlist = async (user: User | DatabaseUser | null) => {
 	let pagesLeft = true;
 	let page = 1;
-	const movies = [];
+	const movies: TMDBMovieResponse[] = [];
 
 	do {
 		const watchlist = await fetch(
@@ -188,14 +188,14 @@ export const getAllMoviesOfTheWeek = async () => {
 		cache: "no-store",
 	});
 
-	const data: MovieOfTheWeek[] = await response.json();
+	const data: MovieWithUser[] = await response.json();
 	/**
 	 * The dates are a bit messed up atm, because the production server timezone differs
 	 * from the development. This is a temporary fix, stripping the time part of the date
 	 */
 	for (const movie of data) {
-		if (movie.movieOfTheWeek && typeof movie.movieOfTheWeek === "string") {
-			movie.movieOfTheWeek = formatISO(new Date(movie.movieOfTheWeek), {
+		if (movie.watchDate && typeof movie.watchDate === "string") {
+			movie.watchDate = formatISO(new Date(movie.watchDate), {
 				representation: "date",
 			});
 		}
@@ -203,8 +203,8 @@ export const getAllMoviesOfTheWeek = async () => {
 
 	const groupedData = keyBy(
 		data,
-		(movie: MovieOfTheWeek) => movie.movieOfTheWeek?.toString() ?? "",
-	) as MovieOfTheWeekQueryResult;
+		(movie: MovieWithUser) => movie.watchDate?.toString() ?? "",
+	);
 
 	return groupedData;
 };
@@ -216,7 +216,7 @@ export const getShortlist = async (id: string) => {
 };
 
 export function findMovieDate(
-	movies: MovieOfTheWeekQueryResult,
+	movies: Record<string, MovieWithUser>,
 	startingDate: Date,
 	direction: "previous" | "next" = "previous",
 	tryCount = 0,
@@ -248,7 +248,9 @@ export function findMovieDate(
 	return findMovieDate(movies, dateAttempt, direction, tryCount + 1);
 }
 
-export async function getAllShortlistsGroupedById(): Promise<ShortlistsById> {
+export async function getAllShortlistsGroupedById(): Promise<
+	Record<string, Shortlist>
+> {
 	const fetchUrl = `${getBaseURL()}/api/shortlist`;
 	//console.log("fetchUrl", fetchUrl);
 	const response = await fetch(fetchUrl);
@@ -256,10 +258,7 @@ export async function getAllShortlistsGroupedById(): Promise<ShortlistsById> {
 	try {
 		const data: Shortlist[] = await response.json();
 		//console.log("data", data);
-		const groupedData: ShortlistsById = keyBy(
-			data,
-			(shortlist) => shortlist.id,
-		);
+		const groupedData = keyBy(data, (shortlist) => shortlist.id);
 		return groupedData;
 	} catch (error) {
 		console.error("Error fetching shortlists", error);

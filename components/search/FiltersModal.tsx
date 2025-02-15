@@ -1,12 +1,7 @@
 "use client";
-
-import { useQuery } from "@tanstack/react-query";
 import GenreSelect from "./GenreSelect";
 import RangeSlider from "./RangeSlider";
-import { Dispatch, SetStateAction, useState } from "react";
-import ProviderToggle from "./ProviderToggle";
 import { useFilterStore } from "@/stores/useFilterStore";
-import { setYear } from "date-fns";
 import { Button } from "@/app/components/ui/Button";
 
 interface modalProps {

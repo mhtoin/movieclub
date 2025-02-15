@@ -24,11 +24,7 @@ export default function ShortlistDrawer() {
 	const { data: user } = useValidateSession();
 	const readyStateMutation = useUpdateReadyStateMutation();
 	const participationMutation = useUpdateParticipationMutation();
-	const {
-		data: allShortlists,
-		isLoading,
-		status,
-	} = useSuspenseShortlistsQuery();
+	const { data: allShortlists } = useSuspenseShortlistsQuery();
 	const userShortlist = user?.shortlistId
 		? allShortlists?.[user?.shortlistId]
 		: null;

@@ -1,4 +1,4 @@
-import router, { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import AriaDialog from "../ui/AriaDialog";
 import FilterBar from "./FilterBar";
 import Results from "./Results";

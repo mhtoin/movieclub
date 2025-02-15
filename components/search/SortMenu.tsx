@@ -12,7 +12,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { SORT_OPTIONS } from "@/lib/constants";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp, } from "lucide-react";
 import { Button } from "../ui/Button";
 
 export default function SortMenu() {

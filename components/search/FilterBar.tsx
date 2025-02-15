@@ -1,8 +1,5 @@
 "use client";
-import {
-	useGetWatchProvidersQuery,
-	useSearchSuspenseInfiniteQuery,
-} from "@/lib/hooks";
+import { useGetWatchProvidersQuery } from "@/lib/hooks";
 import { getFilters } from "@/lib/movies/queries";
 import type { Provider } from "@/types/tmdb.type";
 import { useQuery } from "@tanstack/react-query";
@@ -26,11 +23,10 @@ export default function FilterBar() {
 		searchParams.get("with_watch_providers")?.split("|") || [];
 	const { data: providers, status: providersStatus } =
 		useGetWatchProvidersQuery();
-	const { data: genreOptions, status } = useQuery({
+	const { data: genreOptions } = useQuery({
 		queryKey: ["genres"],
 		queryFn: getFilters,
 	});
-	const { isPending, isFetching } = useSearchSuspenseInfiniteQuery();
 	const [tab, setTab] = useState<"discover" | "search">("discover");
 	const [barWidth, setBarWidth] = useState<number>(0);
 	const [tabHeight, setTabHeight] = useState<number>(0);

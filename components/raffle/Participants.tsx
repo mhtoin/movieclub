@@ -4,8 +4,7 @@ import {
 	useUpdateReadyStateMutation,
 	useValidateSession,
 } from "@/lib/hooks";
-import { User as DatabaseUser } from "@prisma/client";
-import { Lock, LockOpen, PenOff, UserPen } from "lucide-react";
+import { Lock, LockOpen, } from "lucide-react";
 import { Button } from "../ui/Button";
 import { ParticipationButton } from "./ParticipationButton";
 

@@ -4,7 +4,6 @@ import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { SocketClient } from "components/common/SocketClient";
 import ReplaceDialog from "components/search/ReplaceDialog";
 import dynamic from "next/dynamic";
-import { cookies } from "next/headers";
 import { Toaster } from "sonner";
 
 const NavBar = dynamic(
@@ -21,10 +20,6 @@ export default async function HomeLayout({
 	searchModal: React.ReactNode;
 	children: React.ReactNode;
 }) {
-	const cookieStore = cookies();
-	const theme = cookieStore.get("theme");
-	const accent = cookieStore.get("accent");
-
 	const queryClient = getQueryClient();
 
 	queryClient.prefetchQuery({
@@ -34,10 +29,7 @@ export default async function HomeLayout({
 	return (
 		<>
 			<HydrationBoundary state={dehydrate(queryClient)}>
-				<NavBar
-					theme={theme as { value: string; name: string }}
-					accent={accent as { value: string; name: string }}
-				/>
+				<NavBar />
 				<SocketClient />
 
 				<Toaster position="top-center" />

@@ -1,6 +1,6 @@
 import ItemSkeleton from "../edit/components/ItemSkeleton";
 
-export default function ShortlistSkeleton({ index }: { index: number }) {
+export default function ShortlistSkeleton() {
 	return (
 		<div className="flex flex-col place-items-center gap-2">
 			<div className="flex flex-row justify-center items-center gap-8 p-5 w-full">

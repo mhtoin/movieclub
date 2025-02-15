@@ -1,7 +1,6 @@
-import { useRaffle, useValidateSession } from "@/lib/hooks";
-import { shuffle } from "@/lib/utils";
+import { useValidateSession } from "@/lib/hooks";
 import type { UseMutateFunction } from "@tanstack/react-query";
-import { Dices, Shuffle } from "lucide-react";
+import { Dices, } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/Button";
 import {

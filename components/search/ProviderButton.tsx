@@ -1,6 +1,5 @@
 import { useFilterStore } from "@/stores/useFilterStore";
-import { de } from "date-fns/locale";
-import { use, useEffect, useState } from "react";
+import { useEffect, } from "react";
 import { Button } from "../ui/Button";
 
 export default function ProviderButton({

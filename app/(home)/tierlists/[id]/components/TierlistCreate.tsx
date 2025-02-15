@@ -10,7 +10,7 @@ export default function CreateForm() {
 			return { value: index + 1, label: "" };
 		}),
 	);
-	const { register, handleSubmit } = useForm();
+	const { register } = useForm();
 
 	return (
 		<>

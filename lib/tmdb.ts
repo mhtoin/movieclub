@@ -40,7 +40,7 @@ export async function getAdditionalInfo(tmdbId: number) {
 }
 
 export async function getWatchlist() {
-	const { user, session } = await validateRequest();
+	const { user } = await validateRequest();
 
 	if (!user) {
 		return [];

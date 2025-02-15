@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { format, isWednesday, set } from "date-fns";
+import { format, isWednesday, } from "date-fns";
 import * as React from "react";
 
 import { Button } from "@/app/components/ui/Button";
@@ -22,7 +22,7 @@ export function DatePicker({
 	selected: Date;
 	setSelected: (date: Date) => void;
 }) {
-	const [date, setDate] = React.useState<Date>();
+	const [date, _setDate] = React.useState<Date>();
 	const { data } = useQuery({
 		queryKey: ["moviesOfTheWeek"],
 		queryFn: getAllMoviesOfTheWeek,
@@ -32,7 +32,7 @@ export function DatePicker({
 		return !isWednesday(date);
 	};
 
-	const highletedDates = data
+	const _highletedDates = data
 		? Object.values<MovieOfTheWeek>(data).map(
 				(movie: MovieOfTheWeek) => new Date(movie.movieOfTheWeek || ""),
 			)

@@ -1,8 +1,8 @@
 "use client";
-import { Button } from "@/app/components/ui/Button";
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
 import type { Provider } from "@/types/tmdb.type";
+import { Button } from "components/ui/Button";
 import { useState } from "react";
 import FiltersModal from "./FiltersModal";
 import ProviderButton from "./ProviderButton";
@@ -19,8 +19,7 @@ export default function Filters() {
 	const baseUrl =
 		"discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI";
 
-	const { data: providers, status: providersStatus } =
-		useGetWatchProvidersQuery();
+	const { data: providers } = useGetWatchProvidersQuery();
 
 	const handleSearchByTitle = () => {
 		setSearchValue(

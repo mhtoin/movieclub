@@ -6,7 +6,6 @@ import {
 	useValidateSession,
 } from "@/lib/hooks";
 import { Button } from "components/ui/Button";
-import { useRef } from "react";
 
 export default function ShortlistCard({
 	shortlist,
@@ -20,7 +19,7 @@ export default function ShortlistCard({
 
 	const skeletons =
 		movies?.length < 3
-			? [...new Array(3 - movies.length)].map((element, index) => (
+			? [...new Array(3 - movies.length)].map((_element, index) => (
 					<ItemSkeleton key={index} />
 				))
 			: [];

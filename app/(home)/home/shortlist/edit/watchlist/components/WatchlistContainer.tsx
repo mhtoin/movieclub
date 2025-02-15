@@ -8,7 +8,7 @@ import {
 
 export default function WatchlistContainer() {
 	const { data: session } = useValidateSession();
-	const { data: watchlist, status } = useGetWatchlistQuery(session || null);
+	const { data: watchlist } = useGetWatchlistQuery(session || null);
 	const { data: shortlistData } = useShortlistQuery(session?.shortlistId || "");
 
 	const shortlistMovieIds = shortlistData

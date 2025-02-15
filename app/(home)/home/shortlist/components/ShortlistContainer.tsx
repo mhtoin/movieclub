@@ -16,7 +16,7 @@ import WatchlistButton from "../edit/components/WatchlistButton";
 export default function ShortlistContainer() {
 	const { data: session } = useValidateSession();
 	//const { data: shortlist, status: shortlistStatus } = useShortlistQuery(session?.user?.shortlistId)
-	const { data: allShortlists, isLoading, status } = useShortlistsQuery();
+	const { data: allShortlists, status } = useShortlistsQuery();
 	const readyStateMutation = useUpdateReadyStateMutation();
 	const shortlist = session?.shortlistId
 		? allShortlists?.[session?.shortlistId]

@@ -2,8 +2,6 @@ import { isServer } from "@tanstack/react-query";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-type ArgValCallback<T> = (arg0: T) => string;
-
 export function omit<T extends object, K extends keyof T>(
 	obj: T,
 	keys: K[],
@@ -42,8 +40,8 @@ type OrderByItem = {
 
 export const orderBy = <T extends OrderByItem>(
 	arr: T[],
-	key: string,
-	order: string,
+	_key: string,
+	_order: string,
 ) => {
 	return arr.reduce((r: Record<string, unknown[]>, a) => {
 		r[a.user.name] = [...(r[a?.user?.name] || []), a?.movie];
@@ -121,7 +119,7 @@ export async function publishMessage(
 	topic: string,
 	user_id: string,
 ) {
-	const res = await fetch(
+	const _res = await fetch(
 		`${
 			process.env.NODE_ENV === "development"
 				? "http://localhost:8080"
@@ -145,7 +143,7 @@ export async function sendNotification(
 	message: string | object,
 	user_id: string,
 ) {
-	const res = await fetch(
+	const _res = await fetch(
 		`${
 			process.env.NODE_ENV === "development"
 				? "http://localhost:8080"

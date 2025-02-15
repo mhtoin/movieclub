@@ -1,6 +1,5 @@
 "server only";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { PrismaClient } from "@prisma/client";
 import type { User as DatabaseUser } from "@prisma/client";
 import { Discord } from "arctic";
 import { Lucia, type Session, type User } from "lucia";
@@ -69,7 +68,7 @@ export const validateRequest = cache(
 					sessionCookie.attributes,
 				);
 			}
-		} catch (error) {}
+		} catch (_error) {}
 		return result;
 	},
 );

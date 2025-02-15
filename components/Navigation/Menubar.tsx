@@ -1,7 +1,7 @@
 "use client";
 import * as Ariakit from "@ariakit/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MenuItem from "./MenuItem";
 import HamburgerMenu from "./HamburgerMenu";
 import { useIsMobile, useMagneticHover, useValidateSession } from "@/lib/hooks";

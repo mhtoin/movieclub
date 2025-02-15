@@ -9,7 +9,7 @@ import { Loader2Icon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 export default function MoviesOfTheMonth() {
-	const router = useRouter();
+	const _router = useRouter();
 	const pathname = usePathname();
 	const sentinelRef = useRef<HTMLDivElement>(null);
 	const currentMonth =

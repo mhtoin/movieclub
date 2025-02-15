@@ -25,13 +25,13 @@ const code = () => {
 
 	try {
 		preferredTheme = localStorage.getItem("theme");
-	} catch (err) {}
+	} catch (_err) {}
 
 	window.__setPreferredTheme = (newTheme) => {
 		setTheme(newTheme);
 		try {
 			localStorage.setItem("theme", newTheme);
-		} catch (err) {}
+		} catch (_err) {}
 	};
 
 	const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");

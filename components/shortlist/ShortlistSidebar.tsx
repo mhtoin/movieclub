@@ -12,11 +12,7 @@ import { ParticipationButton } from "../raffle/ParticipationButton";
 export default function ShortlistSidebar() {
 	const { data: user } = useValidateSession();
 
-	const {
-		data: allShortlists,
-		isLoading,
-		status,
-	} = useSuspenseShortlistsQuery();
+	const { data: allShortlists } = useSuspenseShortlistsQuery();
 	const userShortlist = user?.shortlistId
 		? allShortlists?.[user?.shortlistId]
 		: null;

@@ -8,15 +8,11 @@ import { Label } from "react-aria-components";
 import { Button } from "../ui/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 
-export default function ThemeSwitcher({
-	userTheme,
-	userAccentColor,
-}: {
-	userTheme: "light" | "dark" | undefined;
-	userAccentColor: string | undefined;
-}) {
+export default function ThemeSwitcher() {
 	const [theme, setTheme] = useState(global.window?.__theme || "light");
-	const [accentColor, setAccentColor] = useState(global.window?.__accent || "");
+	const [_accentColor, setAccentColor] = useState(
+		global.window?.__accent || "",
+	);
 	const [open, setOpen] = useState(false);
 	const isMobile = useIsMobile();
 	const menu = Ariakit.useMenuStore({ open, setOpen });
@@ -71,12 +67,12 @@ export default function ThemeSwitcher({
 		global.window.__onAccentChange = setAccentColor;
 	}, []);
 
-	const handleThemeSwitch = async (theme: "light" | "dark") => {
+	const _handleThemeSwitch = async (theme: "light" | "dark") => {
 		setTheme(theme);
 		await createThemeCookie("theme", theme);
 	};
 
-	const handleAccentSwitch = async (color: string) => {
+	const _handleAccentSwitch = async (color: string) => {
 		setAccentColor(color === "Default" ? "" : color.toLowerCase());
 		// TODO: Server action to save to cookie
 		await createThemeCookie(

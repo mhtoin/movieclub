@@ -1,14 +1,12 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "components/ui/Button";
 import { Input } from "components/ui/Input";
 import { getQueryClient } from "lib/getQueryClient";
-import { tierlistKeys } from "lib/tierlist/tierlistKeys";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export default function TierCreate({ tierlistId }: { tierlistId: string }) {
 	const queryClient = getQueryClient();
-	const { data: tierlistData } = useQuery(tierlistKeys.byId(tierlistId));
 	const [tierName, setTierName] = useState("");
 	const [createFormState, setCreateFormState] = useState<"closed" | "open">(
 		"closed",
