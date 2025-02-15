@@ -3,6 +3,9 @@ declare global {
 		__theme: string;
 		__onThemeChange: (theme: string) => void;
 		__setPreferredTheme: (theme: string) => void;
+		__accent: string;
+		__onAccentChange: (accent: string) => void;
+		__setPreferredAccent: (accent: string) => void;
 	}
 }
 
@@ -40,4 +43,35 @@ const code = () => {
 	setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"));
 };
 
+const codeAccent = () => {
+	window.__onAccentChange = () => {};
+
+	function setAccent(newAccent: string) {
+		window.__accent = newAccent;
+		preferredAccent = newAccent;
+		document.documentElement.dataset.accent = newAccent;
+		window.__onAccentChange(newAccent);
+	}
+
+	let preferredAccent: string | null = null;
+
+	try {
+		preferredAccent = localStorage.getItem("accent");
+	} catch (err) {
+		console.error(err);
+	}
+
+	window.__setPreferredAccent = (newAccent) => {
+		setAccent(newAccent);
+		try {
+			localStorage.setItem("accent", newAccent);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	setAccent(preferredAccent || "");
+};
+
 export const getTheme = `(${code})();`;
+export const getAccent = `(${codeAccent})();`;

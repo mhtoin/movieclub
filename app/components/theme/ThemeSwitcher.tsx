@@ -16,11 +16,11 @@ export default function ThemeSwitcher({
 	userAccentColor: string | undefined;
 }) {
 	const [theme, setTheme] = useState(global.window?.__theme || "light");
-	const [accentColor, setAccentColor] = useState(userAccentColor || "");
+	const [accentColor, setAccentColor] = useState(global.window?.__accent || "");
 	const [open, setOpen] = useState(false);
 	const isMobile = useIsMobile();
 	const menu = Ariakit.useMenuStore({ open, setOpen });
-	const isDark = theme === "dark";
+
 	const accents = [
 		{
 			label: "Default",
@@ -62,8 +62,13 @@ export default function ThemeSwitcher({
 		global.window?.__setPreferredTheme(theme);
 	};
 
+	const toggleAccent = (accent: string) => {
+		global.window?.__setPreferredAccent(accent);
+	};
+
 	useEffect(() => {
 		global.window.__onThemeChange = setTheme;
+		global.window.__onAccentChange = setAccentColor;
 	}, []);
 
 	const handleThemeSwitch = async (theme: "light" | "dark") => {
@@ -125,7 +130,7 @@ export default function ThemeSwitcher({
 									<Button
 										variant={"outline"}
 										size={"icon"}
-										onClick={() => handleAccentSwitch(accent.label)}
+										onClick={() => toggleAccent(accent.label)}
 									>
 										<div
 											className="w-5 h-5 rounded-full"
@@ -194,7 +199,7 @@ export default function ThemeSwitcher({
 							<Button
 								variant={"outline"}
 								size={"icon"}
-								onClick={() => handleAccentSwitch(accent.label)}
+								onClick={() => toggleAccent(accent.label)}
 							>
 								<div
 									className="w-5 h-5 rounded-full"

@@ -64,21 +64,21 @@
 		--popoverBackground: hsl(204 4% 16%);
 	}
 
-	.light[data-accent="magenta"] {
+	:root[data-theme="light"][data-accent="magenta"] {
 		--accent: hsl(340, 82%, 52%);
 		--accent-foreground: hsl(0, 0%, 6%);
 		--secondary: hsl(340, 82%, 52%);
 		--secondary-foreground: hsl(240 10% 3.9%);
 	}
 
-	:root[data-accent="aqua"] {
+	:root[data-theme="light"][data-accent="aqua"] {
 		--accent: hsl(187, 49%, 17%);
 		--accent-foreground: hsl(0, 0%, 6%);
 		--secondary: hsl(188, 9%, 52%);
 		--secondary-foreground: hsl(0, 0%, 100%);
 	}
 
-	:root[data-accent="orange"] {
+	:root[data-theme="light"][data-accent="orange"] {
 		--accent: hsl(25, 97%, 53%);
 		--accent-foreground: hsl(0, 0%, 6%);
 		--secondary: hsl(25, 97%, 53%);
@@ -129,14 +129,14 @@
 		@apply bg-easing-b-ex3;
 	}
 
-	.dark[data-accent="magenta"] {
+	:root[data-theme="dark"][data-accent="Magenta"] {
 		--accent: hsl(340, 82%, 52%);
 		--accent-foreground: hsl(0, 0%, 100%);
 		--secondary: hsl(345, 84%, 61%);
 		--secondary-foreground: hsl(240 10% 3.9%);
 	}
 
-	.dark[data-accent="aqua"] {
+	:root[data-theme="dark"][data-accent="Aqua"] {
 		--accent: hsl(187, 49%, 17%);
 		--accent-foreground: hsl(0, 0%, 100%);
 		--secondary: hsl(188, 9%, 52%);
@@ -144,14 +144,14 @@
 		--card: hsl(0, 0%, 4%);
 	}
 
-	.dark[data-accent="purple"] {
+	:root[data-theme="dark"][data-accent="Purple"] {
 		--accent: hsl(291, 65%, 34%);
 		--accent-foreground: hsl(0, 0%, 100%);
 		--secondary: hsl(265, 48%, 70%);
 		--secondary-foreground: hsl(240 10% 3.9%);
 	}
 
-	.dark[data-accent="orange"] {
+	:root[data-theme="dark"][data-accent="Orange"] {
 		--accent: hsl(25, 97%, 53%);
 		--accent-foreground: hsl(0, 0%, 100%);
 		--secondary: hsl(25, 97%, 53%);
