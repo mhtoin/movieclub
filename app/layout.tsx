@@ -1,6 +1,7 @@
 import Providers from "@/utils/provider";
 import "./globals.css";
 import ThemeInitializer from "@/app/components/ThemeInitializer";
+import { getTheme } from "@/lib/getTheme";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
@@ -24,15 +25,13 @@ export default async function RootLayout({
 	const accent = cookieStore.get("accent");
 
 	return (
-		<html
-			lang="en"
-			className={theme ? theme.value : ""}
-			data-accent={accent ? accent.value : ""}
-		>
+		<html lang="en">
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: getTheme }} />
+			</head>
 			<body
 				className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
 			>
-				<ThemeInitializer theme={theme?.value} accent={accent?.value} />
 				<Providers>
 					{children}
 					<SpeedInsights />
