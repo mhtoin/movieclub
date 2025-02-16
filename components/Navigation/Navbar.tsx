@@ -11,7 +11,7 @@ const ThemeSwitcher = dynamic(() => import("../theme/ThemeSwitcher"), {
 	ssr: false,
 });
 
-export const NavBar = () => {
+export default function NavBar() {
 	const isMobile = useIsMobile();
 
 	// detect if the user has scrolled down
@@ -71,4 +71,4 @@ export const NavBar = () => {
 			</div>
 		</div>
 	);
-};
+}
