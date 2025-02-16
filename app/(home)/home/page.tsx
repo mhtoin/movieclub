@@ -12,39 +12,39 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function HomePage() {
-	const queryClient = getQueryClient();
+  const queryClient = getQueryClient();
 
-	queryClient.prefetchInfiniteQuery({
-		queryKey: ["pastMovies"],
-		queryFn: () => getMoviesOfTheWeekByMonth(""),
-		initialPageParam: format(new Date(), "yyyy-MM"),
-	});
+  queryClient.prefetchInfiniteQuery({
+    queryKey: ["pastMovies"],
+    queryFn: () => getMoviesOfTheWeekByMonth(format(new Date(), "yyyy-MM")),
+    initialPageParam: format(new Date(), "yyyy-MM"),
+  });
 
-	const dehydratedState = dehydrate(queryClient);
-	const { user } = await getCurrentSession();
+  const dehydratedState = dehydrate(queryClient);
+  const { user } = await getCurrentSession();
 
-	if (!user) {
-		redirect("/");
-	}
+  if (!user) {
+    redirect("/");
+  }
 
-	return (
-		<div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth relative">
-			<div className="snap-start min-h-screen shrink-0">
-				<Suspense fallback={null}>
-					{/* @ts-expect-error Server Component */}
-					<CurrentMoviePoster />
-				</Suspense>
-			</div>
-			<HydrationBoundary state={dehydratedState}>
-				<Suspense fallback={null}>
-					<MoviesOfTheMonth />
-				</Suspense>
-			</HydrationBoundary>
-			<div className="fixed bottom-14 left-1/2 -translate-x-1/2">
-				<Suspense fallback={null}>
-					<WatchDate />
-				</Suspense>
-			</div>
-		</div>
-	);
+  return (
+    <div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth relative">
+      <div className="snap-start min-h-screen shrink-0">
+        <Suspense fallback={null}>
+          {/* @ts-expect-error Server Component */}
+          <CurrentMoviePoster />
+        </Suspense>
+      </div>
+      <HydrationBoundary state={dehydratedState}>
+        <Suspense fallback={null}>
+          <MoviesOfTheMonth />
+        </Suspense>
+      </HydrationBoundary>
+      <div className="fixed bottom-14 left-1/2 -translate-x-1/2">
+        <Suspense fallback={null}>
+          <WatchDate />
+        </Suspense>
+      </div>
+    </div>
+  );
 }

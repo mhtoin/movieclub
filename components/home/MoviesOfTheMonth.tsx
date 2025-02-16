@@ -19,7 +19,7 @@ export default function MoviesOfTheMonth() {
       queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
       initialPageParam: currentMonth,
       getNextPageParam: (lastPage) => {
-        if (!lastPage?.month) return currentMonth;
+        if (!lastPage?.month) return undefined;
         const { month } = lastPage;
         // Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
         const dateParts = month.split("-");
