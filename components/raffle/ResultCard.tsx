@@ -1,5 +1,5 @@
 import { useMovieQuery } from "@/lib/hooks";
-import type { CastMember } from "@/types/tmdb.type";
+import type { MovieWithUser } from "@/types/movie.type";
 import {
 	Calendar,
 	Clock,
@@ -35,8 +35,6 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 	const randomBackdrop = backdrops
 		? backdrops[Math.floor(Math.random() * backdrops.length)]
 		: null;
-
-	console.log("backdrop", randomBackdrop);
 
 	return (
 		<div className="grid grid-rows-6 h-full">
@@ -160,17 +158,28 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 					</span>
 					<div className="flex flex-row gap-2 justify-start items-center">
 						{movieData?.credits?.cast?.slice(0, 6).map((cast) => {
-							return <CastPortrait cast={cast as CastMember} key={cast.id} />;
+							return (
+								<CastPortrait
+									cast={{
+										...cast,
+										profile_path: cast.profile_path || null,
+									}}
+									key={cast.id}
+								/>
+							);
 						})}
 						{movieData?.credits?.cast && (
-							<CastPopover cast={movieData?.credits?.cast as CastMember[]} />
+							<CastPopover
+								cast={movieData.credits.cast.map((cast) => ({
+									...cast,
+									profile_path: cast.profile_path || null,
+								}))}
+							/>
 						)}
 					</div>
 					<p className="text-foreground/50 ">{movie.overview}</p>
 					<div className="flex flex-row gap-2">
-						<div className="flex flex-row gap-2">
-							<UserPortrait user={movie?.user} />
-						</div>
+						{movie?.user && <UserPortrait user={movie.user} />}
 					</div>
 				</div>
 			</div>

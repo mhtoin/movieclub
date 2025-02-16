@@ -315,7 +315,11 @@ export async function replaceShortlistMovie(
 			},
 		},
 		include: {
-			movies: true,
+			movies: {
+				include: {
+					user: true,
+				},
+			},
 		},
 	});
 

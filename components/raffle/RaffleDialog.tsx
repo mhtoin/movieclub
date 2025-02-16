@@ -1,5 +1,6 @@
 "use client";
 import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
+import type { MovieWithUser } from "@/types/movie.type";
 import * as Ariakit from "@ariakit/react";
 import { ChevronRight, Dices } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";

@@ -1,78 +1,29 @@
-import { NextResponse } from "next/server";
 import { getTierlist, updateTierlist } from "@/lib/tierlists";
-import type { TierlistsTier } from "@prisma/client";
-import prisma from "@/lib/prisma";
+import type { TierlistWithTiers } from "@/types/tierlist.type";
+import { NextResponse } from "next/server";
 
 export async function GET(
-  _request: Request,
-  { params }: { params: { id: string } }
+	_request: Request,
+	{ params }: { params: { id: string } },
 ) {
-  const tierlist = await getTierlist(params.id);
-  return NextResponse.json(tierlist);
+	const tierlist = await getTierlist(params.id);
+	return NextResponse.json(tierlist);
 }
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+	request: Request,
+	{ params }: { params: { id: string } },
 ) {
-  const tierlist: Tierlist = await request.json();
+	const tierlist: TierlistWithTiers = await request.json();
+	console.log("received tierlist", tierlist);
 
-  const tiers = tierlist.tiers.map((tier) => {
-    const movieIds = tier.movies.map((movie) => movie.id);
-
-    return {
-      ...tier,
-      movies: movieIds,
-    };
-  }) as Array<TierlistsTier>;
-  try {
-    const res = await updateTierlist(params.id, tiers);
-    return NextResponse.json({ ok: true, data: res });
-  } catch (e) {
-    const error = e as Error;
-    return NextResponse.json({ ok: false, message: error }, { status: 500 });
-  }
-}
-
-export async function DELETE(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const _res = await updateTierlist(params.id, []);
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    const error = e as Error;
-    return NextResponse.json({ ok: false, message: error }, { status: 500 });
-  }
-}
-
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const body = await request.json();
-  const tierlist = await getTierlist(params.id);
-  const tierlistTiers = tierlist.tiers;
-  tierlistTiers.push({
-    label: body.tierName,
-    value: tierlistTiers.length + 1,
-    movies: [],
-  });
-
-  const formattedTiers = tierlistTiers.map((tier) => ({
-    ...tier,
-    movies: tier.movies.map((movie) => movie.id),
-  }));
-
-  await prisma.tierlists.update({
-    where: {
-      id: params.id,
-    },
-    data: {
-      tiers: formattedTiers as Array<TierlistsTier>,
-    },
-  });
-
-  return NextResponse.json({ ok: true });
+	try {
+		const res = await updateTierlist(params.id, tierlist);
+		console.log("updated tierlist", res);
+		return NextResponse.json({ ok: true, data: res });
+	} catch (e) {
+		const error = e as Error;
+		console.error("error updating tierlist", error);
+		return NextResponse.json({ ok: false, message: error }, { status: 500 });
+	}
 }

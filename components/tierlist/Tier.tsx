@@ -1,3 +1,4 @@
+import type { MovieWithUser } from "@/types/movie.type";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -7,11 +8,11 @@ import { useEffect, useState } from "react";
 export default function Tier({
 	tierIndex,
 	tier,
-	tiers,
+	label,
 }: {
 	tierIndex: number;
-	tier: Movie[];
-	tiers: string[];
+	tier: MovieWithUser[];
+	label: string;
 }) {
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(false);
@@ -71,7 +72,7 @@ export default function Tier({
 		>
 			<div className="flex md:hidden absolute -top-4 bg-background rounded-md px-2">
 				<span className="text-lg font-bold whitespace-normal text-center">
-					{tiers[tierIndex]}
+					{label}
 				</span>
 			</div>
 			<button
@@ -101,7 +102,7 @@ export default function Tier({
 					}
 				>
 					<span className="text-lg font-bold whitespace-normal w-24 text-center">
-						{tiers[tierIndex]}
+						{label}
 					</span>
 				</div>
 			)}

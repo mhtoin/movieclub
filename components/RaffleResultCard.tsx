@@ -1,7 +1,9 @@
+import type { MovieWithUser } from "@/types/movie.type";
+
 export default function RaffleResultCard({
 	chosenMovie,
 }: {
-	chosenMovie: MovieOfTheWeek;
+	chosenMovie: MovieWithUser;
 }) {
 	return (
 		<div className="card bg-base-100 shadow-xl image-full">
@@ -23,7 +25,7 @@ export default function RaffleResultCard({
 					{chosenMovie?.overview}
 				</p>
 				<div className="card-actions justify-end">
-					{chosenMovie?.trailers?.map((trailer) => {
+					{chosenMovie?.videos?.map((trailer) => {
 						return (
 							<a
 								key={`${trailer.id}-link`}
@@ -56,7 +58,7 @@ export default function RaffleResultCard({
 						rel="noopener noreferrer"
 					>
 						<div className="join">
-							{chosenMovie?.watchProviders?.flatrate?.map((item) => {
+							{chosenMovie?.watchProviders?.providers?.map((item) => {
 								return (
 									<div className="avatar join-item" key={item.provider_id}>
 										<div className="w-10 rounded">

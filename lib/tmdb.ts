@@ -28,7 +28,7 @@ export async function getAdditionalInfo(tmdbId: number) {
 				id: trailer.id,
 				key: trailer.key,
 			};
-		}) as Trailer[];
+		});
 
 	const watchProviders = tmdbDetails["watch/providers"]?.results?.FI;
 

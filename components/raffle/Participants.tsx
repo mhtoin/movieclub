@@ -4,7 +4,7 @@ import {
 	useUpdateReadyStateMutation,
 	useValidateSession,
 } from "@/lib/hooks";
-import { Lock, LockOpen, } from "lucide-react";
+import { Lock, LockOpen } from "lucide-react";
 import { Button } from "../ui/Button";
 import { ParticipationButton } from "./ParticipationButton";
 
@@ -20,9 +20,8 @@ export default function Participants({
 		status: updateReadyStateStatus,
 		mutate: updateReadyState,
 	} = useUpdateReadyStateMutation();
-	const { status: updateParticipationStatus, mutate: updateParticipation } =
-		useUpdateParticipationMutation();
-	const { data: allShortlists, status } = useShortlistsQuery();
+	const { mutate: updateParticipation } = useUpdateParticipationMutation();
+	const { data: allShortlists } = useShortlistsQuery();
 	const { data: currentUser } = useValidateSession();
 	return (
 		<div className="flex flex-col gap-10 items-center w-full h-full overflow-y-auto py-5">
@@ -60,10 +59,7 @@ export default function Participants({
 										<LockOpen className="h-5 w-5" />
 									)}
 								</div>
-								<span
-									className={"text-xs text-center font-semibold"}
-									style={{ color: user?.color }}
-								>
+								<span className={"text-xs text-center font-semibold"}>
 									{user?.name}
 								</span>
 								<Button

@@ -1,5 +1,6 @@
 import { useFilterStore } from "@/stores/useFilterStore";
-import { useEffect, } from "react";
+import type { Provider } from "@/types/tmdb.type";
+import { useEffect } from "react";
 import { Button } from "../ui/Button";
 
 export default function ProviderButton({
@@ -7,7 +8,7 @@ export default function ProviderButton({
 	isToggled,
 	submit,
 }: {
-	provider: WatchProvider;
+	provider: Provider;
 	isToggled: boolean;
 	submit: () => void;
 }) {

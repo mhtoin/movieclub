@@ -1,3 +1,4 @@
+import type { User } from "@prisma/client";
 import prisma from "./prisma";
 
 export async function updateUser(user: User, id: string) {

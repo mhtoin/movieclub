@@ -1,5 +1,6 @@
 "use client";
 import type { MovieWithUser } from "@/types/movie.type";
+import type { TierlistWithTiers } from "@/types/tierlist.type";
 import {
 	DragDropContext,
 	type DraggableLocation,
@@ -53,8 +54,10 @@ const moveItem = (
 
 export default function DnDTierContainer({
 	tierlistId,
+	authorized,
 }: {
 	tierlistId: string;
+	authorized: boolean;
 }) {
 	const queryClient = getQueryClient();
 	const pathname = usePathname();
@@ -66,49 +69,25 @@ export default function DnDTierContainer({
 	const { data: tierlistData, status: tierlistStatus } = useQuery(
 		tierlistKeys.byId(tierlistId),
 	);
-	const { data: moviesOfTheWeek, status: moviesOfTheWeekStatus } = useQuery({
-		queryKey: ["moviesOfTheWeek"],
-		queryFn: async () => {
-			const res = await fetch("/api/movies");
-			const data: MovieWithUser[] = await res.json();
-			return data;
-		},
-	});
-
-	const tiers = ["Unranked"].concat(
-		tierlistData?.tiers.map((tier) => tier.label) || [],
-	);
 
 	const [containerState, setContainerState] = useState<
-		MovieOfTheWeek[][] | undefined
+		MovieWithUser[][] | undefined
 	>(undefined);
 	const setNotification = useNotificationStore(
 		(state) => state.setNotification,
 	);
+	const tiers = tierlistData?.tierlistTiers.map((tier) => tier.label);
 
 	useEffect(() => {
-		const movieMatrix = tierlistData?.tiers.map((tier) => {
+		const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
 			return tier.movies
 				.filter((movie) =>
 					selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true,
 				)
 				.map((movie) => movie);
 		});
-
-		const unranked = moviesOfTheWeek?.filter((movie) => {
-			const movieInList = tierlistData?.tiers
-				.flatMap((tier) => tier.movies.map((movie) => movie.title))
-				.includes(movie.title);
-			return !movieInList && selectedDate
-				? movie.watchDate?.split("-")[0] === selectedDate
-				: !movieInList;
-		}) as unknown as MovieOfTheWeek[];
-
-		if (unranked) {
-			movieMatrix?.unshift(unranked);
-		}
 		setContainerState(movieMatrix);
-	}, [tierlistData, moviesOfTheWeek, selectedDate]);
+	}, [tierlistData, selectedDate]);
 
 	const handleDateChange = (date: string) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -121,7 +100,7 @@ export default function DnDTierContainer({
 			scroll: false,
 		});
 		setSelectedDate(date);
-		const movieMatrix = tierlistData?.tiers.map((tier) => {
+		const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
 			return tier.movies
 				.filter((movie) =>
 					date ? movie.watchDate?.split("-")[0] === date : true,
@@ -129,18 +108,6 @@ export default function DnDTierContainer({
 				.map((movie) => movie);
 		});
 
-		const unranked = moviesOfTheWeek?.filter((movie) => {
-			const movieInList = tierlistData?.tiers
-				.flatMap((tier) => tier.movies.map((movie) => movie.title))
-				.includes(movie.title);
-			return !movieInList && date
-				? movie.watchDate?.split("-")[0] === date
-				: !movieInList;
-		}) as unknown as MovieOfTheWeek[];
-
-		if (unranked) {
-			movieMatrix?.unshift(unranked);
-		}
 		setContainerState(movieMatrix);
 	};
 
@@ -176,12 +143,12 @@ export default function DnDTierContainer({
 			newState[sInd] = items;
 
 			const saveState = produce(tierlistData, (draft) => {
-				for (const tier of draft.tiers) {
+				for (const tier of draft.tierlistTiers) {
 					tier.movies = newState[tier.value];
 				}
 			});
 			setContainerState(newState);
-			queryClient.setQueryData(["tierlists", tierlist.id], saveState);
+			queryClient.setQueryData(["tierlists", tierlistId], saveState);
 
 			saveMutation.mutate(saveState);
 		} else {
@@ -197,14 +164,13 @@ export default function DnDTierContainer({
 
 			// mutate the tierlist
 			const saveState = produce(tierlistData, (draft) => {
-				for (const tier of draft.tiers) {
+				for (const tier of draft.tierlistTiers) {
 					// need to merge states if we have filtered for a date
 					tier.movies = newState[tier.value];
 				}
 			});
 
-			queryClient.setQueryData(["moviesOfTheWeek"], newState[0]);
-			queryClient.setQueryData(["tierlists", tierlist.id], saveState);
+			queryClient.setQueryData(["tierlists", tierlistId], saveState);
 
 			saveMutation.mutate(saveState);
 
@@ -213,7 +179,7 @@ export default function DnDTierContainer({
 	}
 
 	const saveMutation = useMutation({
-		mutationFn: async (saveState: Tierlist) => {
+		mutationFn: async (saveState: TierlistWithTiers) => {
 			const res = await fetch(`/api/tierlists/${saveState.id}`, {
 				method: "PUT",
 				body: JSON.stringify(saveState),
@@ -224,13 +190,13 @@ export default function DnDTierContainer({
 			if (body.ok) {
 				return body;
 			}
-			throw new Error("Updating tierlist failed");
+			throw new Error("Updating tierlist failed", { cause: body });
 		},
 		onSuccess: (_data, _variables, _context) => {
 			toast.success("Tierlist updated!");
 		},
 		onError: (_error) => {
-			setNotification("Updating tierlist failed!", "error");
+			toast.error("Updating tierlist failed!");
 		},
 	});
 
@@ -258,14 +224,16 @@ export default function DnDTierContainer({
 
 	const handleSave = () => {
 		// construct a tierlist from tiers and matrix
-		const saveState = produce(tierlist, (draft) => {
-			for (const tier of draft.tiers) {
+		const saveState = produce(tierlistData, (draft) => {
+			for (const tier of draft?.tierlistTiers || []) {
 				tier.movies = containerState?.[tier.value] || [];
 			}
 			return draft;
 		});
 
-		saveMutation.mutate(saveState);
+		if (saveState) {
+			saveMutation.mutate(saveState);
+		}
 	};
 
 	return (
@@ -285,7 +253,7 @@ export default function DnDTierContainer({
 					isLoading={deleteMutation.isPending}
 					onClick={() => {
 						if (containerState && containerState?.length > 1) {
-							deleteMutation.mutate(tierlist.id);
+							deleteMutation.mutate(tierlistId);
 						} else {
 							if (document) {
 								(
@@ -301,12 +269,12 @@ export default function DnDTierContainer({
 					</span>
 				</Button>
 				<TierDateFilter
-					values={allYears}
+					values={["2023", "2024", "2025"]}
 					selectedDate={selectedDate}
 					setSelectedDate={handleDateChange}
 				/>
 			</div>
-			{tierlistStatus === "pending" || moviesOfTheWeekStatus === "pending" ? (
+			{tierlistStatus === "pending" ? (
 				<Loader2 className="animate-spin" />
 			) : (
 				<div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
@@ -316,12 +284,12 @@ export default function DnDTierContainer({
 								key={tierIndex}
 								tierIndex={tierIndex}
 								tier={tier}
-								tiers={tiers}
+								label={tiers?.[tierIndex] || ""}
 							/>
 						))}
 					</DragDropContext>
 					{tierlistData?.tiers && tierlistData?.tiers?.length <= 4 && (
-						<TierCreate tierlistId={tierlist.id} />
+						<TierCreate tierlistId={tierlistId} />
 					)}
 				</div>
 			)}

@@ -1,6 +1,7 @@
 import { useValidateSession } from "@/lib/hooks";
+import type { MovieWithUser } from "@/types/movie.type";
 import type { UseMutateFunction } from "@tanstack/react-query";
-import { Dices, } from "lucide-react";
+import { Dices } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/Button";
 import {
@@ -38,8 +39,6 @@ export default function ActionButtons({
 	setIsPlaying,
 	setStarted,
 	shuffledMovies,
-	setShuffledMovies,
-	resetRaffle,
 	raffle,
 	disabled,
 }: ActionButtonsProps) {

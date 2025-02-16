@@ -2,6 +2,7 @@
 import { useGetWatchProvidersQuery } from "@/lib/hooks";
 import { useFilterStore } from "@/stores/useFilterStore";
 import type { Provider } from "@/types/tmdb.type";
+import type { Genre } from "@prisma/client";
 import { Button } from "components/ui/Button";
 import { useState } from "react";
 import FiltersModal from "./FiltersModal";
@@ -32,7 +33,7 @@ export default function Filters() {
 		if (genreSelections.length > 0) {
 			queryStringArr.push(
 				`with_genres=${genreSelections
-					.map((genre: Genre) => genre.value)
+					.map((genre: Genre) => genre.id)
 					.join("|")}`,
 			);
 		}

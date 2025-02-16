@@ -1,3 +1,5 @@
+import type { TierlistWithTiers } from "@/types/tierlist.type";
+import type { TierlistTier } from "@prisma/client";
 import { validateRequest } from "./auth";
 import prisma from "./prisma";
 
@@ -24,7 +26,14 @@ export async function getTierlist(id: string) {
 		include: {
 			tierlistTiers: {
 				include: {
-					movies: true,
+					movies: {
+						include: {
+							user: true,
+						},
+					},
+				},
+				orderBy: {
+					value: "asc",
 				},
 			},
 		},
@@ -51,7 +60,7 @@ export async function createTierlist(formData: FormData) {
 				label: tierLabel,
 				value: tierValue,
 				movies: movies,
-			} as unknown as TierlistsTier);
+			} as TierlistTier);
 		}
 	}
 
@@ -65,13 +74,22 @@ export async function createTierlist(formData: FormData) {
 	});
 }
 
-export async function updateTierlist(id: string, tiers: Array<TierlistsTier>) {
+export async function updateTierlist(id: string, tierList: TierlistWithTiers) {
 	return await prisma.tierlists.update({
-		where: {
-			id: id,
-		},
+		where: { id },
 		data: {
-			tiers: tiers,
+			tierlistTiers: {
+				update: tierList.tierlistTiers.map((tier) => ({
+					where: { id: tier.id },
+					data: {
+						label: tier.label,
+						value: tier.value,
+						movies: {
+							set: tier.movies.map((movie) => ({ id: movie.id })),
+						},
+					},
+				})),
+			},
 		},
 	});
 }
@@ -104,7 +122,7 @@ function parseTiers(formData: FormData) {
 				label: tierLabel,
 				value: tierValue,
 				movies: movies,
-			} as unknown as TierlistsTier);
+			} as TierlistTier);
 		}
 	}
 

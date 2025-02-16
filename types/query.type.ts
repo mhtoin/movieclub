@@ -1,5 +1,5 @@
-import { MovieOfTheWeek } from "./movie.type";
+import type { MovieWithUser } from "./movie.type";
 
 export interface MoviesOfTheWeekByMonth {
-  [key: `${number}-${number}-${number}`]: MovieOfTheWeek[];
+	[key: `${number}-${number}-${number}`]: MovieWithUser[];
 }
