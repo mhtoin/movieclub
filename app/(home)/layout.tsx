@@ -6,7 +6,7 @@ import ReplaceDialog from "components/search/ReplaceDialog";
 import dynamic from "next/dynamic";
 import { Toaster } from "sonner";
 
-const NavBar = dynamic(() => import("@/components/navigation/Navbar"), {
+const NavBar = dynamic(() => import("components/nav/Navbar"), {
 	ssr: false,
 });
 
