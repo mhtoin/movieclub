@@ -1,5 +1,3 @@
-const path = require("node:path");
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	output: "standalone",
@@ -25,13 +23,6 @@ const nextConfig = {
 				pathname: "/u/**",
 			},
 		],
-	},
-	webpack: (config) => {
-		config.resolve.alias = {
-			...config.resolve.alias,
-			components: path.join(__dirname, "components"),
-		};
-		return config;
 	},
 };
 
