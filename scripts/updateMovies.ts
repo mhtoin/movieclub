@@ -54,10 +54,10 @@ export default async function updateMovies() {
 		//console.dir(data, { depth: null });
 
 		const finnishProvider = [
-			...(data["watch/providers"]?.results?.["FI"]?.flatrate ?? []),
-			...(data["watch/providers"]?.results?.["FI"]?.free ?? []),
+			...(data["watch/providers"]?.results?.FI?.flatrate ?? []),
+			...(data["watch/providers"]?.results?.FI?.free ?? []),
 		];
-		const providerLink = data["watch/providers"]?.results?.["FI"]?.link;
+		const providerLink = data["watch/providers"]?.results?.FI?.link;
 		const cast = data.credits?.cast;
 
 		// for videos, only include trailers
