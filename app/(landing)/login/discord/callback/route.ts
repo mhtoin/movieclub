@@ -5,8 +5,9 @@ import {
 	setSessionTokenCookie,
 } from "@/lib/authentication/session";
 import { db } from "@/lib/db";
-import { cookies } from "next/headers";
+import type { DiscordUser } from "@/types/common.type";
 import type { OAuth2Tokens } from "arctic";
+import { cookies } from "next/headers";
 
 export async function GET(request: Request): Promise<Response> {
 	const url = new URL(request.url);
@@ -88,7 +89,7 @@ export async function GET(request: Request): Promise<Response> {
 		},
 	});
 
-	const _account = await db?.account.create({
+	await db?.account.create({
 		data: {
 			userId: user.id,
 			provider: "discord",

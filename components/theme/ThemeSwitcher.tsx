@@ -1,5 +1,4 @@
 "use client";
-import { createThemeCookie } from "@/lib/actions/setThemeCookie";
 import { useIsMobile } from "@/lib/hooks";
 import * as Ariakit from "@ariakit/react";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
@@ -66,20 +65,6 @@ export default function ThemeSwitcher() {
 		global.window.__onThemeChange = setTheme;
 		global.window.__onAccentChange = setAccentColor;
 	}, []);
-
-	const _handleThemeSwitch = async (theme: "light" | "dark") => {
-		setTheme(theme);
-		await createThemeCookie("theme", theme);
-	};
-
-	const _handleAccentSwitch = async (color: string) => {
-		setAccentColor(color === "Default" ? "" : color.toLowerCase());
-		// TODO: Server action to save to cookie
-		await createThemeCookie(
-			"accent",
-			color === "Default" ? "" : color.toLowerCase(),
-		);
-	};
 
 	if (isMobile) {
 		return (

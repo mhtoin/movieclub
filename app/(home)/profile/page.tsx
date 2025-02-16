@@ -122,12 +122,11 @@ export default function Profile() {
 			</details>
 			<Button
 				onClick={() =>
-					startTransition(() =>
-						saveProfile({
-							sessionId: sessionId,
-							accountId: accountId ? accountId : null,
-						}),
-					)
+					startTransition(() => {
+						if (sessionId && accountId) {
+							saveProfile(session);
+						}
+					})
 				}
 			>
 				Save

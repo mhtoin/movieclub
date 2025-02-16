@@ -119,7 +119,7 @@ export async function publishMessage(
 	topic: string,
 	user_id: string,
 ) {
-	const _res = await fetch(
+	await fetch(
 		`${
 			process.env.NODE_ENV === "development"
 				? "http://localhost:8080"
@@ -143,7 +143,7 @@ export async function sendNotification(
 	message: string | object,
 	user_id: string,
 ) {
-	const _res = await fetch(
+	await fetch(
 		`${
 			process.env.NODE_ENV === "development"
 				? "http://localhost:8080"

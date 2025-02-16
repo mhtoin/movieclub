@@ -364,7 +364,7 @@ export async function connectChosenMovies(movies: ChosenMovie[]) {
 			});
 
 			if (!movieData?.userId) {
-				const _res = await prisma.movie.update({
+				await prisma.movie.update({
 					where: {
 						id: movieData?.id,
 					},

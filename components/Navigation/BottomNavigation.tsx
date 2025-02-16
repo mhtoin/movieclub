@@ -1,11 +1,8 @@
 "use client";
 import { useDebounce } from "@/lib/hooks";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BottomNavigation() {
-	const _pathname = usePathname();
-	const _router = useRouter();
 	const [prevScrollPos, setPrevScrollPos] = useState(0);
 	const [_visible, setVisible] = useState(true);
 

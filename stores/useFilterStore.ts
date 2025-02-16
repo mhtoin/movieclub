@@ -1,4 +1,6 @@
 import { createSelectors } from "@/lib/createSelectors";
+import type { RangeSelection } from "@/types/common.type";
+import type { Genre } from "@prisma/client";
 import { create } from "zustand";
 
 const baseUrl =
@@ -22,7 +24,7 @@ interface FilterState {
 	addGenre: (genre: Genre) => void;
 }
 
-const useFilterStoreBase = create<FilterState>()((set, get) => ({
+const useFilterStoreBase = create<FilterState>()((set) => ({
 	genres: [],
 	yearRange: { min: "1900", max: new Date().getFullYear().toString() },
 	ratingRange: { min: "0", max: "10" },
@@ -31,12 +33,12 @@ const useFilterStoreBase = create<FilterState>()((set, get) => ({
 	defaultSelectAll: true,
 	searchValue: `${baseUrl}&with_watch_providers=8|119|323|337|384|1773&watch_region=FI`,
 	setSearchValue: (value) =>
-		set((state) => {
+		set(() => {
 			return { searchValue: value };
 		}),
-	setDefaultSelectAll: (value) => set((state) => ({ defaultSelectAll: value })),
+	setDefaultSelectAll: (value) => set(() => ({ defaultSelectAll: value })),
 	setWatchProviders: (watchProviders) =>
-		set((state) => ({ watchProviders: watchProviders })),
+		set(() => ({ watchProviders: watchProviders })),
 	addWatchprovider: (watchProvider) =>
 		set((state) => ({
 			watchProviders: [...state.watchProviders, watchProvider],
@@ -49,7 +51,7 @@ const useFilterStoreBase = create<FilterState>()((set, get) => ({
 		set((state) => ({ ratingRange: { ...state.ratingRange, [label]: value } })),
 	setYearRange: (label, value) =>
 		set((state) => ({ yearRange: { ...state.yearRange, [label]: value } })),
-	setGenres: (genres) => set((state) => ({ genres: genres })),
+	setGenres: (genres) => set(() => ({ genres: genres })),
 	addGenre: (genre) => set((state) => ({ genres: [...state.genres, genre] })),
 }));
 

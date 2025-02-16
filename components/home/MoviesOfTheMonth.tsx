@@ -6,10 +6,9 @@ import MovieGalleryItem from "./MovieGalleryItem";
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 export default function MoviesOfTheMonth() {
-	const _router = useRouter();
 	const pathname = usePathname();
 	const sentinelRef = useRef<HTMLDivElement>(null);
 	const currentMonth =

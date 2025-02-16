@@ -46,7 +46,9 @@ export default async function CurrentMoviePoster() {
 						<div className="flex items-center justify-start md:justify-center p-4 w-full md:w-1/2 h-full">
 							<div className="flex flex-col gap-4 justify-center ">
 								<div className="flex flex-row gap-2 ">
-									<UserPortrait user={mostRecentMovie?.user} />
+									{mostRecentMovie?.user && (
+										<UserPortrait user={mostRecentMovie?.user} />
+									)}
 								</div>
 								<p className="text-lg max-w-[500px] text-foreground/60">
 									{mostRecentMovie?.tagline}

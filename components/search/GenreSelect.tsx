@@ -16,10 +16,13 @@ export default function GenreSelect() {
 				isMulti
 				name="genres"
 				isSearchable={false}
-				defaultValue={genres}
+				defaultValue={genres?.map((genre) => ({
+					label: genre.name,
+					value: genre.id,
+				}))}
 				options={genreOptions}
 				onChange={(selections) => {
-					setGenres([...selections]);
+					setGenres(selections.map((s) => ({ id: s.value, name: s.label })));
 				}}
 				styles={{
 					control: (baseStyles, _state) => ({
