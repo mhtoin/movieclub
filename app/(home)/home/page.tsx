@@ -16,7 +16,7 @@ export default async function HomePage() {
 
 	queryClient.prefetchInfiniteQuery({
 		queryKey: ["pastMovies"],
-		queryFn: () => getMoviesOfTheWeekByMonth(""),
+		queryFn: () => getMoviesOfTheWeekByMonth(format(new Date(), "yyyy-MM")),
 		initialPageParam: format(new Date(), "yyyy-MM"),
 	});
 
