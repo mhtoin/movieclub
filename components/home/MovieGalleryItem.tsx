@@ -1,4 +1,5 @@
 "use client";
+import { useWatchDateStore } from "@/stores/useWatchDateStore";
 import type { MovieWithUser } from "@/types/movie.type";
 import { Button } from "components/ui/Button";
 import {
@@ -19,9 +20,12 @@ import { SiThemoviedatabase } from "react-icons/si";
 import CastPopover from "../raffle/CastPopover";
 import CastPortrait from "../raffle/CastPortrait";
 import UserPortrait from "../raffle/UserPortrait";
+
 export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const pathname = usePathname();
+
+	const setDay = useWatchDateStore.use.setDay();
 	const backgroundImage = movie?.images?.backdrops[0]?.file_path
 		? `https://image.tmdb.org/t/p/original/${movie?.images?.backdrops[0]?.file_path}`
 		: `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`;
@@ -43,12 +47,13 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 		};
 	}, [isExpanded]);
 
-	const handleHover = () => {
+	const handleExpand = () => {
 		const params = new URLSearchParams(window.location.search);
 		const dateParts = movie?.watchDate?.split("-");
 		const day = dateParts?.[2];
 		params.set("date", day ?? "");
 		window.history.replaceState({}, "", `${pathname}?${params}`);
+		setIsExpanded(!isExpanded);
 	};
 
 	return (
@@ -56,7 +61,8 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 			className="gallery-item @container group"
 			key={movie.id}
 			data-expanded={isExpanded}
-			onMouseEnter={() => handleHover()}
+			onMouseEnter={() => setDay(movie?.watchDate?.split("-")[2] ?? "")}
+			onMouseLeave={() => setDay("")}
 		>
 			<div className="relative w-full h-full">
 				<Image
@@ -76,7 +82,7 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 						<Button
 							variant="ghost"
 							size="iconLg"
-							onClick={() => setIsExpanded(!isExpanded)}
+							onClick={handleExpand}
 							className="z-50"
 							tabIndex={isExpanded ? -1 : 0}
 						>
@@ -130,9 +136,7 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 								</div>
 								<div className="flex flex-row gap-2 flex-wrap items-center">
 									<p className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60">
-										{new Date(movie?.watchDate ?? "").toLocaleDateString(
-											"fi-FI",
-										)}
+										{new Date(movie?.watchDate ?? "").toLocaleDateString("fi-FI")}
 									</p>
 									<span>|</span>
 									<span className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
@@ -232,9 +236,7 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 									</div>
 									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
 										{movie?.runtime
-											? `${Math.floor(movie?.runtime / 60)}h ${
-													movie?.runtime % 60
-												}m`
+											? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}m`
 											: ""}
 									</div>
 								</div>
