@@ -13,10 +13,7 @@ export async function POST(request: NextRequest, _response: NextResponse) {
 	} catch (e) {
 		console.error("error", e);
 		if (e instanceof Error) {
-			return NextResponse.json(
-				{ ok: false, message: e.message },
-				{ status: 401 },
-			);
+			return NextResponse.json({ ok: false, message: e.message }, { status: 401 });
 		}
 		return NextResponse.json(
 			{ ok: false, message: "Something went wrong!" },

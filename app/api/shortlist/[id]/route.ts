@@ -25,10 +25,7 @@ export async function GET(
 		return NextResponse.json(shortlist, { status: 200 });
 	} catch (e) {
 		if (e instanceof Error) {
-			return NextResponse.json(
-				{ ok: false, message: e.message },
-				{ status: 401 },
-			);
+			return NextResponse.json({ ok: false, message: e.message }, { status: 401 });
 		}
 	}
 
@@ -51,10 +48,7 @@ export async function POST(
 		return NextResponse.json(updatedShortlist);
 	} catch (e) {
 		if (e instanceof Error) {
-			return NextResponse.json(
-				{ ok: false, message: e.message },
-				{ status: 401 },
-			);
+			return NextResponse.json({ ok: false, message: e.message }, { status: 401 });
 		}
 	}
 

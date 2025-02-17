@@ -22,10 +22,7 @@ export default function Page() {
 				{tiers?.map((tier) => {
 					return (
 						<>
-							<label
-								htmlFor={`tier${tier.value}`}
-								key={`tier-label-${tier.value}`}
-							>
+							<label htmlFor={`tier${tier.value}`} key={`tier-label-${tier.value}`}>
 								{`Tier${tier.value}`}
 							</label>
 							<input

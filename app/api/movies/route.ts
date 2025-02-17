@@ -24,10 +24,7 @@ export async function GET(
 		return NextResponse.json(movies, { status: 200 });
 	} catch (e) {
 		if (e instanceof Error) {
-			return NextResponse.json(
-				{ ok: false, message: e.message },
-				{ status: 401 },
-			);
+			return NextResponse.json({ ok: false, message: e.message }, { status: 401 });
 		}
 		return NextResponse.json(
 			{ ok: false, message: "An unknown error occurred" },

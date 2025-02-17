@@ -42,8 +42,7 @@ export default async function Dashboard() {
 							<h2 className="text-xl font-bold">{user}</h2>
 							<p className="text-2xl">
 								{`${moviesGroupedByUser[user].length} (${(
-									(moviesGroupedByUser[user].length / watchedMovies.length) *
-										100
+									(moviesGroupedByUser[user].length / watchedMovies.length) * 100
 								).toFixed(2)}%)`}
 							</p>
 						</div>

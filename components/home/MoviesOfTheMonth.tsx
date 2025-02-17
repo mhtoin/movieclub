@@ -9,66 +9,29 @@ import { Loader2Icon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-function DebugOverlays() {
-	return (
-		<>
-			{/* Top overlay representing the extra 1000px above the viewport */}
-			<div
-				style={{
-					position: "fixed",
-					top: -1000,
-					left: 0,
-					right: 0,
-					height: "1000px",
-					borderBottom: "2px dashed green",
-					pointerEvents: "none",
-					zIndex: 1000,
-				}}
-			/>
-			{/* Bottom overlay representing the extra 1000px below the viewport */}
-			<div
-				style={{
-					position: "fixed",
-					bottom: -1000,
-					left: 0,
-					right: 0,
-					height: "1000px",
-					borderTop: "2px dashed blue",
-					pointerEvents: "none",
-					zIndex: 1000,
-				}}
-			/>
-		</>
-	);
-}
-
 export default function MoviesOfTheMonth() {
 	const pathname = usePathname();
 	const sentinelRef = useRef<HTMLDivElement>(null);
-	const currentMonth =
-		useSearchParams().get("month") || format(new Date(), "yyyy-MM");
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useSuspenseInfiniteQuery({
-			queryKey: ["pastMovies"],
-			queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
-			initialPageParam: currentMonth,
-			getNextPageParam: (lastPage) => {
-				if (!lastPage?.month) return undefined;
-				const { month } = lastPage;
-				// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
-				const dateParts = month.split("-");
-				const monthNumber = Number.parseInt(dateParts[1]);
-				const yearNumber = Number.parseInt(dateParts[0]);
-				const nextMonthNumber =
-					monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
-				const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;
-				const nextMonthString =
-					nextMonthNumber < 10 ? `0${nextMonthNumber}` : nextMonthNumber;
-				const nextMonth = `${nextYearNumber}-${nextMonthString}`;
+	const currentMonth = useSearchParams().get("month") || format(new Date(), "yyyy-MM");
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery({
+		queryKey: ["pastMovies"],
+		queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
+		initialPageParam: currentMonth,
+		getNextPageParam: (lastPage) => {
+			if (!lastPage?.month) return undefined;
+			const { month } = lastPage;
+			// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
+			const dateParts = month.split("-");
+			const monthNumber = Number.parseInt(dateParts[1]);
+			const yearNumber = Number.parseInt(dateParts[0]);
+			const nextMonthNumber = monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
+			const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;
+			const nextMonthString = nextMonthNumber < 10 ? `0${nextMonthNumber}` : nextMonthNumber;
+			const nextMonth = `${nextYearNumber}-${nextMonthString}`;
 
-				return nextMonth;
-			},
-		});
+			return nextMonth;
+		},
+	});
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -78,8 +41,8 @@ export default function MoviesOfTheMonth() {
 				}
 			},
 			{
-				rootMargin: "1000px 0px", // Increased buffer to 1000px for earlier detection
-				threshold: 0, // Trigger immediately when any part of sentinel becomes visible
+				rootMargin: "1000px 0px",
+				threshold: 0,
 			},
 		);
 
@@ -90,6 +53,7 @@ export default function MoviesOfTheMonth() {
 		return () => observer.disconnect();
 	}, [hasNextPage, fetchNextPage]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			(entries) => {
