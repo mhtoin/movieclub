@@ -47,17 +47,14 @@ export default function MoviesOfTheMonth() {
 	const sentinelRef = useRef<HTMLDivElement>(null);
 	const currentMonth =
 		useSearchParams().get("month") || format(new Date(), "yyyy-MM");
-	console.log("currentMonth", currentMonth);
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
 		useSuspenseInfiniteQuery({
 			queryKey: ["pastMovies"],
 			queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
 			initialPageParam: currentMonth,
 			getNextPageParam: (lastPage) => {
-				console.log("lastPage", lastPage);
 				if (!lastPage?.month) return undefined;
 				const { month } = lastPage;
-				console.log("month", month);
 				// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
 				const dateParts = month.split("-");
 				const monthNumber = Number.parseInt(dateParts[1]);
@@ -74,23 +71,15 @@ export default function MoviesOfTheMonth() {
 		});
 
 	useEffect(() => {
-		console.log("Setting up Intersection Observer");
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				console.log("Intersection Observer Entry:", entry);
-				console.log(" - boundingClientRect:", entry.boundingClientRect);
-				console.log(" - rootBounds:", entry.rootBounds);
-				console.log(" - isIntersecting:", entry.isIntersecting);
-				console.log(" - hasNextPage:", hasNextPage);
-
 				if (entry.isIntersecting && hasNextPage) {
-					console.log("Fetching next page...");
 					fetchNextPage();
 				}
 			},
 			{
-				rootMargin: "1000px 0px",
-				threshold: 0,
+				rootMargin: "1000px 0px", // Increased buffer to 1000px for earlier detection
+				threshold: 0, // Trigger immediately when any part of sentinel becomes visible
 			},
 		);
 
@@ -98,10 +87,7 @@ export default function MoviesOfTheMonth() {
 			observer.observe(sentinelRef.current);
 		}
 
-		return () => {
-			console.log("Disconnecting Intersection Observer");
-			observer.disconnect();
-		};
+		return () => observer.disconnect();
 	}, [hasNextPage, fetchNextPage]);
 
 	useEffect(() => {
@@ -127,13 +113,10 @@ export default function MoviesOfTheMonth() {
 		}
 
 		return () => observer.disconnect();
-	}, [pathname]);
+	}, [data.pages]);
 
 	return (
 		<>
-			{/* Only include these overlays when debugging */}
-			<DebugOverlays />
-
 			{data?.pages.map((page) => (
 				<div
 					key={page.month}
@@ -150,14 +133,7 @@ export default function MoviesOfTheMonth() {
 					)}
 				</div>
 			))}
-			<div
-				ref={sentinelRef}
-				className="h-6 w-full"
-				style={{
-					border: "2px dashed red",
-					backgroundColor: "rgba(255, 0, 0, 0.1)",
-				}}
-			/>
+			<div ref={sentinelRef} className="h-6 w-full" />
 		</>
 	);
 }
