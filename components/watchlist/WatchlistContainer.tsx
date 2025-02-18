@@ -15,11 +15,9 @@ export default function WatchlistContainer() {
 		? shortlistData?.movies?.map((movie) => movie.tmdbId)
 		: [];
 
-	const watchlistMovieIds = watchlist
-		? watchlist?.map((movie) => movie.id)
-		: [];
+	const watchlistMovieIds = watchlist ? watchlist?.map((movie) => movie.id) : [];
 	return (
-		<div className="flex flex-col justify-center m-5 p-10 place-items-center py-20">
+		<div className="flex flex-col m-5 p-10 py-20 overflow-y-auto no-scrollbar gap-5">
 			{session && !session.accountId && (
 				<div className="alert alert-error w-1/3">
 					<svg
@@ -39,6 +37,9 @@ export default function WatchlistContainer() {
 					<span>{`You haven't linked your TMDB account yet. You can do so in your profile`}</span>
 				</div>
 			)}
+			<div className="flex flex-col items-center gap-5">
+				<h1 className="text-2xl font-bold">Watchlist</h1>
+			</div>
 			<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
 				{watchlist?.map((movie) => {
 					return (

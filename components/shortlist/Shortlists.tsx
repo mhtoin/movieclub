@@ -4,7 +4,6 @@ import { useIsMobile } from "@/lib/hooks";
 import ShortlistCard from "components/shortlist/ShortlistCard";
 import { LoaderCircle } from "lucide-react";
 import ShortlistDrawer from "./ShortlistDrawer";
-import ShortlistSidebar from "./ShortlistSidebar";
 
 export default function Shortlists() {
 	const { data: user } = useValidateSession();
@@ -36,9 +35,7 @@ export default function Shortlists() {
 						<div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4 overflow-y-auto no-scrollbar">
 							{Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
 								if (shortlistId !== user?.shortlistId) {
-									return (
-										<ShortlistCard key={shortlistId} shortlist={shortlist} />
-									);
+									return <ShortlistCard key={shortlistId} shortlist={shortlist} />;
 								}
 							})}
 						</div>
@@ -49,26 +46,21 @@ export default function Shortlists() {
 	}
 
 	return (
-		<div className="pt-16 flex flex-row h-screen overflow-hidden">
-			<ShortlistSidebar />
-			<main className="flex flex-col items-center justify-center gap-5 p-2 pt-10 w-full h-full">
-				<div className="relative bg-secondary w-1/2 h-[1px]">
-					<h3 className="text-2xl font-bold absolute -top-4 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
-						Shortlists
-					</h3>
+		<main className="flex flex-col items-center justify-center gap-5 p-2 pt-10 w-full h-full">
+			<div className="relative bg-secondary w-1/2 h-[1px]">
+				<h3 className="text-2xl font-bold absolute -top-4 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+					Shortlists
+				</h3>
+			</div>
+			{user && (
+				<div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4 overflow-y-auto no-scrollbar p-5">
+					{Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
+						if (shortlistId !== user?.shortlistId) {
+							return <ShortlistCard key={shortlistId} shortlist={shortlist} />;
+						}
+					})}
 				</div>
-				{user && (
-					<div className="grid grid-cols-1 lg:grid-cols-2 4xl:grid-cols-3 gap-4 overflow-y-auto no-scrollbar p-5">
-						{Object.entries(allShortlists).map(([shortlistId, shortlist]) => {
-							if (shortlistId !== user?.shortlistId) {
-								return (
-									<ShortlistCard key={shortlistId} shortlist={shortlist} />
-								);
-							}
-						})}
-					</div>
-				)}
-			</main>
-		</div>
+			)}
+		</main>
 	);
 }

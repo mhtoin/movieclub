@@ -54,7 +54,7 @@ export default function NavBar() {
 			className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
 				isScrolled
 					? "bg-background/80 backdrop-blur-md border-b"
-					: "bg-transparent"
+					: "bg-transparent border-b border-border/50"
 			}`}
 		>
 			<div className="w-[90%] h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">

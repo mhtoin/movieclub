@@ -1,11 +1,9 @@
-import {
-	Checkbox,
-	VisuallyHidden,
-} from "@ariakit/react";
+"use client";
+import { Checkbox, VisuallyHidden } from "@ariakit/react";
 import {
 	type ComponentPropsWithoutRef,
-	forwardRef,
 	type ReactNode,
+	forwardRef,
 	useState,
 } from "react";
 
