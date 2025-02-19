@@ -8,12 +8,14 @@ import {
 import type { MovieWithUser } from "@/types/movie.type";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import { Button } from "components/ui/Button";
+import { ChevronUp } from "lucide-react";
 import { Fragment, useEffect, useRef } from "react";
 import MovieCard from "./MovieCard";
 
 export default function Results() {
 	const { data: user } = useValidateSession();
 	const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
+	const resultsContainerRef = useRef<HTMLDivElement>(null);
 
 	const { data: shortlist } = useShortlistQuery(user?.shortlistId ?? "");
 	const { data: watchlist } = useGetWatchlistQuery(user ? user : null);
@@ -52,35 +54,56 @@ export default function Results() {
 
 	const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? [];
 	return (
-		<div className="h-[calc(100vh-310px)] w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background justify-items-center">
-			{data
-				? data?.pages?.map((page) => (
-						<Fragment key={page.page}>
-							{page.results.map((movie: TMDBMovieResponse) => {
-								return (
-									<MovieCard
-										key={movie.id}
-										movie={movie}
-										added={shortlistMovieIds?.includes(movie.id)}
-										inWatchlist={watchlistMovieIds?.includes(movie.id)}
-										showActions
-									/>
-								);
-							})}
-						</Fragment>
-					))
-				: []}
-			{hasNextPage && (
+		<div className="w-full h-full flex flex-col gap-2">
+			<div className="flex flex-row items-center justify-center w-full p-5 gap-5">
+				<span className="text-md text-muted-foreground">
+					{`Showing ${data?.pages[0]?.total_results} results (page ${data?.pages.length} of ${data?.pages[0]?.total_pages})` ||
+						"No results found"}
+				</span>
 				<Button
 					variant="outline"
-					size="lg"
-					className="max-w-sm m-auto invisible"
-					ref={loadMoreButtonRef}
-					onClick={() => fetchNextPage()}
+					size="icon"
+					className="ml-auto"
+					tooltip="Scroll to top"
+					onClick={() => {
+						resultsContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+					}}
 				>
-					Load More
+					<ChevronUp className="w-4 h-4" />
 				</Button>
-			)}
+			</div>
+			<div
+				ref={resultsContainerRef}
+				className="h-dvh w-full max-w-screen-xl mx-auto overflow-y-auto lg:h-full grid grid-flow-row-dense grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 no-scrollbar p-2 bg-background justify-items-center"
+			>
+				{data
+					? data?.pages?.map((page) => (
+							<Fragment key={page.page}>
+								{page.results.map((movie: TMDBMovieResponse) => {
+									return (
+										<MovieCard
+											key={movie.id}
+											movie={movie}
+											added={shortlistMovieIds?.includes(movie.id)}
+											inWatchlist={watchlistMovieIds?.includes(movie.id)}
+											showActions
+										/>
+									);
+								})}
+							</Fragment>
+						))
+					: []}
+				{hasNextPage && (
+					<Button
+						variant="outline"
+						size="lg"
+						className="max-w-sm m-auto opacity-0 h-[1px] min-h-[1px]"
+						ref={loadMoreButtonRef}
+					>
+						Load More
+					</Button>
+				)}
+			</div>
 		</div>
 	);
 }

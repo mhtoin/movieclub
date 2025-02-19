@@ -5,12 +5,16 @@ import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 export default function ExpandableSidebar({
+	width = "w-96",
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	width?: string;
+	children: React.ReactNode;
+}) {
 	const [isExpanded, setIsExpanded] = useState(true);
 	return (
 		<aside
-			className={`relative h-full transition-all duration-300 ${isExpanded ? "w-96" : "w-0"}`}
+			className={`hidden md:block relative h-full transition-all duration-300 ${isExpanded ? width : "w-0"}`}
 		>
 			{children}
 			<Button

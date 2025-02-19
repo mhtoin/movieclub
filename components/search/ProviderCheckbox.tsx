@@ -32,6 +32,7 @@ export const ProviderCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
 				<Ariakit.VisuallyHidden>
 					<Ariakit.Checkbox
 						{...props}
+						id={`provider-${provider.provider_id}`}
 						ref={ref}
 						clickOnEnter
 						onFocusVisible={() => setFocusVisible(true)}

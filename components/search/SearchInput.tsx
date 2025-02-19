@@ -12,10 +12,8 @@ import KeywordTag from "./KeywordTag";
 
 export default function SearchInput({
 	type,
-	width,
 }: {
 	type: "discover" | "search";
-	width: number;
 }) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -113,7 +111,7 @@ export default function SearchInput({
 		return (
 			<form
 				onSubmit={handleSubmit}
-				className="lg:py-7 relative lg:h-12 flex gap-2 border border-border/80 lg:min-w-[400px] transition-all duration-300 w-full rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
+				className="lg:py-7 relative lg:h-12 flex gap-2 border border-border/80 transition-all duration-300 w-full rounded-lg items-center group focus-visible:ring-offset-2 bg-input"
 			>
 				<KeywordCombobox handleSelect={handleKeywordSelect} />
 				<div className="absolute top-1/2 -translate-y-1/2 right-1/4 flex gap-1">
@@ -133,7 +131,6 @@ export default function SearchInput({
 		<form
 			className="lg:py-7 relative lg:h-12 flex gap-2 border border-border/80 rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
 			onSubmit={handleSubmit}
-			style={{ width: `${width}px` }}
 		>
 			<Input
 				type="text"

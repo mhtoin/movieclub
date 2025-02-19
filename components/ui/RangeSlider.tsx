@@ -19,29 +19,40 @@ export default function RangeSlider<T extends number | number[]>({
 	return (
 		<Slider
 			{...props}
-			className="grid grid-cols-[1fr_auto] items-center gap-2 w-64 px-7"
+			className="grid grid-cols-[1fr_auto] items-center gap-2 w-full px-7"
 			aria-label={label}
 		>
-			<SliderOutput className="text-sm text-foreground font-medium absolute left-0 px-3">
-				{({ state }) => state.getThumbValue(0)}
-			</SliderOutput>
-			<SliderOutput className="text-sm text-foreground font-medium absolute right-0 px-3">
-				{({ state }) => state.getThumbValue(1)}
-			</SliderOutput>
 			<SliderTrack className="group col-span-2 h-6 flex items-center px-2">
-				{({ state }) => (
-					<>
-						<div className="rounded-full w-full h-[4px] bg-secondary" />
-						{state.values.map((_, i) => (
-							<SliderThumb
-								key={i}
-								index={i}
-								aria-label={thumbLabels?.[i]}
-								className="w-4 h-4 mt-4 rounded-full bg-gray-50 dark:bg-primary border-2 border-gray-700 dark:border-gray-300"
-							/>
-						))}
-					</>
-				)}
+				{({ state }) => {
+					const minPercent = state.getThumbPercent(0) * 100;
+					const maxPercent = state.getThumbPercent(1) * 100;
+					return (
+						<>
+							<div className="relative w-full h-[8px]">
+								<div className="absolute rounded-full h-full bg-secondary w-full" />
+								<div
+									className="absolute rounded-full h-full bg-accent"
+									style={{
+										left: `${minPercent}%`,
+										width: `${maxPercent - minPercent}%`,
+									}}
+								/>
+							</div>
+							{state.values.map((_, i) => (
+								<SliderThumb
+									key={i}
+									index={i}
+									aria-label={thumbLabels?.[i]}
+									className="w-8 h-8 mt-8 rounded-full bg-primary border-2 border-border relative flex items-center justify-center"
+								>
+									<SliderOutput className="text-sm text-background font-medium cursor-pointer">
+										{({ state }) => state.getThumbValue(i)}
+									</SliderOutput>
+								</SliderThumb>
+							))}
+						</>
+					);
+				}}
 			</SliderTrack>
 		</Slider>
 	);

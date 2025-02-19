@@ -21,7 +21,7 @@ export default function ShortlistSidebarContent() {
 	const readyStateMutation = useUpdateReadyStateMutation();
 	const participationMutation = useUpdateParticipationMutation();
 	return (
-		<div className="border-r border-border/50 gap-5 h-full overflow-y-auto no-scrollbar mt-1.5">
+		<div className="border-r border-border/50 gap-5 h-full overflow-y-auto no-scrollbar mt-1.5 pb-4">
 			<div className="flex flex-col items-center justify-center gap-5 ">
 				<div className="sticky top-0 bg-background flex flex-col items-center justify-center gap-10 z-20 w-full py-5">
 					<div className="w-1/2 h-[1px] bg-secondary relative">

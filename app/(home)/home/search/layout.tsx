@@ -1,3 +1,5 @@
+import ExpandableSidebar from "@/components/common/ExpandableSidebar";
+import SearchSidebarContent from "@/components/search/SearchSidebarContent";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { searchMovies } from "@/lib/movies/queries";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
@@ -24,10 +26,13 @@ export default async function SearchLayout({
 	});
 
 	return (
-		<>
+		<div className="pt-16 flex flex-row h-screen overflow-hidden">
 			<HydrationBoundary state={dehydrate(queryClient)}>
+				<ExpandableSidebar width="w-[36rem]">
+					<SearchSidebarContent />
+				</ExpandableSidebar>
 				{children}
 			</HydrationBoundary>
-		</>
+		</div>
 	);
 }

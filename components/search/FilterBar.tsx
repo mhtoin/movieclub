@@ -28,13 +28,12 @@ export default function FilterBar() {
 		queryFn: getFilters,
 	});
 	const [tab, setTab] = useState<"discover" | "search">("discover");
-	const [barWidth, setBarWidth] = useState<number>(0);
 	const [tabHeight, setTabHeight] = useState<number>(0);
 	const [discoverParams, setDiscoverParams] = useState<string>("");
 	const measuredBarRef = useCallback(
 		(node: HTMLDivElement) => {
 			if (node && tab === "discover") {
-				setBarWidth(node.getBoundingClientRect().width);
+				setTabHeight(node.getBoundingClientRect().height);
 			}
 		},
 		[tab],
@@ -157,10 +156,7 @@ export default function FilterBar() {
 									>
 										Discover
 									</TabsTrigger>
-									<TabsTrigger
-										value="search"
-										className="data-[state=active]:bg-accent"
-									>
+									<TabsTrigger value="search" className="data-[state=active]:bg-accent">
 										Search
 									</TabsTrigger>
 								</TabsList>
@@ -169,16 +165,12 @@ export default function FilterBar() {
 										<div className="hidden lg:flex items-center gap-4">
 											<div className="flex flex-row gap-2 items-center">
 												<ArrowUpDown className="w-6 h-6 text-accent/80" />
-												<p className="text-sm font-medium text-foreground/80">
-													Sorting
-												</p>
+												<p className="text-sm font-medium text-foreground/80">Sorting</p>
 												<SortMenu />
 											</div>
 											<div className="flex flex-row gap-2 items-center">
 												<Filter className="w-6 h-6 text-accent/80" />
-												<p className="text-sm font-medium text-foreground/80">
-													Filters
-												</p>
+												<p className="text-sm font-medium text-foreground/80">Filters</p>
 											</div>
 											<FilterSelect
 												label="Genres"
@@ -200,7 +192,7 @@ export default function FilterBar() {
 									<div style={{ height: `${tabHeight}px` }} />
 								</TabsContent>
 							</div>
-							<SearchInput type={tab} width={barWidth} />
+							<SearchInput type={tab} />
 						</div>
 					</div>
 					<TabsContent value="discover">
