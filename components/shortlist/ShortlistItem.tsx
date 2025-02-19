@@ -55,35 +55,33 @@ export default function ShortListItem({
 
 	return (
 		<div
-			className={`moviecard group ${
+			className={`moviecard group rounded-none md:rounded-md ${
 				highlight ? "border-accent border-b-4 transition-all duration-700" : ""
 			}`}
 		>
-			{showActions &&
-				requiresSelection &&
-				shortlistId === user?.shortlistId && (
-					<div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
-						<Button
-							variant={"ghost"}
-							size={"iconSm"}
-							tooltip={highlight ? "Selected" : "Select"}
-							onClick={() => {
-								selectionMutation.mutate({
-									userId: user?.id || "",
-									shortlistId: user?.shortlistId || "",
-									selectedIndex: index || 0,
-								});
-							}}
-							isLoading={selectionMutation.isPending}
-						>
-							{highlight ? (
-								<TicketCheck className="w-5 h-5" />
-							) : (
-								<TicketPlus className="w-5 h-5" />
-							)}
-						</Button>
-					</div>
-				)}
+			{showActions && requiresSelection && shortlistId === user?.shortlistId && (
+				<div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
+					<Button
+						variant={"ghost"}
+						size={"iconSm"}
+						tooltip={highlight ? "Selected" : "Select"}
+						onClick={() => {
+							selectionMutation.mutate({
+								userId: user?.id || "",
+								shortlistId: user?.shortlistId || "",
+								selectedIndex: index || 0,
+							});
+						}}
+						isLoading={selectionMutation.isPending}
+					>
+						{highlight ? (
+							<TicketCheck className="w-5 h-5" />
+						) : (
+							<TicketPlus className="w-5 h-5" />
+						)}
+					</Button>
+				</div>
+			)}
 			{showActions && (
 				<div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card/80 rounded-bl-lg rounded-tr-lg p-2">
 					{removeFromShortList ? (
@@ -127,9 +125,7 @@ export default function ShortListItem({
 							});
 						}}
 						isLoading={watchlistMutation.isPending}
-						tooltip={
-							isInWatchlist ? "Remove from watchlist" : "Add to watchlist"
-						}
+						tooltip={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
 					>
 						{isInWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
 					</Button>
@@ -140,7 +136,9 @@ export default function ShortListItem({
 				alt=""
 				width={"150"}
 				height={"150"}
-				className={"primary-img w-[150px] h-auto 2xl:w-[150px]"}
+				className={
+					"primary-img w-[150px] h-auto 2xl:w-[150px] rounded-none md:rounded-md"
+				}
 				priority={removeFromShortList}
 				loading={removeFromShortList ? "eager" : "lazy"}
 			/>

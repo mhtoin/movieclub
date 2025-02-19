@@ -116,7 +116,7 @@ export default function ShortlistDrawer() {
 								Movies
 							</span>
 						</div>
-						<div className="flex flex-row flex-wrap items-center justify-center gap-5">
+						<div className="grid grid-cols-3 items-center justify-center gap-2">
 							{userShortlist
 								? userShortlist.movies.map((movie, index) => (
 										<ShortListItem
@@ -128,9 +128,7 @@ export default function ShortlistDrawer() {
 													userShortlist.selectedIndex === index) ||
 												false
 											}
-											requiresSelection={
-												userShortlist.requiresSelection || false
-											}
+											requiresSelection={userShortlist.requiresSelection || false}
 											removeFromShortList={user?.id === userShortlist.userId}
 											index={index}
 											showActions={true}
