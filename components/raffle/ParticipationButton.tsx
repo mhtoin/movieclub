@@ -9,6 +9,7 @@ import {
 
 interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
 	children?: ReactNode;
+	label?: string;
 }
 
 export const ParticipationButton = forwardRef<HTMLInputElement, CheckboxProps>(
@@ -25,11 +26,12 @@ export const ParticipationButton = forwardRef<HTMLInputElement, CheckboxProps>(
 				data-focus-visible={focusVisible || undefined}
 				title="Participate in the raffle"
 				aria-label="Participate in the raffle"
-				htmlFor="raffle-participation"
+				htmlFor={props.id}
 			>
 				<VisuallyHidden>
 					<Checkbox
 						{...props}
+						id={props.id}
 						ref={ref}
 						clickOnEnter
 						onFocusVisible={() => setFocusVisible(true)}
