@@ -14,9 +14,11 @@ export default function ExpandableSidebar({
 	const [isExpanded, setIsExpanded] = useState(true);
 	return (
 		<aside
-			className={`hidden md:block relative h-full transition-all duration-300 ${isExpanded ? width : "w-0"}`}
+			className={`hidden md:block relative h-full transition-all max-${width} duration-300 ${isExpanded ? width : "w-0"}`}
 		>
-			{children}
+			<div className="relative border-r border-border/50 gap-5 h-full overflow-y-auto no-scrollbar mt-1.5 pb-4 ">
+				{children}
+			</div>
 			<Button
 				variant={"outline"}
 				size={"icon"}
