@@ -29,11 +29,11 @@ export default function ShortlistCard({
 	return (
 		<div
 			key={`fragment-${shortlist?.id}`}
-			className="overflow-clip flex flex-col justify-between border border-border rounded-xl md:p-2 bg-card/20 h-full backdrop-blur-lg"
+			className="overflow-clip flex flex-col justify-between border border-border rounded-xl md:gap-2 md:p-2 bg-card/20 h-full backdrop-blur-lg"
 		>
 			<div
 				key={`${shortlist?.id}-container`}
-				className="grid grid-cols-3 sm:w-auto items-center justify-center md:border md:rounded-md md:p-1 md:gap-2 bg-background  overflow-hidden "
+				className="grid grid-cols-3 sm:w-auto items-center justify-center  md:rounded-md md:p-1 md:gap-2 bg-background  overflow-hidden "
 			>
 				{shortlist?.movies.map((movie, index: number) => {
 					const isInWatchlist = watchlist?.some(
