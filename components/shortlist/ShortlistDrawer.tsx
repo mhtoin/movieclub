@@ -116,7 +116,7 @@ export default function ShortlistDrawer() {
 								Movies
 							</span>
 						</div>
-						<div className="grid grid-cols-3 items-center justify-center gap-2">
+						<div className="grid grid-cols-3 items-center justify-center gap-2 overflow-hidden">
 							{userShortlist
 								? userShortlist.movies.map((movie, index) => (
 										<ShortListItem
