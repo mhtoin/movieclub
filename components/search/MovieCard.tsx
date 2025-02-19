@@ -65,7 +65,7 @@ export default function MovieCard({
 			}}
 		>
 			{showActions && (
-				<div className="opacity-0 group-hover:opacity-80  backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+				<div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
 					{added ? (
 						<Button
 							variant={"ghost"}
@@ -117,8 +117,9 @@ export default function MovieCard({
 			<img
 				src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 				alt=""
-				width={"150"}
-				className={"w-[150px] h-auto 2xl:w-[150px]"}
+				width={250}
+				height={375}
+				className="w-full h-full object-cover absolute top-0 left-0"
 			/>
 			<div className="info">
 				<h1 className="title line-clamp-2">{movie.title}</h1>
@@ -152,11 +153,7 @@ export default function MovieCard({
 								href={`https://www.imdb.com/title/${movieData?.imdb_id}`}
 								target="_blank"
 							>
-								<Button
-									variant="ghost"
-									size="icon"
-									isLoading={status === "pending"}
-								>
+								<Button variant="ghost" size="icon" isLoading={status === "pending"}>
 									<FaImdb className="w-6 h-6" />
 								</Button>
 							</Link>
