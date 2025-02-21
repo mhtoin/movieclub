@@ -121,73 +121,78 @@ export default function SearchButton() {
 					open ? "w-[600px] h-[800px] max-h-[80vh] py-2" : ""
 				}`}
 			>
-				<div
-					className={`flex px-2 items-center justify-center bg-transparent h-[38px] ${
-						open ? "rounded-md border" : ""
-					}`}
-				>
-					<Input
-						placeholder="Search movies..."
-						ref={inputRef}
-						value={inputValue}
-						onChange={(e) => {
-							setInputValue(e.target.value);
-							debouncedSearch(e.target.value);
+				<div className="flex flex-col gap-2 relative h-full">
+					<Button
+						variant="outline"
+						size="icon"
+						className={`absolute bottom-0 right-0 z-30 ${
+							open ? "visible" : "invisible"
+						}`}
+						onClick={() => {
+							resultsContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
 						}}
-						onFocus={() => setOpen(true)}
-						className="bg-transparent focus:outline-none focus-visible:ring-0 focus-visible:ring-opacity-0 focus-visible:ring-offset-0 border-none z-20"
-					/>
-					<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 z-20">
-						<span className="text-xs">⌘</span>K
-					</kbd>
-				</div>
-				{open && (
-					<div className="flex flex-col gap-2 bg-transparent overflow-hidden">
-						<div className="flex w-full justify-between items-center">
-							<div className="flex items-center justify-center gap-2">
-								<h3 className="text-sm font-medium">Search for movies</h3>
-								<span className="text-xs text-muted-foreground">
-									{`Found ${data?.pages[0].total_results} results`}
-								</span>
-							</div>
-							<Button
-								variant="ghost"
-								size="icon"
-								onClick={() => {
-									resultsContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-								}}
-							>
-								<ChevronUp className="w-4 h-4" />
-							</Button>
-						</div>
-						<div className="h-[0.5px] w-full bg-accent" />
-
-						<div
-							ref={resultsContainerRef}
-							className="flex flex-wrap gap-2 py-2 h-full w-full items-center justify-center overflow-y-scroll relative"
-						>
-							{data?.pages.map((page) => (
-								<Fragment key={page.page}>
-									{page.results.map((result: TMDBMovieResponse) => (
-										<MovieCard key={result.id} movie={result} />
-									))}
-								</Fragment>
-							))}
-							<div ref={sentinelRef} className="flex h-10 w-full justify-center">
-								<Button
-									variant="ghost"
-									size="icon"
-									isLoading={isFetchingNextPage}
-									onClick={() => {
-										fetchNextPage();
-									}}
-								>
-									<ArrowDownToLineIcon className="w-4 h-4" />
-								</Button>
-							</div>
-						</div>
+					>
+						<ChevronUp className="w-4 h-4" />
+					</Button>
+					<div
+						className={`flex px-2 items-center justify-center bg-transparent h-[38px] ${
+							open ? "rounded-md border" : ""
+						}`}
+					>
+						<Input
+							placeholder="Search movies..."
+							ref={inputRef}
+							value={inputValue}
+							onChange={(e) => {
+								setInputValue(e.target.value);
+								debouncedSearch(e.target.value);
+							}}
+							onFocus={() => setOpen(true)}
+							className="bg-transparent focus:outline-none focus-visible:ring-0 focus-visible:ring-opacity-0 focus-visible:ring-offset-0 border-none z-20"
+						/>
+						<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 z-20">
+							<span className="text-xs">⌘</span>K
+						</kbd>
 					</div>
-				)}
+					{open && (
+						<div className="flex flex-col gap-2 bg-transparent overflow-hidden">
+							<div className="flex w-full justify-between items-center">
+								<div className="flex items-center justify-center gap-2 p-2">
+									<h3 className="text-sm font-medium">Search for movies</h3>
+									<span className="text-xs text-muted-foreground">
+										{`Found ${data?.pages[0].total_results} results`}
+									</span>
+								</div>
+							</div>
+							<div className="h-[0.5px] w-full bg-accent" />
+
+							<div
+								ref={resultsContainerRef}
+								className="flex flex-wrap gap-2 py-2 h-full w-full items-center justify-center overflow-y-scroll relative"
+							>
+								{data?.pages.map((page) => (
+									<Fragment key={page.page}>
+										{page.results.map((result: TMDBMovieResponse) => (
+											<MovieCard key={result.id} movie={result} />
+										))}
+									</Fragment>
+								))}
+								<div ref={sentinelRef} className="flex h-10 w-full justify-center">
+									<Button
+										variant="ghost"
+										size="icon"
+										isLoading={isFetchingNextPage}
+										onClick={() => {
+											fetchNextPage();
+										}}
+									>
+										<ArrowDownToLineIcon className="w-4 h-4" />
+									</Button>
+								</div>
+							</div>
+						</div>
+					)}
+				</div>
 			</div>
 
 			{open && (
