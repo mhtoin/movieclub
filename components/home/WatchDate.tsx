@@ -7,6 +7,7 @@ export default function WatchDate() {
 	const params = useSearchParams();
 	const date = params.get("month");
 	const day = useWatchDateStore.use.day();
+	const dayParam = params.get("date");
 	const formattedDate = date
 		? new Date(date).toLocaleDateString("en-US", {
 				month: "long",
@@ -20,7 +21,7 @@ export default function WatchDate() {
 
 	const monthLetters = month.split("");
 	const yearLetters = year.split("");
-	const dayLetters = day?.split("");
+	const dayLetters = day ? day.split("") : dayParam ? dayParam.split("") : [];
 
 	return (
 		<div className="hidden md:flex flex-row p-4 rounded-md bg-background">

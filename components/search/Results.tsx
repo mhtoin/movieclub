@@ -60,6 +60,7 @@ export default function Results() {
 					{`Showing ${data?.pages[0]?.total_results} results (page ${data?.pages.length} of ${data?.pages[0]?.total_pages})` ||
 						"No results found"}
 				</span>
+				{/* Causes hydration error */}
 				<Button
 					variant="outline"
 					size="icon"

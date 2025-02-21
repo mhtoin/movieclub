@@ -40,7 +40,7 @@ export default function NavBar() {
 						<ProfileMenu />
 						<span className="font-bold">leffaseura</span>
 					</div>
-					<div className="flex gap-2 h-full items-center">
+					<div className="flex gap-2 h-full items-center relative">
 						<ThemeSwitcher />
 						<SearchButton />
 						<Menubar />

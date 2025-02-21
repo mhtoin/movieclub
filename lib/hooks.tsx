@@ -87,7 +87,9 @@ export const useSearchSuspenseInfiniteQuery = () => {
 	return useSuspenseInfiniteQuery({
 		queryKey: [
 			"search",
-			searchParams ? searchParamsString : "with_watch_providers=8",
+			searchParams && searchType === "search"
+				? titleSearch
+				: searchParamsString || "with_watch_providers=8",
 		],
 		queryFn: async ({ pageParam }) =>
 			searchMovies(pageParam, searchParamsString, searchType),
@@ -104,10 +106,7 @@ export const useSearchInfiniteQuery = () => {
 	const searchParams = useSearchParams().toString();
 
 	return useInfiniteQuery({
-		queryKey: [
-			"search",
-			searchParams ? searchParams : "with_watch_providers=8",
-		],
+		queryKey: ["search", searchParams ? searchParams : "with_watch_providers=8"],
 		queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
 		getNextPageParam: (lastPage) => {
 			const { page, total_pages: totalPages } = lastPage;
@@ -133,8 +132,7 @@ export const useRaffle = () => {
 				method: "POST",
 				body: JSON.stringify({ userId: session?.id, movies, startingUserId }),
 			});
-			const data: { movie: MovieWithUser; chosenIndex: number } =
-				await res.json();
+			const data: { movie: MovieWithUser; chosenIndex: number } = await res.json();
 			return data;
 		},
 		onSuccess: (data) => {
@@ -237,13 +235,10 @@ export const useUpdateParticipationMutation = () => {
 			shortlistId: string;
 			participating: boolean;
 		}) => {
-			const response = await fetch(
-				`/api/shortlist/${shortlistId}/participation`,
-				{
-					method: "PUT",
-					body: JSON.stringify({ participating }),
-				},
-			);
+			const response = await fetch(`/api/shortlist/${shortlistId}/participation`, {
+				method: "PUT",
+				body: JSON.stringify({ participating }),
+			});
 			const data: Shortlist = await response.json();
 
 			return data;
@@ -525,9 +520,7 @@ export const useGetTMDBSession = (
 	setSessionId: (value: string) => void,
 	setAccountId: (value: string) => void,
 ) => {
-	const setNotification = useNotificationStore(
-		(state) => state.setNotification,
-	);
+	const setNotification = useNotificationStore((state) => state.setNotification);
 	const { data: session } = useValidateSession();
 	useEffect(() => {
 		const loc = window.location.search;
@@ -751,8 +744,8 @@ export function useMagneticHover() {
 					const bounds = anchor.getBoundingClientRect();
 					return `
           [data-no-anchor] ul:has(li:nth-of-type(${
-						i + 1
-					}) a:is(:hover, :focus-visible)) {
+											i + 1
+										}) a:is(:hover, :focus-visible)) {
             --item-active-y: ${bounds.top}px;
             --item-active-x: ${bounds.left}px;
             --item-active-width: ${bounds.width}px;
