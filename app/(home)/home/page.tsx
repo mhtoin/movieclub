@@ -19,11 +19,6 @@ export default async function HomePage() {
 		queryFn: () => getMoviesOfTheWeekByMonth(format(new Date(), "yyyy-MM")),
 		initialPageParam: format(new Date(), "yyyy-MM"),
 	});
-	queryClient.prefetchInfiniteQuery({
-		queryKey: ["pastMovies"],
-		queryFn: () => getMoviesOfTheWeekByMonth(format(new Date(), "yyyy-MM")),
-		initialPageParam: format(new Date(), "yyyy-MM"),
-	});
 
 	const dehydratedState = dehydrate(queryClient);
 	const { user } = await getCurrentSession();

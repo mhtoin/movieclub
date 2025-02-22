@@ -73,26 +73,33 @@ export const useMovieQuery = (id: number, enabled: boolean) => {
 	});
 };
 
+export const useDiscoverSuspenseInfiniteQuery = () => {
+	const searchParams = useSearchParams();
+	const searchParamsString = searchParams.toString();
+
+	return useSuspenseInfiniteQuery({
+		queryKey: ["discover", searchParamsString],
+
+		queryFn: async ({ pageParam }) =>
+			searchMovies(pageParam, searchParamsString, "discover"),
+		getNextPageParam: (lastPage) => {
+			const { page, total_pages: totalPages } = lastPage;
+
+			return page < totalPages ? page + 1 : undefined;
+		},
+		initialPageParam: 1,
+	});
+};
+
 export const useSearchSuspenseInfiniteQuery = () => {
 	const searchParams = useSearchParams();
 	const titleSearch = searchParams.get("query");
-	const searchType = titleSearch ? "search" : "discover";
 	const searchParamsString = searchParams.toString();
 
-	/**
-	 * If there is a title, we need to use a whole different endpoint to search for movies
-	 * instead of using the discover endpoint, since that does not support title search
-	 */
-
 	return useSuspenseInfiniteQuery({
-		queryKey: [
-			"search",
-			searchParams && searchType === "search"
-				? titleSearch
-				: searchParamsString || "with_watch_providers=8",
-		],
+		queryKey: ["search", titleSearch],
 		queryFn: async ({ pageParam }) =>
-			searchMovies(pageParam, searchParamsString, searchType),
+			searchMovies(pageParam, searchParamsString, "search"),
 		getNextPageParam: (lastPage) => {
 			const { page, total_pages: totalPages } = lastPage;
 
@@ -553,7 +560,7 @@ export const useGetTMDBSession = (
 							setAccountId(accountBody.id);
 
 							if (id.session_id && accountBody.id) {
-								await fetch(`/api/user/${session?.id}`, {
+								await fetch(`/api/users/${session?.id}`, {
 									method: "PUT",
 									body: JSON.stringify({
 										sessionId: id.session_id,

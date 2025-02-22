@@ -16,7 +16,8 @@
 		"add-tierlist-id": "tsx scripts/addTierlistId.ts",
 		"insert-imdb-id": "tsx scripts/insertImdbId.ts",
 		"update-movies": "tsx scripts/updateMovies.ts",
-		"migrate-tierlists": "tsx scripts/migrateTierlists.ts"
+		"migrate-tierlists": "tsx scripts/migrateTierlists.ts",
+		"update-similar": "tsx scripts/updateSimilar.ts"
 	},
 	"dependencies": {
 		"@ariakit/react": "^0.4.11",

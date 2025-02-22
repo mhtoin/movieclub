@@ -1,15 +1,19 @@
 "use client";
 import MovieCard from "@/components/search/MovieCard";
 import { Input } from "@/components/ui/Input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { SEARCH_ROUTE } from "@/lib/globals";
 import {
 	useDebounce,
 	useIsMobile,
 	useSearchSuspenseInfiniteQuery,
+	useValidateSession,
 } from "@/lib/hooks";
+import { userKeys } from "@/lib/users/userKeys";
 import { useDialogStore } from "@/stores/useDialogStore";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Button } from "components/ui/Button";
 import { ArrowDownToLineIcon, ChevronUp } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -25,10 +29,14 @@ export default function SearchButton() {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const resultsContainerRef = useRef<HTMLDivElement>(null);
 	const [inputValue, setInputValue] = useState(searchParams.get("query") || "");
+	const { data: user } = useValidateSession();
 	const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useSearchSuspenseInfiniteQuery();
+	const { data: recommended } = useSuspenseQuery(
+		userKeys.recommended(user?.id || ""),
+	);
 	const modalRef = useRef<HTMLDivElement>(null);
-	const sentinelRef = useRef<HTMLDivElement>(null);
+	const sentinelRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		const currentQuery = searchParams.get("query") || "";
@@ -96,6 +104,7 @@ export default function SearchButton() {
 	};
 
 	const debouncedSearch = useDebounce(handleSearch, 500);
+	const hasResults = data?.pages?.[0]?.total_results > 0;
 
 	if (isMobile) {
 		return (
@@ -118,7 +127,7 @@ export default function SearchButton() {
 			<div
 				ref={modalRef}
 				className={`fixed top-4 left-1/2 -translate-x-1/2 border px-4 flex flex-col gap-5 transition-all duration-300 rounded-md bg-input hover:bg-input/80 z-20 w-[300px] h-10 ${
-					open ? "w-[600px] h-[800px] max-h-[80vh] py-2" : ""
+					open ? "w-[600px] h-[90vh] max-h-[90vh] py-2" : ""
 				}`}
 			>
 				<div className="flex flex-col gap-2 relative h-full">
@@ -155,42 +164,67 @@ export default function SearchButton() {
 						</kbd>
 					</div>
 					{open && (
-						<div className="flex flex-col gap-2 bg-transparent overflow-hidden">
-							<div className="flex w-full justify-between items-center">
-								<div className="flex items-center justify-center gap-2 p-2">
-									<h3 className="text-sm font-medium">Search for movies</h3>
-									<span className="text-xs text-muted-foreground">
-										{`Found ${data?.pages[0].total_results} results`}
-									</span>
+						<Tabs defaultValue="results">
+							<div className="flex flex-col items-center bg-transparent overflow-hidden">
+								<div className="flex w-full justify-between items-center h-full overflow-hidden">
+									<TabsList className="h-[38px]">
+										<TabsTrigger value="results">Results</TabsTrigger>
+										<TabsTrigger value="recommended">Recommended</TabsTrigger>
+									</TabsList>
 								</div>
-							</div>
-							<div className="h-[0.5px] w-full bg-accent" />
-
-							<div
-								ref={resultsContainerRef}
-								className="flex flex-wrap gap-2 py-2 h-full w-full items-center justify-center overflow-y-scroll relative"
-							>
-								{data?.pages.map((page) => (
-									<Fragment key={page.page}>
-										{page.results.map((result: TMDBMovieResponse) => (
-											<MovieCard key={result.id} movie={result} />
-										))}
-									</Fragment>
-								))}
-								<div ref={sentinelRef} className="flex h-10 w-full justify-center">
-									<Button
-										variant="ghost"
-										size="icon"
-										isLoading={isFetchingNextPage}
-										onClick={() => {
-											fetchNextPage();
-										}}
+								<div className="h-[0.5px] w-full bg-accent" />
+								<TabsContent value="results">
+									<div
+										ref={resultsContainerRef}
+										className="flex flex-wrap gap-2 py-2 w-full items-center justify-center overflow-y-scroll relative"
 									>
-										<ArrowDownToLineIcon className="w-4 h-4" />
-									</Button>
-								</div>
+										{data?.pages.map((page) => (
+											<Fragment key={page.page}>
+												{page.results.map((result: TMDBMovieResponse) => (
+													<MovieCard key={result.id} movie={result} />
+												))}
+											</Fragment>
+										))}
+										<div className="flex h-10 w-full justify-center">
+											<Button
+												variant="ghost"
+												ref={sentinelRef}
+												size="icon"
+												isLoading={isFetchingNextPage}
+												onClick={() => {
+													fetchNextPage();
+												}}
+											>
+												<ArrowDownToLineIcon className="w-4 h-4" />
+											</Button>
+										</div>
+									</div>
+								</TabsContent>
+								<TabsContent value="recommended" className="overflow-hidden h-full">
+									<div
+										ref={resultsContainerRef}
+										className="flex flex-wrap gap-2 py-2 w-full items-center justify-center overflow-y-scroll relative"
+									>
+										{recommended?.map((movie) => (
+											<MovieCard key={movie.id} movie={movie} />
+										))}
+										<div className="flex h-10 w-full justify-center">
+											<Button
+												variant="ghost"
+												ref={sentinelRef}
+												size="icon"
+												isLoading={isFetchingNextPage}
+												onClick={() => {
+													fetchNextPage();
+												}}
+											>
+												<ArrowDownToLineIcon className="w-4 h-4" />
+											</Button>
+										</div>
+									</div>
+								</TabsContent>
 							</div>
-						</div>
+						</Tabs>
 					)}
 				</div>
 			</div>

@@ -98,6 +98,8 @@ model Movie {
   cast              CastMember[]
   tiers             Tier[]         @relation(fields: [tierIds], references: [id])
   tierIds           String[]       @db.ObjectId
+  similarForUser    User[]         @relation("SimilarMovies", fields: [similarForUserIDs], references: [id])
+  similarForUserIDs String[]       @db.ObjectId
 
   @@map("movies")
 }
@@ -209,7 +211,8 @@ model User {
   Raffle        Raffle[]   @relation(fields: [raffleIDs], references: [id])
   raffleIDs     String[]   @db.ObjectId
   sessions      Session[]
-
+  similarMovies Movie[] @relation("SimilarMovies", fields: [similarMovieIDs], references: [id])
+  similarMovieIDs String[] @db.ObjectId
   @@map("users")
 }
 

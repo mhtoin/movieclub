@@ -1,7 +1,7 @@
 "use client";
 import { useIsMobile } from "@/lib/hooks";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useState } from "react";
 import SearchButton from "../search/SearchButton";
 import Menubar from "./Menubar";
@@ -64,9 +64,13 @@ export default function NavBar() {
 					<span className="font-bold">leffaseura</span>
 				</div>
 				<div className="flex gap-10 h-full items-center">
-					<SearchButton />
+					<Suspense fallback={null}>
+						<SearchButton />
+					</Suspense>
 					<ThemeSwitcher />
-					<ProfileMenu />
+					<Suspense fallback={null}>
+						<ProfileMenu />
+					</Suspense>
 				</div>
 			</div>
 		</div>
