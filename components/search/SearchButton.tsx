@@ -105,6 +105,9 @@ export default function SearchButton() {
 
 	const handleClose = () => {
 		setOpen(false);
+		const params = new URLSearchParams(searchParams.toString());
+		params.delete("query");
+		router.push(`${pathname}?${params.toString()}`, { scroll: false });
 	};
 
 	const debouncedSearch = useDebounce(handleSearch, 500);
