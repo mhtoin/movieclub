@@ -7,7 +7,7 @@ import type {
 	ShortlistWithMoviesById,
 } from "@/types/shortlist.type";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import type { User as DatabaseUser, Shortlist } from "@prisma/client";
+import type { User as DatabaseUser, Movie, Shortlist } from "@prisma/client";
 import {
 	useInfiniteQuery,
 	useMutation,
@@ -332,21 +332,25 @@ export const useAddToWatchlistMutation = () => {
  */
 export const useUpdateShortlistMutation = () => {
 	const queryClient = useQueryClient();
+	const isOpen = useDialogStore.use.isOpen();
+	const setIsOpen = useDialogStore.use.setIsOpen();
+	const setMovie = useDialogStore.use.setMovie();
 	return useMutation({
 		mutationFn: async ({
-			movieId,
+			movie,
 			shortlistId,
 		}: {
-			movieId: string;
+			movie: MovieWithUser | Movie;
 			shortlistId: string;
 		}) => {
 			const response = await fetch(`/api/shortlist/${shortlistId}/update`, {
 				method: "PUT",
-				body: JSON.stringify({ movieId }),
+				body: JSON.stringify({ movie }),
 			});
 
 			if (!response.ok) {
-				throw new Error("Failed to update shortlist");
+				const error = await response.json();
+				throw new Error(error.message);
 			}
 
 			const data: ShortlistWithMovies = await response.json();
@@ -362,16 +366,25 @@ export const useUpdateShortlistMutation = () => {
 					});
 				},
 			);
-			/*
-      queryClient.invalidateQueries({
-        queryKey: ["shortlist"],
-      });*/
+			toast.success("Movie added to shortlist");
+			queryClient.invalidateQueries({
+				queryKey: ["shortlist", variables.shortlistId],
+			});
+		},
+		onError: (_error, variables) => {
+			console.log("error", _error);
+			if (!isOpen) {
+				setIsOpen(true);
+				setMovie(variables.movie);
+			}
 		},
 	});
 };
 
 export const useRemoveFromShortlistMutation = () => {
 	const queryClient = useQueryClient();
+	const isOpen = useDialogStore.use.isOpen();
+	const setIsOpen = useDialogStore.use.setIsOpen();
 	return useMutation({
 		mutationFn: async ({
 			movieId,
@@ -398,7 +411,17 @@ export const useRemoveFromShortlistMutation = () => {
 					});
 				},
 			);
+			queryClient.invalidateQueries({
+				queryKey: ["shortlist", variables.shortlistId],
+			});
 			sendShortlistUpdate(variables.userId);
+		},
+		onError: (_error, _variables) => {
+			console.log("error", _error);
+			if (!isOpen) {
+				setIsOpen(true);
+				//setMovie(variables.movie);
+			}
 		},
 	});
 };
@@ -407,7 +430,7 @@ export const useAddToShortlistMutation = () => {
 	const queryClient = useQueryClient();
 	const isOpen = useDialogStore.use.isOpen();
 	const setIsOpen = useDialogStore.use.setIsOpen();
-	//const setMovie = useDialogStore.use.setMovie();
+	const setMovie = useDialogStore.use.setMovie();
 	return useMutation({
 		mutationFn: async ({
 			movie,
@@ -440,10 +463,10 @@ export const useAddToShortlistMutation = () => {
 			);
 			sendShortlistUpdate(variables.userId);
 		},
-		onError: (_error, _variables) => {
+		onError: (_error, variables) => {
 			if (!isOpen) {
 				setIsOpen(true);
-				//setMovie(variables.movie);
+				setMovie(variables.movie);
 			}
 		},
 	});
@@ -459,8 +482,8 @@ export const useReplaceShortlistMutation = () => {
 			replacingWithMovie,
 			shortlistId,
 		}: {
-			replacedMovie: MovieWithUser; // always guaranteed to be of type Movie
-			replacingWithMovie: MovieWithUser;
+			replacedMovie: MovieWithUser | Movie;
+			replacingWithMovie: MovieWithUser | TMDBMovieResponse | Movie;
 			shortlistId: string;
 		}) => {
 			return await replaceShortlistItem(

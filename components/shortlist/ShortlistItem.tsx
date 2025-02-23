@@ -2,6 +2,7 @@
 "use client";
 
 import type { MovieWithUser } from "@/types/movie.type";
+import type { Movie } from "@prisma/client";
 import { Button } from "components/ui/Button";
 import {
 	useAddToWatchlistMutation,
@@ -27,7 +28,7 @@ import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";
 
 interface SearchResultCardProps {
-	movie: MovieWithUser;
+	movie: MovieWithUser | Movie;
 	shortlistId: string;
 	removeFromShortList?: boolean;
 	highlight?: boolean;
@@ -107,7 +108,7 @@ export default function ShortListItem({
 							tooltip="Add"
 							onClick={() => {
 								addMutation.mutate({
-									movieId: movie.id,
+									movie: movie,
 									shortlistId: shortlistId,
 								});
 							}}

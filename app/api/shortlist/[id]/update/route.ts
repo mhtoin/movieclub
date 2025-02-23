@@ -5,10 +5,16 @@ export async function PUT(
 	request: NextRequest,
 	{ params }: { params: { id: string } },
 ) {
-	const { movieId } = await request.json();
+	const { movie } = await request.json();
+	const movieId = "id" in movie ? movie.id : movie.tmdbId;
 	const shortlistId = params.id;
 
-	const updatedShortlist = await connectMovieToShortlist(movieId, shortlistId);
-
-	return NextResponse.json(updatedShortlist);
+	try {
+		const updatedShortlist = await connectMovieToShortlist(movieId, shortlistId);
+		return NextResponse.json(updatedShortlist);
+	} catch (e) {
+		if (e instanceof Error) {
+			return NextResponse.json({ ok: false, message: e.message }, { status: 401 });
+		}
+	}
 }

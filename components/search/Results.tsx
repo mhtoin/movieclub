@@ -1,7 +1,7 @@
 "use client";
 import {
+	useDiscoverSuspenseInfiniteQuery,
 	useGetWatchlistQuery,
-	useSearchSuspenseInfiniteQuery,
 	useShortlistQuery,
 	useValidateSession,
 } from "@/lib/hooks";
@@ -20,7 +20,8 @@ export default function Results() {
 	const { data: shortlist } = useShortlistQuery(user?.shortlistId ?? "");
 	const { data: watchlist } = useGetWatchlistQuery(user ? user : null);
 
-	const { data, hasNextPage, fetchNextPage } = useSearchSuspenseInfiniteQuery();
+	const { data, hasNextPage, fetchNextPage } =
+		useDiscoverSuspenseInfiniteQuery();
 
 	useEffect(() => {
 		if (!hasNextPage) {
@@ -55,7 +56,7 @@ export default function Results() {
 	const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? [];
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
-			<div className="flex flex-row items-center justify-center w-full p-5 gap-5">
+			<div className="flex flex-row items-center justify-center p-5 gap-5">
 				<span className="text-md text-muted-foreground">
 					{`Showing ${data?.pages[0]?.total_results} results (page ${data?.pages.length} of ${data?.pages[0]?.total_pages})` ||
 						"No results found"}
@@ -75,7 +76,7 @@ export default function Results() {
 			</div>
 			<div
 				ref={resultsContainerRef}
-				className="h-dvh w-full overflow-y-auto flex flex-wrap justify-center gap-5 no-scrollbar lg:p-5 bg-background"
+				className="h-dvh w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 overflow-y-auto no-scrollbar bg-background"
 			>
 				{data
 					? data?.pages?.map((page) => (

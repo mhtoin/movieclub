@@ -56,12 +56,10 @@ export default async function CurrentMoviePoster() {
 								<h1 className="text-xl md:text-5xl font-bold underline">
 									{mostRecentMovie?.title}
 								</h1>
-								<div className="flex flex-row gap-2 flex-wrap">
+								<div className="flex flex-row gap-2 flex-wrap items-center justify-center">
 									<p className="text-sm md:text-lg max-w-[500px] text-foreground/60">
 										{mostRecentMovie?.watchDate
-											? new Date(mostRecentMovie?.watchDate).toLocaleDateString(
-													"fi-FI",
-												)
+											? new Date(mostRecentMovie?.release_date).toLocaleDateString("fi-FI")
 											: ""}
 									</p>
 									<span>|</span>
@@ -81,41 +79,47 @@ export default async function CurrentMoviePoster() {
 									</span>
 								</div>
 								<div className="flex flex-row gap-2">
-									{mostRecentMovie?.watchProviders?.providers?.map(
-										(provider) => {
-											return (
-												<Link
-													href={mostRecentMovie?.watchProviders?.link || ""}
-													target="_blank"
-													key={provider.provider_id}
-													className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
-												>
-													<Image
-														src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-														alt={provider.provider_name}
-														width={50}
-														height={50}
-														className="rounded-md w-8 h-8 md:w-10 md:h-10"
-													/>
-												</Link>
-											);
-										},
-									)}
+									{mostRecentMovie?.watchProviders?.providers?.map((provider) => {
+										return (
+											<Link
+												href={mostRecentMovie?.watchProviders?.link || ""}
+												target="_blank"
+												key={provider.provider_id}
+												className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
+											>
+												<Image
+													src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+													alt={provider.provider_name}
+													width={50}
+													height={50}
+													className="rounded-md w-8 h-8 md:w-10 md:h-10"
+												/>
+											</Link>
+										);
+									})}
 								</div>
 							</div>
 						</div>
 
 						{/* Top-right cell */}
 						<div className="flex items-center justify-start p-4 md:w-1/2 h-full">
-							<div className="flex flex-col gap-2">
+							<div className="flex flex-col gap-5">
 								<h1 className="text-xl md:text-2xl font-bold">Cast</h1>
 								<div className="flex flex-row gap-2 justify-start items-center">
 									{mostRecentMovie?.cast?.slice(0, 6).map((cast) => {
 										return <CastPortrait cast={cast} key={cast.id} />;
 									})}
-									{mostRecentMovie?.cast && (
-										<CastPopover cast={mostRecentMovie?.cast} />
-									)}
+									{mostRecentMovie?.cast && <CastPopover cast={mostRecentMovie?.cast} />}
+								</div>
+								<div className="flex flex-row gap-2">
+									{mostRecentMovie?.crew?.map((crew) => {
+										return (
+											<div className="flex flex-col gap-2 items-start" key={crew.id}>
+												<h1 className="text-xl md:text-2xl font-bold">{crew.job}</h1>
+												<CastPortrait cast={crew} key={crew.id} />
+											</div>
+										);
+									})}
 								</div>
 							</div>
 						</div>
@@ -140,20 +144,6 @@ export default async function CurrentMoviePoster() {
 						{/* Bottom-right cell */}
 						<div className="flex items-start justify-start p-4 w-full md:w-1/2">
 							<div className="flex flex-col gap-2">
-								<div className="flex flex-row gap-2">
-									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
-										{mostRecentMovie?.genres
-											?.map((genre) => genre.name)
-											.join("/")}
-									</div>
-									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
-										{mostRecentMovie?.runtime
-											? `${Math.floor(mostRecentMovie?.runtime / 60)}h ${
-													mostRecentMovie?.runtime % 60
-												}m`
-											: ""}
-									</div>
-								</div>
 								<div className="flex flex-row gap-2 rounded-md w-fit px-2 py-1">
 									<Link
 										href={`https://www.themoviedb.org/movie/${mostRecentMovie?.tmdbId}`}
@@ -168,7 +158,19 @@ export default async function CurrentMoviePoster() {
 										<FaImdb className="w-4 h-4 md:w-6 md:h-6 hover:text-accent" />
 									</Link>
 								</div>
-								<p className="text-sm md:text-lg max-w-[500px] text-foreground/60 px-2">
+								<div className="flex flex-row gap-2">
+									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
+										{mostRecentMovie?.genres?.map((genre) => genre.name).join("/")}
+									</div>
+									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
+										{mostRecentMovie?.runtime
+											? `${Math.floor(mostRecentMovie?.runtime / 60)}h ${
+													mostRecentMovie?.runtime % 60
+												}m`
+											: ""}
+									</div>
+								</div>
+								<p className="text-sm md:text-md max-w-[500px] text-foreground/60 px-2">
 									{mostRecentMovie?.overview}
 								</p>
 							</div>

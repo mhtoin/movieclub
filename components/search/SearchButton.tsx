@@ -1,5 +1,6 @@
 "use client";
 import MovieCard from "@/components/search/MovieCard";
+import RecommendedCard from "@/components/search/RecommendedCard";
 import { Input } from "@/components/ui/Input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { SEARCH_ROUTE } from "@/lib/globals";
@@ -164,7 +165,7 @@ export default function SearchButton() {
 						</kbd>
 					</div>
 					{open && (
-						<Tabs defaultValue="results">
+						<Tabs defaultValue="results" className="overflow-hidden">
 							<div className="flex flex-col items-center bg-transparent overflow-hidden">
 								<div className="flex w-full justify-between items-center h-full overflow-hidden">
 									<TabsList className="h-[38px]">
@@ -173,10 +174,10 @@ export default function SearchButton() {
 									</TabsList>
 								</div>
 								<div className="h-[0.5px] w-full bg-accent" />
-								<TabsContent value="results">
+								<TabsContent value="results" className="flex-1">
 									<div
 										ref={resultsContainerRef}
-										className="flex flex-wrap gap-2 py-2 w-full items-center justify-center overflow-y-scroll relative"
+										className="flex flex-wrap gap-2 py-2 w-full items-center justify-center overflow-y-auto max-h-[calc(90vh-150px)] relative"
 									>
 										{data?.pages.map((page) => (
 											<Fragment key={page.page}>
@@ -185,28 +186,44 @@ export default function SearchButton() {
 												))}
 											</Fragment>
 										))}
-										<div className="flex h-10 w-full justify-center">
-											<Button
-												variant="ghost"
-												ref={sentinelRef}
-												size="icon"
-												isLoading={isFetchingNextPage}
-												onClick={() => {
-													fetchNextPage();
-												}}
-											>
-												<ArrowDownToLineIcon className="w-4 h-4" />
-											</Button>
-										</div>
+										{hasResults && (
+											<div className="flex h-10 w-full justify-center">
+												<Button
+													variant="ghost"
+													ref={sentinelRef}
+													size="icon"
+													isLoading={isFetchingNextPage}
+													onClick={() => {
+														fetchNextPage();
+													}}
+												>
+													<ArrowDownToLineIcon className="w-4 h-4" />
+												</Button>
+											</div>
+										)}
 									</div>
 								</TabsContent>
-								<TabsContent value="recommended" className="overflow-hidden h-full">
-									<div
-										ref={resultsContainerRef}
-										className="flex flex-wrap gap-2 py-2 w-full items-center justify-center overflow-y-scroll relative"
-									>
-										{recommended?.map((movie) => (
-											<MovieCard key={movie.id} movie={movie} />
+								<TabsContent
+									value="recommended"
+									className="overflow-y-auto"
+									style={{ maxHeight: "calc(90vh - 150px)" }}
+								>
+									<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
+										{Object.keys(recommended).map((sourceMovie) => (
+											<div key={sourceMovie} className="w-full">
+												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent/40 rounded-md w-fit">
+													Because you liked: {sourceMovie}
+												</h3>
+												<div className="flex flex-wrap gap-2 w-full">
+													{recommended[sourceMovie].map((rec, index) => (
+														<RecommendedCard
+															key={`${sourceMovie}-${index}`}
+															movie={rec.movie}
+															showActions={true}
+														/>
+													))}
+												</div>
+											</div>
 										))}
 										<div className="flex h-10 w-full justify-center">
 											<Button

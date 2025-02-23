@@ -1,15 +1,12 @@
 "use client";
 
 import {
-	useAddToShortlistMutation,
 	useAddToWatchlistMutation,
-	useMovieQuery,
 	useRemoveFromShortlistMutation,
+	useUpdateShortlistMutation,
 	useValidateSession,
 } from "@/lib/hooks";
-import { getMovie } from "@/lib/movies/queries";
-import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import { useQueryClient } from "@tanstack/react-query";
+import type { Movie } from "@prisma/client";
 import {
 	BookmarkMinus,
 	BookmarkPlus,
@@ -24,40 +21,27 @@ import { useState } from "react";
 import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";
 import { Button } from "../ui/Button";
-
-export default function MovieCard({
+export default function RecommendedCard({
 	movie,
 	added,
 	inWatchlist,
 	showActions,
 }: {
-	movie: TMDBMovieResponse;
+	movie: Movie;
 	added?: boolean;
 	inWatchlist?: boolean;
 	showActions?: boolean;
 }) {
-	const queryClient = useQueryClient();
-	const [isHovering, setIsHovering] = useState(false);
+	const [_isHovering, setIsHovering] = useState(false);
 	const watchlistMutation = useAddToWatchlistMutation();
-	const addMutation = useAddToShortlistMutation();
+	const addMutation = useUpdateShortlistMutation();
 	const removeMutation = useRemoveFromShortlistMutation();
-	const { data: movieData, status } = useMovieQuery(movie?.id, isHovering);
 	const { data: user } = useValidateSession();
-
-	const prefetch = () => {
-		queryClient.prefetchQuery({
-			queryKey: ["movie", movie.id],
-			queryFn: () => getMovie(movie.id),
-			staleTime: 1000 * 60 * 60 * 24,
-			gcTime: 1000 * 60 * 60 * 24,
-		});
-	};
 
 	return (
 		<div
 			className={"moviecard group"}
 			onMouseEnter={() => {
-				prefetch();
 				setIsHovering(true);
 			}}
 			onMouseLeave={() => {
@@ -85,16 +69,13 @@ export default function MovieCard({
 						<Button
 							variant={"ghost"}
 							size={"iconXs"}
-							onClick={() => {
-								if (movieData) {
-									addMutation.mutate({
-										userId: user?.id ?? "",
-										shortlistId: user?.shortlistId ?? "",
-										movie: movieData,
-									});
-								}
-							}}
 							isLoading={addMutation.isPending}
+							onClick={() => {
+								addMutation.mutate({
+									movie: movie,
+									shortlistId: user?.shortlistId ?? "",
+								});
+							}}
 						>
 							<ListPlus />
 						</Button>
@@ -104,7 +85,7 @@ export default function MovieCard({
 						size="iconXs"
 						onClick={() => {
 							watchlistMutation.mutate({
-								movieId: movie.id,
+								movieId: movie.tmdbId,
 							});
 						}}
 						isLoading={watchlistMutation.isPending}
@@ -115,26 +96,27 @@ export default function MovieCard({
 			)}
 
 			<img
-				src={`https://image.tmdb.org/t/p/original/${movie?.poster_path}`}
+				src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 				alt=""
 				width={250}
 				height={375}
-				className="w-full h-full object-cover absolute top-0 left-0"
+				className="w-full h-full object-cover absolute top-0 left-0 border rounded-md"
+				loading="lazy"
 			/>
 			<div className="info">
-				<h1 className="title line-clamp-2">{movie?.title}</h1>
+				<h1 className="title line-clamp-2">{movie.title}</h1>
 				<div className="flex flex-row gap-2 flex-wrap">
 					<span className="text-xs flex flex-row items-center gap-1">
 						<Star className="w-4 h-4" />
-						{movie?.vote_average?.toFixed(1)}
+						{movie.vote_average.toFixed(1)}
 					</span>
 					<span className="text-xs flex flex-row items-center gap-1">
 						<Users className="w-4 h-4" />
-						{movie?.vote_count}
+						{movie.vote_count}
 					</span>
 					<span className="text-xs flex flex-row items-center gap-1">
 						<TrendingUp className="w-4 h-4" />
-						{movie?.popularity?.toFixed(1)}
+						{movie.popularity.toFixed(1)}
 					</span>
 				</div>
 				<div className="flex flex-col justify-between gap-2">
@@ -142,7 +124,7 @@ export default function MovieCard({
 					<div className="description-links">
 						<div className="flex flex-row items-center gap-2">
 							<Link
-								href={`https://www.themoviedb.org/movie/${movie?.id}`}
+								href={`https://www.themoviedb.org/movie/${movie.id}`}
 								target="_blank"
 							>
 								<Button variant="ghost" size="icon">
@@ -150,10 +132,10 @@ export default function MovieCard({
 								</Button>
 							</Link>
 							<Link
-								href={`https://www.imdb.com/title/${movieData?.imdb_id}`}
+								href={`https://www.imdb.com/title/${movie?.imdbId}`}
 								target="_blank"
 							>
-								<Button variant="ghost" size="icon" isLoading={status === "pending"}>
+								<Button variant="ghost" size="icon">
 									<FaImdb className="w-6 h-6" />
 								</Button>
 							</Link>

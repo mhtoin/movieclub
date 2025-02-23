@@ -1,5 +1,5 @@
 import { createDbMovie } from "@/lib/createDbMovie";
-import { getSimilarMovies } from "@/lib/getSimilarMovies";
+import { getRecommendedMovies } from "@/lib/getSimilarMovies";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import prisma from "../lib/prisma";
 async function updateSimilar() {
@@ -35,25 +35,27 @@ async function updateSimilar() {
 		}
 
 		for (const movie of movies) {
-			const similarMovies = await getSimilarMovies(movie.tmdbId);
-			const topFiveSimilarMovies = similarMovies.slice(0, 5);
+			const recommended = await getRecommendedMovies(movie.tmdbId);
+			const topFiveRecommended = recommended.slice(0, 5);
 
 			// find or create if missing from database
-			for (const similarMovie of topFiveSimilarMovies) {
+			for (const recommendedMovie of topFiveRecommended) {
 				const existingMovie = await prisma.movie.findUnique({
 					where: {
-						tmdbId: similarMovie.id,
+						tmdbId: recommendedMovie.id,
 					},
 					include: {
-						similarForUser: true,
+						recommendations: true,
 					},
 				});
 				console.log("existingMovie", existingMovie);
 
 				if (!existingMovie) {
-					console.log(`Creating movie ${similarMovie.id} ${similarMovie.title}`);
+					console.log(
+						`Creating movie ${recommendedMovie.id} ${recommendedMovie.title}`,
+					);
 					const detailsRes = await fetch(
-						`https://api.themoviedb.org/3/movie/${similarMovie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
+						`https://api.themoviedb.org/3/movie/${recommendedMovie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
 						{
 							method: "GET",
 							headers: {
@@ -70,25 +72,43 @@ async function updateSimilar() {
 					await prisma.movie.create({
 						data: {
 							...movieObject,
-							similarForUser: {
-								connect: {
-									id: user.id,
+							recommendations: {
+								create: {
+									user: {
+										connect: {
+											id: user.id,
+										},
+									},
+									sourceMovie: {
+										connect: {
+											id: movie.id,
+										},
+									},
 								},
 							},
 						},
 					});
 				} else {
 					console.log(
-						`Connecting movie ${similarMovie.id} ${similarMovie.title} to user ${user.id}`,
+						`Connecting movie ${recommendedMovie.id} ${recommendedMovie.title} to user ${user.id}`,
 					);
 					await prisma.movie.update({
 						where: {
 							id: existingMovie.id,
 						},
 						data: {
-							similarForUser: {
-								connect: {
-									id: user.id,
+							recommendations: {
+								create: {
+									user: {
+										connect: {
+											id: user.id,
+										},
+									},
+									sourceMovie: {
+										connect: {
+											id: movie.id,
+										},
+									},
 								},
 							},
 						},
@@ -96,8 +116,6 @@ async function updateSimilar() {
 				}
 			}
 		}
-
-		//console.dir(movies, { depth: null });
 	}
 }
 

@@ -2,14 +2,13 @@
 import { createDbMovie } from "@/lib/createDbMovie";
 import type { MovieWithUser } from "@/types/movie.type";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import type { Movie, Prisma } from "@prisma/client";
+import type { Movie } from "@prisma/client";
 import { isWednesday, nextWednesday, set } from "date-fns";
 import { NextResponse } from "next/server";
 import { db } from "./db";
-import { getMovie } from "./movies/queries";
 import prisma from "./prisma";
 import { getAdditionalInfo } from "./tmdb";
-import { keyBy, omit } from "./utils";
+import { keyBy } from "./utils";
 
 export const revalidate = 10;
 
@@ -105,6 +104,19 @@ export async function connectMovieToShortlist(
 	movieId: string,
 	shortlistId: string,
 ) {
+	const shortlist = await prisma.shortlist.findUnique({
+		where: {
+			id: shortlistId,
+		},
+		include: {
+			movies: true,
+		},
+	});
+
+	if (shortlist?.movies.length && shortlist.movies.length >= 3) {
+		throw new Error("Only 3 movies allowed, remove to make room");
+	}
+
 	const updatedShortlist = await prisma.shortlist.update({
 		where: {
 			id: shortlistId,
@@ -160,7 +172,11 @@ export async function addMovieToShortlist(
 			},
 		},
 		include: {
-			movies: true,
+			movies: {
+				include: {
+					user: true,
+				},
+			},
 		},
 	});
 
@@ -283,25 +299,42 @@ export async function updateShortlistSelectionStatus(
 }
 
 export async function replaceShortlistMovie(
-	replacedMovie: MovieWithUser,
-	replacingWithMovie: MovieWithUser,
+	replacedMovie: MovieWithUser | Movie,
+	replacingWithMovie: MovieWithUser | TMDBMovieResponse | Movie,
 	shortlistId: string,
 ) {
 	// try to fetch the movie from the db to check if it exists
 	// if tmdbId is present, it means replacingWithMovie is of type Movie
 	// so we can just insert it directly
-	console.log("is tmdb movie", replacingWithMovie);
-	console.log("replacedMovie", replacedMovie);
-	const movie = await getMovie(replacingWithMovie.tmdbId);
-	const movieObject = {
-		...omit(replacingWithMovie, ["id"]),
-		tmdbId: movie.id,
-		imdbId: movie?.imdb_id,
-		genres: replacingWithMovie.genres || null, // Remove JSON.stringify
-		runtime: replacingWithMovie.runtime,
-		tagline: replacingWithMovie.tagline,
-	} as Prisma.MovieCreateInput;
-	const updated = await prisma.shortlist.update({
+	if ("tmdbId" in replacingWithMovie) {
+		console.log("tmdbId in replacingWithMovie");
+		const updated = await prisma.shortlist.update({
+			where: {
+				id: shortlistId,
+			},
+			data: {
+				movies: {
+					disconnect: [{ id: replacedMovie.id }],
+					connect: {
+						tmdbId: replacingWithMovie.tmdbId,
+					},
+				},
+			},
+			include: {
+				movies: {
+					include: {
+						user: true,
+					},
+				},
+			},
+		});
+
+		return updated;
+	}
+	console.log("updating with search result movie");
+	const movieObject = await createDbMovie(replacingWithMovie);
+
+	const updatedShortlist = await prisma.shortlist.update({
 		where: {
 			id: shortlistId,
 		},
@@ -309,7 +342,9 @@ export async function replaceShortlistMovie(
 			movies: {
 				disconnect: [{ id: replacedMovie.id }],
 				connectOrCreate: {
-					where: { tmdbId: replacingWithMovie.tmdbId },
+					where: {
+						tmdbId: movieObject.tmdbId,
+					},
 					create: movieObject,
 				},
 			},
@@ -323,5 +358,7 @@ export async function replaceShortlistMovie(
 		},
 	});
 
-	return updated;
+	console.log("updatedShortlist", updatedShortlist);
+
+	return updatedShortlist;
 }

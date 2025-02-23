@@ -1,4 +1,4 @@
-import type { Movie } from "@prisma/client";
+import type { UserRecommendations } from "@/types/user.type";
 import { queryOptions } from "@tanstack/react-query";
 
 export const userKeys = {
@@ -6,9 +6,10 @@ export const userKeys = {
 	recommended: (userId: string) =>
 		queryOptions({
 			queryKey: ["users", userId, "recommended"],
-			queryFn: async (): Promise<Movie[]> => {
+			queryFn: async (): Promise<UserRecommendations> => {
 				const res = await fetch(`/api/users/${userId}/recommended`);
-				return res.json();
+				const data: UserRecommendations = await res.json();
+				return data;
 			},
 			enabled: !!userId,
 		}),

@@ -179,19 +179,24 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 						</div>
 
 						{/* Top-right cell */}
-						<div
-							className="hidden @4xl:flex items-center justify-start p-4 @4xl:w-1/2 h-full data-[expanded=true]:flex md:data-[expanded=false]:flex "
-							data-expanded={isExpanded}
-						>
-							<div className="flex flex-col gap-2">
-								<h1 className="text-xl @4xl:text-2xl font-bold">Cast</h1>
-								<div className="flex flex-row gap-2 justify-start items-center">
-									{movie?.cast?.slice(0, 6).map((cast) => {
-										return <CastPortrait cast={cast} key={cast.id} />;
-									})}
-									{movie?.cast && <CastPopover cast={movie?.cast} />}
+						<div className="flex items-center justify-start p-4 md:w-1/2 h-full">
+							{isExpanded && (
+								<div className="flex flex-col gap-5">
+									<h1 className="text-xl md:text-2xl font-bold">Cast</h1>
+									<div className="flex flex-row gap-2 justify-start items-center">
+										{movie?.cast?.slice(0, 6).map((cast) => {
+											return <CastPortrait cast={cast} key={cast.id} />;
+										})}
+										{movie?.cast && <CastPopover cast={movie?.cast} />}
+									</div>
+									<h1 className="text-xl md:text-2xl font-bold">Crew</h1>
+									<div className="flex flex-row gap-2 justify-start items-center">
+										{movie?.crew?.map((crew) => {
+											return <CastPortrait cast={crew} key={crew.id} />;
+										})}
+									</div>
 								</div>
-							</div>
+							)}
 						</div>
 					</div>
 
@@ -230,16 +235,6 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 							data-expanded={isExpanded}
 						>
 							<div className="flex flex-col gap-2">
-								<div className="flex flex-row gap-2">
-									<div className="text-sm bg-background/40 rounded-md px-0 md:px-2 py-1">
-										{movie?.genres?.map((genre) => genre.name).join("/")}
-									</div>
-									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
-										{movie?.runtime
-											? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}m`
-											: ""}
-									</div>
-								</div>
 								<div className="flex flex-row gap-2 rounded-md w-fit px-0 md:px-2 md:py-1">
 									<Link
 										href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
@@ -254,7 +249,18 @@ export default function MovieGalleryItem({ movie }: { movie: MovieWithUser }) {
 										<FaImdb className="w-4 h-4 @4xl:w-6 @4xl:h-6 hover:text-accent" />
 									</Link>
 								</div>
-								<p className="text-sm @4xl:text-lg max-w-[500px] text-foreground/60 px-0 md:px-2 max-h-[100px] overflow-y-auto md:max-h-none">
+								<div className="flex flex-row flex-wrap gap-2">
+									<div className="text-sm bg-background/40 rounded-md px-0 md:px-2 py-1">
+										{movie?.genres?.map((genre) => genre.name).join("/")}
+									</div>
+									<div className="text-sm bg-background/40 rounded-md px-2 py-1">
+										{movie?.runtime
+											? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}m`
+											: ""}
+									</div>
+								</div>
+
+								<p className="text-sm @4xl:text-md max-w-[500px] text-foreground/60 px-0 md:px-2 max-h-[100px] overflow-y-auto md:max-h-none">
 									{movie?.overview}
 								</p>
 							</div>

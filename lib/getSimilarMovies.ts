@@ -1,8 +1,8 @@
-import type { TMDBSimilarResponse } from "@/types/tmdb.type";
+import type { TMDBRecommendationResponse } from "@/types/tmdb.type";
 
-export async function getSimilarMovies(tmdbId: number) {
+export async function getRecommendedMovies(tmdbId: number) {
 	const response = await fetch(
-		`https://api.themoviedb.org/3/movie/${tmdbId}/similar`,
+		`https://api.themoviedb.org/3/movie/${tmdbId}/recommendations`,
 		{
 			method: "GET",
 			headers: {
@@ -12,6 +12,6 @@ export async function getSimilarMovies(tmdbId: number) {
 			},
 		},
 	);
-	const data: TMDBSimilarResponse = await response.json();
+	const data: TMDBRecommendationResponse = await response.json();
 	return data.results;
 }

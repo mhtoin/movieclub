@@ -1,12 +1,14 @@
 import { createSelectors } from "@/lib/createSelectors";
 import type { MovieWithUser } from "@/types/movie.type";
+import type { TMDBMovieResponse } from "@/types/tmdb.type";
+import type { Movie } from "@prisma/client";
 import { create } from "zustand";
 
 interface DialogState {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
-	movie: MovieWithUser | null;
-	setMovie: (movie: MovieWithUser | null) => void;
+	movie: MovieWithUser | TMDBMovieResponse | Movie | null;
+	setMovie: (movie: MovieWithUser | TMDBMovieResponse | Movie | null) => void;
 	initialRoute: string | null;
 	setInitialRoute: (initialRoute: string | null) => void;
 }

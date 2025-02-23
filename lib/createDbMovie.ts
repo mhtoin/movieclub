@@ -45,6 +45,12 @@ export const createDbMovie = async (
 	];
 	const providerLink = movieData["watch/providers"]?.results?.FI?.link;
 	const cast = movieData.credits?.cast;
+	const crew = movieData.credits?.crew.filter(
+		(crew) =>
+			crew.job === "Director" ||
+			crew.job === "Screenplay" ||
+			crew.job === "Original Music Composer",
+	);
 
 	const trailers = movieData.videos?.results.filter(
 		(video) => video.type === "Trailer",
@@ -120,5 +126,6 @@ export const createDbMovie = async (
 		},
 		videos: trailers,
 		cast: cast,
+		crew: crew,
 	} as Prisma.MovieCreateInput;
 };

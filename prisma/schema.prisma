@@ -96,12 +96,27 @@ model Movie {
   images            Images?
   videos            Video[]
   cast              CastMember[]
+  crew              CrewMember[]
   tiers             Tier[]         @relation(fields: [tierIds], references: [id])
   tierIds           String[]       @db.ObjectId
-  similarForUser    User[]         @relation("SimilarMovies", fields: [similarForUserIDs], references: [id])
-  similarForUserIDs String[]       @db.ObjectId
+  recommendations   RecommendedMovie[] @relation("recommendedMovie")
+  sourceRecommendations RecommendedMovie[] @relation("sourceMovieRelation")
 
   @@map("movies")
+}
+
+type CrewMember {
+  adult                Boolean
+  gender               Int
+  id                   Int
+  known_for_department String
+  name                 String
+  original_name        String
+  popularity           Float
+  profile_path         String?
+  credit_id            String
+  department           String
+  job                  String
 }
 
 type CastMember {
@@ -211,8 +226,7 @@ model User {
   Raffle        Raffle[]   @relation(fields: [raffleIDs], references: [id])
   raffleIDs     String[]   @db.ObjectId
   sessions      Session[]
-  similarMovies Movie[] @relation("SimilarMovies", fields: [similarMovieIDs], references: [id])
-  similarMovieIDs String[] @db.ObjectId
+  recommendations RecommendedMovie[]
   @@map("users")
 }
 
@@ -231,4 +245,16 @@ model Raffle {
   movies         Movie[]  @relation(fields: [movieIDs], references: [id])
   winningMovieID String   @db.ObjectId
   date           String
+}
+
+model RecommendedMovie {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  movie         Movie   @relation("recommendedMovie", fields: [movieId], references: [id])
+  movieId       String  @db.ObjectId
+  user          User    @relation(fields: [userId], references: [id])
+  userId        String  @db.ObjectId
+  sourceMovie   Movie   @relation("sourceMovieRelation", fields: [sourceMovieId], references: [id])
+  sourceMovieId String  @db.ObjectId
+  
+  @@unique([movieId, userId, sourceMovieId])
 }

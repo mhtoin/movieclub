@@ -51,7 +51,7 @@ export interface TMDBMovieResponse {
 	};
 }
 
-export interface TMDBSimilarResponse {
+export interface TMDBRecommendationResponse {
 	page: number;
 	results: SimilarMovie[];
 	total_pages: number;

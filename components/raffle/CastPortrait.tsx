@@ -1,4 +1,4 @@
-import type { CastMember } from "@prisma/client";
+import type { CastMember, CrewMember } from "@prisma/client";
 import {
 	Tooltip,
 	TooltipContent,
@@ -7,7 +7,9 @@ import {
 } from "components/ui/Tooltip";
 import Image from "next/image";
 import Link from "next/link";
-export default function CastPortrait({ cast }: { cast: CastMember }) {
+export default function CastPortrait({
+	cast,
+}: { cast: CastMember | CrewMember }) {
 	return (
 		<TooltipProvider>
 			<Tooltip>
@@ -30,7 +32,12 @@ export default function CastPortrait({ cast }: { cast: CastMember }) {
 				<TooltipContent className="bg-card">
 					<div className="flex flex-col">
 						<span className="font-bold">{cast.name}</span>
-						<span className="text-foreground/50">{cast.character}</span>
+						{"character" in cast && cast.character && (
+							<span className="text-foreground/50">{cast.character}</span>
+						)}
+						{"job" in cast && cast.job && (
+							<span className="text-foreground/50">{cast.job}</span>
+						)}
 					</div>
 				</TooltipContent>
 			</Tooltip>
