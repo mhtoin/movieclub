@@ -36,6 +36,9 @@ export default function SearchButton() {
 	const { data: recommended } = useSuspenseQuery(
 		userKeys.recommended(user?.id || ""),
 	);
+	const [activeTab, setActiveTab] = useState<"results" | "recommended">(
+		(searchParams.get("query")?.length ?? 0) > 0 ? "results" : "recommended",
+	);
 	const modalRef = useRef<HTMLDivElement>(null);
 	const sentinelRef = useRef<HTMLButtonElement>(null);
 
@@ -154,8 +157,17 @@ export default function SearchButton() {
 							ref={inputRef}
 							value={inputValue}
 							onChange={(e) => {
-								setInputValue(e.target.value);
-								debouncedSearch(e.target.value);
+								const nextValue = e.target.value;
+
+								setInputValue(nextValue);
+								debouncedSearch(nextValue);
+								if (activeTab !== "results" && nextValue.length > 0) {
+									setActiveTab("results");
+								}
+
+								if (activeTab === "results" && nextValue.length === 0) {
+									setActiveTab("recommended");
+								}
 							}}
 							onFocus={() => setOpen(true)}
 							className="bg-transparent focus:outline-none focus-visible:ring-0 focus-visible:ring-opacity-0 focus-visible:ring-offset-0 border-none z-20"
@@ -165,19 +177,26 @@ export default function SearchButton() {
 						</kbd>
 					</div>
 					{open && (
-						<Tabs defaultValue="results" className="overflow-hidden">
+						<Tabs
+							value={activeTab}
+							onValueChange={(value) => {
+								setActiveTab(value as "results" | "recommended");
+							}}
+							activationMode="automatic"
+							className="overflow-hidden"
+						>
 							<div className="flex flex-col items-center bg-transparent overflow-hidden">
 								<div className="flex w-full justify-between items-center h-full overflow-hidden">
 									<TabsList className="h-[38px]">
-										<TabsTrigger value="results">Results</TabsTrigger>
 										<TabsTrigger value="recommended">Recommended</TabsTrigger>
+										<TabsTrigger value="results">Results</TabsTrigger>
 									</TabsList>
 								</div>
 								<div className="h-[0.5px] w-full bg-accent" />
-								<TabsContent value="results" className="flex-1">
+								<TabsContent value="results" className="flex-1 justify-center">
 									<div
 										ref={resultsContainerRef}
-										className="flex flex-wrap gap-2 py-2 w-full items-center justify-center overflow-y-auto max-h-[calc(90vh-150px)] relative"
+										className="flex flex-wrap gap-5 py-2 w-full items-center justify-center overflow-y-auto max-h-[calc(90vh-150px)] relative"
 									>
 										{data?.pages.map((page) => (
 											<Fragment key={page.page}>
@@ -214,7 +233,7 @@ export default function SearchButton() {
 												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent/40 rounded-md w-fit">
 													Because you liked: {sourceMovie}
 												</h3>
-												<div className="flex flex-wrap gap-2 w-full">
+												<div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5 place-items-center w-full">
 													{recommended[sourceMovie].map((rec, index) => (
 														<RecommendedCard
 															key={`${sourceMovie}-${index}`}
