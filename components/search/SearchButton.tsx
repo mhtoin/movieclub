@@ -204,7 +204,7 @@ export default function SearchButton() {
 										{data?.pages.map((page) => (
 											<Fragment key={page.page}>
 												{page.results.map((result: TMDBMovieResponse) => (
-													<MovieCard key={result.id} movie={result} />
+													<MovieCard key={result.id} movie={result} showActions />
 												))}
 											</Fragment>
 										))}
