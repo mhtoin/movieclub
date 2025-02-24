@@ -1,5 +1,6 @@
 "use client";
 
+import UserAvatar from "@/components/shortlist/UserAvatar";
 import {
 	useUpdateParticipationMutation,
 	useUpdateReadyStateMutation,
@@ -55,29 +56,10 @@ export default function ShortlistDrawer() {
 						</DrawerTitle>
 						<DrawerDescription>
 							<div className="flex flex-col items-center justify-center gap-5">
-								<Button
-									variant={"outline"}
-									size={"avatarSm"}
-									className={`flex justify-center ${"hover:opacity-70"} transition-colors outline ${
-										userShortlist?.isReady ? "outline-success" : "outline-error"
-									} ${readyStateMutation.isPending ? "animate-pulse" : ""} }`}
-									key={`avatar-${userShortlist?.userId}`}
-									onClick={() => {
-										if (userShortlist) {
-											readyStateMutation.mutate({
-												shortlistId: userShortlist.id,
-												isReady: !userShortlist.isReady,
-												userId: userShortlist.userId,
-											});
-										}
-									}}
-								>
-									<img
-										src={userShortlist?.user?.image}
-										alt=""
-										key={`profile-img-${userShortlist?.userId}`}
-									/>
-								</Button>
+								<UserAvatar
+									userShortlist={userShortlist}
+									readyStateMutation={readyStateMutation}
+								/>
 								<div className="flex flex-row items-center gap-2">
 									<div className="flex flex-col items-center gap-2">
 										<h3 className="text-xs font-semibold">Participating</h3>
