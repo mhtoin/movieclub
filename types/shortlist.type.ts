@@ -6,3 +6,7 @@ export type ShortlistWithMovies = Prisma.ShortlistGetPayload<{
 
 export interface ShortlistWithMoviesById
 	extends Record<string, ShortlistWithMovies> {}
+
+export type UserShortlist = Prisma.ShortlistGetPayload<{
+	include: { user: true };
+}>;

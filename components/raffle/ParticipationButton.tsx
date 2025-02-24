@@ -14,15 +14,14 @@ interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
 
 export const ParticipationButton = forwardRef<HTMLInputElement, CheckboxProps>(
 	function ParticipationButton(props, ref) {
-		const [checked, setChecked] = useState(props.defaultChecked ?? false);
 		const [focusVisible, setFocusVisible] = useState(false);
 
 		return (
 			<label
 				className={`flex select-none items-center gap-2 border rounded-md p-3 transition-all duration-500 ${
-					checked ? "border-accent" : "border-border"
+					props.checked ? "border-accent" : "border-border"
 				}`}
-				data-checked={checked}
+				data-checked={props.checked}
 				data-focus-visible={focusVisible || undefined}
 				title="Participate in the raffle"
 				aria-label="Participate in the raffle"
@@ -34,16 +33,16 @@ export const ParticipationButton = forwardRef<HTMLInputElement, CheckboxProps>(
 						id={props.id}
 						ref={ref}
 						clickOnEnter
+						checked={props.checked}
 						onFocusVisible={() => setFocusVisible(true)}
 						onBlur={() => setFocusVisible(false)}
 						onChange={(event) => {
-							setChecked(event.target.checked);
 							props.onChange?.(event);
 						}}
 					/>
 				</VisuallyHidden>
 
-				<div className="check" data-checked={checked}>
+				<div className="check" data-checked={props.checked}>
 					<svg
 						fill="none"
 						stroke="currentColor"
