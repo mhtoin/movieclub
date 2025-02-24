@@ -128,7 +128,7 @@ export default function RaffleDialog() {
 				backdrop={
 					<div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
 				}
-				className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
+				className="fixed z-[9999] inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
 			>
 				{finished && data ? (
 					<div className="flex flex-col gap-5 justify-center items-center">
@@ -163,10 +163,7 @@ export default function RaffleDialog() {
 									sidebarExpanded ? "opacity-100" : "opacity-100"
 								}`}
 							>
-								<Participants
-									isEditing={isEditing}
-									setIsEditing={setIsEditing}
-								/>
+								<Participants isEditing={isEditing} setIsEditing={setIsEditing} />
 							</div>
 						</div>
 						<div className="flex flex-col gap-5 items-center h-full flex-1 @container/items pt-5 ">

@@ -1,3 +1,4 @@
+import UserAvatar from "@/components/shortlist/UserAvatar";
 import {
 	useShortlistsQuery,
 	useUpdateParticipationMutation,
@@ -15,11 +16,7 @@ export default function Participants({
 	isEditing: boolean;
 	setIsEditing: (isEditing: boolean) => void;
 }) {
-	const {
-		variables: readyStateVariables,
-		status: updateReadyStateStatus,
-		mutate: updateReadyState,
-	} = useUpdateReadyStateMutation();
+	const updateReadyState = useUpdateReadyStateMutation();
 	const { mutate: updateParticipation } = useUpdateParticipationMutation();
 	const { data: allShortlists } = useShortlistsQuery();
 	const { data: currentUser } = useValidateSession();
@@ -62,34 +59,13 @@ export default function Participants({
 								<span className={"text-xs text-center font-semibold"}>
 									{user?.name}
 								</span>
-								<Button
-									variant={"outline"}
-									size={"avatarSm"}
-									className={`flex justify-center ${"hover:opacity-70"} transition-colors outline ${
-										shortlist?.isReady ? "outline-success" : "outline-error"
-									}`}
-									key={`avatar-${user?.id}`}
+								<UserAvatar
+									userShortlist={shortlist}
+									readyStateMutation={updateReadyState}
 									disabled={!isEditing}
-									isLoading={
-										updateReadyStateStatus === "pending" &&
-										readyStateVariables?.shortlistId === shortlistId
-									}
-									onClick={() => {
-										updateReadyState({
-											userId: currentUser?.id || "",
-											shortlistId: shortlistId,
-											isReady: !shortlist?.isReady,
-										});
-									}}
-								>
-									<img
-										src={user?.image}
-										alt=""
-										key={`profile-img-${user?.id}`}
-									/>
-								</Button>
+								/>
 								<ParticipationButton
-									defaultChecked={participating}
+									checked={participating}
 									disabled={!isEditing}
 									onChange={(e) => {
 										updateParticipation({
