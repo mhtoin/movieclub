@@ -1,6 +1,7 @@
 "use client";
 import { useIsMobile } from "@/lib/hooks";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import { useState } from "react";
 import SearchButton from "../search/SearchButton";
@@ -12,27 +13,30 @@ const ThemeSwitcher = dynamic(() => import("../theme/ThemeSwitcher"), {
 });
 
 export default function NavBar() {
+	const pathname = usePathname();
 	const isMobile = useIsMobile();
 
+	// Define paths where transparent background is wanted (e.g. homepage)
+	const transparentBgPaths = ["/home"]; // Add other paths as needed
+
 	// detect if the user has scrolled down
-	const [isScrolled, setIsScrolled] = useState(false);
+	const [isTransparent, setIsTransparent] = useState(false);
 
 	useEffect(() => {
-		// detect if the user has scrolled down an entire screen
-		const handleScroll = () => {
-			setIsScrolled(window.scrollY > window.innerHeight);
-		};
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
+		if (transparentBgPaths.includes(pathname)) {
+			setIsTransparent(true);
+		} else {
+			setIsTransparent(false);
+		}
+	}, [pathname]); // Re-run effect when path changes
 
 	if (isMobile) {
 		return (
 			<div
 				className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
-					isScrolled
-						? "bg-background/80 backdrop-blur-md border-b"
-						: "bg-transparent"
+					isTransparent
+						? "bg-transparent"
+						: "bg-background/80 backdrop-blur-md border-b"
 				}`}
 			>
 				<div className="w-full py-5 px-1 rounded flex justify-between items-center">
@@ -52,9 +56,9 @@ export default function NavBar() {
 	return (
 		<div
 			className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
-				isScrolled
-					? "bg-background/80 backdrop-blur-md border-b"
-					: "bg-transparent border-b border-border/50"
+				isTransparent
+					? "bg-transparent border-b border-border/50 "
+					: "bg-background/80 backdrop-blur-md border-b"
 			}`}
 		>
 			<div className="w-[90%] h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
