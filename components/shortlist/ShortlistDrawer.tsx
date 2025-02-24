@@ -64,7 +64,7 @@ export default function ShortlistDrawer() {
 									<div className="flex flex-col items-center gap-2">
 										<h3 className="text-xs font-semibold">Participating</h3>
 										<ParticipationButton
-											defaultChecked={userShortlist?.participating || true}
+											checked={userShortlist?.participating}
 											onChange={(e) => {
 												participationMutation.mutate({
 													userId: user?.id || "",
@@ -77,7 +77,7 @@ export default function ShortlistDrawer() {
 									<div className="flex flex-col items-center gap-2">
 										<h3 className="text-xs font-semibold">Ready</h3>
 										<ParticipationButton
-											defaultChecked={userShortlist?.isReady || true}
+											checked={userShortlist?.isReady}
 											onChange={(e) => {
 												readyStateMutation.mutate({
 													userId: user?.id || "",
