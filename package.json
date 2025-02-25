@@ -17,7 +17,9 @@
 		"insert-imdb-id": "tsx scripts/insertImdbId.ts",
 		"update-movies": "tsx scripts/updateMovies.ts",
 		"migrate-tierlists": "tsx scripts/migrateTierlists.ts",
-		"update-similar": "tsx scripts/updateSimilar.ts"
+		"update-similar": "tsx scripts/updateSimilar.ts",
+		"update-recommended": "tsx scripts/updateRecommended.ts",
+		"backup": "tsx scripts/backup.sh"
 	},
 	"dependencies": {
 		"@ariakit/react": "^0.4.11",

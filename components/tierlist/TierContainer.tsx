@@ -73,9 +73,7 @@ export default function DnDTierContainer({
 	const [containerState, setContainerState] = useState<
 		MovieWithUser[][] | undefined
 	>(undefined);
-	const setNotification = useNotificationStore(
-		(state) => state.setNotification,
-	);
+	const setNotification = useNotificationStore((state) => state.setNotification);
 	const tiers = tierlistData?.tierlistTiers.map((tier) => tier.label);
 
 	useEffect(() => {
@@ -102,9 +100,7 @@ export default function DnDTierContainer({
 		setSelectedDate(date);
 		const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
 			return tier.movies
-				.filter((movie) =>
-					date ? movie.watchDate?.split("-")[0] === date : true,
-				)
+				.filter((movie) => (date ? movie.watchDate?.split("-")[0] === date : true))
 				.map((movie) => movie);
 		});
 
@@ -256,9 +252,7 @@ export default function DnDTierContainer({
 							deleteMutation.mutate(tierlistId);
 						} else {
 							if (document) {
-								(
-									document.getElementById("createModal") as HTMLFormElement
-								).showModal();
+								(document.getElementById("createModal") as HTMLFormElement).showModal();
 							}
 						}
 					}}

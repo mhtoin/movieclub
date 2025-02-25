@@ -73,8 +73,8 @@ async function migrateTierlists() {
 						create: tierMovies.map((movie, index) => ({
 							movie: {
 								connect: { id: movie },
+								position: index,
 							},
-							position: index,
 						})),
 					},
 				},
