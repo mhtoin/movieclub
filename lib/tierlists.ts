@@ -31,6 +31,18 @@ export async function getTierlist(id: string) {
 							user: true,
 						},
 					},
+					tierMovies: {
+						include: {
+							movie: {
+								include: {
+									user: true,
+								},
+							},
+						},
+						orderBy: {
+							position: "asc",
+						},
+					},
 				},
 				orderBy: {
 					value: "asc",

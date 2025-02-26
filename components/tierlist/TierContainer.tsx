@@ -78,11 +78,19 @@ export default function DnDTierContainer({
 
 	useEffect(() => {
 		const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
-			return tier.movies
-				.filter((movie) =>
-					selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true,
-				)
-				.map((movie) => movie);
+			return tier.value === 0
+				? tier.movies
+						.filter((movie) =>
+							selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true,
+						)
+						.map((movie) => movie)
+				: tier.tierMovies
+						.filter((movie) =>
+							selectedDate
+								? movie.movie.watchDate?.split("-")[0] === selectedDate
+								: true,
+						)
+						.map((movie) => movie.movie);
 		});
 		setContainerState(movieMatrix);
 	}, [tierlistData, selectedDate]);
@@ -99,9 +107,15 @@ export default function DnDTierContainer({
 		});
 		setSelectedDate(date);
 		const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
-			return tier.movies
-				.filter((movie) => (date ? movie.watchDate?.split("-")[0] === date : true))
-				.map((movie) => movie);
+			return tier.value === 0
+				? tier.movies
+						.filter((movie) =>
+							selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true,
+						)
+						.map((movie) => movie)
+				: tier.tierMovies
+						.filter((movie) => movie.movie.watchDate?.split("-")[0] === selectedDate)
+						.map((movie) => movie.movie);
 		});
 
 		setContainerState(movieMatrix);

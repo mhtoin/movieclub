@@ -9,6 +9,18 @@ export type TierlistWithTiers = Prisma.TierlistsGetPayload<{
 						user: true;
 					};
 				};
+				tierMovies: {
+					include: {
+						movie: {
+							include: {
+								user: true;
+							};
+						};
+					};
+					orderBy: {
+						position: "asc";
+					};
+				};
 			};
 		};
 	};
@@ -19,6 +31,16 @@ export type TierWithMovies = Prisma.TierGetPayload<{
 		movies: {
 			include: {
 				user: true;
+			};
+		};
+	};
+}>;
+
+export type TiersWithMovies = Prisma.TierGetPayload<{
+	include: {
+		tierMovies: {
+			include: {
+				movie: true;
 			};
 		};
 	};
