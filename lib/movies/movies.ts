@@ -71,6 +71,7 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
 export async function getMoviesOfTheWeekByMonth(month: string) {
 	const currentMonth = format(new Date(), "yyyy-MM");
 	const targetMonth = month || currentMonth;
+	console.log("targetMonth", targetMonth);
 	const movies = await prisma.movie.findMany({
 		where: {
 			watchDate: {
@@ -85,15 +86,10 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 		},
 	});
 
-	return targetMonth === month
-		? {
-				month,
-				movies: movies.slice(1),
-			}
-		: {
-				month,
-				movies: movies,
-			};
+	return {
+		month: targetMonth,
+		movies: movies,
+	};
 }
 
 export async function getMoviesUntil(date: string) {
@@ -272,9 +268,7 @@ export async function postRaffleWork({
 	await new Promise((resolve) => setTimeout(resolve, runtime));
 	console.log("Raffle finished");
 
-	const participants = [
-		...new Set(movies.map((movie) => movie.user?.id ?? "")),
-	];
+	const participants = [...new Set(movies.map((movie) => movie.user?.id ?? ""))];
 
 	// create a raffle record
 	await prisma.raffle.create({
