@@ -39,6 +39,8 @@ async function migrateTierlists() {
 			(movie) => !moviesInTiers.includes(movie),
 		);
 
+		console.log("unrankedMovies", unrankedMovies);
+
 		/*
 		const unrankedTier = await prisma.tier.create({
 			data: {

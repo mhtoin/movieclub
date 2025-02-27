@@ -1,21 +1,18 @@
 "use client";
 import type { MovieWithUser } from "@/types/movie.type";
-import type { TierlistWithTiers } from "@/types/tierlist.type";
 import {
 	DragDropContext,
 	type DraggableLocation,
 	type DropResult,
 } from "@hello-pangea/dnd";
+import type { TierMovie } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button } from "components/ui/Button";
-import { produce } from "immer";
 import { getQueryClient } from "lib/getQueryClient";
 import { tierlistKeys } from "lib/tierlist/tierlistKeys";
 import { Loader2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useNotificationStore } from "stores/useNotificationStore";
 import Tier from "./Tier";
 import TierCreate from "./TierCreate";
 import TierDateFilter from "./TierDateFilter";
@@ -73,7 +70,7 @@ export default function DnDTierContainer({
 	const [containerState, setContainerState] = useState<
 		MovieWithUser[][] | undefined
 	>(undefined);
-	const setNotification = useNotificationStore((state) => state.setNotification);
+
 	const tiers = tierlistData?.tierlistTiers.map((tier) => tier.label);
 
 	useEffect(() => {
@@ -139,28 +136,56 @@ export default function DnDTierContainer({
 
 		const sInd = +source.droppableId;
 		const dInd = +destination.droppableId;
-		/**
-		 * !TODO refactor this to use immer
-		 */
+
+		const destinationTier = tierlistData.tierlistTiers[dInd];
+
+		if (destinationTier.value === 0) {
+			// handle case where no sourceData yet
+			toast.error("Cannot unrank or reorder unranked items at this time");
+			return;
+		}
 
 		if (sInd === dInd) {
+			const sourceData = tierlistData.tierlistTiers[sInd].tierMovies[source.index];
+			const destinationData =
+				tierlistData.tierlistTiers[dInd].tierMovies[destination.index];
 			const items = reorder(
 				containerState?.[sInd],
 				source.index,
 				destination.index,
 			);
+
+			const newSourceData = {
+				...sourceData,
+				position: destination.index,
+			};
+
+			const newDestinationData = {
+				...destinationData,
+				position: source.index,
+			};
+
+			/**
+			 * Newstate contains the movies in the correct order
+			 */
 			const newState = [...containerState];
 			newState[sInd] = items;
 
-			const saveState = produce(tierlistData, (draft) => {
-				for (const tier of draft.tierlistTiers) {
-					tier.movies = newState[tier.value];
-				}
-			});
-			setContainerState(newState);
-			queryClient.setQueryData(["tierlists", tierlistId], saveState);
+			/**
+			 * Technically, all we need to do is update the position of the source and the target
+			 * source now has the destination index, and the destination has the source index
+			 */
 
-			saveMutation.mutate(saveState);
+			setContainerState(newState);
+			//queryClient.setQueryData(["tierlists", tierlistId], saveState);
+
+			saveMutation.mutate({
+				data: {
+					sourceData: newSourceData,
+					destinationData: newDestinationData,
+				},
+				operation: "reorder",
+			});
 		} else {
 			const result = moveItem(
 				containerState[sInd],
@@ -172,28 +197,77 @@ export default function DnDTierContainer({
 			newState[sInd] = result[sInd];
 			newState[dInd] = result[dInd];
 
-			// mutate the tierlist
-			const saveState = produce(tierlistData, (draft) => {
-				for (const tier of draft.tierlistTiers) {
-					// need to merge states if we have filtered for a date
-					tier.movies = newState[tier.value];
-				}
-			});
+			const sourceTier = tierlistData.tierlistTiers[sInd];
+			const destinationTier = tierlistData.tierlistTiers[dInd];
 
-			queryClient.setQueryData(["tierlists", tierlistId], saveState);
+			if (sourceTier.value === 0) {
+				// handle case where no sourceData yet
+				const sourceData = sourceTier.movies[source.index];
 
-			saveMutation.mutate(saveState);
+				// construct a tierMovie object
+				const newSourceData = {
+					id: "",
+					tierId: destinationTier.id,
+					position: destination.index,
+					movieId: sourceData.id,
+				};
+
+				// update the tierlist
+				saveMutation.mutate({
+					data: {
+						sourceData: newSourceData,
+						sourceTierId: sourceTier.id,
+						destinationTierId: destinationTier.id,
+					},
+					operation: "rank",
+				});
+			} else {
+				const sourceData = sourceTier.tierMovies[source.index];
+
+				const newSourceData = {
+					...sourceData,
+					tierId: destinationTier.id,
+					position: destination.index,
+				};
+
+				saveMutation.mutate({
+					data: {
+						sourceData: sourceData,
+						updatedSourceData: newSourceData,
+						sourceTierId: sourceTier.id,
+						destinationTierId: destinationTier.id,
+					},
+					operation: "move",
+				});
+			}
 
 			setContainerState(newState);
 		}
 	}
 
 	const saveMutation = useMutation({
-		mutationFn: async (saveState: TierlistWithTiers) => {
-			const res = await fetch(`/api/tierlists/${saveState.id}`, {
-				method: "PUT",
-				body: JSON.stringify(saveState),
-			});
+		mutationFn: async ({
+			data,
+			operation,
+		}: {
+			data: {
+				sourceData: TierMovie;
+				updatedSourceData?: TierMovie;
+				sourceTierId?: string;
+				destinationTierId?: string;
+				destinationData?: TierMovie;
+			};
+			operation: "reorder" | "move" | "rank";
+		}) => {
+			const res = await fetch(
+				`/api/tierlists/${tierlistId}?operation=${operation}`,
+				{
+					method: "PUT",
+					body: JSON.stringify({
+						data,
+					}),
+				},
+			);
 
 			const body = await res.json();
 
@@ -204,78 +278,18 @@ export default function DnDTierContainer({
 		},
 		onSuccess: (_data, _variables, _context) => {
 			toast.success("Tierlist updated!");
+			queryClient.invalidateQueries({
+				queryKey: ["tierlists", tierlistId],
+			});
 		},
 		onError: (_error) => {
 			toast.error("Updating tierlist failed!");
 		},
 	});
 
-	const deleteMutation = useMutation({
-		mutationFn: async (tierlistId: string) => {
-			const res = await fetch(`/api/tierlists/${tierlistId}`, {
-				method: "DELETE",
-			});
-
-			const body = await res.json();
-
-			if (body.ok) {
-				return body;
-			}
-			throw new Error("Deleting tierlist failed");
-		},
-		onSuccess: (_data) => {
-			setNotification("Tierlist cleared!", "success");
-			window.location.reload();
-		},
-		onError: (_error) => {
-			setNotification("Deleting tierlist failed!", "error");
-		},
-	});
-
-	const handleSave = () => {
-		// construct a tierlist from tiers and matrix
-		const saveState = produce(tierlistData, (draft) => {
-			for (const tier of draft?.tierlistTiers || []) {
-				tier.movies = containerState?.[tier.value] || [];
-			}
-			return draft;
-		});
-
-		if (saveState) {
-			saveMutation.mutate(saveState);
-		}
-	};
-
 	return (
 		<>
 			<div className="flex flex-row items-center gap-5 w-full justify-center">
-				<Button
-					onClick={handleSave}
-					disabled={!authorized}
-					variant="outline"
-					size={"default"}
-					isLoading={saveMutation.isPending}
-				>
-					Save
-				</Button>
-				<Button
-					variant="outline"
-					isLoading={deleteMutation.isPending}
-					onClick={() => {
-						if (containerState && containerState?.length > 1) {
-							deleteMutation.mutate(tierlistId);
-						} else {
-							if (document) {
-								(document.getElementById("createModal") as HTMLFormElement).showModal();
-							}
-						}
-					}}
-					disabled={!authorized}
-				>
-					<span>
-						{containerState && containerState?.length > 1 ? "Reset" : "Create"}
-					</span>
-				</Button>
 				<TierDateFilter
 					values={["2023", "2024", "2025"]}
 					selectedDate={selectedDate}

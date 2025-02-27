@@ -1,9 +1,13 @@
-import type { TierlistWithTiers } from "@/types/tierlist.type";
-import type { TierlistTier } from "@prisma/client";
+import type { TierMovie, TierlistTier } from "@prisma/client";
 import { validateRequest } from "./auth";
 import prisma from "./prisma";
 
 export const revalidate = 10;
+
+type TierUpdateData = {
+	position: number;
+	tierId?: string;
+};
 
 export async function getTierlists() {
 	return await prisma.tierlists.findMany({
@@ -86,24 +90,156 @@ export async function createTierlist(formData: FormData) {
 	});
 }
 
-export async function updateTierlist(id: string, tierList: TierlistWithTiers) {
-	return await prisma.tierlists.update({
-		where: { id },
-		data: {
-			tierlistTiers: {
-				update: tierList.tierlistTiers.map((tier) => ({
-					where: { id: tier.id },
-					data: {
-						label: tier.label,
-						value: tier.value,
-						movies: {
-							set: tier.movies.map((movie) => ({ id: movie.id })),
+export async function updateTierMove({
+	sourceData,
+	updatedSourceData,
+	sourceTierId,
+	destinationTierId,
+}: {
+	sourceData: TierMovie;
+	updatedSourceData: TierMovie;
+	sourceTierId?: string;
+	destinationTierId?: string;
+}) {
+	await prisma
+		.$transaction(async (tx) => {
+			// move the source item to the destination tier
+			await tx.tierMovie.update({
+				where: { id: sourceData.id },
+				data: {
+					tierId: destinationTierId,
+					position: updatedSourceData.position,
+				},
+			});
+
+			// update the positions of the items in the source tier
+			await tx.tierMovie.updateMany({
+				where: { tierId: sourceTierId, position: { gt: sourceData.position } },
+				data: { position: { decrement: 1 } },
+			});
+
+			await tx.tierMovie.updateMany({
+				where: {
+					tierId: destinationTierId,
+					position: { gte: updatedSourceData.position },
+					id: { not: sourceData.id }, // Don't update the moved item
+				},
+				data: {
+					position: { increment: 1 },
+				},
+			});
+		})
+		.catch((e) => {
+			console.error("error updating tierlist", e);
+			throw new Error("error updating tierlist");
+		});
+	return { ok: true };
+}
+
+export async function rankMovie({
+	sourceData,
+	sourceTierId,
+	destinationTierId,
+}: {
+	sourceData: TierMovie;
+	sourceTierId: string;
+	destinationTierId: string;
+}) {
+	await prisma
+		.$transaction(async (tx) => {
+			const newTierMovie = await tx.tierMovie.create({
+				data: {
+					movieId: sourceData.movieId,
+					tierId: destinationTierId,
+					position: sourceData.position,
+				},
+			});
+
+			await tx.tierMovie.updateMany({
+				where: {
+					tierId: destinationTierId,
+					position: { gte: sourceData.position },
+					id: { not: newTierMovie.id },
+				},
+				data: { position: { increment: 1 } },
+			});
+
+			// finally, remove the source movie from the unranked source tier
+			await tx.tier.update({
+				where: { id: sourceTierId },
+				data: {
+					movies: {
+						disconnect: {
+							id: sourceData.movieId,
 						},
 					},
-				})),
+				},
+			});
+		})
+		.catch((e) => {
+			console.error("error updating tierlist", e);
+			throw new Error("error updating tierlist");
+		});
+	return { ok: true };
+}
+
+export async function updateTierlist(
+	_id: string,
+	sourceData: TierMovie,
+	destinationData: TierMovie,
+) {
+	console.log("sourceData", sourceData);
+	console.log("destinationData", destinationData);
+
+	const sourceUpdateData: TierUpdateData = {
+		position: sourceData.position,
+	};
+
+	if (sourceData.tierId) {
+		sourceUpdateData.tierId = sourceData.tierId;
+	}
+
+	const destinationUpdateData: TierUpdateData = {
+		position: destinationData.position,
+	};
+
+	if (destinationData.tierId) {
+		destinationUpdateData.tierId = destinationData.tierId;
+	}
+
+	const source = await prisma.tierMovie
+		.update({
+			where: { id: sourceData.id },
+			data: sourceUpdateData,
+			include: {
+				movie: true,
 			},
-		},
-	});
+		})
+		.catch((e) => {
+			console.error("error updating tierlist", e);
+			throw new Error("error updating tierlist");
+		});
+
+	const destination = await prisma.tierMovie
+		.update({
+			where: { id: destinationData.id },
+			data: destinationUpdateData,
+			include: {
+				movie: true,
+			},
+		})
+		.catch((e) => {
+			console.error("error updating tierlist", e);
+			throw new Error("error updating tierlist");
+		});
+
+	console.log("updated source", source);
+	console.log("updated destination", destination);
+
+	return {
+		source,
+		destination,
+	};
 }
 
 export async function modifyTierlist(formData: FormData) {
