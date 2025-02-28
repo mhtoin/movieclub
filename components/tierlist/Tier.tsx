@@ -1,8 +1,7 @@
+import TierItem from "@/components/tierlist/TIerItem";
 import type { MovieWithUser } from "@/types/movie.type";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Tier({
@@ -120,28 +119,9 @@ export default function Tier({
 							{...provided.droppableProps}
 						>
 							{tier.map((item, index) => (
-								<Draggable
-									key={item.id}
-									draggableId={item.id ?? ""}
-									index={index}
-								>
+								<Draggable key={item.id} draggableId={item.id ?? ""} index={index}>
 									{(provided, _snapshot) => (
-										<div
-											className="indicator mx-auto border-2 rounded-md max-w-[120px] md:max-w-[150px] lg:max-w-[200px] min-w-[120px] md:min-w-[150px] lg:min-w-[200px] shrink-0"
-											ref={provided.innerRef}
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
-										>
-											<Link href={`/home/movies/${item.id}`}>
-												<Image
-													src={`https://image.tmdb.org/t/p/original/${item.poster_path}`}
-													width={200}
-													height={300}
-													alt=""
-													className="h-full w-full object-cover"
-												/>
-											</Link>
-										</div>
+										<TierItem key={item.id} item={item} provided={provided} />
 									)}
 								</Draggable>
 							))}
