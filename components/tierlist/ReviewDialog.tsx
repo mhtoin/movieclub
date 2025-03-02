@@ -1,13 +1,13 @@
 "use client";
+import ReviewEditor from "components/tierlist/ReviewEditor";
+import StarRadio from "components/tierlist/StarRadio";
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/ui/dialog";
-import ReviewEditor from "components/tierlist/ReviewEditor";
-import StarRadio from "components/tierlist/StarRadio";
+} from "components/ui/dialog";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
