@@ -210,6 +210,8 @@ export default function DnDTierContainer({
 					tierId: destinationTier.id,
 					position: destination.index,
 					movieId: sourceData.id,
+					rating: "",
+					review: null,
 				};
 
 				// update the tierlist
