@@ -53,6 +53,22 @@ export default function StarRadio({
 		lg: 3,
 	};
 
+	// Animation classes for wave effect
+	const getAnimationClasses = (index: number): string => {
+		if (!saveRatingMutation.isPending) return "";
+
+		// Use different animation delay classes based on index
+		const delayClasses = [
+			"delay-0",
+			"delay-100",
+			"delay-200",
+			"delay-300",
+			"delay-400",
+		];
+
+		return `animate-star-wave ${delayClasses[index]}`;
+	};
+
 	// Calculate the display value (either the hover value or the actual value)
 	const displayValue = hoverValue !== null ? hoverValue : value;
 
@@ -143,7 +159,7 @@ export default function StarRadio({
 				{/* Base star (outline) */}
 				<Star
 					className={`${sizeClasses[size]} stroke-yellow-400 transition-all duration-200 ${
-						saveRatingMutation.isPending ? "opacity-50" : ""
+						saveRatingMutation.isPending ? "opacity-70" : ""
 					}`}
 					fill="transparent"
 					strokeWidth={strokeWidth[size]}
@@ -156,7 +172,7 @@ export default function StarRadio({
 				>
 					<Star
 						className={`${sizeClasses[size]} stroke-yellow-400 ${
-							saveRatingMutation.isPending ? "opacity-50" : ""
+							saveRatingMutation.isPending ? "opacity-70" : ""
 						}`}
 						fill="rgb(250 204 21)" // text-yellow-400 equivalent
 						strokeWidth={strokeWidth[size]}
@@ -189,7 +205,10 @@ export default function StarRadio({
 			onMouseDown={handleMouseDown}
 		>
 			{[0, 1, 2, 3, 4].map((starIndex) => (
-				<div key={starIndex} className="relative">
+				<div
+					key={starIndex}
+					className={`relative ${getAnimationClasses(starIndex)}`}
+				>
 					<input
 						type="radio"
 						id={`${name}-${starIndex + 1}`}

@@ -22,9 +22,18 @@ export default function ReviewDialog({
 	return (
 		<Dialog>
 			<DialogTrigger>
-				<Star className="w-4 h-4 text-yellow-500 hover:text-yellow-600 hover:scale-110 fill-transparent hover:fill-yellow-600 transition-all duration-300" />
+				<Star
+					className={`w-4 h-4 text-yellow-500 hover:scale-110 fill-transparent hover:fill-accent hover:text-accent transition-all duration-300 ${
+						Number.parseFloat(movie.rating) > 0 || movie.review
+							? "fill-yellow-500"
+							: ""
+					}`}
+				/>
 			</DialogTrigger>
-			<DialogContent className="max-w-4xl max-h-[90vh] h-[90vh] overflow-hidden p-0 z-[9999]">
+			<DialogContent
+				className="max-w-4xl max-h-[90vh] h-[90vh] overflow-hidden p-0 z-[9999]"
+				variant="noClose"
+			>
 				{/* Background image container */}
 				<div className="relative w-full h-full">
 					{/* Background image with overlay */}

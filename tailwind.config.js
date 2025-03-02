@@ -103,6 +103,11 @@ module.exports = {
 					"50%": { transform: "scale(0.95)" },
 					"100%": { transform: "scale(0.9)" },
 				},
+				"star-wave": {
+					"0%": { transform: "translateY(0)" },
+					"50%": { transform: "translateY(-5px)" },
+					"100%": { transform: "translateY(0)" },
+				},
 				overlayShow: {
 					from: { opacity: 0 },
 					to: { opacity: 1 },
@@ -135,6 +140,7 @@ module.exports = {
 				"slide-in": "slide-in 0.5s ease-out",
 				"slide-out": "slide-out 0.5s ease-out",
 				"button-press": "button-press 0.2s ease-in",
+				"star-wave": "star-wave 0.8s ease-in-out infinite",
 				overlayShow: "overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
 				contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
 				slideUpAndFade: "slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
@@ -152,6 +158,13 @@ module.exports = {
 					"0 0px 20px rgba(255,255, 255, 0.35)",
 					"0 0px 65px rgba(255, 255,255, 0.1)",
 				],
+			},
+			transitionDelay: {
+				0: "0ms",
+				100: "100ms",
+				200: "200ms",
+				300: "300ms",
+				400: "400ms",
 			},
 		},
 	},

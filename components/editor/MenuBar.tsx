@@ -25,6 +25,7 @@ import {
 	Workflow,
 	WrapText,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export const MenuBar = ({
 	editor,
@@ -46,6 +47,12 @@ export const MenuBar = ({
 				body: JSON.stringify({ content }),
 			});
 			return res.json();
+		},
+		onSuccess: () => {
+			toast.success("Review saved");
+		},
+		onError: () => {
+			toast.error("Failed to save review");
 		},
 	});
 
@@ -219,6 +226,7 @@ export const MenuBar = ({
 				<Button
 					variant={iconVariant}
 					size={iconSize}
+					isLoading={saveReviewMutation.isPending}
 					onClick={() => saveReviewMutation.mutate()}
 				>
 					<Save className="h-4 w-4" />
