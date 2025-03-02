@@ -1,5 +1,6 @@
 import TierItem from "@/components/tierlist/TIerItem";
 import type { MovieWithUser } from "@/types/movie.type";
+import type { TierMovieWithMovieData } from "@/types/tierlist.type";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -10,7 +11,7 @@ export default function Tier({
 	label,
 }: {
 	tierIndex: number;
-	tier: MovieWithUser[];
+	tier: MovieWithUser[] | TierMovieWithMovieData[];
 	label: string;
 }) {
 	const [canScrollLeft, setCanScrollLeft] = useState(false);

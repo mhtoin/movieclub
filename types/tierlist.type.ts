@@ -45,3 +45,9 @@ export type TiersWithMovies = Prisma.TierGetPayload<{
 		};
 	};
 }>;
+
+export type TierMovieWithMovieData = Prisma.TierMovieGetPayload<{
+	include: {
+		movie: true;
+	};
+}>;
