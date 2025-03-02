@@ -1,7 +1,7 @@
 "use client";
 
 import CurrentMoviePoster from "@/components/home/CurrentMoviePoster";
-import type { MovieWithUser } from "@/types/movie.type";
+import type { MovieWithReviews } from "@/types/movie.type";
 import { useSearchParams } from "next/navigation";
 
 /**
@@ -12,7 +12,7 @@ export default function CurrentMovie({
 	mostRecentMovie,
 	isMobile,
 }: {
-	mostRecentMovie: MovieWithUser;
+	mostRecentMovie: MovieWithReviews;
 	isMobile: boolean;
 }) {
 	const params = useSearchParams();

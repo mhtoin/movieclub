@@ -98,6 +98,21 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 		},
 		include: {
 			user: true,
+			tierMovies: {
+				select: {
+					review: true,
+					rating: true,
+					tier: {
+						select: {
+							tierlist: {
+								select: {
+									user: true,
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	});
 
@@ -116,9 +131,22 @@ export async function getMoviesUntil(date: string) {
 			},
 		},
 		include: {
-			reviews: true,
-			ratings: true,
 			user: true,
+			tierMovies: {
+				select: {
+					review: true,
+					rating: true,
+					tier: {
+						select: {
+							tierlist: {
+								select: {
+									user: true,
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	});
 
@@ -170,9 +198,22 @@ export async function getMoviesOfTheWeek() {
 			},
 		},
 		include: {
-			reviews: true,
-			ratings: true,
 			user: true,
+			tierMovies: {
+				select: {
+					review: true,
+					rating: true,
+					tier: {
+						select: {
+							tierlist: {
+								select: {
+									user: true,
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 	});
 }

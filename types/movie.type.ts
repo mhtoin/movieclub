@@ -1,6 +1,10 @@
 import type { Prisma } from "@prisma/client";
 
 export type MovieWithUser = Prisma.MovieGetPayload<{
+	include: { user: true };
+}>;
+
+export type MovieWithReviews = Prisma.MovieGetPayload<{
 	include: {
 		user: true;
 		tierMovies: {
