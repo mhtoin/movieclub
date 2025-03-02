@@ -1,6 +1,4 @@
 "use client";
-import ReviewEditor from "@/components/tierlist/ReviewEditor";
-import StarRadio from "@/components/tierlist/StarRadio";
 import {
 	Dialog,
 	DialogContent,
@@ -8,10 +6,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import type { TierMovieWithMovieData } from "@/types/tierlist.type";
+import ReviewEditor from "components/tierlist/ReviewEditor";
+import StarRadio from "components/tierlist/StarRadio";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import type { TierMovieWithMovieData } from "types/tierlist.type";
 
 export default function ReviewDialog({
 	movie,
