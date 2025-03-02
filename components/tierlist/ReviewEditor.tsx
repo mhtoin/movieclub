@@ -1,13 +1,14 @@
 "use client";
 
 import { MenuBar } from "@/components/editor/MenuBar";
-import { EditorContent, useEditor } from "@tiptap/react";
+import type { TierMovieWithMovieData } from "@/types/tierlist.type";
+import { EditorContent, type JSONContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-const ReviewEditor = ({ id }: { id: string }) => {
+const ReviewEditor = ({ movieData }: { movieData: TierMovieWithMovieData }) => {
 	const editor = useEditor({
 		extensions: [StarterKit],
-		content: "",
+		content: movieData.review ? (movieData.review as JSONContent) : "<p></p>",
 		editorProps: {
 			attributes: {
 				class:
@@ -18,7 +19,7 @@ const ReviewEditor = ({ id }: { id: string }) => {
 
 	return (
 		<div className="flex flex-col h-full gap-2">
-			<MenuBar editor={editor} id={id} />
+			<MenuBar editor={editor} id={movieData.id} />
 			<div className="flex-grow overflow-hidden relative">
 				<EditorContent
 					editor={editor}

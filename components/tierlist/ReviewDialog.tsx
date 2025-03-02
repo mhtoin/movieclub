@@ -1,3 +1,4 @@
+"use client";
 import ReviewEditor from "@/components/tierlist/ReviewEditor";
 import StarRadio from "@/components/tierlist/StarRadio";
 import {
@@ -10,12 +11,14 @@ import {
 import type { TierMovieWithMovieData } from "@/types/tierlist.type";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function ReviewDialog({
 	movie,
 }: {
 	movie: TierMovieWithMovieData;
 }) {
+	const [rating, setRating] = useState(Number.parseFloat(movie.rating));
 	return (
 		<Dialog>
 			<DialogTrigger>
@@ -58,13 +61,17 @@ export default function ReviewDialog({
 								<div className="flex flex-col gap-4 text-white w-full h-full items-start">
 									<div className="flex flex-col gap-2 max-w-sm shrink-0 grow-0">
 										<StarRadio
-											value={3.5}
-											onChange={(newValue) => console.log(`New rating: ${newValue}`)}
+											value={rating}
+											id={movie.id}
+											onChange={(newValue) => {
+												console.log("new value", newValue);
+												setRating(newValue);
+											}}
 										/>
 									</div>
 									<div className="flex flex-col gap-2 w-full h-full">
 										<h2 className="text-lg font-semibold">Review</h2>
-										<ReviewEditor id={movie.id} />
+										<ReviewEditor movieData={movie} />
 									</div>
 								</div>
 							</div>

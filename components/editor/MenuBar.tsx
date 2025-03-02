@@ -40,7 +40,7 @@ export const MenuBar = ({
 	const saveReviewMutation = useMutation({
 		mutationFn: async () => {
 			const content = editor.getJSON();
-			console.log(content);
+			console.log("content", content);
 			const res = await fetch(`/api/reviews?id=${id}`, {
 				method: "POST",
 				body: JSON.stringify({ content }),

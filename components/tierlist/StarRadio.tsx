@@ -1,5 +1,7 @@
-import { Star } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2, Star } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface StarRadioProps {
 	value?: number;
@@ -7,6 +9,7 @@ interface StarRadioProps {
 	size?: "sm" | "md" | "lg";
 	disabled?: boolean;
 	name?: string;
+	id: string;
 }
 
 export default function StarRadio({
@@ -15,9 +18,26 @@ export default function StarRadio({
 	size = "md",
 	disabled = false,
 	name = "star-rating",
+	id,
 }: StarRadioProps) {
 	const [hoverValue, setHoverValue] = useState<number | null>(null);
 	const [isDragging, setIsDragging] = useState(false);
+
+	const saveRatingMutation = useMutation({
+		mutationFn: async (rating: number) => {
+			const res = await fetch(`/api/ratings?id=${id}`, {
+				method: "POST",
+				body: JSON.stringify({ rating }),
+			});
+			return res.json();
+		},
+		onSuccess: () => {
+			toast.success("Rating saved");
+		},
+		onError: () => {
+			toast.error("Failed to save rating");
+		},
+	});
 
 	// Size classes for the stars
 	const sizeClasses = {
@@ -41,7 +61,7 @@ export default function StarRadio({
 		event: React.MouseEvent<HTMLLabelElement>,
 		starIndex: number,
 	) => {
-		if (disabled) return;
+		if (disabled || saveRatingMutation.isPending) return;
 
 		const { left, width } = event.currentTarget.getBoundingClientRect();
 		const position = (event.clientX - left) / width;
@@ -57,9 +77,14 @@ export default function StarRadio({
 	};
 
 	// Handle click on a star
-	const handleClick = () => {
-		if (disabled || hoverValue === null) return;
+	const handleClick = (event: React.MouseEvent) => {
+		if (disabled || hoverValue === null || saveRatingMutation.isPending) return;
+
+		// Prevent the event from triggering the radio input's default behavior
+		event.preventDefault();
+
 		onChange?.(hoverValue);
+		saveRatingMutation.mutate(hoverValue);
 	};
 
 	// Handle keyboard events for accessibility
@@ -67,7 +92,7 @@ export default function StarRadio({
 		event: React.KeyboardEvent<HTMLLabelElement>,
 		starIndex: number,
 	) => {
-		if (disabled) return;
+		if (disabled || saveRatingMutation.isPending) return;
 
 		if (event.key === "Enter" || event.key === " ") {
 			event.preventDefault();
@@ -84,15 +109,19 @@ export default function StarRadio({
 
 	// Handle mouse down for drag functionality
 	const handleMouseDown = () => {
-		if (!disabled) {
+		if (!disabled && !saveRatingMutation.isPending) {
 			setIsDragging(true);
 		}
 	};
 
 	// Handle mouse up to end dragging
-	const handleMouseUp = () => {
-		if (isDragging && hoverValue !== null) {
-			onChange?.(hoverValue);
+	const handleMouseUp = (event: React.MouseEvent) => {
+		if (isDragging && hoverValue !== null && !saveRatingMutation.isPending) {
+			// Only call onChange if this is not a click event (which is handled separately)
+			// Check if the event target is not a label element
+			if (!(event.target instanceof HTMLLabelElement)) {
+				onChange?.(hoverValue);
+			}
 			setIsDragging(false);
 		}
 	};
@@ -113,7 +142,9 @@ export default function StarRadio({
 			<div className="relative group">
 				{/* Base star (outline) */}
 				<Star
-					className={`${sizeClasses[size]} stroke-yellow-400 transition-all duration-200`}
+					className={`${sizeClasses[size]} stroke-yellow-400 transition-all duration-200 ${
+						saveRatingMutation.isPending ? "opacity-50" : ""
+					}`}
 					fill="transparent"
 					strokeWidth={strokeWidth[size]}
 				/>
@@ -124,14 +155,16 @@ export default function StarRadio({
 					style={{ width: `${fillPercentage}%` }}
 				>
 					<Star
-						className={`${sizeClasses[size]} stroke-yellow-400`}
+						className={`${sizeClasses[size]} stroke-yellow-400 ${
+							saveRatingMutation.isPending ? "opacity-50" : ""
+						}`}
 						fill="rgb(250 204 21)" // text-yellow-400 equivalent
 						strokeWidth={strokeWidth[size]}
 					/>
 				</div>
 
 				{/* Hover indicator - shows the potential fill amount */}
-				{!disabled && (
+				{!disabled && !saveRatingMutation.isPending && (
 					<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 						<div className="bg-yellow-400/20 rounded-full w-1/2 h-1/2 flex items-center justify-center">
 							{fillPercentage > 0 && (
@@ -152,7 +185,7 @@ export default function StarRadio({
 		<div
 			className="flex items-center gap-2"
 			onMouseLeave={handleMouseLeave}
-			onMouseUp={handleMouseUp}
+			onMouseUp={(e) => handleMouseUp(e)}
 			onMouseDown={handleMouseDown}
 		>
 			{[0, 1, 2, 3, 4].map((starIndex) => (
@@ -163,31 +196,37 @@ export default function StarRadio({
 						name={name}
 						value={starIndex + 1}
 						checked={Math.floor(displayValue) === starIndex + 1}
-						onChange={() => onChange?.(starIndex + 1)}
 						className="sr-only" // Visually hidden but accessible
-						disabled={disabled}
+						disabled={disabled || saveRatingMutation.isPending}
 					/>
 					<label
 						htmlFor={`${name}-${starIndex + 1}`}
 						className={`cursor-pointer transition-transform duration-200 hover:scale-110 ${
-							disabled ? "opacity-60 cursor-not-allowed hover:scale-100" : ""
+							disabled || saveRatingMutation.isPending
+								? "opacity-60 cursor-not-allowed hover:scale-100"
+								: ""
 						}`}
 						onMouseMove={(e) => handleMouseMove(e, starIndex)}
-						onClick={handleClick}
+						onClick={(e) => handleClick(e)}
 						onKeyDown={(e) => handleKeyDown(e, starIndex)}
-						tabIndex={disabled ? -1 : 0}
+						tabIndex={disabled || saveRatingMutation.isPending ? -1 : 0}
 					>
 						{renderStar(starIndex)}
 					</label>
 				</div>
 			))}
 
-			{/* Optional: Display the numeric value */}
-			{displayValue > 0 && (
+			{/* Display the numeric value or loading spinner */}
+			{saveRatingMutation.isPending ? (
+				<span className="ml-3 flex items-center bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md">
+					<Loader2 className="w-4 h-4 mr-1 animate-spin" />
+					<span className="text-sm font-medium">Saving...</span>
+				</span>
+			) : displayValue > 0 ? (
 				<span className="ml-3 text-sm font-medium bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md transition-all duration-200">
 					{displayValue.toFixed(2)}
 				</span>
-			)}
+			) : null}
 		</div>
 	);
 }

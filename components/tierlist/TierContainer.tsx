@@ -1,5 +1,5 @@
 "use client";
-import type { MovieWithUser } from "@/types/movie.type";
+import type { TierMovieWithMovieData } from "@/types/tierlist.type";
 import {
 	DragDropContext,
 	type DraggableLocation,
@@ -18,10 +18,10 @@ import TierCreate from "./TierCreate";
 import TierDateFilter from "./TierDateFilter";
 
 type MoveItemObject = {
-	[x: string]: MovieWithUser[];
+	[x: string]: TierMovieWithMovieData[];
 };
 const reorder = (
-	tier: MovieWithUser[],
+	tier: TierMovieWithMovieData[],
 	startIndex: number,
 	endIndex: number,
 ) => {
@@ -32,8 +32,8 @@ const reorder = (
 };
 
 const moveItem = (
-	sourceTier: MovieWithUser[],
-	destinationTier: MovieWithUser[],
+	sourceTier: TierMovieWithMovieData[],
+	destinationTier: TierMovieWithMovieData[],
 	droppableSource: DraggableLocation,
 	droppableDestination: DraggableLocation,
 ) => {
@@ -68,7 +68,7 @@ export default function DnDTierContainer({
 	);
 
 	const [containerState, setContainerState] = useState<
-		MovieWithUser[][] | undefined
+		TierMovieWithMovieData[][] | undefined
 	>(undefined);
 
 	const tiers = tierlistData?.tierlistTiers.map((tier) => tier.label);
@@ -80,14 +80,24 @@ export default function DnDTierContainer({
 						.filter((movie) =>
 							selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true,
 						)
-						.map((movie) => movie)
+						.map((movie, index) => {
+							return {
+								id: "",
+								tierId: tier.id,
+								position: index,
+								movieId: movie.id,
+								movie: movie,
+								rating: "",
+								review: null,
+							};
+						})
 				: tier.tierMovies
 						.filter((movie) =>
 							selectedDate
 								? movie.movie.watchDate?.split("-")[0] === selectedDate
 								: true,
 						)
-						.map((movie) => movie.movie);
+						.map((movie) => movie);
 		});
 		setContainerState(movieMatrix);
 	}, [tierlistData, selectedDate]);
@@ -109,10 +119,24 @@ export default function DnDTierContainer({
 						.filter((movie) =>
 							selectedDate ? movie.watchDate?.split("-")[0] === selectedDate : true,
 						)
-						.map((movie) => movie)
+						.map((movie, index) => {
+							return {
+								id: "",
+								tierId: tier.id,
+								position: index,
+								movieId: movie.id,
+								movie: movie,
+								rating: "",
+								review: null,
+							};
+						})
 				: tier.tierMovies
-						.filter((movie) => movie.movie.watchDate?.split("-")[0] === selectedDate)
-						.map((movie) => movie.movie);
+						.filter((movie) =>
+							selectedDate
+								? movie.movie.watchDate?.split("-")[0] === selectedDate
+								: true,
+						)
+						.map((movie) => movie);
 		});
 
 		setContainerState(movieMatrix);

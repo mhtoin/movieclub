@@ -1,5 +1,4 @@
 import TierItem from "@/components/tierlist/TIerItem";
-import type { MovieWithUser } from "@/types/movie.type";
 import type { TierMovieWithMovieData } from "@/types/tierlist.type";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -11,7 +10,7 @@ export default function Tier({
 	label,
 }: {
 	tierIndex: number;
-	tier: MovieWithUser[] | TierMovieWithMovieData[];
+	tier: TierMovieWithMovieData[];
 	label: string;
 }) {
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -120,9 +119,17 @@ export default function Tier({
 							{...provided.droppableProps}
 						>
 							{tier.map((item, index) => (
-								<Draggable key={item.id} draggableId={item.id ?? ""} index={index}>
+								<Draggable
+									key={item.id ? item.id : item.movieId}
+									draggableId={item.id ? item.id : item.movieId}
+									index={index}
+								>
 									{(provided, _snapshot) => (
-										<TierItem key={item.id} item={item} provided={provided} />
+										<TierItem
+											key={item.id ? item.id : item.movieId}
+											item={item}
+											provided={provided}
+										/>
 									)}
 								</Draggable>
 							))}

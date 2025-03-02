@@ -1,5 +1,4 @@
 import ReviewDialog from "@/components/tierlist/ReviewDialog";
-import type { MovieWithUser } from "@/types/movie.type";
 import type { TierMovieWithMovieData } from "@/types/tierlist.type";
 import type { DraggableProvided } from "@hello-pangea/dnd";
 import Image from "next/image";
@@ -8,7 +7,7 @@ export default function TierItem({
 	item,
 	provided,
 }: {
-	item: MovieWithUser | TierMovieWithMovieData;
+	item: TierMovieWithMovieData;
 	provided: DraggableProvided;
 }) {
 	console.log("item", item);
@@ -31,7 +30,7 @@ export default function TierItem({
 					className="h-full w-full object-cover [mask-image:radial-gradient(200%_200%_at_0%_100%,#fff,transparent)]"
 				/>
 			</Link>
-			{"rating" in item && (
+			{item.id && (
 				<div className="absolute top-0 right-0 rounded-md p-2">
 					<ReviewDialog movie={item} />
 				</div>
