@@ -7,7 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "components/ui/dialog";
+} from "components/ui/Dialog";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
