@@ -1,9 +1,9 @@
 export const revalidate = 0;
 
+import { CurrentMovieWrapper } from "@/components/home/CurrentMovieWrapper";
 import { getCurrentSession } from "@/lib/authentication/session";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import CurrentMoviePoster from "components/home/CurrentMoviePoster";
 import MoviesOfTheMonth from "components/home/MoviesOfTheMonth";
 import WatchDate from "components/home/WatchDate";
 import { format } from "date-fns";
@@ -32,7 +32,7 @@ export default async function HomePage() {
 			<div className="snap-start min-h-screen shrink-0">
 				<Suspense fallback={null}>
 					{/* @ts-expect-error Server Component */}
-					<CurrentMoviePoster />
+					<CurrentMovieWrapper />
 				</Suspense>
 			</div>
 			<HydrationBoundary state={dehydratedState}>
@@ -40,7 +40,7 @@ export default async function HomePage() {
 					<MoviesOfTheMonth />
 				</Suspense>
 			</HydrationBoundary>
-			<div className="fixed bottom-14 left-1/2 -translate-x-1/2">
+			<div className="fixed bottom-2 left-1/2 -translate-x-1/2">
 				<Suspense fallback={null}>
 					<WatchDate />
 				</Suspense>

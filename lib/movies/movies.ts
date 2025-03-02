@@ -37,6 +37,21 @@ export async function getMostRecentMovieOfTheWeek() {
 		},
 		include: {
 			user: true,
+			tierMovies: {
+				select: {
+					review: true,
+					rating: true,
+					tier: {
+						select: {
+							tierlist: {
+								select: {
+									user: true,
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 		take: 1,
 	});
