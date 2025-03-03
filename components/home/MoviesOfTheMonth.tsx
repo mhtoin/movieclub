@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import MovieGalleryItem from "./MovieGalleryItem";
 
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
+import { getNextMonth } from "@/lib/utils";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -23,17 +24,7 @@ export default function MoviesOfTheMonth() {
 				if (!lastPage?.month) return undefined;
 				const { month } = lastPage;
 				// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
-				const dateParts = month.split("-");
-				const monthNumber = Number.parseInt(dateParts[1]);
-				const yearNumber = Number.parseInt(dateParts[0]);
-				const nextMonthNumber =
-					monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
-				const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;
-				const nextMonthString =
-					nextMonthNumber < 10 ? `0${nextMonthNumber}` : nextMonthNumber;
-				const nextMonth = `${nextYearNumber}-${nextMonthString}`;
-
-				return nextMonth;
+				return getNextMonth(month);
 			},
 		});
 

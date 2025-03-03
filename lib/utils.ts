@@ -174,3 +174,16 @@ export async function getBlurDataUrl(imageUrl: string): Promise<string> {
 		return ""; // Return empty string as fallback
 	}
 }
+
+export function getNextMonth(month: string) {
+	const dateParts = month.split("-");
+	const monthNumber = Number.parseInt(dateParts[1]);
+	const yearNumber = Number.parseInt(dateParts[0]);
+	const nextMonthNumber =
+		monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
+	const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;
+	const nextMonthString =
+		nextMonthNumber < 10 ? `0${nextMonthNumber}` : nextMonthNumber;
+	const nextMonth = `${nextYearNumber}-${nextMonthString}`;
+	return nextMonth;
+}

@@ -12,6 +12,7 @@ import {
 } from "../shortlist";
 import {
 	countByKey,
+	getNextMonth,
 	groupBy,
 	sample,
 	sendNotification,
@@ -86,7 +87,7 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
 export async function getMoviesOfTheWeekByMonth(month: string) {
 	const currentMonth = format(new Date(), "yyyy-MM");
 	const targetMonth = month || currentMonth;
-	console.log("targetMonth", targetMonth);
+	//console.log("targetMonth", targetMonth);
 	const movies = await prisma.movie.findMany({
 		where: {
 			watchDate: {
@@ -115,6 +116,52 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 			},
 		},
 	});
+
+	if (currentMonth === targetMonth && movies.length === 1) {
+		// most recent is the same as all of the movies of the month
+		// so we need to skip ahead
+		const nextMonth = getNextMonth(targetMonth);
+		const nextMonthMovies = await prisma.movie.findMany({
+			where: {
+				watchDate: {
+					contains: nextMonth,
+				},
+			},
+			orderBy: {
+				watchDate: "desc",
+			},
+			include: {
+				user: true,
+				tierMovies: {
+					select: {
+						review: true,
+						rating: true,
+						tier: {
+							select: {
+								tierlist: {
+									select: {
+										user: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
+
+		return {
+			month: nextMonth,
+			movies: nextMonthMovies,
+		};
+	}
+
+	if (currentMonth === targetMonth && movies.length > 1) {
+		return {
+			month: targetMonth,
+			movies: movies.slice(1),
+		};
+	}
 
 	return {
 		month: targetMonth,
