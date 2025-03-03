@@ -1,5 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
+import { getQueryClient } from "lib/getQueryClient";
 import { Loader2, Star } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -22,7 +24,9 @@ export default function StarRadio({
 }: StarRadioProps) {
 	const [hoverValue, setHoverValue] = useState<number | null>(null);
 	const [isDragging, setIsDragging] = useState(false);
-
+	const pathname = usePathname();
+	const tierlistId = pathname.split("/").pop();
+	const queryClient = getQueryClient();
 	const saveRatingMutation = useMutation({
 		mutationFn: async (rating: number) => {
 			const res = await fetch(`/api/ratings?id=${id}`, {
@@ -33,6 +37,9 @@ export default function StarRadio({
 		},
 		onSuccess: () => {
 			toast.success("Rating saved");
+			queryClient.invalidateQueries({
+				queryKey: ["tierlists", tierlistId],
+			});
 		},
 		onError: () => {
 			toast.error("Failed to save rating");

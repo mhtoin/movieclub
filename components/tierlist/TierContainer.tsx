@@ -1,4 +1,5 @@
 "use client";
+import SuccessReview from "@/components/tierlist/SuccessReview";
 import type { TierMovieWithMovieData } from "@/types/tierlist.type";
 import {
 	DragDropContext,
@@ -60,6 +61,8 @@ export default function DnDTierContainer({
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const router = useRouter();
+	const [selectedMovie, setSelectedMovie] =
+		useState<TierMovieWithMovieData | null>(null);
 	const [selectedDate, setSelectedDate] = useState(
 		searchParams.get("date") || "",
 	);
@@ -295,7 +298,8 @@ export default function DnDTierContainer({
 				},
 			);
 
-			const body = await res.json();
+			const body: { ok: boolean; data?: TierMovieWithMovieData } =
+				await res.json();
 
 			if (body.ok) {
 				return body;
@@ -310,6 +314,10 @@ export default function DnDTierContainer({
 			queryClient.invalidateQueries({
 				queryKey: ["tierlists", tierlistId],
 			});
+
+			if (_variables.operation === "rank" && _data.data) {
+				setSelectedMovie(_data.data);
+			}
 		},
 		onError: (_error) => {
 			toast.error("Updating tierlist failed!");
@@ -343,6 +351,12 @@ export default function DnDTierContainer({
 						<TierCreate tierlistId={tierlistId} />
 					)}
 				</div>
+			)}
+			{selectedMovie && (
+				<SuccessReview
+					movie={selectedMovie}
+					onClose={() => setSelectedMovie(null)}
+				/>
 			)}
 		</>
 	);

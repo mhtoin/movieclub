@@ -7,25 +7,26 @@ import {
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from "components/ui/Dialog";
 import { tierlistKeys } from "lib/tierlist/tierlistKeys";
-import { Loader2, Star } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { TierMovieWithMovieData } from "types/tierlist.type";
 
-export default function ReviewDialog({
+export default function SuccessReview({
 	movie,
+	onClose,
 }: {
 	movie: TierMovieWithMovieData;
+	onClose: () => void;
 }) {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 	const pathname = usePathname();
 	const tierlistId = pathname.split("/").pop();
 
-	// Fetch the latest tierlist data when the dialog is open
+	// Fetch the latest tierlist data
 	const { data: tierlistData, isLoading } = useQuery({
 		...tierlistKeys.byId(tierlistId || ""),
 		enabled: open,
@@ -49,16 +50,13 @@ export default function ReviewDialog({
 	}, [open, latestMovieData]);
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger>
-				<Star
-					className={`w-4 h-4 text-yellow-500 hover:scale-110 fill-transparent hover:fill-accent hover:text-accent transition-all duration-300 ${
-						Number.parseFloat(movie.rating) > 0 || movie.review
-							? "fill-yellow-500"
-							: ""
-					}`}
-				/>
-			</DialogTrigger>
+		<Dialog
+			open={open}
+			onOpenChange={(open) => {
+				setOpen(open);
+				if (!open) onClose();
+			}}
+		>
 			<DialogContent
 				className="max-w-4xl max-h-[90vh] h-[90vh] overflow-hidden p-0 z-[9999]"
 				variant="noClose"
