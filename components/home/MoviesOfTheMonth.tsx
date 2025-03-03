@@ -1,5 +1,5 @@
 "use client";
-import type { MovieWithUser } from "@/types/movie.type";
+import type { MovieWithReviews } from "@/types/movie.type";
 import { format } from "date-fns";
 import MovieGalleryItem from "./MovieGalleryItem";
 
@@ -12,26 +12,30 @@ import { useEffect, useRef } from "react";
 export default function MoviesOfTheMonth() {
 	const pathname = usePathname();
 	const sentinelRef = useRef<HTMLDivElement>(null);
-	const currentMonth = useSearchParams().get("month") || format(new Date(), "yyyy-MM");
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery({
-		queryKey: ["pastMovies"],
-		queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
-		initialPageParam: currentMonth,
-		getNextPageParam: (lastPage) => {
-			if (!lastPage?.month) return undefined;
-			const { month } = lastPage;
-			// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
-			const dateParts = month.split("-");
-			const monthNumber = Number.parseInt(dateParts[1]);
-			const yearNumber = Number.parseInt(dateParts[0]);
-			const nextMonthNumber = monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
-			const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;
-			const nextMonthString = nextMonthNumber < 10 ? `0${nextMonthNumber}` : nextMonthNumber;
-			const nextMonth = `${nextYearNumber}-${nextMonthString}`;
+	const currentMonth =
+		useSearchParams().get("month") || format(new Date(), "yyyy-MM");
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useSuspenseInfiniteQuery({
+			queryKey: ["pastMovies"],
+			queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
+			initialPageParam: currentMonth,
+			getNextPageParam: (lastPage) => {
+				if (!lastPage?.month) return undefined;
+				const { month } = lastPage;
+				// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
+				const dateParts = month.split("-");
+				const monthNumber = Number.parseInt(dateParts[1]);
+				const yearNumber = Number.parseInt(dateParts[0]);
+				const nextMonthNumber =
+					monthNumber > 1 ? monthNumber - 1 : monthNumber === 1 ? 12 : 1;
+				const nextYearNumber = monthNumber === 1 ? yearNumber - 1 : yearNumber;
+				const nextMonthString =
+					nextMonthNumber < 10 ? `0${nextMonthNumber}` : nextMonthNumber;
+				const nextMonth = `${nextYearNumber}-${nextMonthString}`;
 
-			return nextMonth;
-		},
-	});
+				return nextMonth;
+			},
+		});
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
@@ -87,7 +91,7 @@ export default function MoviesOfTheMonth() {
 					data-month={page.month}
 					className="gallery snap-start min-h-screen shrink-0 listview-section relative"
 				>
-					{page.movies.map((movie: MovieWithUser) => (
+					{page.movies.map((movie: MovieWithReviews) => (
 						<MovieGalleryItem key={movie.id} movie={movie} />
 					))}
 					{isFetchingNextPage && (

@@ -2,7 +2,7 @@ import URLSearchUpdater from "components/home/URLSearchUpdater";
 import CastPopover from "components/raffle/CastPopover";
 import CastPortrait from "components/raffle/CastPortrait";
 import UserPortrait from "components/raffle/UserPortrait";
-import { Star, TrendingUp, Users } from "lucide-react";
+import { Calendar, Star, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
@@ -19,34 +19,37 @@ export default function MovieDetails({
 			)}
 			<div className="flex flex-col md:flex-row md:gap-12 w-full h-full justify-evenly md:items-center ">
 				<div className="flex items-center justify-start md:justify-center p-4 w-full md:w-1/2 h-full">
-					<div className="flex flex-col gap-4 justify-center ">
+					<div className="flex flex-col gap-4 4xl:gap-6 justify-center ">
 						<div className="flex flex-row gap-2 ">
 							{mostRecentMovie?.user && <UserPortrait user={mostRecentMovie?.user} />}
 						</div>
-						<p className="text-lg max-w-[500px] text-foreground/60">
-							{mostRecentMovie?.tagline}
-						</p>
-						<h1 className="text-xl md:text-5xl font-bold underline">
+						{mostRecentMovie?.tagline && (
+							<span className="text-lg max-w-[500px] text-foreground/60">
+								{mostRecentMovie?.tagline}
+							</span>
+						)}
+						<h1 className="text-xl md:text-5xl 4xl:text-6xl font-bold underline">
 							{mostRecentMovie?.title}
 						</h1>
-						<div className="flex flex-row gap-2 flex-wrap items-center justify-center">
-							<p className="text-sm md:text-lg max-w-[500px] text-foreground/60">
+						<div className="flex flex-row gap-2 4xl:gap-4 flex-wrap items-center justify-center">
+							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-2">
+								<Calendar className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.watchDate
 									? new Date(mostRecentMovie?.release_date).toLocaleDateString("fi-FI")
 									: ""}
-							</p>
+							</span>
 							<span>|</span>
-							<span className="text-sm md:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
+							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-2">
 								<Star className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.vote_average.toFixed(1)}
 							</span>
 							<span>|</span>
-							<span className="text-sm md:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
+							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-2">
 								<Users className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.vote_count}
 							</span>
 							<span>|</span>
-							<span className="text-sm md:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-1">
+							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-foreground/60 flex flex-row items-center gap-2">
 								<TrendingUp className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.popularity.toFixed(1)}
 							</span>
@@ -122,20 +125,20 @@ export default function MovieDetails({
 								href={`https://www.themoviedb.org/movie/${mostRecentMovie?.tmdbId}`}
 								target="_blank"
 							>
-								<SiThemoviedatabase className="w-4 h-4 md:w-6 md:h-6 hover:text-accent" />
+								<SiThemoviedatabase className="w-4 h-4 md:w-6 md:h-6 4xl:w-8 4xl:h-8 hover:text-accent" />
 							</Link>
 							<Link
 								href={`https://www.imdb.com/title/${mostRecentMovie?.imdbId}`}
 								target="_blank"
 							>
-								<FaImdb className="w-4 h-4 md:w-6 md:h-6 hover:text-accent" />
+								<FaImdb className="w-4 h-4 md:w-6 md:h-6 4xl:w-8 4xl:h-8 hover:text-accent" />
 							</Link>
 						</div>
 						<div className="flex flex-row gap-2">
-							<div className="text-sm bg-background/40 rounded-md px-2 py-1">
+							<div className="text-sm 4xl:text-lg bg-background/40 rounded-md px-2 py-1">
 								{mostRecentMovie?.genres?.map((genre) => genre.name).join("/")}
 							</div>
-							<div className="text-sm bg-background/40 rounded-md px-2 py-1">
+							<div className="text-sm 4xl:text-lg bg-background/40 rounded-md px-2 py-1">
 								{mostRecentMovie?.runtime
 									? `${Math.floor(mostRecentMovie?.runtime / 60)}h ${
 											mostRecentMovie?.runtime % 60
@@ -143,7 +146,7 @@ export default function MovieDetails({
 									: ""}
 							</div>
 						</div>
-						<p className="text-sm md:text-md max-w-[500px] text-foreground/60 px-2">
+						<p className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-foreground/60 px-2">
 							{mostRecentMovie?.overview}
 						</p>
 					</div>

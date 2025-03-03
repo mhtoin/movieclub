@@ -2,7 +2,7 @@
  * Queries
  */
 
-import type { MovieWithUser } from "@/types/movie.type";
+import type { MovieWithReviews, MovieWithUser } from "@/types/movie.type";
 import type { ShortlistWithMovies } from "@/types/shortlist.type";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import type { Provider } from "@prisma/client";
@@ -269,6 +269,7 @@ export async function getAllShortlistsGroupedById(): Promise<
 
 export const getMoviesOfTheMonth = async (month: string) => {
 	const response = await fetch(`${getBaseURL()}/api/movies?month=${month}`);
-	const data: { month: string; movies: MovieWithUser[] } = await response.json();
+	const data: { month: string; movies: MovieWithReviews[] } =
+		await response.json();
 	return data;
 };

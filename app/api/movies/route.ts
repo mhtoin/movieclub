@@ -2,15 +2,15 @@ import {
 	getMoviesOfTheWeek,
 	getMoviesOfTheWeekByMonth,
 } from "@/lib/movies/movies";
-import type { MovieWithUser } from "@/types/movie.type";
+import type { MovieWithReviews } from "@/types/movie.type";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
 	request: NextRequest,
 ): Promise<
 	NextResponse<
-		| { month: string; movies: MovieWithUser[] }
-		| MovieWithUser[]
+		| { month: string; movies: MovieWithReviews[] }
+		| MovieWithReviews[]
 		| { ok: boolean; message: string }
 	>
 > {

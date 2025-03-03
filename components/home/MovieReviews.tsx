@@ -1,8 +1,9 @@
-import StarRadio from "@/components/tierlist/StarRadio";
 import type { MovieReview } from "@/types/movie.type";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { type JSONContent, generateHTML } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import StarRadio from "components/tierlist/StarRadio";
+import { Button } from "components/ui/Button";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function MovieReviews({
@@ -50,28 +51,28 @@ export default function MovieReviews({
 	}, [updateScrollButtonsState]);
 
 	return (
-		<div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center  w-full h-full">
+		<div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
 			<div className="relative w-full max-w-3xl">
 				{/* Scroll buttons */}
-				<button
-					type="button"
+				<Button
 					onClick={() => scroll("left")}
+					variant="outline"
 					disabled={!canScrollLeft}
 					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Previous review"
 				>
 					<ChevronLeftIcon className="h-5 w-5" />
-				</button>
+				</Button>
 
-				<button
-					type="button"
+				<Button
 					onClick={() => scroll("right")}
 					disabled={!canScrollRight}
 					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Next review"
+					variant="outline"
 				>
 					<ChevronRightIcon className="h-5 w-5" />
-				</button>
+				</Button>
 
 				{/* Carousel container */}
 				<div
@@ -92,7 +93,7 @@ export default function MovieReviews({
 									<h2 className="text-lg font-bold">
 										{review.tier.tierlist.user?.name}
 									</h2>
-									<div className="flex flex-row gap-5 items-center">
+									<div className="flex flex-row gap-5 items-center border-b pb-5">
 										<img
 											src={review.tier.tierlist.user?.image}
 											alt={review.tier.tierlist.user?.name ?? ""}
@@ -119,9 +120,10 @@ export default function MovieReviews({
 				{/* Pagination dots */}
 				<div className="flex justify-center gap-2 mt-4">
 					{reviews.map((_, index) => (
-						<button
+						<Button
 							type="button"
 							key={index}
+							variant="ghost"
 							onClick={() => {
 								if (!scrollContainerRef.current) return;
 								const container = scrollContainerRef.current;
@@ -131,7 +133,17 @@ export default function MovieReviews({
 									behavior: "smooth",
 								});
 							}}
-							className="w-2 h-2 rounded-full bg-border hover:bg-primary/70 transition-colors"
+							className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${
+								scrollContainerRef.current &&
+								Math.round(
+									scrollContainerRef.current.scrollLeft /
+										scrollContainerRef.current.offsetWidth,
+								) === index
+									? "bg-primary/70"
+									: !scrollContainerRef.current && index === 0
+										? "bg-primary/70"
+										: ""
+							}`}
 							aria-label={`Go to review ${index + 1}`}
 						/>
 					))}
