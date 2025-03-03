@@ -145,13 +145,16 @@ export async function rankMovie({
 	sourceTierId: string;
 	destinationTierId: string;
 }) {
-	await prisma
+	const newTierMovie = await prisma
 		.$transaction(async (tx) => {
 			const newTierMovie = await tx.tierMovie.create({
 				data: {
 					movieId: sourceData.movieId,
 					tierId: destinationTierId,
 					position: sourceData.position,
+				},
+				include: {
+					movie: true,
 				},
 			});
 
@@ -175,12 +178,15 @@ export async function rankMovie({
 					},
 				},
 			});
+
+			return newTierMovie;
 		})
 		.catch((e) => {
 			console.error("error updating tierlist", e);
 			throw new Error("error updating tierlist");
 		});
-	return { ok: true };
+	// would make sense to return the updated item here
+	return newTierMovie;
 }
 
 export async function updateTierlist(

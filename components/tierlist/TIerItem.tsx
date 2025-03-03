@@ -10,8 +10,6 @@ export default function TierItem({
 	item: TierMovieWithMovieData;
 	provided: DraggableProvided;
 }) {
-	console.log("item", item);
-
 	return (
 		<div
 			className="relative indicator mx-auto border-2 rounded-md max-w-[120px] md:max-w-[150px] lg:max-w-[200px] min-w-[120px] md:min-w-[150px] lg:min-w-[200px] shrink-0"

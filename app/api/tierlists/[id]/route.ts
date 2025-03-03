@@ -38,12 +38,6 @@ export async function PUT(
 		destinationTierId,
 	} = data;
 	const operation = request.nextUrl.searchParams.get("operation");
-	console.log("sourceData", sourceData);
-	console.log("destinationData", destinationData);
-	console.log("updatedSourceData", updatedSourceData);
-	console.log("sourceTierId", sourceTierId);
-	console.log("destinationTierId", destinationTierId);
-	console.log("operation", operation);
 
 	if (operation === "reorder") {
 		try {
