@@ -24,8 +24,6 @@ export default function CurrentMoviePoster({
 	const blurDataUrl = mostRecentMovie?.images?.backdrops[0]?.blurDataUrl;
 	const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl;
 
-	console.log(mostRecentMovie);
-
 	return (
 		<div className="w-full h-full ">
 			<Image
