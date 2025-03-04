@@ -16,7 +16,7 @@ async function migrateTierlists() {
 	});
 
 	existingTierlists = existingTierlists.filter(
-		(tierlist) => tierlist.userId === "6508739865db145325247550",
+		(tierlist) => tierlist.userId === "648875d9b274755f19862cbf",
 	);
 
 	console.log("existingTierlists", existingTierlists);

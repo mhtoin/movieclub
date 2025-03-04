@@ -87,7 +87,23 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
 export async function getMoviesOfTheWeekByMonth(month: string) {
 	const currentMonth = format(new Date(), "yyyy-MM");
 	const targetMonth = month || currentMonth;
-	//console.log("targetMonth", targetMonth);
+
+	// First get the tierMovies that have valid tiers to avoid the null tier issue
+	const validTierMovies = await prisma.tierMovie.findMany({
+		where: {
+			tier: {
+				tierlistId: {
+					not: undefined,
+				},
+			},
+		},
+		select: {
+			id: true,
+		},
+	});
+
+	const validTierMovieIds = validTierMovies.map((tm) => tm.id);
+
 	const movies = await prisma.movie.findMany({
 		where: {
 			watchDate: {
@@ -100,6 +116,11 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 		include: {
 			user: true,
 			tierMovies: {
+				where: {
+					id: {
+						in: validTierMovieIds,
+					},
+				},
 				select: {
 					review: true,
 					rating: true,
@@ -133,6 +154,11 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 			include: {
 				user: true,
 				tierMovies: {
+					where: {
+						id: {
+							in: validTierMovieIds,
+						},
+					},
 					select: {
 						review: true,
 						rating: true,

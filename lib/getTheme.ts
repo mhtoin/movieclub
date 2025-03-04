@@ -13,11 +13,14 @@ const code = () => {
 	window.__onThemeChange = () => {};
 
 	function setTheme(newTheme: string) {
-		document.documentElement.classList.remove(window.__theme);
+		document.documentElement.dataset.theme = newTheme;
+
 		window.__theme = newTheme;
 		preferredTheme = newTheme;
-		document.documentElement.dataset.theme = newTheme;
+
+		document.documentElement.classList.remove("light", "dark");
 		document.documentElement.classList.add(newTheme);
+
 		window.__onThemeChange(newTheme);
 	}
 

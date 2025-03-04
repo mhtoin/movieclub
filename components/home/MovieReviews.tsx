@@ -9,7 +9,25 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export default function MovieReviews({
 	movieReviews,
 }: { movieReviews: MovieReview[] }) {
-	const reviews = [...movieReviews].concat(movieReviews);
+	// Filter out reviews with null tier fields
+	const validReviews = movieReviews.filter(
+		(review) =>
+			review?.tier?.tierlist?.user && (review?.review || review?.rating !== "0"),
+	);
+
+	// If there are no valid reviews, show a message instead
+	if (!validReviews.length) {
+		return (
+			<div className="absolute inset-0 top-16 flex items-center justify-center">
+				<div className="p-6 border border-border/30 bg-card/50 backdrop-blur-sm rounded-md">
+					<h2 className="text-lg font-bold">No reviews available</h2>
+					<p>There are no reviews for this movie yet.</p>
+				</div>
+			</div>
+		);
+	}
+
+	const reviews = validReviews;
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(true);
@@ -81,27 +99,27 @@ export default function MovieReviews({
 					style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
 				>
 					<div className="flex flex-row w-full">
-						{reviews?.map((review) => {
+						{reviews?.map((review, index) => {
 							const reviewText = review.review
 								? generateHTML(review?.review as JSONContent, [StarterKit])
 								: "";
 							return (
 								<div
-									key={review?.tier.tierlist.user?.id}
+									key={`${review?.tier?.tierlist?.user?.id || index}`}
 									className="flex-shrink-0 w-full snap-center flex flex-col rounded-md p-6 gap-5 border border-border/30 bg-card/50 backdrop-blur-sm"
 								>
 									<h2 className="text-lg font-bold">
-										{review.tier.tierlist.user?.name}
+										{review.tier?.tierlist?.user?.name}
 									</h2>
 									<div className="flex flex-row gap-5 items-center border-b pb-5">
 										<img
-											src={review.tier.tierlist.user?.image}
-											alt={review.tier.tierlist.user?.name ?? ""}
+											src={review.tier?.tierlist?.user?.image}
+											alt={review.tier?.tierlist?.user?.name ?? ""}
 											className="w-10 h-10 rounded-full"
 										/>
 										<StarRadio
 											value={Number.parseFloat(review.rating)}
-											id={review.tier.tierlist.user?.id ?? ""}
+											id={review.tier?.tierlist?.user?.id ?? ""}
 											disabled={true}
 										/>
 									</div>

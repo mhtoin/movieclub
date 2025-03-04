@@ -31,6 +31,39 @@
 
 		--mobilenav: hsl(164 64% 42%);
 		--popoverBackground: hsl(204 4% 16%);
+
+		/* Add transition for all CSS variables */
+		transition:
+			color 0.3s ease,
+			background-color 0.3s ease,
+			border-color 0.3s ease,
+			--background 0.3s ease,
+			--foreground 0.3s ease,
+			--card 0.3s ease,
+			--card-foreground 0.3s ease,
+			--popover 0.3s ease,
+			--popover-foreground 0.3s ease,
+			--primary 0.3s ease,
+			--primary-foreground 0.3s ease,
+			--secondary 0.3s ease,
+			--secondary-foreground 0.3s ease,
+			--muted 0.3s ease,
+			--muted-foreground 0.3s ease,
+			--accent 0.3s ease,
+			--accent-foreground 0.3s ease,
+			--destructive 0.3s ease,
+			--destructive-foreground 0.3s ease,
+			--border 0.3s ease,
+			--input 0.3s ease,
+			--ring 0.3s ease;
+	}
+
+	/* Apply transition to all elements that use theme colors */
+	* {
+		transition-property: color, background-color, border-color, outline-color,
+			fill, stroke;
+		transition-timing-function: ease;
+		transition-duration: 0.3s;
 	}
 	/**
 	 * @theme light

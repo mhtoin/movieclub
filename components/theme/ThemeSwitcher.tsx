@@ -1,21 +1,17 @@
 "use client";
-import { useIsMobile } from "@/lib/hooks";
-import * as Ariakit from "@ariakit/react";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Label } from "react-aria-components";
 import { Button } from "../ui/Button";
-import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 
 export default function ThemeSwitcher() {
 	const [theme, setTheme] = useState(global.window?.__theme || "light");
-	const [_accentColor, setAccentColor] = useState(
-		global.window?.__accent || "",
-	);
-	const [open, setOpen] = useState(false);
-	const isMobile = useIsMobile();
-	const menu = Ariakit.useMenuStore({ open, setOpen });
+	const [_accentColor, setAccentColor] = useState(global.window?.__accent || "");
+	//const [open, setOpen] = useState(false);
+	//const isMobile = useIsMobile();
+	//const menu = Ariakit.useMenuStore({ open, setOpen });
 
+	/*
 	const accents = [
 		{
 			label: "Default",
@@ -37,7 +33,7 @@ export default function ThemeSwitcher() {
 			label: "Purple",
 			color: "#7e1e8f",
 		},
-	];
+	];*/
 
 	/*
 	useEffect(() => {
@@ -57,15 +53,52 @@ export default function ThemeSwitcher() {
 		global.window?.__setPreferredTheme(theme);
 	};
 
+	/*
 	const toggleAccent = (accent: string) => {
 		global.window?.__setPreferredAccent(accent);
-	};
+	};*/
 
 	useEffect(() => {
 		global.window.__onThemeChange = setTheme;
 		global.window.__onAccentChange = setAccentColor;
 	}, []);
 
+	return (
+		<Button
+			variant={"outline"}
+			size={"icon"}
+			onClick={() => toggleTheme(theme === "dark" ? "light" : "dark")}
+			className="relative overflow-hidden"
+		>
+			<div className="relative w-full h-full flex items-center justify-center">
+				<motion.div
+					animate={{
+						opacity: theme === "dark" ? 1 : 0,
+						y: theme === "dark" ? 0 : 10,
+						scale: theme === "dark" ? 1 : 0.5,
+					}}
+					transition={{ duration: 0.3 }}
+					className="absolute"
+				>
+					<MoonIcon />
+				</motion.div>
+
+				<motion.div
+					animate={{
+						opacity: theme === "light" ? 1 : 0,
+						y: theme === "light" ? 0 : -10,
+						scale: theme === "light" ? 1 : 0.5,
+					}}
+					transition={{ duration: 0.3 }}
+					className="absolute"
+				>
+					<SunIcon />
+				</motion.div>
+			</div>
+		</Button>
+	);
+
+	/*
 	if (isMobile) {
 		return (
 			<Drawer open={open} onOpenChange={setOpen}>
@@ -192,5 +225,5 @@ export default function ThemeSwitcher() {
 				</div>
 			</Ariakit.Menu>
 		</Ariakit.MenuProvider>
-	);
+	);*/
 }
