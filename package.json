@@ -20,7 +20,8 @@
 		"update-similar": "tsx scripts/updateSimilar.ts",
 		"update-recommended": "tsx scripts/updateRecommended.ts",
 		"backup": "tsx scripts/backup.sh",
-		"update-tiers": "tsx scripts/updateTiers.ts"
+		"update-tiers": "tsx scripts/updateTiers.ts",
+		"migrate-tierlist": "tsx scripts/migrateTierlistData.ts"
 	},
 	"dependencies": {
 		"@ariakit/react": "^0.4.11",
