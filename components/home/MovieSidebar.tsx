@@ -79,7 +79,7 @@ export default function MovieSidebar() {
 	return (
 		<div
 			ref={sidebarRef}
-			className="fixed flex flex-col bg-background rounded-full z-[9998] border border-border cursor-move"
+			className="fixed flex flex-col bg-background rounded-3xl z-[9998] border border-border cursor-move"
 			style={{
 				left: `${position.x}px`,
 				top: `${position.y}px`,
