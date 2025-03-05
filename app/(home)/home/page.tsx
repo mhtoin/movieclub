@@ -1,6 +1,7 @@
 export const revalidate = 0;
 
 import { CurrentMovieWrapper } from "@/components/home/CurrentMovieWrapper";
+import MovieSidebar from "@/components/home/MovieSidebar";
 import { getCurrentSession } from "@/lib/authentication/session";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
@@ -38,6 +39,7 @@ export default async function HomePage() {
 				<Suspense fallback={null}>
 					<MoviesOfTheMonth />
 				</Suspense>
+				<MovieSidebar />
 			</HydrationBoundary>
 		</div>
 	);

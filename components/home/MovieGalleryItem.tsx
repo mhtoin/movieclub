@@ -1,7 +1,6 @@
 "use client";
 import GalleryItemDetails from "@/components/home/GalleryItemDetails";
 import MovieReviews from "@/components/home/MovieReviews";
-import MovieSidebar from "@/components/home/MovieSidebar";
 import { useWatchDateStore } from "@/stores/useWatchDateStore";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { Button } from "components/ui/Button";
@@ -129,7 +128,6 @@ export default function MovieGalleryItem({
 						</motion.div>
 					)}
 				</AnimatePresence>
-				{isExpanded && <MovieSidebar />}
 			</div>
 		</div>
 	);
