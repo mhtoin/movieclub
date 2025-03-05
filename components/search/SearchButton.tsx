@@ -199,17 +199,17 @@ export default function SearchButton() {
 						>
 							<div className="flex flex-col items-center bg-transparent overflow-hidden gap-2">
 								<div className="flex w-full justify-between items-center h-full overflow-hidden bg-transparent">
-									<TabsList className="h-[38px]">
+									<TabsList className="h-[38px] bg-transparent">
 										<div className="flex flex-row gap-2 bg-transparent">
 											<TabsTrigger
 												value="recommended"
-												className="[&[data-state=active]]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
+												className="bg-background/40 [&[data-state=active]]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
 											>
 												Recommended
 											</TabsTrigger>
 											<TabsTrigger
 												value="results"
-												className=" [&[data-state=active]]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
+												className="bg-background/40 [&[data-state=active]]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
 											>
 												Results
 											</TabsTrigger>
@@ -254,8 +254,8 @@ export default function SearchButton() {
 								>
 									<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
 										{Object.keys(recommended).map((sourceMovie) => (
-											<div key={sourceMovie} className="w-full">
-												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent w-fit text-accent-foreground">
+											<div key={sourceMovie} className="w-full bg-input/80  ">
+												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent rounded-md w-fit text-accent-foreground">
 													Because you liked: {sourceMovie}
 												</h3>
 												<div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5  w-full">
