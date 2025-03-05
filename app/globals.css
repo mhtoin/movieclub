@@ -150,7 +150,7 @@
 		--foreground: hsl(0 0% 98%);
 		--card-foreground: hsl(0 0% 98%);
 		--secondary-foreground: hsl(0, 0%, 100%);
-		--popover-foreground: hsl(0, 0%, 9%);
+		--popover-foreground: hsl(0, 0%, 100%);
 		--muted-foreground: hsl(240 5% 64.9%);
 		--accent-foreground: hsl(0 0% 98%);
 		--destructive-foreground: hsl(0 0% 98%);

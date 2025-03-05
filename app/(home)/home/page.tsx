@@ -5,7 +5,6 @@ import { getCurrentSession } from "@/lib/authentication/session";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import MoviesOfTheMonth from "components/home/MoviesOfTheMonth";
-import WatchDate from "components/home/WatchDate";
 import { format } from "date-fns";
 import { getMoviesOfTheWeekByMonth } from "lib/movies/movies";
 import { redirect } from "next/navigation";
@@ -40,11 +39,6 @@ export default async function HomePage() {
 					<MoviesOfTheMonth />
 				</Suspense>
 			</HydrationBoundary>
-			<div className="fixed bottom-2 left-1/2 -translate-x-1/2">
-				<Suspense fallback={null}>
-					<WatchDate />
-				</Suspense>
-			</div>
 		</div>
 	);
 }

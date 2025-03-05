@@ -57,7 +57,7 @@ export default function NavBar() {
 		<div
 			className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
 				isTransparent
-					? "bg-transparent border-b border-border/50 "
+					? "bg-transparent  "
 					: "bg-background/80 backdrop-blur-md border-b"
 			}`}
 		>
