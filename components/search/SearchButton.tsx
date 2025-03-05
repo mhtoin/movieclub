@@ -40,6 +40,7 @@ export default function SearchButton() {
 		(searchParams.get("query")?.length ?? 0) > 0 ? "results" : "recommended",
 	);
 	const modalRef = useRef<HTMLDivElement>(null);
+	const recommendedRef = useRef<HTMLDivElement>(null);
 	const sentinelRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
@@ -145,7 +146,15 @@ export default function SearchButton() {
 							open ? "visible" : "invisible"
 						}`}
 						onClick={() => {
-							resultsContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+							if (activeTab === "results") {
+								resultsContainerRef.current?.scrollTo({
+									top: 0,
+									behavior: "smooth",
+								});
+							} else {
+								console.log("scrolling to top");
+								recommendedRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+							}
 						}}
 					>
 						<ChevronUp className="w-4 h-4" />
@@ -153,7 +162,7 @@ export default function SearchButton() {
 					<div
 						className={`flex px-2 items-center justify-center bg-transparent h-[38px] ${
 							open ? "rounded-md border" : ""
-						}`}
+						} ${inputRef.current?.matches(":focus") ? "border-2" : ""}`}
 					>
 						<Input
 							placeholder="Search movies..."
@@ -173,7 +182,7 @@ export default function SearchButton() {
 								}
 							}}
 							onFocus={() => setOpen(true)}
-							className="bg-transparent focus:outline-none focus-visible:ring-0 focus-visible:ring-opacity-0 focus-visible:ring-offset-0 border-none z-20"
+							className="bg-transparent focus:outline-none focus:outline-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 border-none z-20 flex-1 w-full"
 						/>
 						<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 z-20">
 							<span className="text-xs">⌘</span>K
@@ -241,14 +250,15 @@ export default function SearchButton() {
 									value="recommended"
 									className="overflow-y-auto"
 									style={{ maxHeight: "calc(90vh - 150px)" }}
+									ref={recommendedRef}
 								>
 									<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
 										{Object.keys(recommended).map((sourceMovie) => (
 											<div key={sourceMovie} className="w-full">
-												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent rounded-md w-fit text-accent-foreground">
+												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent w-fit text-accent-foreground">
 													Because you liked: {sourceMovie}
 												</h3>
-												<div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5 place-items-center w-full">
+												<div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5  w-full">
 													{recommended[sourceMovie].map((rec, index) => (
 														<RecommendedCard
 															key={`${sourceMovie}-${index}`}

@@ -21,11 +21,7 @@ export default function Menubar() {
 		return (
 			<Drawer open={open} onOpenChange={setOpen}>
 				<DrawerTrigger asChild>
-					<Button
-						variant="ghost"
-						size="icon"
-						onTouchStart={() => setOpen(true)}
-					>
+					<Button variant="ghost" size="icon" onTouchStart={() => setOpen(true)}>
 						<HamburgerMenu open={open} />
 					</Button>
 				</DrawerTrigger>
@@ -60,8 +56,8 @@ export default function Menubar() {
 							className="flex flex-col ml-5 p-2 border-b"
 							onClick={() => setOpen(false)}
 						>
-							<span className="text-foreground">Search</span>
-							<span className="menu-label">Search for movies</span>
+							<span className="text-foreground">Discover</span>
+							<span className="menu-label">Discover movies</span>
 						</Link>
 						<Link
 							href={"/home/shortlist/edit/watchlist"}
@@ -145,9 +141,7 @@ export default function Menubar() {
 						<MenuItem store={menu}>
 							<Link href={"/tierlists"}>
 								<span className="text-foreground">Tierlists</span>
-								<span className="menu-label">
-									View all tierlists from users
-								</span>
+								<span className="menu-label">View all tierlists from users</span>
 							</Link>
 						</MenuItem>
 						<MenuItem className="ml-6" store={menu}>

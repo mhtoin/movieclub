@@ -43,20 +43,29 @@ export default function SearchInput({
 
 	useEffect(() => {
 		const fetchKeywords = async () => {
-			for (const keyword of keywordArr) {
-				const data = await queryClient.ensureQueryData({
-					queryKey: ["keywordSearch", keyword],
-					queryFn: () => getKeyWord(keyword),
-				});
+			// Reset keywords state to match URL parameters
+			const newKeywords: Array<{ id: number; name: string }> = [];
 
-				if (data && !keywords.find((kw) => kw.id === data?.id)) {
-					setKeywords((prev) => [...prev, data]);
+			for (const keyword of keywordArr) {
+				if (keyword) {
+					// Skip empty strings
+					const data = await queryClient.ensureQueryData({
+						queryKey: ["keywordSearch", keyword],
+						queryFn: () => getKeyWord(keyword),
+					});
+
+					if (data && !newKeywords.find((kw) => kw.id === data?.id)) {
+						newKeywords.push(data);
+					}
 				}
 			}
+
+			// Replace the entire keywords state with the new array
+			setKeywords(newKeywords);
 		};
 
 		fetchKeywords();
-	}, [keywordArr, queryClient, keywords]);
+	}, [keywordArr, queryClient]); // Remove 'keywords' from dependency array
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -91,8 +100,9 @@ export default function SearchInput({
 		const params = new URLSearchParams(searchParams.toString());
 		const currentKeywords = searchParams.get("with_keywords")?.split(",") ?? [];
 
+		// Convert string IDs to numbers for comparison
 		const updatedKeywords = currentKeywords.filter(
-			(kw) => kw !== keyword?.id.toString(),
+			(kw) => Number(kw) !== keyword.id,
 		);
 
 		if (updatedKeywords.length === 0) {
@@ -111,18 +121,30 @@ export default function SearchInput({
 		return (
 			<form
 				onSubmit={handleSubmit}
-				className="lg:py-7 relative lg:h-12 flex gap-2 border border-border/80 transition-all duration-300 w-full rounded-lg items-center group focus-visible:ring-offset-2 bg-input"
+				className="relative w-full min-h-12 flex flex-col gap-2 border border-border/80 rounded-lg transition-all duration-300 bg-input p-2"
 			>
-				<KeywordCombobox handleSelect={handleKeywordSelect} />
-				<div className="absolute top-1/2 -translate-y-1/2 right-1/4 flex gap-1">
-					{keywords.map((keyword) => (
-						<KeywordTag
-							key={keyword.id}
-							keyword={keyword}
-							handleClick={handleKeywordRemove}
-						/>
-					))}
+				<div className="flex items-center">
+					<div className="flex-grow">
+						<KeywordCombobox handleSelect={handleKeywordSelect} />
+					</div>
+					{keywords.length > 0 && (
+						<Button variant={"ghost"} type="submit" className="ml-2">
+							<MagnifyingGlassIcon />
+						</Button>
+					)}
 				</div>
+
+				{keywords.length > 0 && (
+					<div className="flex flex-wrap gap-1 pt-1 pb-1">
+						{keywords.map((keyword) => (
+							<KeywordTag
+								key={keyword.id}
+								keyword={keyword}
+								handleClick={handleKeywordRemove}
+							/>
+						))}
+					</div>
+				)}
 			</form>
 		);
 	}

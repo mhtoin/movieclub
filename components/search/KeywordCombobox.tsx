@@ -8,7 +8,6 @@ export default function KeywordCombobox({
 }: {
 	handleSelect: (value: string) => void;
 }) {
-	const [_value, setValue] = useState("");
 	const combobox = Ariakit.useComboboxStore();
 	const searchValue = Ariakit.useStoreState(combobox, "value");
 	const { data: keywords } = useInfiniteQuery({
@@ -23,21 +22,27 @@ export default function KeywordCombobox({
 		initialPageParam: 1,
 	});
 
+	const [inputValue, setInputValue] = useState("");
+
+	const handleSelectionComplete = (value: string) => {
+		handleSelect(value);
+		setInputValue("");
+	};
+
 	return (
 		<Ariakit.ComboboxProvider
 			setSelectedValue={(value) => {
-				console.log("selected value", value);
-				handleSelect(value.toString());
-				setValue("");
+				handleSelectionComplete(value.toString());
 			}}
 		>
 			<Ariakit.Combobox
-				value={searchValue}
+				value={inputValue}
 				setValueOnChange={(value) => {
 					const target = value.target as HTMLInputElement;
 					console.log("target", target.value);
 					console.log("searchValue", searchValue);
 					combobox.setValue(target.value);
+					setInputValue(target.value);
 					return true;
 				}}
 				placeholder="Search for a keyword"
