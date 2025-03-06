@@ -1,24 +1,18 @@
 "use client";
-import MovieCard from "@/components/search/MovieCard";
-import RecommendedCard from "@/components/search/RecommendedCard";
+
+import RecommendedTab from "@/components/search/RecommendedTab";
+import ResultTab from "@/components/search/ResultTab";
+import SkeletonRecommendedTab from "@/components/search/SkeletonRecommendedTab";
 import { Input } from "@/components/ui/Input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { SEARCH_ROUTE } from "@/lib/globals";
-import {
-	useDebounce,
-	useIsMobile,
-	useSearchSuspenseInfiniteQuery,
-	useValidateSession,
-} from "@/lib/hooks";
-import { userKeys } from "@/lib/users/userKeys";
+import { useDebounce, useIsMobile } from "@/lib/hooks";
 import { useDialogStore } from "@/stores/useDialogStore";
-import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Button } from "components/ui/Button";
-import { ArrowDownToLineIcon, ChevronUp } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 export default function SearchButton() {
 	const router = useRouter();
@@ -30,18 +24,12 @@ export default function SearchButton() {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const resultsContainerRef = useRef<HTMLDivElement>(null);
 	const [inputValue, setInputValue] = useState(searchParams.get("query") || "");
-	const { data: user } = useValidateSession();
-	const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
-		useSearchSuspenseInfiniteQuery();
-	const { data: recommended } = useSuspenseQuery(
-		userKeys.recommended(user?.id || ""),
-	);
+
 	const [activeTab, setActiveTab] = useState<"results" | "recommended">(
 		(searchParams.get("query")?.length ?? 0) > 0 ? "results" : "recommended",
 	);
 	const modalRef = useRef<HTMLDivElement>(null);
 	const recommendedRef = useRef<HTMLDivElement>(null);
-	const sentinelRef = useRef<HTMLButtonElement>(null);
 
 	useEffect(() => {
 		const currentQuery = searchParams.get("query") || "";
@@ -77,27 +65,6 @@ export default function SearchButton() {
 		}
 	}, []);
 
-	useEffect(() => {
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && hasNextPage) {
-					fetchNextPage();
-				}
-			},
-			{
-				root: modalRef.current,
-				rootMargin: "1000px",
-				threshold: 0.1,
-			},
-		);
-
-		if (sentinelRef.current) {
-			observer.observe(sentinelRef.current);
-		}
-
-		return () => observer.disconnect();
-	}, [hasNextPage, fetchNextPage]);
-
 	const handleSearch = (value: string) => {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set("query", value);
@@ -112,7 +79,6 @@ export default function SearchButton() {
 	};
 
 	const debouncedSearch = useDebounce(handleSearch, 500);
-	const hasResults = data?.pages?.[0]?.total_results > 0;
 
 	if (isMobile) {
 		return (
@@ -217,73 +183,12 @@ export default function SearchButton() {
 									</TabsList>
 								</div>
 								<div className="h-0.5 w-full bg-accent" />
-								<TabsContent value="results" className="flex-1 justify-center">
-									<div
-										ref={resultsContainerRef}
-										className="flex flex-wrap gap-5 py-2 w-full items-center justify-center overflow-y-auto max-h-[calc(90vh-150px)] relative"
-									>
-										{data?.pages.map((page) => (
-											<Fragment key={page.page}>
-												{page.results.map((result: TMDBMovieResponse) => (
-													<MovieCard key={result.id} movie={result} showActions />
-												))}
-											</Fragment>
-										))}
-										{hasResults && (
-											<div className="flex h-10 w-full justify-center">
-												<Button
-													variant="ghost"
-													ref={sentinelRef}
-													size="icon"
-													isLoading={isFetchingNextPage}
-													onClick={() => {
-														fetchNextPage();
-													}}
-												>
-													<ArrowDownToLineIcon className="w-4 h-4" />
-												</Button>
-											</div>
-										)}
-									</div>
-								</TabsContent>
-								<TabsContent
-									value="recommended"
-									className="overflow-y-auto"
-									style={{ maxHeight: "calc(90vh - 150px)" }}
-									ref={recommendedRef}
-								>
-									<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
-										{Object.keys(recommended).map((sourceMovie) => (
-											<div key={sourceMovie} className="w-full bg-input/80  ">
-												<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent rounded-md w-fit text-accent-foreground">
-													Because you liked: {sourceMovie}
-												</h3>
-												<div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5  w-full">
-													{recommended[sourceMovie].map((rec, index) => (
-														<RecommendedCard
-															key={`${sourceMovie}-${index}`}
-															movie={rec.movie}
-															showActions={true}
-														/>
-													))}
-												</div>
-											</div>
-										))}
-										<div className="flex h-10 w-full justify-center">
-											<Button
-												variant="ghost"
-												ref={sentinelRef}
-												size="icon"
-												isLoading={isFetchingNextPage}
-												onClick={() => {
-													fetchNextPage();
-												}}
-											>
-												<ArrowDownToLineIcon className="w-4 h-4" />
-											</Button>
-										</div>
-									</div>
-								</TabsContent>
+								<Suspense fallback={null}>
+									<ResultTab />
+								</Suspense>
+								<Suspense fallback={<SkeletonRecommendedTab />}>
+									<RecommendedTab />
+								</Suspense>
 							</div>
 						</Tabs>
 					)}

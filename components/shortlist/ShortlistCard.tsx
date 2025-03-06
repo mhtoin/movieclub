@@ -33,7 +33,7 @@ export default function ShortlistCard({
 		>
 			<div
 				key={`${shortlist?.id}-container`}
-				className="grid grid-cols-3 sm:w-auto items-center justify-center  md:rounded-md md:p-1 md:gap-2 bg-background  overflow-hidden "
+				className="grid grid-cols-3 sm:w-auto items-center justify-center  md:rounded-md md:p-1 md:gap-2  overflow-hidden "
 			>
 				{shortlist?.movies.map((movie, index: number) => {
 					const isInWatchlist = watchlist?.some(

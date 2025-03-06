@@ -1,6 +1,5 @@
 "use client";
 import type { MovieWithReviews } from "@/types/movie.type";
-import { format } from "date-fns";
 import MovieGalleryItem from "./MovieGalleryItem";
 
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
@@ -13,8 +12,7 @@ import { useEffect, useRef } from "react";
 export default function MoviesOfTheMonth() {
 	const pathname = usePathname();
 	const sentinelRef = useRef<HTMLDivElement>(null);
-	const currentMonth =
-		useSearchParams().get("month") || format(new Date(), "yyyy-MM");
+	const currentMonth = useSearchParams().get("month") || "";
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
 		useSuspenseInfiniteQuery({
 			queryKey: ["pastMovies"],
@@ -26,6 +24,8 @@ export default function MoviesOfTheMonth() {
 				// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
 				return getNextMonth(month);
 			},
+			staleTime: 1000 * 60 * 60 * 24,
+			gcTime: 1000 * 60 * 60 * 24,
 		});
 
 	useEffect(() => {

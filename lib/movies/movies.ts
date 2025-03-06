@@ -551,3 +551,31 @@ function getNextDate() {
     milliseconds: 0,
   });*/
 }
+
+export async function getAllMonths() {
+	const movies = await prisma.movie.findMany({
+		where: {
+			watchDate: {
+				not: null,
+			},
+		},
+		select: {
+			watchDate: true,
+		},
+	});
+
+	const monthsSet = new Set<string>();
+
+	for (const movie of movies) {
+		if (movie.watchDate) {
+			monthsSet.add(movie.watchDate.substring(0, 7));
+		}
+	}
+
+	return Array.from(monthsSet).map((month) => {
+		return {
+			month: month,
+			label: format(new Date(month), "MMMM yyyy"),
+		};
+	});
+}

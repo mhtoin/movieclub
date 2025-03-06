@@ -128,8 +128,8 @@ export default function Menubar() {
 						</MenuItem>
 						<MenuItem className="ml-6 " store={menu}>
 							<Link href={`/home/${SEARCH_ROUTE}`}>
-								<span className="text-foreground">Search</span>
-								<span className="menu-label">Search for movies</span>
+								<span className="text-foreground">Discover</span>
+								<span className="menu-label">Discover movies</span>
 							</Link>
 						</MenuItem>
 						<MenuItem className="ml-6" store={menu}>
