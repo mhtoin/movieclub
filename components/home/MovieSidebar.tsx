@@ -23,7 +23,9 @@ export default function MovieSidebar() {
 	const monthAndYear = searchParams.get("month")?.split("-");
 	const date = searchParams.get("date");
 
-	const [position, setPosition] = useState({ x: 5, y: 0 });
+	const [position, setPosition] = useState<{ x: number; y: number } | null>(
+		null,
+	);
 	const [isDragging, setIsDragging] = useState(false);
 	const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 	const sidebarRef = useRef<HTMLDivElement>(null);
@@ -35,8 +37,14 @@ export default function MovieSidebar() {
 
 	// Set initial position after mount
 	useEffect(() => {
-		setPosition({ x: 5, y: window.innerHeight / 2 - 100 });
-	}, []);
+		setPosition({
+			x: 25,
+			y:
+				orientation === "horizontal"
+					? window.innerHeight - 150
+					: window.innerHeight / 2 - 100,
+		});
+	}, [orientation]);
 
 	// Handle mouse events for dragging
 	const handleMouseDown = (e: React.MouseEvent) => {
@@ -81,15 +89,15 @@ export default function MovieSidebar() {
 			ref={sidebarRef}
 			className="fixed flex flex-col bg-background rounded-3xl z-[9998] border border-border cursor-move"
 			style={{
-				left: `${position.x}px`,
-				top: `${position.y}px`,
+				left: `${position?.x}px`,
+				top: `${position?.y}px`,
 				userSelect: "none",
 			}}
 			onMouseDown={handleMouseDown}
 		>
 			<div
 				className={`relative bg-background rounded-full flex  justify-center items-center py-6 gap-10 ${
-					orientation === "horizontal" ? "h-24 w-80 flex-row" : "h-80 w-24 flex-col"
+					orientation === "horizontal" ? "h-24 w-80 flex-row" : "h-96 w-24 flex-col"
 				}`}
 			>
 				<Popover>
@@ -170,9 +178,16 @@ export default function MovieSidebar() {
 					<Button variant={"outline"} size={"icon"}>
 						<CalendarRange />
 					</Button>
-					<span className="text-xs">
-						{monthAndYear && date ? `${date}.${monthAndYear[1]}` : "Select Date"}
-					</span>
+					<div
+						className={`flex gap-1 ${orientation === "horizontal" ? "flex-row" : "flex-col"}`}
+					>
+						<span className="text-xs">
+							{monthAndYear && date ? `${date}.${monthAndYear[1]}` : "Select Date"}
+						</span>
+						<span className="text-xs">
+							{monthAndYear && date ? `${monthAndYear[0]}` : "Select Date"}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
