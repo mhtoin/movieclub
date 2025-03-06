@@ -559,6 +559,9 @@ export async function getAllMonths() {
 				not: null,
 			},
 		},
+		orderBy: {
+			watchDate: "desc",
+		},
 		select: {
 			watchDate: true,
 		},
