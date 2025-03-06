@@ -30,6 +30,9 @@ export default function NavBar() {
 		}
 	}, [pathname]); // Re-run effect when path changes
 
+	const isHome = pathname === "/home";
+	console.log(isHome);
+
 	if (isMobile) {
 		return (
 			<div
@@ -42,7 +45,11 @@ export default function NavBar() {
 				<div className="w-full py-5 px-1 rounded flex justify-between items-center">
 					<div className="flex items-center justify-center gap-2">
 						<ProfileMenu />
-						<span className="font-bold">leffaseura</span>
+						<span
+							className={`font-bold ${isHome ? "text-primary-foreground" : "text-foreground"}`}
+						>
+							leffaseura
+						</span>
 					</div>
 					<div className="flex gap-2 h-full items-center relative">
 						<ThemeSwitcher />
@@ -65,7 +72,11 @@ export default function NavBar() {
 				{/**Right side */}
 				<div className="flex items-center justify-center gap-5">
 					{<Menubar />}
-					<span className="font-bold">leffaseura</span>
+					<span
+						className={`font-bold ${isHome ? "text-primary-foreground" : "text-foreground"}`}
+					>
+						leffaseura
+					</span>
 				</div>
 				<div className="flex gap-10 h-full items-center">
 					<Suspense fallback={null}>

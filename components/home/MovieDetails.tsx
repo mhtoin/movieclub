@@ -38,17 +38,17 @@ export default function MovieDetails({
 									? new Date(mostRecentMovie?.release_date).toLocaleDateString("fi-FI")
 									: ""}
 							</span>
-							<span>|</span>
+							<span className="text-primary-foreground/60">|</span>
 							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
 								<Star className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.vote_average.toFixed(1)}
 							</span>
-							<span>|</span>
+							<span className="text-primary-foreground/60">|</span>
 							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
 								<Users className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.vote_count}
 							</span>
-							<span>|</span>
+							<span className="text-primary-foreground/60">|</span>
 							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
 								<TrendingUp className="w-4 h-4 md:w-6 md:h-6" />
 								{mostRecentMovie?.popularity.toFixed(1)}

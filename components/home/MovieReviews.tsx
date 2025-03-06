@@ -76,7 +76,7 @@ export default function MovieReviews({
 					onClick={() => scroll("left")}
 					variant="outline"
 					disabled={!canScrollLeft}
-					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Previous review"
 				>
 					<ChevronLeftIcon className="h-5 w-5" />
@@ -85,7 +85,7 @@ export default function MovieReviews({
 				<Button
 					onClick={() => scroll("right")}
 					disabled={!canScrollRight}
-					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-background/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Next review"
 					variant="outline"
 				>
@@ -106,9 +106,9 @@ export default function MovieReviews({
 							return (
 								<div
 									key={`${review?.tier?.tierlist?.user?.id || index}`}
-									className="flex-shrink-0 w-full snap-center flex flex-col rounded-md p-6 gap-5 border border-border/30 bg-card/50 backdrop-blur-sm"
+									className="flex-shrink-0 w-full snap-center flex flex-col rounded-md p-6 gap-5 border border-border/30 bg-opaqueCard/50 backdrop-blur-sm"
 								>
-									<h2 className="text-lg font-bold">
+									<h2 className="text-lg font-bold text-primary-foreground">
 										{review.tier?.tierlist?.user?.name}
 									</h2>
 									<div className="flex flex-row gap-5 items-center border-b pb-5">

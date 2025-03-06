@@ -8,7 +8,7 @@ export default function CastPopover({ cast }: { cast: Array<CastMember> }) {
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button variant="ghost" size="icon" className="p-0">
+				<Button variant="ghost" size="icon" className="p-0 text-primary-foreground">
 					<List />
 				</Button>
 			</PopoverTrigger>

@@ -81,7 +81,7 @@ export default function MovieGalleryItem({
 							className="z-50"
 							tabIndex={isExpanded ? -1 : 0}
 						>
-							<ChevronsLeftRight className="w-8 h-8" />
+							<ChevronsLeftRight className="w-8 h-8 text-primary-foreground" />
 						</Button>
 					</div>
 				)}
@@ -95,7 +95,7 @@ export default function MovieGalleryItem({
 								className="z-[101]"
 								tabIndex={isExpanded ? -1 : 0}
 							>
-								<X className="w-8 h-8" />
+								<X className="w-8 h-8 text-primary-foreground" />
 							</Button>
 						</div>,
 						document.body,

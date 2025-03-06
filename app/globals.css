@@ -95,6 +95,7 @@
 		--error: hsl(9 100% 40%);
 		--mobilenav: hsl(164 64% 42%);
 		--popoverBackground: hsl(204 4% 16%);
+		--opaque-card: hsl(0, 0%, 15%);
 	}
 
 	:root[data-theme="light"][data-accent="magenta"] {
@@ -132,6 +133,7 @@
 		--popover: hsl(0, 0%, 12%);
 		--navigation: hsl(0, 0%, 25%);
 		--dialog: hsl(240 10% 3.9%);
+		--opaque-card: hsl(0, 0%, 15%);
 		/*
     * Components
     */
