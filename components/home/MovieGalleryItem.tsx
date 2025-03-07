@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { ChevronsLeftRight, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 
 export default function MovieGalleryItem({
@@ -17,61 +17,99 @@ export default function MovieGalleryItem({
 	alwaysExpanded = false,
 }: { movie: MovieWithReviews; alwaysExpanded?: boolean }) {
 	const [isExpanded, setIsExpanded] = useState(alwaysExpanded);
+	const [isAnimating, setIsAnimating] = useState(false);
 	const pathname = usePathname();
 	const params = useSearchParams();
 	const viewMode = params.get("viewMode");
 
 	const setDay = useWatchDateStore.use.setDay();
-	const backgroundImage = movie?.images?.backdrops[0]?.file_path
-		? `https://image.tmdb.org/t/p/original/${movie?.images?.backdrops[0]?.file_path}`
-		: `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`;
+
+	// Memoize the background image URL calculation
+	const backgroundImage = useMemo(() => {
+		return movie?.images?.backdrops[0]?.file_path
+			? `https://image.tmdb.org/t/p/original/${movie?.images?.backdrops[0]?.file_path}`
+			: `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`;
+	}, [movie?.images?.backdrops, movie?.backdrop_path]);
+
+	// Memoize handlers
+	const handleMouseEnter = useCallback(() => {
+		setDay(movie?.watchDate?.split("-")[2] ?? "");
+	}, [movie?.watchDate, setDay]);
+
+	const handleMouseLeave = useCallback(() => {
+		setDay("");
+	}, [setDay]);
 
 	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				setIsExpanded(false);
+			}
+		};
+
 		if (isExpanded) {
-			document.body.addEventListener("keydown", (e) => {
-				if (e.key === "Escape") {
-					setIsExpanded(false);
-				}
-			});
+			document.body.addEventListener("keydown", handleKeyDown);
 		}
+
 		return () => {
-			document.body.removeEventListener("keydown", (e) => {
-				if (e.key === "Escape") {
-					setIsExpanded(false);
-				}
-			});
+			document.body.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [isExpanded]);
 
-	const handleExpand = () => {
-		const params = new URLSearchParams(window.location.search);
-		const dateParts = movie?.watchDate?.split("-");
-		const day = dateParts?.[2];
-		params.set("date", day ?? "");
-		window.history.replaceState({}, "", `${pathname}?${params}`);
+	// Optimize the expand handler to update URL after animation
+	const handleExpand = useCallback(() => {
+		setIsAnimating(true);
 		setIsExpanded(!isExpanded);
-	};
+
+		// Update URL parameters after a slight delay to avoid doing this during animation
+		setTimeout(() => {
+			if (!isExpanded) {
+				// Only update URL when expanding
+				const params = new URLSearchParams(window.location.search);
+				const dateParts = movie?.watchDate?.split("-");
+				const day = dateParts?.[2];
+				params.set("date", day ?? "");
+				window.history.replaceState({}, "", `${pathname}?${params}`);
+			}
+			setIsAnimating(false);
+		}, 350); // Slightly longer than animation duration
+	}, [isExpanded, movie?.watchDate, pathname]);
+
+	// Handle close button click
+	const handleClose = useCallback(() => {
+		setIsExpanded(false);
+	}, []);
+
+	// Will-change CSS for better performance during animation
+	const imageClassName = useMemo(() => {
+		return `object-cover absolute inset-0 scale-105 data-[expanded=true]:scale-100 
+			transition-all duration-1000 ease-in-out grayscale brightness-150 
+			data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 
+			[mask-image:radial-gradient(100%_100%_at_95%_0,#fff,transparent)] 
+			data-[expanded=true]:transition-all 
+			${isAnimating ? "will-change-transform will-change-filter" : ""}`;
+	}, [isAnimating]);
 
 	return (
 		<div
 			className="gallery-item @container group"
 			key={movie.id}
 			data-expanded={isExpanded}
-			onMouseEnter={() => setDay(movie?.watchDate?.split("-")[2] ?? "")}
-			onMouseLeave={() => setDay("")}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
 		>
 			<div className="relative w-full h-full">
 				<Image
 					src={backgroundImage}
 					alt={movie?.title}
 					data-expanded={isExpanded}
-					className={
-						"object-cover absolute inset-0 scale-105 data-[expanded=true]:scale-100 transition-all duration-1000 ease-in-out grayscale brightness-150 data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 data [mask-image:radial-gradient(100%_100%_at_95%_0,#fff,transparent)] data-[expanded-true]:transitiona-all"
-					}
-					quality={50}
+					className={imageClassName}
+					quality={isExpanded ? 80 : 50}
 					fill
 					placeholder="blur"
 					blurDataURL={movie?.images?.backdrops[0]?.blurDataUrl ?? ""}
+					priority={isExpanded}
+					sizes={isExpanded ? "100vw" : "(max-width: 768px) 100vw, 33vw"}
 				/>
 				{/* Gradient Overlay */}
 				{/*<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />*/}
@@ -96,9 +134,9 @@ export default function MovieGalleryItem({
 							<Button
 								variant="ghost"
 								size="iconLg"
-								onClick={() => setIsExpanded(!isExpanded)}
+								onClick={handleClose}
 								className="z-[101]"
-								tabIndex={isExpanded ? -1 : 0}
+								tabIndex={isExpanded ? 0 : -1}
 							>
 								<X className="w-8 h-8 text-primary-foreground" />
 							</Button>

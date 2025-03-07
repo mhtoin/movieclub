@@ -85,34 +85,41 @@ export default function GalleryItemDetails({
 				</div>
 
 				{/* Top-right cell */}
-				<div className="flex items-center justify-start p-4 md:w-1/2 h-full">
-					{isExpanded && (
-						<div className="flex flex-col gap-5">
-							<h1 className="text-xl md:text-2xl font-bold text-primary-foreground">
-								Cast
-							</h1>
-							<div className="flex flex-row gap-2 justify-start items-center">
-								{movie?.cast?.slice(0, 6).map((cast) => {
-									return <CastPortrait cast={cast} key={cast.id} />;
-								})}
-								{movie?.cast && <CastPopover cast={movie?.cast} />}
-							</div>
-							<h1 className="text-xl md:text-2xl font-bold text-primary-foreground">
-								Crew
-							</h1>
-							<div className="flex flex-row gap-2 justify-start items-center">
-								{movie?.crew?.map((crew) => {
-									return <CastPortrait cast={crew} key={crew.id} />;
-								})}
-							</div>
+				<div
+					className="flex items-center justify-start p-4 md:w-1/2 h-full opacity-0 data-[expanded=true]:opacity-100 transition-all duration-1000"
+					data-expanded={isExpanded}
+				>
+					<div
+						className="hidden flex-col gap-5 data-[expanded=true]:flex"
+						data-expanded={isExpanded}
+					>
+						<h1 className="text-xl md:text-2xl font-bold text-primary-foreground">
+							Cast
+						</h1>
+						<div className="flex flex-row gap-2 justify-start items-center">
+							{movie?.cast?.slice(0, 6).map((cast) => {
+								return <CastPortrait cast={cast} key={cast.id} />;
+							})}
+							{movie?.cast && <CastPopover cast={movie?.cast} />}
 						</div>
-					)}
+						<h1 className="text-xl md:text-2xl font-bold text-primary-foreground">
+							Crew
+						</h1>
+						<div className="flex flex-row gap-2 justify-start items-center">
+							{movie?.crew?.map((crew) => {
+								return <CastPortrait cast={crew} key={crew.id} />;
+							})}
+						</div>
+					</div>
 				</div>
 			</div>
 
 			{/* Bottom-left cell */}
-			<div className="flex flex-col @4xl:flex-row gap-12 w-full h-full @4xl:justify-evenly ">
-				<div className="hidden @4xl:flex items-start justify-center p-4 w-full @4xl:w-1/2 h-full">
+			<div className="flex flex-col @4xl:flex-row gap-12 w-full h-full @4xl:justify-evenly">
+				<div
+					className="hidden @4xl:flex items-start justify-center p-4 w-full @4xl:w-1/2 h-full opacity-0 data-[expanded=true]:opacity-100 transition-all duration-1000"
+					data-expanded={isExpanded}
+				>
 					<div className="flex flex-col gap-2 w-full h-full items-center">
 						{movie?.videos?.[0]?.key && (
 							<iframe
