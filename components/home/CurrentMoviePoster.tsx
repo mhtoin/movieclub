@@ -36,7 +36,6 @@ export default function CurrentMoviePoster({
 				placeholder="blur"
 				blurDataURL={isMobile ? posterBlurDataUrl || "" : blurDataUrl || ""}
 			/>
-			{/* @ts-ignore */}
 			<AnimatePresence mode="wait">
 				{(viewMode === "details" || !viewMode) && (
 					<motion.div

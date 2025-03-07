@@ -104,8 +104,6 @@ export default function MovieGalleryItem({
 						</div>,
 						document.body,
 					)}
-				{/* Grid Overlay */}
-				{/* @ts-ignore */}
 				<AnimatePresence mode="wait">
 					{(viewMode === "details" || !viewMode || !isExpanded) && (
 						<motion.div
