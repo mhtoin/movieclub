@@ -90,6 +90,7 @@ export default function MovieGalleryItem({
 					</div>
 				)}
 				{isExpanded &&
+					!alwaysExpanded &&
 					createPortal(
 						<div className="fixed top-5 right-5 z-[101]">
 							<Button
