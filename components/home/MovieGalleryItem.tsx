@@ -66,7 +66,7 @@ export default function MovieGalleryItem({
 					alt={movie?.title}
 					data-expanded={isExpanded}
 					className={
-						"object-cover absolute inset-0 transition-all duration-1000 ease-in-out grayscale brightness-150 data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 data [mask-image:radial-gradient(100%_100%_at_100%_0,#fff,transparent)] data-[expanded-true]:transitiona-all"
+						"object-cover absolute inset-0 scale-105 data-[expanded=true]:scale-100 transition-all duration-1000 ease-in-out grayscale brightness-150 data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 data [mask-image:radial-gradient(100%_100%_at_95%_0,#fff,transparent)] data-[expanded-true]:transitiona-all"
 					}
 					quality={50}
 					fill
