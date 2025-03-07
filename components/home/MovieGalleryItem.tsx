@@ -14,8 +14,9 @@ import { createPortal } from "react-dom";
 
 export default function MovieGalleryItem({
 	movie,
-}: { movie: MovieWithReviews }) {
-	const [isExpanded, setIsExpanded] = useState(false);
+	alwaysExpanded = false,
+}: { movie: MovieWithReviews; alwaysExpanded?: boolean }) {
+	const [isExpanded, setIsExpanded] = useState(alwaysExpanded);
 	const pathname = usePathname();
 	const params = useSearchParams();
 	const viewMode = params.get("viewMode");
@@ -63,14 +64,17 @@ export default function MovieGalleryItem({
 				<Image
 					src={backgroundImage}
 					alt={movie?.title}
-					className="object-cover absolute inset-0"
+					data-expanded={isExpanded}
+					className={
+						"object-cover absolute inset-0 transition-all duration-1000 ease-in-out grayscale brightness-150 data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 data [mask-image:radial-gradient(100%_100%_at_100%_0,#fff,transparent)] data-[expanded-true]:transitiona-all"
+					}
 					quality={50}
 					fill
 					placeholder="blur"
 					blurDataURL={movie?.images?.backdrops[0]?.blurDataUrl ?? ""}
 				/>
 				{/* Gradient Overlay */}
-				<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />
+				{/*<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />*/}
 				{!isExpanded && (
 					<div className="absolute inset-0 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-full h-full flex items-center justify-center">
 						<div className="absolute inset-0 z-50 bg-[radial-gradient(transparent_0%,var(--primary)_80%,var(--primary)_100%)] opacity-10 blur-xl" />

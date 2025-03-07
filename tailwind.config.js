@@ -69,6 +69,7 @@ module.exports = {
 					DEFAULT: mix("--error"),
 				},
 				opaqueCard: mix("--opaque-card"),
+				mainBackground: mix("--main-background"),
 			},
 			borderRadius: {
 				lg: "var(--radius)",

@@ -29,15 +29,13 @@ export default function CurrentMoviePoster({
 			<Image
 				src={isMobile ? posterImage : backgroundImage}
 				alt={mostRecentMovie?.title}
-				className="object-cover absolute inset-0"
+				className="object-cover absolute inset-0 sepia-[0.35] [mask-image:radial-gradient(100%_100%_at_100%_0,#fff,transparent)]"
 				quality={50}
 				priority={true}
 				fill
 				placeholder="blur"
 				blurDataURL={isMobile ? posterBlurDataUrl || "" : blurDataUrl || ""}
 			/>
-			{/* Gradient Overlay */}
-			<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />
 			{/* @ts-ignore */}
 			<AnimatePresence mode="wait">
 				{(viewMode === "details" || !viewMode) && (

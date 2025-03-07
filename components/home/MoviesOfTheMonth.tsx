@@ -76,22 +76,29 @@ export default function MoviesOfTheMonth() {
 
 	return (
 		<>
-			{data?.pages.map((page) => (
-				<div
-					key={page.month}
-					data-month={page.month}
-					className="gallery snap-start min-h-screen shrink-0 listview-section relative"
-				>
-					{page.movies.map((movie: MovieWithReviews) => (
-						<MovieGalleryItem key={movie.id} movie={movie} />
-					))}
-					{isFetchingNextPage && (
-						<div className="fixed bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-							<Loader2Icon className="animate-spin" />
-						</div>
-					)}
-				</div>
-			))}
+			{data?.pages.map((page) => {
+				const alwaysExpanded = page.movies.length === 1;
+				return (
+					<div
+						key={page.month}
+						data-month={page.month}
+						className="gallery snap-start min-h-screen shrink-0 listview-section relative"
+					>
+						{page.movies.map((movie: MovieWithReviews) => (
+							<MovieGalleryItem
+								key={movie.id}
+								movie={movie}
+								alwaysExpanded={alwaysExpanded}
+							/>
+						))}
+						{isFetchingNextPage && (
+							<div className="fixed bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+								<Loader2Icon className="animate-spin" />
+							</div>
+						)}
+					</div>
+				);
+			})}
 			<div ref={sentinelRef} className="h-6 w-full" />
 		</>
 	);
