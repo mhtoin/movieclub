@@ -1,13 +1,5 @@
-import { useMovieQuery } from "@/lib/hooks";
 import type { MovieWithUser } from "@/types/movie.type";
-import {
-	Calendar,
-	Clock,
-	Loader2,
-	Star,
-	TrendingUp,
-	Users,
-} from "lucide-react";
+import { Calendar, Clock, Star, TrendingUp, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
@@ -18,23 +10,10 @@ import TrailerLink from "./TrailerLink";
 import UserPortrait from "./UserPortrait";
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
-	const { data: movieData, status } = useMovieQuery(movie.tmdbId, !!movie);
-
-	if (status === "pending") return <Loader2 className="animate-spin" />;
-
-	const watchproviders = movieData?.["watch/providers"]
-		? movieData["watch/providers"].results.FI
-		: null;
-	const backdrops = movieData?.images?.backdrops.filter(
-		(backdrop) => backdrop.iso_639_1 === "en",
-	);
-	const posters = movieData?.images?.posters.filter(
-		(poster) => poster.iso_639_1 === "en",
-	);
-
-	const randomBackdrop = backdrops
-		? backdrops[Math.floor(Math.random() * backdrops.length)]
-		: null;
+	console.log("result card", movie);
+	const watchproviders = movie?.watchProviders?.providers;
+	const backdrop = movie?.images?.backdrops[0];
+	const poster = movie?.images?.posters[0];
 
 	return (
 		<div className="grid grid-rows-6 h-full">
@@ -66,12 +45,8 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 									<span className="text-sm flex flex-row items-center gap-1">
 										<Clock className="w-6 h-6" />
 										{`${
-											movieData?.runtime
-												? Math.floor(movieData?.runtime / 60)
-												: 0
-										} h ${
-											movieData?.runtime ? movieData?.runtime % 60 : 0
-										} min`}
+											movie?.runtime ? Math.floor(movie?.runtime / 60) : 0
+										} h ${movie?.runtime ? movie?.runtime % 60 : 0} min`}
 									</span>
 									<span className="text-sm flex flex-row items-center gap-1">
 										<Calendar className="w-6 h-6" />
@@ -87,7 +62,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 										<SiThemoviedatabase className="w-6 h-6 " />
 									</Link>
 									<Link
-										href={`https://www.imdb.com/title/${movieData?.imdb_id}`}
+										href={`https://www.imdb.com/title/${movie?.imdbId}`}
 										target="_blank"
 										className="bg-accent/50 rounded-md p-2"
 									>
@@ -99,11 +74,11 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 					</div>
 				</div>
 				<Image
-					src={`https://image.tmdb.org/t/p/original${randomBackdrop?.file_path}`}
+					src={`https://image.tmdb.org/t/p/original${backdrop?.file_path}`}
 					alt={movie.title}
-					width={randomBackdrop?.width}
-					height={randomBackdrop?.height}
-					className={`object-cover aspect-[${randomBackdrop?.aspect_ratio}]`}
+					width={backdrop?.width}
+					height={backdrop?.height}
+					className={`object-cover aspect-[${backdrop?.aspect_ratio}]`}
 					quality={100}
 					priority
 				/>
@@ -112,15 +87,15 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 				<div className="flex flex-col col-span-1 h-full relative ">
 					<div className="flex flex-col justify-center items-center absolute -top-[85%] left-0 gap-5 py-2">
 						<Image
-							src={`https://image.tmdb.org/t/p/original${posters?.[0]?.file_path}`}
+							src={`https://image.tmdb.org/t/p/original${poster?.file_path}`}
 							alt={movie.title}
-							width={posters?.[0]?.width}
-							height={posters?.[0]?.height}
-							className="object-contain w-4/5 rounded-sm aspect-[${posters?.[0]?.aspect_ratio}]"
+							width={poster?.width}
+							height={poster?.height}
+							className="object-contain w-4/5 rounded-sm aspect-[${poster?.aspect_ratio}]"
 							priority
 						/>
 						<div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">
-							{watchproviders?.flatrate?.map((provider) => {
+							{watchproviders?.map((provider) => {
 								return (
 									<img
 										src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
@@ -134,7 +109,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 							})}
 						</div>
 						<div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">
-							{movieData?.genres?.map((genre) => {
+							{movie?.genres?.map((genre) => {
 								return (
 									<div
 										className="text-foreground/50 text-sm bg-foreground/10 rounded-md px-2 py-1"
@@ -146,7 +121,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 							})}
 						</div>
 						<div className="flex flex-row flex-wrap gap-2 justify-center items-center max-w-40">
-							{movieData?.videos?.results?.slice(0, 3).map((video) => {
+							{movie?.videos?.slice(0, 3).map((video) => {
 								return <TrailerLink video={video} key={video.id} />;
 							})}
 						</div>
@@ -154,10 +129,10 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 				</div>
 				<div className="flex flex-col col-span-2 h-full pt-10 gap-2">
 					<span className="text-foreground/50 text-md font-bold italic">
-						{movieData?.tagline}
+						{movie?.tagline}
 					</span>
 					<div className="flex flex-row gap-2 justify-start items-center">
-						{movieData?.credits?.cast?.slice(0, 6).map((cast) => {
+						{movie?.cast?.slice(0, 6).map((cast) => {
 							return (
 								<CastPortrait
 									cast={{
@@ -168,9 +143,9 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
 								/>
 							);
 						})}
-						{movieData?.credits?.cast && (
+						{movie?.cast && (
 							<CastPopover
-								cast={movieData.credits.cast.map((cast) => ({
+								cast={movie.cast.map((cast) => ({
 									...cast,
 									profile_path: cast.profile_path || null,
 								}))}
