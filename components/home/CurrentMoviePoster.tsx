@@ -1,5 +1,5 @@
 "use client";
-import MovieDetails from "@/components/home/MovieDetails";
+import DetailsView from "@/components/home/DetailsView";
 import MovieReviews from "@/components/home/MovieReviews";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { AnimatePresence, motion } from "framer-motion";
@@ -46,7 +46,7 @@ export default function CurrentMoviePoster({
 						exit={{ opacity: 0, x: 20 }}
 						transition={{ duration: 0.3 }}
 					>
-						<MovieDetails mostRecentMovie={mostRecentMovie} />
+						<DetailsView movie={mostRecentMovie} />
 					</motion.div>
 				)}
 				{viewMode === "reviews" && (
