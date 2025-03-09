@@ -1,5 +1,5 @@
 "use client";
-import GalleryItemDetails from "@/components/home/GalleryItemDetails";
+import DetailsView from "@/components/home/DetailsView";
 import MovieReviews from "@/components/home/MovieReviews";
 import { useWatchDateStore } from "@/stores/useWatchDateStore";
 import type { MovieWithReviews } from "@/types/movie.type";
@@ -153,7 +153,7 @@ export default function MovieGalleryItem({
 							exit={{ opacity: 0, x: 20 }}
 							transition={{ duration: 0.3 }}
 						>
-							<GalleryItemDetails movie={movie} isExpanded={isExpanded} />
+							<DetailsView movie={movie} />
 						</motion.div>
 					)}
 					{viewMode === "reviews" && isExpanded && (

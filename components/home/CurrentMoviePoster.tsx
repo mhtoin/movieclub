@@ -33,7 +33,7 @@ export default function CurrentMoviePoster({
 				quality={50}
 				priority={true}
 				fill
-				placeholder="blur"
+				placeholder={blurDataUrl || posterBlurDataUrl ? "blur" : "empty"}
 				blurDataURL={isMobile ? posterBlurDataUrl || "" : blurDataUrl || ""}
 			/>
 			<AnimatePresence mode="wait">
