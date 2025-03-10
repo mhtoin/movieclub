@@ -46,7 +46,7 @@ export default function CurrentMoviePoster({
 						exit={{ opacity: 0, x: 20 }}
 						transition={{ duration: 0.3 }}
 					>
-						<DetailsView movie={mostRecentMovie} />
+						<DetailsView movie={mostRecentMovie} isExpanded={true} />
 					</motion.div>
 				)}
 				{viewMode === "reviews" && (

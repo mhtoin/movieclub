@@ -155,7 +155,7 @@ export default React.memo(
 								exit={{ opacity: 0, x: 20 }}
 								transition={{ duration: 0.3 }}
 							>
-								<DetailsView movie={movie} />
+								<DetailsView movie={movie} isExpanded={isExpanded} />
 							</motion.div>
 						)}
 						{viewMode === "reviews" && isExpanded && (

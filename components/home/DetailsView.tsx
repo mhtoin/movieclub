@@ -10,8 +10,10 @@ import React from "react";
 export default React.memo(
 	function DetailsView({
 		movie,
+		isExpanded = true,
 	}: {
 		movie: MovieWithReviews;
+		isExpanded?: boolean;
 	}) {
 		const containerRef = useRef<HTMLDivElement>(null);
 		const [isWrapped, setIsWrapped] = useState(false);
@@ -103,7 +105,7 @@ export default React.memo(
 					className="col-span-6 relative flex flex-col justify-center overflow-hidden"
 					ref={containerRef}
 				>
-					<div className="flex flex-col w-full p-10  gap-4">
+					<div className="flex flex-col w-full p-8  gap-4">
 						<div className="flex flex-row gap-2 h-10">
 							{movie.genres.map((genre) => (
 								<div
@@ -224,7 +226,10 @@ export default React.memo(
 				</div>
 
 				{/* Side column (20%) */}
-				<div className="col-span-2 gap-2">
+				<div
+					className="col-span-2 gap-2 data-[expanded=true]:flex data-[expanded=false]:hidden"
+					data-expanded={isExpanded}
+				>
 					<div className="w-full h-full p-10 flex flex-col gap-4">
 						<div className="flex flex-col gap-1 bg-background/40 backdrop-blur-md rounded-md p-2">
 							<h2 className="text-2xl font-bold text-primary-foreground/60">
@@ -248,6 +253,7 @@ export default React.memo(
 		// Only re-render if the movie ID changes or if it's the same movie with different reviews
 		return (
 			prevProps.movie.id === nextProps.movie.id &&
+			prevProps.isExpanded === nextProps.isExpanded &&
 			JSON.stringify(prevProps.movie.tierMovies) ===
 				JSON.stringify(nextProps.movie.tierMovies)
 		);
