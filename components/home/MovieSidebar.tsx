@@ -12,6 +12,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/Select";
+import { useViewMode } from "@/hooks/useViewMode";
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
 import { getNextMonth } from "@/lib/utils";
 import type { MovieWithReviews } from "@/types/movie.type";
@@ -40,6 +41,7 @@ export default function MovieSidebar({
 	const monthAndYear = searchParams.get("month")?.split("-");
 	const date = searchParams.get("date");
 	const queryClient = useQueryClient();
+	const { setViewMode } = useViewMode();
 
 	const [position, setPosition] = useState<{ x: number; y: number } | null>(
 		null,
@@ -246,11 +248,7 @@ export default function MovieSidebar({
 					<Button
 						variant={"outline"}
 						size={"icon"}
-						onClick={() => {
-							const params = new URLSearchParams(searchParams);
-							params.set("viewMode", "details");
-							router.push(`/home?${params.toString()}`);
-						}}
+						onClick={() => setViewMode("details")}
 					>
 						<Clapperboard />
 					</Button>
@@ -260,11 +258,7 @@ export default function MovieSidebar({
 					<Button
 						variant={"outline"}
 						size={"icon"}
-						onClick={() => {
-							const params = new URLSearchParams(searchParams);
-							params.set("viewMode", "reviews");
-							router.push(`/home?${params.toString()}`);
-						}}
+						onClick={() => setViewMode("reviews")}
 					>
 						<Star />
 					</Button>
