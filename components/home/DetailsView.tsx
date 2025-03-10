@@ -225,27 +225,33 @@ export default React.memo(
 					})()}
 				</div>
 
-				{/* Side column (20%) */}
-				<div
-					className="col-span-2 gap-2 data-[expanded=true]:flex data-[expanded=false]:hidden"
-					data-expanded={isExpanded}
-				>
-					<div className="w-full h-full p-10 flex flex-col gap-4">
-						<div className="flex flex-col gap-1 bg-background/40 backdrop-blur-md rounded-md p-2">
-							<h2 className="text-2xl font-bold text-primary-foreground/60">
-								Overview
-							</h2>
-							<p className="text-xs text-primary-foreground/60 ">{movie.overview}</p>
-						</div>
-						<div className="flex flex-col gap-2">
-							<img
-								src={`https://image.tmdb.org/t/p/w500/${movie?.images?.posters[0]?.file_path}`}
-								alt={movie.title}
-								className="w-full h-full object-cover rounded-md"
-							/>
-						</div>
-					</div>
-				</div>
+				<AnimatePresence mode="wait">
+					{isExpanded && (
+						<motion.div
+							className="col-span-2 gap-2"
+							initial={{ opacity: 0, x: 100 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: -100, transition: { duration: 0.1, delay: 0 } }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+						>
+							<div className="w-full h-full p-10 flex flex-col gap-4">
+								<div className="flex flex-col gap-1 bg-background/40 backdrop-blur-md rounded-md p-2">
+									<h2 className="text-2xl font-bold text-primary-foreground/60">
+										Overview
+									</h2>
+									<p className="text-xs text-primary-foreground/60 ">{movie.overview}</p>
+								</div>
+								<div className="flex flex-col gap-2">
+									<img
+										src={`https://image.tmdb.org/t/p/w500/${movie?.images?.posters[0]?.file_path}`}
+										alt={movie.title}
+										className="w-full h-full object-cover rounded-md"
+									/>
+								</div>
+							</div>
+						</motion.div>
+					)}
+				</AnimatePresence>
 			</div>
 		);
 	},
