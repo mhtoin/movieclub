@@ -1,6 +1,7 @@
 "use client";
 import DetailsView from "@/components/home/DetailsView";
 import MovieReviews from "@/components/home/MovieReviews";
+import ViewModeButtons from "@/components/home/ViewModeButtons";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
@@ -25,7 +26,8 @@ export default function CurrentMoviePoster({
 	const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl;
 
 	return (
-		<div className="w-full h-full ">
+		<div className="w-full h-full relative">
+			<ViewModeButtons />
 			<Image
 				src={isMobile ? posterImage : backgroundImage}
 				alt={mostRecentMovie?.title}

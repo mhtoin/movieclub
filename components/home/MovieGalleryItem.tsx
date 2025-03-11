@@ -2,13 +2,13 @@
 import CollapsedView from "@/components/home/CollapsedView";
 import DetailsView from "@/components/home/DetailsView";
 import MovieReviews from "@/components/home/MovieReviews";
-import { useViewMode } from "@/hooks/useViewMode";
+import ViewModeButtons from "@/components/home/ViewModeButtons";
 import { useWatchDateStore } from "@/stores/useWatchDateStore";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { Button } from "components/ui/Button";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, ChevronsLeftRight, X } from "lucide-react";
+import { ChevronsLeftRight, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -25,7 +25,6 @@ export default React.memo(
 		const pathname = usePathname();
 		const params = useSearchParams();
 		const viewMode = params.get("viewMode");
-		const { setViewMode } = useViewMode();
 
 		const setDay = useWatchDateStore.use.setDay();
 
@@ -85,13 +84,6 @@ export default React.memo(
 			setIsExpanded(false);
 		}, []);
 
-		const handleDetailsClick = useCallback(() => {
-			setViewMode("details");
-		}, [setViewMode]);
-
-		const handleReviewsClick = useCallback(() => {
-			setViewMode("reviews");
-		}, [setViewMode]);
 		// Will-change CSS for better performance during animation
 		const imageClassName = useMemo(() => {
 			return `object-cover absolute inset-0 scale-110 data-[expanded=true]:scale-100 
@@ -111,30 +103,7 @@ export default React.memo(
 				onMouseLeave={handleMouseLeave}
 			>
 				<div className="relative w-full h-full">
-					{isExpanded && (
-						<div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-[100] h-28">
-							<div className="flex flex-row gap-2">
-								<Button
-									variant="outline"
-									className="flex items-center justify-center gap-2"
-									onClick={handleDetailsClick}
-									disabled={viewMode === "details"}
-								>
-									<ArrowLeft className="w-4 h-4" />
-									<span>Details</span>
-								</Button>
-								<Button
-									variant="outline"
-									className="flex items-center justify-center gap-2"
-									onClick={handleReviewsClick}
-									disabled={viewMode === "reviews"}
-								>
-									<span>Reviews</span>
-									<ArrowRight className="w-4 h-4" />
-								</Button>
-							</div>
-						</div>
-					)}
+					{isExpanded && <ViewModeButtons />}
 					<Image
 						src={backgroundImage}
 						alt={movie?.title}

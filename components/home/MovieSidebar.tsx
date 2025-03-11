@@ -1,5 +1,6 @@
 "use client";
 
+import RaffleDialog from "@/components/raffle/RaffleDialog";
 import {
 	Popover,
 	PopoverContent,
@@ -12,13 +13,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/Select";
-import { useViewMode } from "@/hooks/useViewMode";
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
 import { getNextMonth } from "@/lib/utils";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "components/ui/Button";
-import { CalendarRange, Clapperboard, Settings, Star } from "lucide-react";
+import { CalendarRange, Settings } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -41,7 +41,6 @@ export default function MovieSidebar({
 	const monthAndYear = searchParams.get("month")?.split("-");
 	const date = searchParams.get("date");
 	const queryClient = useQueryClient();
-	const { setViewMode } = useViewMode();
 
 	const [position, setPosition] = useState<{ x: number; y: number } | null>(
 		null,
@@ -194,10 +193,14 @@ export default function MovieSidebar({
 			onMouseDown={handleMouseDown}
 		>
 			<div
-				className={`relative bg-background rounded-full flex  justify-center items-center py-6 gap-10 ${
-					orientation === "horizontal" ? "h-24 w-80 flex-row" : "h-96 w-24 flex-col"
+				className={`relative bg-background rounded-full flex justify-center items-center py-6 gap-10 ${
+					orientation === "horizontal" ? "h-24 w-48 flex-row" : "h-96 w-24 flex-col"
 				}`}
 			>
+				<div className="flex flex-col gap-2 items-center justify-center">
+					<RaffleDialog />
+					<span className="text-xs">Raffle</span>
+				</div>
 				<Popover>
 					<PopoverTrigger asChild>
 						<Button
@@ -205,7 +208,7 @@ export default function MovieSidebar({
 							size={"iconSm"}
 							className={`absolute ${
 								orientation === "horizontal"
-									? "top-2 right-5"
+									? "top-2 right-3"
 									: "top-0 right-1/2 translate-x-1/2"
 							}`}
 						>
@@ -244,26 +247,6 @@ export default function MovieSidebar({
 						</div>
 					</PopoverContent>
 				</Popover>
-				<div className="flex flex-col gap-2 items-center justify-center">
-					<Button
-						variant={"outline"}
-						size={"icon"}
-						onClick={() => setViewMode("details")}
-					>
-						<Clapperboard />
-					</Button>
-					<span className="text-xs">Details</span>
-				</div>
-				<div className="flex flex-col gap-2 items-center justify-center">
-					<Button
-						variant={"outline"}
-						size={"icon"}
-						onClick={() => setViewMode("reviews")}
-					>
-						<Star />
-					</Button>
-					<span className="text-xs">Reviews</span>
-				</div>
 				<div className="flex flex-col gap-2 items-center justify-center">
 					<Popover>
 						<PopoverTrigger asChild>
