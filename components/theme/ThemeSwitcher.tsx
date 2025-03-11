@@ -65,7 +65,7 @@ export default function ThemeSwitcher() {
 
 	return (
 		<Button
-			variant={"outline"}
+			variant={"ghost"}
 			size={"icon"}
 			onClick={() => toggleTheme(theme === "dark" ? "light" : "dark")}
 			className="relative overflow-hidden"
@@ -92,7 +92,7 @@ export default function ThemeSwitcher() {
 					transition={{ duration: 0.3 }}
 					className="absolute"
 				>
-					<SunIcon />
+					<SunIcon className="text-yellow-400 font-bold shadow-lg" />
 				</motion.div>
 			</div>
 		</Button>

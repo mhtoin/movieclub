@@ -1,12 +1,14 @@
 "use client";
+import CollapsedView from "@/components/home/CollapsedView";
 import DetailsView from "@/components/home/DetailsView";
 import MovieReviews from "@/components/home/MovieReviews";
+import { useViewMode } from "@/hooks/useViewMode";
 import { useWatchDateStore } from "@/stores/useWatchDateStore";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { Button } from "components/ui/Button";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
-import { ChevronsLeftRight, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronsLeftRight, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -23,6 +25,7 @@ export default React.memo(
 		const pathname = usePathname();
 		const params = useSearchParams();
 		const viewMode = params.get("viewMode");
+		const { setViewMode } = useViewMode();
 
 		const setDay = useWatchDateStore.use.setDay();
 
@@ -82,13 +85,20 @@ export default React.memo(
 			setIsExpanded(false);
 		}, []);
 
+		const handleDetailsClick = useCallback(() => {
+			setViewMode("details");
+		}, [setViewMode]);
+
+		const handleReviewsClick = useCallback(() => {
+			setViewMode("reviews");
+		}, [setViewMode]);
 		// Will-change CSS for better performance during animation
 		const imageClassName = useMemo(() => {
-			return `object-cover absolute inset-0 scale-105 data-[expanded=true]:scale-100 
+			return `object-cover absolute inset-0 scale-110 data-[expanded=true]:scale-100 
 			transition-all duration-1000 ease-in-out grayscale brightness-150 
 			data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 
 			[mask-image:radial-gradient(100%_100%_at_95%_0,#fff,transparent)] 
-			data-[expanded=true]:transition-all 
+			data-[expanded=true]:transition-all data-[expanded=true]:duration-1000
 			${isAnimating ? "will-change-transform will-change-filter" : ""}`;
 		}, [isAnimating]);
 
@@ -101,6 +111,30 @@ export default React.memo(
 				onMouseLeave={handleMouseLeave}
 			>
 				<div className="relative w-full h-full">
+					{isExpanded && (
+						<div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-[100] h-28">
+							<div className="flex flex-row gap-2">
+								<Button
+									variant="outline"
+									className="flex items-center justify-center gap-2"
+									onClick={handleDetailsClick}
+									disabled={viewMode === "details"}
+								>
+									<ArrowLeft className="w-4 h-4" />
+									<span>Details</span>
+								</Button>
+								<Button
+									variant="outline"
+									className="flex items-center justify-center gap-2"
+									onClick={handleReviewsClick}
+									disabled={viewMode === "reviews"}
+								>
+									<span>Reviews</span>
+									<ArrowRight className="w-4 h-4" />
+								</Button>
+							</div>
+						</div>
+					)}
 					<Image
 						src={backgroundImage}
 						alt={movie?.title}
@@ -146,7 +180,19 @@ export default React.memo(
 							document.body,
 						)}
 					<AnimatePresence mode="wait">
-						{(viewMode === "details" || !viewMode || !isExpanded) && (
+						{!isExpanded && (
+							<motion.div
+								key="collapsed"
+								initial={{ opacity: 0, x: -50 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: -50 }}
+								transition={{ duration: 0.5 }}
+								className="absolute inset-0 overflow-hidden"
+							>
+								<CollapsedView movie={movie} />
+							</motion.div>
+						)}
+						{(viewMode === "details" || !viewMode) && isExpanded && (
 							<motion.div
 								key="details"
 								className="absolute inset-0 overflow-hidden"

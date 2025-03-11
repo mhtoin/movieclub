@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
+import { FaImdb } from "react-icons/fa";
+import { SiThemoviedatabase } from "react-icons/si";
 
 export default React.memo(
 	function DetailsView({
@@ -100,66 +102,91 @@ export default React.memo(
 		}, [movie.title, containerWidth]);
 
 		return (
-			<div className="grid grid-cols-8 w-full h-full mt-20">
+			<div className="grid grid-cols-8 w-full h-full mt-20 relative">
 				<div
 					className="col-span-6 relative flex flex-col justify-center overflow-hidden"
 					ref={containerRef}
 				>
-					<div className="flex flex-col w-full p-8  gap-4">
-						<div className="flex flex-row gap-2 h-10">
-							{movie.genres.map((genre) => (
-								<div
-									key={genre.id}
-									className="text-md text-primary-foreground/60 bg-card  rounded-md px-4 py-4 h-full flex items-center justify-center"
-								>
-									{genre.name}
-								</div>
-							))}
-						</div>
-						<div className="flex flex-row gap-2 4xl:gap-4 flex-wrap items-center px-1">
-							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-								<Calendar className="w-4 h-4 md:w-6 md:h-6" />
-								{movie.watchDate
-									? new Date(movie?.watchDate).toLocaleDateString("fi-FI")
-									: ""}
-							</span>
-							<span className="text-primary-foreground/60">|</span>
-							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-								<Star className="w-4 h-4 md:w-6 md:h-6" />
-								{movie?.vote_average.toFixed(1)}
-							</span>
-							<span className="text-primary-foreground/60">|</span>
-							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-								<Users className="w-4 h-4 md:w-6 md:h-6" />
-								{movie?.vote_count}
-							</span>
-							<span className="text-primary-foreground/60">|</span>
-							<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-								<TrendingUp className="w-4 h-4 md:w-6 md:h-6" />
-								{movie?.popularity.toFixed(1)}
-							</span>
-						</div>
-						<div className="flex flex-row gap-2 4xl:gap-4 flex-wrap items-center">
-							{movie?.watchProviders?.providers?.map((provider) => {
-								return (
-									<Link
-										href={movie?.watchProviders?.link || ""}
-										target="_blank"
-										key={provider.provider_id}
-										className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
+					<AnimatePresence mode="wait">
+						<motion.div
+							className="flex flex-col w-full p-8  gap-4"
+							initial={{ opacity: 0, x: -100 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: 100 }}
+							transition={{ duration: 0.5 }}
+						>
+							<div className="flex flex-row gap-2 h-10">
+								{movie.genres.map((genre) => (
+									<div
+										key={genre.id}
+										className="text-md text-primary-foreground/60 bg-card rounded-md px-4 py-4 h-full flex items-center justify-center"
 									>
-										<Image
-											src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
-											alt={provider.provider_name}
-											width={50}
-											height={50}
-											className="rounded-md w-8 h-8 md:w-10 md:h-10"
-										/>
+										{genre.name}
+									</div>
+								))}
+							</div>
+							<div className="flex flex-row gap-2 4xl:gap-4 flex-wrap items-center px-1">
+								<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
+									<Calendar className="w-4 h-4 md:w-6 md:h-6" />
+									{movie.watchDate
+										? new Date(movie?.watchDate).toLocaleDateString("fi-FI")
+										: ""}
+								</span>
+								<span className="text-primary-foreground/60">|</span>
+								<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
+									<Star className="w-4 h-4 md:w-6 md:h-6" />
+									{movie?.vote_average.toFixed(1)}
+								</span>
+								<span className="text-primary-foreground/60">|</span>
+								<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
+									<Users className="w-4 h-4 md:w-6 md:h-6" />
+									{movie?.vote_count}
+								</span>
+								<span className="text-primary-foreground/60">|</span>
+								<span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
+									<TrendingUp className="w-4 h-4 md:w-6 md:h-6" />
+									{movie?.popularity.toFixed(1)}
+								</span>
+							</div>
+							<div className="flex flex-row flex-wrap items-center gap-6">
+								<div className="flex flex-row gap-2 flex-wrap items-center">
+									{movie?.watchProviders?.providers?.map((provider) => {
+										return (
+											<Link
+												href={movie?.watchProviders?.link || ""}
+												target="_blank"
+												key={provider.provider_id}
+												className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
+											>
+												<Image
+													src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
+													alt={provider.provider_name}
+													width={50}
+													height={50}
+													className="rounded-md w-8 h-8 md:w-10 md:h-10"
+												/>
+											</Link>
+										);
+									})}
+								</div>
+								<div className="h-4/5 w-[1px] bg-primary-foreground/60" />
+								<div className="flex flex-row gap-2 flex-wrap items-center">
+									<Link
+										href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
+										target="_blank"
+									>
+										<SiThemoviedatabase className="w-8 h-8 text-primary-foreground hover:text-accent" />
 									</Link>
-								);
-							})}
-						</div>
-					</div>
+									<Link
+										href={`https://www.imdb.com/title/${movie?.imdbId}`}
+										target="_blank"
+									>
+										<FaImdb className="w-8 h-8 text-primary-foreground hover:text-accent" />
+									</Link>
+								</div>
+							</div>
+						</motion.div>
+					</AnimatePresence>
 					{(() => {
 						const title = movie.title;
 						const words = title.split(" ");
@@ -183,7 +210,7 @@ export default React.memo(
 									<div className="flex flex-wrap px-10">
 										<motion.span
 											key={`first-${isWrapped ? "wrapped" : "unwrapped"}`}
-											className={`${titleFontSize} font-bold font-mono whitespace-nowrap`}
+											className={`${titleFontSize} font-bold font-mono whitespace-nowrap text-primary-foreground`}
 											initial={
 												isWrapped ? { opacity: 0, x: -100 } : { opacity: 0, y: -100 }
 											}
@@ -235,7 +262,7 @@ export default React.memo(
 							transition={{ duration: 0.5, delay: 0.2 }}
 						>
 							<div className="w-full h-full p-10 flex flex-col gap-4">
-								<div className="flex flex-col gap-1 bg-background/40 backdrop-blur-md rounded-md p-2">
+								<div className="flex flex-col gap-1 bg-card/60 backdrop-blur-md rounded-md p-2">
 									<h2 className="text-2xl font-bold text-primary-foreground/60">
 										Overview
 									</h2>
