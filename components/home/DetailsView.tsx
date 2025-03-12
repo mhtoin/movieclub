@@ -107,7 +107,7 @@ export default React.memo(
 					className="col-span-6 relative flex flex-col justify-center overflow-hidden"
 					ref={containerRef}
 				>
-					<AnimatePresence mode="wait">
+					<AnimatePresence mode="wait" propagate>
 						<motion.div
 							className="flex flex-col w-full p-8  gap-4"
 							initial={{ opacity: 0, x: -100 }}
@@ -206,7 +206,7 @@ export default React.memo(
 						const titleFontSize = "text-[clamp(0.5rem,calc(0.05*100vw),3rem)]";
 						return (
 							<div className="w-full max-w-full flex flex-col flex-wrap">
-								<AnimatePresence mode="wait">
+								<AnimatePresence mode="wait" propagate>
 									<div className="flex flex-wrap px-10">
 										<motion.span
 											key={`first-${isWrapped ? "wrapped" : "unwrapped"}`}
@@ -252,7 +252,7 @@ export default React.memo(
 					})()}
 				</div>
 
-				<AnimatePresence mode="wait">
+				<AnimatePresence mode="wait" propagate>
 					{isExpanded && (
 						<motion.div
 							className="col-span-2 gap-2"
