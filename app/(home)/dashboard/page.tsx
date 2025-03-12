@@ -1,5 +1,5 @@
 import { getCurrentSession } from "@/lib/authentication/session";
-import { getMoviesOfTheWeek } from "@/lib/movies/movies";
+import { getWatchedMovies } from "@/lib/movies/movies";
 import { getUsers } from "@/lib/user";
 import { groupBy } from "@/lib/utils";
 import { redirect } from "next/navigation";
@@ -12,7 +12,7 @@ export default async function Dashboard() {
 	}
 
 	const users = await getUsers();
-	const watchedMovies = await getMoviesOfTheWeek();
+	const watchedMovies = await getWatchedMovies();
 	const moviesGroupedByUser = groupBy(watchedMovies, (movie) => {
 		const movieObject = movie;
 		return movieObject?.user?.name;

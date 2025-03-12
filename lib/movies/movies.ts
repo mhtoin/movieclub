@@ -263,6 +263,17 @@ export async function getAllMoviesOfTheWeek() {
 	return movies;
 }
 
+export async function getWatchedMovies() {
+	return await prisma.movie.findMany({
+		where: {
+			watchDate: { not: null },
+		},
+		include: {
+			user: true,
+		},
+	});
+}
+
 export async function getMoviesOfTheWeek() {
 	return await prisma.movie.findMany({
 		where: {
