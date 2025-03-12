@@ -91,12 +91,12 @@ export const useDiscoverSuspenseInfiniteQuery = () => {
 	});
 };
 
-export const useSearchSuspenseInfiniteQuery = () => {
+export const useSearchQuery = () => {
 	const searchParams = useSearchParams();
 	const titleSearch = searchParams.get("query");
 	const searchParamsString = searchParams.toString();
 
-	return useSuspenseInfiniteQuery({
+	return useInfiniteQuery({
 		queryKey: ["search", titleSearch],
 		queryFn: async ({ pageParam }) =>
 			searchMovies(pageParam, searchParamsString, "search"),

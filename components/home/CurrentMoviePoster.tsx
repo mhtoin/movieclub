@@ -5,7 +5,8 @@ import ViewModeButtons from "@/components/home/ViewModeButtons";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 export default function CurrentMoviePoster({
 	mostRecentMovie,
@@ -15,7 +16,58 @@ export default function CurrentMoviePoster({
 	isMobile: boolean;
 }) {
 	const params = useSearchParams();
+	const router = useRouter();
+	const containerRef = useRef<HTMLDivElement>(null);
 	const viewMode = params.get("viewMode");
+
+	// Set up Intersection Observer
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						// Component is in view, update search params
+						// Preserve existing parameters
+						const currentParams = new URLSearchParams(params.toString());
+
+						// Add movie date parameters
+						const watchDate = mostRecentMovie?.watchDate?.split("-");
+						const month = watchDate?.[1];
+						const day = watchDate?.[2];
+						const year = watchDate?.[0];
+
+						currentParams.set("month", `${year}-${month}`);
+
+						currentParams.set("date", day || "");
+
+						// Only set viewMode if it exists
+						if (viewMode) {
+							currentParams.set("viewMode", viewMode);
+						}
+
+						// Create parameter string with all parameters
+						const paramsString = `?${currentParams.toString()}`;
+
+						router.push(paramsString, {
+							scroll: false,
+						});
+					}
+				}
+			},
+			{ threshold: 0.3 },
+		);
+
+		if (containerRef.current) {
+			observer.observe(containerRef.current);
+		}
+
+		return () => {
+			if (containerRef.current) {
+				observer.unobserve(containerRef.current);
+			}
+		};
+	}, [router, mostRecentMovie, viewMode, params.toString]);
+
 	const backgroundImage = mostRecentMovie?.images?.backdrops[0]?.file_path
 		? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.backdrops[0]?.file_path}`
 		: `https://image.tmdb.org/t/p/original/${mostRecentMovie?.backdrop_path}`;
@@ -26,7 +78,7 @@ export default function CurrentMoviePoster({
 	const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl;
 
 	return (
-		<div className="w-full h-full relative">
+		<div className="w-full h-full relative" ref={containerRef}>
 			<ViewModeButtons />
 			<Image
 				src={isMobile ? posterImage : backgroundImage}

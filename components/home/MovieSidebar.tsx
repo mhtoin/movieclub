@@ -1,6 +1,4 @@
 "use client";
-
-import RaffleDialog from "@/components/raffle/RaffleDialog";
 import {
 	Popover,
 	PopoverContent,
@@ -18,7 +16,7 @@ import { getNextMonth } from "@/lib/utils";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "components/ui/Button";
-import { CalendarRange, Settings } from "lucide-react";
+import { CalendarRange } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -51,7 +49,7 @@ export default function MovieSidebar({
 	const [isLoadingMonths, setIsLoadingMonths] = useState(false);
 
 	// config
-	const [orientation, setOrientation] = useState<"horizontal" | "vertical">(
+	const [orientation, _setOrientation] = useState<"horizontal" | "vertical">(
 		"horizontal",
 	);
 
@@ -184,7 +182,7 @@ export default function MovieSidebar({
 	return (
 		<div
 			ref={sidebarRef}
-			className="fixed flex flex-col bg-background rounded-3xl z-[9998] border border-border cursor-move"
+			className="fixed flex flex-col items-center justify-center bg-transparent rounded-3xl z-[9998]  cursor-move"
 			style={{
 				left: `${position?.x}px`,
 				top: `${position?.y}px`,
@@ -193,60 +191,15 @@ export default function MovieSidebar({
 			onMouseDown={handleMouseDown}
 		>
 			<div
-				className={`relative bg-background rounded-full flex justify-center items-center py-6 gap-10 ${
-					orientation === "horizontal" ? "h-24 w-48 flex-row" : "h-96 w-24 flex-col"
+				className={`relative bg-transparent rounded-full flex justify-around items-center py-6  ${
+					orientation === "horizontal" ? "h-28 w-28 flex-row" : "h-44 w-28 flex-col"
 				}`}
 			>
-				<div className="flex flex-col gap-2 items-center justify-center">
+				{/*<div className="flex flex-col gap-2 items-center justify-center">
 					<RaffleDialog />
 					<span className="text-xs">Raffle</span>
-				</div>
-				<Popover>
-					<PopoverTrigger asChild>
-						<Button
-							variant={"ghost"}
-							size={"iconSm"}
-							className={`absolute ${
-								orientation === "horizontal"
-									? "top-2 right-3"
-									: "top-0 right-1/2 translate-x-1/2"
-							}`}
-						>
-							<Settings />
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent
-						side="top"
-						align="end"
-						alignOffset={-10}
-						className="z-[9999] bg-background w-fit p-2"
-					>
-						<div className="flex flex-col gap-2">
-							<label className="text-sm text-foreground/50 px-2" htmlFor="orientation">
-								Orientation
-							</label>
-							<Select
-								value={orientation}
-								onValueChange={(value) =>
-									setOrientation(value as "horizontal" | "vertical")
-								}
-							>
-								<SelectTrigger>
-									<SelectValue
-										placeholder="Orientation"
-										className="text-foreground placeholder:text-foreground/50"
-									/>
-								</SelectTrigger>
-								<SelectContent className="text-foreground z-[9999] bg-background p-2">
-									<SelectItem value="horizontal" className="text-sm">
-										Horizontal
-									</SelectItem>
-									<SelectItem value="vertical">Vertical</SelectItem>
-								</SelectContent>
-							</Select>
-						</div>
-					</PopoverContent>
-				</Popover>
+				</div>*/}
+
 				<div className="flex flex-col gap-2 items-center justify-center">
 					<Popover>
 						<PopoverTrigger asChild>
@@ -284,10 +237,14 @@ export default function MovieSidebar({
 						className={`flex gap-1 ${orientation === "horizontal" ? "flex-row" : "flex-col"}`}
 					>
 						<span className="text-xs">
-							{monthAndYear && date ? `${date}.${monthAndYear[1]}` : "Select Date"}
-						</span>
-						<span className="text-xs">
-							{monthAndYear && date ? `${monthAndYear[0]}` : "Select Date"}
+							{monthAndYear && date
+								? `${new Date(
+										`${monthAndYear[0]}-${monthAndYear[1]}`,
+									).toLocaleDateString("en-US", {
+										month: "long",
+										year: "numeric",
+									})}`
+								: "Select Date"}
 						</span>
 					</div>
 				</div>

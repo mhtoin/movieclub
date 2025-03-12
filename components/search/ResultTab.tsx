@@ -1,6 +1,6 @@
 import MovieCard from "@/components/search/MovieCard";
 import { TabsContent } from "@/components/ui/Tabs";
-import { useSearchSuspenseInfiniteQuery } from "@/lib/hooks";
+import { useSearchQuery } from "@/lib/hooks";
 import type { TMDBMovieResponse } from "@/types/tmdb.type";
 import { Button } from "components/ui/Button";
 import { ArrowDownToLineIcon } from "lucide-react";
@@ -8,8 +8,7 @@ import { Fragment, useEffect, useRef } from "react";
 
 export default function ResultTab() {
 	const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
-		useSearchSuspenseInfiniteQuery();
-
+		useSearchQuery();
 	const modalRef = useRef<HTMLDivElement>(null);
 	const sentinelRef = useRef<HTMLButtonElement>(null);
 	const resultsContainerRef = useRef<HTMLDivElement>(null);

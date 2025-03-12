@@ -2,6 +2,50 @@ import { getBlurDataUrl } from "@/lib/utils";
 import type { Image, TMDBMovieResponse } from "@/types/tmdb.type";
 import type { SingleImage } from "@prisma/client";
 import prisma from "../lib/prisma";
+
+type RankObject = {
+	[key: string]: {
+		image: Image;
+		points: number;
+	};
+};
+
+function rankImages(images: Array<Image>, originalLanguage: string) {
+	const rankObject: RankObject = images.reduce((acc, image) => {
+		let points = 0;
+		if (
+			image.iso_639_1 === "en" ||
+			image.iso_639_1 === originalLanguage ||
+			!image.iso_639_1
+		) {
+			points += 3;
+		} else {
+			points -= 1;
+		}
+		if (image.vote_average > 5) {
+			points += 2;
+		}
+		if (image.vote_average > 0) {
+			points += 1;
+		}
+		if (image.height > 1920 && image.width > 1080) {
+			points += 2;
+		}
+
+		if (image.height === 1920 && image.width === 1080) {
+			points += 1;
+		}
+		acc[image.file_path] = {
+			image,
+			points: points,
+		};
+		return acc;
+	}, {} as RankObject);
+
+	return Object.values(rankObject)
+		.sort((a, b) => b.points - a.points)
+		.map((image) => image.image);
+}
 /**
  * Including all the images and videos is probably not necessary
  * so need to cull some of them using some criteria
@@ -11,6 +55,7 @@ import prisma from "../lib/prisma";
  * 3. Height is greater than 1920
  * 4. Width is greater than 1080
  */
+/*
 function sortImages(images: Array<Image>, originalLanguage: string) {
 	return [...images].sort((a, b) => {
 		// First priority: dimensions that meet requirements
@@ -32,7 +77,7 @@ function sortImages(images: Array<Image>, originalLanguage: string) {
 
 		return 0;
 	});
-}
+}*/
 
 export default async function updateMovies() {
 	const movies = await prisma.movie.findMany();
@@ -67,9 +112,11 @@ export default async function updateMovies() {
 
 		// for images, only include those that have a height of 2160 and a width of 3840
 		const backdrops = data.images?.backdrops
-			? sortImages(data.images.backdrops, movie.original_language)
+			? rankImages(data.images.backdrops, movie.original_language)
 			: [];
 		const backdropsWithBlurDataUrl: Array<SingleImage> = [];
+
+		console.log(backdrops);
 
 		for (const backdrop of backdrops.slice(0, 3)) {
 			const blurDataUrl = await getBlurDataUrl(
@@ -84,7 +131,7 @@ export default async function updateMovies() {
 
 		// include only english posters
 		const posters = data.images?.posters
-			? sortImages(data.images.posters, movie.original_language)
+			? rankImages(data.images.posters, movie.original_language)
 			: [];
 		const postersWithBlurDataUrl: Array<SingleImage> = [];
 
