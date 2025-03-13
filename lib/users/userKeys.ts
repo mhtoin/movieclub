@@ -12,5 +12,6 @@ export const userKeys = {
 				return data;
 			},
 			enabled: !!userId,
+			staleTime: Number.POSITIVE_INFINITY,
 		}),
 };

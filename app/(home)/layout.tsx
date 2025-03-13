@@ -1,4 +1,6 @@
+import ToolBar from "@/components/home/ToolBar";
 import { getQueryClient } from "@/lib/getQueryClient";
+import { getAllMonths } from "@/lib/movies/movies";
 import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { SocketClient } from "components/common/SocketClient";
@@ -19,6 +21,7 @@ export default async function HomeLayout({
 	children: React.ReactNode;
 }) {
 	const queryClient = getQueryClient();
+	const months = await getAllMonths();
 
 	queryClient.prefetchQuery({
 		queryKey: ["shortlists"],
@@ -37,6 +40,7 @@ export default async function HomeLayout({
 				{searchModal}
 
 				{children}
+				<ToolBar months={months} />
 			</HydrationBoundary>
 		</>
 	);

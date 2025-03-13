@@ -8,13 +8,12 @@ function makeQueryClient() {
 	return new QueryClient({
 		defaultOptions: {
 			queries: {
-				staleTime: 60 * 1000,
+				staleTime: 600000, // 10 minutes
 			},
 			dehydrate: {
 				// include pending queries in dehydration
 				shouldDehydrateQuery: (query) =>
-					defaultShouldDehydrateQuery(query) ||
-					query.state.status === "pending",
+					defaultShouldDehydrateQuery(query) || query.state.status === "pending",
 			},
 		},
 	});
