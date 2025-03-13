@@ -451,6 +451,31 @@ export async function postRaffleWork({
 		if (movieInShortlist) {
 			await removeMovieFromShortlist(movieInShortlist.id, shortlist?.id ?? "");
 		}
+
+		// need to update each user's unranked tier to add the winning movie
+		const tierlist = await prisma.tierlists.findFirst({
+			where: {
+				userId: participant,
+			},
+			include: {
+				tierlistTiers: true,
+			},
+		});
+		if (tierlist) {
+			for (const tier of tierlist.tierlistTiers) {
+				if (tier.value === 0) {
+					await prisma.tier.update({
+						where: { id: tier.id },
+						data: {
+							movies: {
+								connect: { id: winner.id },
+							},
+						},
+					});
+					break;
+				}
+			}
+		}
 	}
 	console.log("sending notification");
 	sendNotification(
