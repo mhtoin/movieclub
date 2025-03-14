@@ -41,8 +41,8 @@ export default function CurrentMoviePoster({
 						currentParams.set("date", day || "");
 
 						// Only set viewMode if it exists
-						if (viewMode) {
-							currentParams.set("viewMode", viewMode);
+						if (!viewMode) {
+							currentParams.set("viewMode", "details");
 						}
 
 						// Create parameter string with all parameters
