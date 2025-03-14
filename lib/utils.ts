@@ -13,18 +13,33 @@ export function omit<T extends object, K extends keyof T>(
 	return result;
 }
 
+/**
+ * Shuffles an array using the Fisher-Yates algorithm
+ * @param array Array to shuffle
+ * @returns A new shuffled array (original array is not modified)
+ */
 export const shuffle = <T>(array: T[]): T[] => {
-	for (let i = array.length - 1; i > 0; i--) {
+	// Create a copy to avoid mutating the original array
+	const result = [...array];
+	for (let i = result.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]];
+		[result[i], result[j]] = [result[j], result[i]];
 	}
-	return array;
+	return result;
 };
 
+/**
+ * Returns a random element from an array
+ * @param arr Source array
+ * @param withShuffle Whether to shuffle the array before sampling
+ * @returns A random element from the array, or undefined if the array is empty
+ */
 export const sample = <T>(arr: T[], withShuffle: boolean): T | undefined => {
-	const shuffledArr = withShuffle ? shuffle(arr) : arr;
-	const len = shuffledArr == null ? 0 : shuffledArr.length;
-	return len ? shuffledArr[Math.floor(Math.random() * len)] : undefined;
+	if (arr == null || arr.length === 0) return undefined;
+
+	// If withShuffle is true, use a shuffled copy, otherwise use the original array
+	const sourceArr = withShuffle ? shuffle(arr) : arr;
+	return sourceArr[getSecureRandom(sourceArr.length)];
 };
 
 export const range = (length: number) => {
@@ -187,3 +202,9 @@ export function getNextMonth(month: string) {
 	const nextMonth = `${nextYearNumber}-${nextMonthString}`;
 	return nextMonth;
 }
+
+const getSecureRandom = (max: number) => {
+	const array = new Uint32Array(1);
+	crypto.getRandomValues(array);
+	return array[0] % max;
+};

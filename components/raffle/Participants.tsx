@@ -46,7 +46,7 @@ export default function Participants({
 
 						return (
 							<div
-								key={`avatar-${user?.id}-${participating}-${shortlist?.isReady}`}
+								key={`avatar-${user?.id}-${participating}`}
 								className="flex flex-col gap-3 items-center justify-center border rounded-md px-10 py-5 relative"
 							>
 								<div className="absolute top-2 right-2">

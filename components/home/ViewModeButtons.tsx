@@ -15,7 +15,7 @@ export default function ViewModeButtons() {
 		setViewMode("reviews");
 	}, [setViewMode]);
 	return (
-		<div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-[100] h-28">
+		<div className="absolute bottom-5 left-1/2 -translate-x-1/2 h-28 z-10">
 			<div className="flex flex-row gap-2">
 				<Button
 					variant="outline"

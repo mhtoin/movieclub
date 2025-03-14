@@ -4,6 +4,7 @@ import DateSelect from "@/components/home/DateSelect";
 import RaffleDialog from "@/components/raffle/RaffleDialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { WrenchIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 export default function ToolBar({
@@ -11,7 +12,16 @@ export default function ToolBar({
 }: {
 	months: { month: string; label: string }[];
 }) {
+	const pathname = usePathname();
 	const [isExpanded, setIsExpanded] = useState(false);
+
+	if (pathname && pathname !== "/home") {
+		return (
+			<div className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group">
+				<RaffleDialog />
+			</div>
+		);
+	}
 	return (
 		<button
 			type="button"
@@ -36,6 +46,7 @@ export default function ToolBar({
 								duration: 0.8,
 								bounce: 0.5,
 							}}
+							onClick={(e) => e.stopPropagation()}
 						>
 							<span className="text-xs font-medium">Raffle</span>
 							<RaffleDialog />
@@ -55,6 +66,7 @@ export default function ToolBar({
 								duration: 0.8,
 								bounce: 0.5,
 							}}
+							onClick={(e) => e.stopPropagation()}
 						>
 							<DateSelect months={months} />
 						</motion.div>

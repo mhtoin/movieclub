@@ -25,10 +25,10 @@ export default function SkeletonRecommendedTab() {
 							{Array.from({ length: 6 }, (_, i) => (
 								<div
 									key={i}
-									className="flex flex-col m-2 p-3 space-y-3 bg-card/50 rounded-lg"
+									className="flex flex-col m-2 space-y-3 bg-card/50 rounded-lg"
 								>
 									{/* Skeleton poster */}
-									<div className="w-full aspect-[2/3] bg-muted/60 animate-pulse rounded-md" />
+									<div className="w-full aspect-[2/3] bg-accent/60 rounded-md animate-pulse" />
 								</div>
 							))}
 						</div>

@@ -2,6 +2,7 @@
 import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
 import type { MovieWithUser } from "@/types/movie.type";
 import * as Ariakit from "@ariakit/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Dices } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/Button";
@@ -126,61 +127,79 @@ export default function RaffleDialog() {
 				className="fixed z-[9999] inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
 			>
 				{finished && data ? (
-					<div className="flex flex-col gap-5 justify-center items-center">
-						<ResultCard movie={data?.movie} />
-					</div>
+					<AnimatePresence mode="wait" presenceAffectsLayout>
+						<motion.div
+							key="result-view"
+							className="flex flex-col gap-5 justify-center items-center"
+							initial={{ opacity: 0, x: 100 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: -100 }}
+							transition={{ duration: 0.5 }}
+						>
+							<ResultCard movie={data?.movie} />
+						</motion.div>
+					</AnimatePresence>
 				) : (
-					<div className="flex flex-row gap-5 justify-center items-center h-full w-full">
-						<div
-							className={`flex flex-col justify-start gap-5 h-full border-r border-border pt-5 relative transition-all duration-300 ${
-								sidebarExpanded ? "w-[250px]" : "w-[0px]"
-							}`}
+					<AnimatePresence mode="wait" presenceAffectsLayout>
+						<motion.div
+							key="raffle-view"
+							className="flex flex-row gap-5 justify-center items-center h-full w-full"
+							initial={{ opacity: 0, x: 100 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: -100 }}
+							transition={{ duration: 0.5 }}
 						>
 							<div
-								className={`absolute top-1/2 -translate-y-1/2 ${
-									sidebarExpanded ? "-right-3" : "-right-5"
+								className={`flex flex-col justify-start gap-5 h-full border-r border-border pt-5 relative transition-all duration-300 ${
+									sidebarExpanded ? "w-[250px]" : "w-[0px]"
 								}`}
 							>
-								<Button
-									variant={"outline"}
-									size={"iconSm"}
-									onClick={() => setSidebarExpanded(!sidebarExpanded)}
+								<div
+									className={`absolute top-1/2 -translate-y-1/2 ${
+										sidebarExpanded ? "-right-3" : "-right-5"
+									}`}
 								>
-									<ChevronRight
-										className={`w-4 h-4 transition-transform duration-300 ${
-											sidebarExpanded ? "rotate-180" : ""
-										}`}
-									/>
-								</Button>
+									<Button
+										variant={"outline"}
+										size={"iconSm"}
+										onClick={() => setSidebarExpanded(!sidebarExpanded)}
+									>
+										<ChevronRight
+											className={`w-4 h-4 transition-transform duration-300 ${
+												sidebarExpanded ? "rotate-180" : ""
+											}`}
+										/>
+									</Button>
+								</div>
+								<div
+									className={`overflow-hidden ${
+										sidebarExpanded ? "opacity-100" : "opacity-100"
+									}`}
+								>
+									<Participants isEditing={isEditing} setIsEditing={setIsEditing} />
+								</div>
 							</div>
-							<div
-								className={`overflow-hidden ${
-									sidebarExpanded ? "opacity-100" : "opacity-100"
-								}`}
-							>
-								<Participants isEditing={isEditing} setIsEditing={setIsEditing} />
-							</div>
-						</div>
-						<div className="flex flex-col gap-5 items-center h-full flex-1 @container/items pt-5 ">
-							<h3 className="text-lg font-bold">Movies</h3>
-							<ActionButtons
-								isPlaying={isPlaying}
-								setIsPlaying={setIsPlaying}
-								setStarted={setStarted}
-								shuffledMovies={shuffledMovies}
-								setShuffledMovies={setShuffledMovies}
-								resetRaffle={resetRaffle}
-								raffle={raffle}
-								disabled={!allReady}
-							/>
+							<div className="flex flex-col gap-5 items-center h-full flex-1 @container/items pt-5 ">
+								<h3 className="text-lg font-bold">Movies</h3>
+								<ActionButtons
+									isPlaying={isPlaying}
+									setIsPlaying={setIsPlaying}
+									setStarted={setStarted}
+									shuffledMovies={shuffledMovies}
+									setShuffledMovies={setShuffledMovies}
+									resetRaffle={resetRaffle}
+									raffle={raffle}
+									disabled={!allReady}
+								/>
 
-							<RaffleItems
-								shuffledMovies={shuffledMovies}
-								currentIndex={currentIndex}
-								started={started}
-							/>
-						</div>
-					</div>
+								<RaffleItems
+									shuffledMovies={shuffledMovies}
+									currentIndex={currentIndex}
+									started={started}
+								/>
+							</div>
+						</motion.div>
+					</AnimatePresence>
 				)}
 			</Ariakit.Dialog>
 		</>

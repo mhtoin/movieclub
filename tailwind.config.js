@@ -134,6 +134,10 @@ module.exports = {
 					from: { opacity: 0, transform: "translateX(10px)" },
 					to: { opacity: 1, transform: "translateX(0)" },
 				},
+				shimmer: {
+					"0%": { backgroundPosition: "0% 0%" },
+					"100%": { backgroundPosition: "100% 0%" },
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
@@ -149,6 +153,7 @@ module.exports = {
 				slideRightAndFade: "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
 				slideDownAndFade: "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
 				slideLeftAndFade: "slideLeftAndFade 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
+				shimmer: "shimmer 2s infinite linear",
 			},
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
