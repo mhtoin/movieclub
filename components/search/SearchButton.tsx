@@ -5,8 +5,10 @@ import ResultTab from "@/components/search/ResultTab";
 import SkeletonRecommendedTab from "@/components/search/SkeletonRecommendedTab";
 import { Input } from "@/components/ui/Input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
+import { getQueryClient } from "@/lib/getQueryClient";
 import { SEARCH_ROUTE } from "@/lib/globals";
-import { useDebounce, useIsMobile } from "@/lib/hooks";
+import { useDebounce, useIsMobile, useValidateSession } from "@/lib/hooks";
+import { userKeys } from "@/lib/users/userKeys";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Button } from "components/ui/Button";
@@ -19,6 +21,7 @@ export default function SearchButton() {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const isMobile = useIsMobile();
+	const { data: user } = useValidateSession();
 	const { setInitialRoute } = useDialogStore();
 	const [open, setOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -30,6 +33,7 @@ export default function SearchButton() {
 	);
 	const modalRef = useRef<HTMLDivElement>(null);
 	const recommendedRef = useRef<HTMLDivElement>(null);
+	const queryClient = getQueryClient();
 
 	useEffect(() => {
 		const currentQuery = searchParams.get("query") || "";
@@ -153,6 +157,10 @@ export default function SearchButton() {
 								}
 							}}
 							onFocus={() => setOpen(true)}
+							onMouseEnter={() => {
+								// prefetch recommended movies
+								queryClient.prefetchQuery(userKeys.recommended(user?.id ?? ""));
+							}}
 							className="bg-transparent focus:outline-none focus:outline-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 border-none z-20 flex-1 w-full"
 						/>
 						<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 z-20">
