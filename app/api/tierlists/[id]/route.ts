@@ -1,3 +1,4 @@
+import { updateRecommended } from "@/lib/recommended";
 import {
 	getTierlist,
 	rankMovie,
@@ -5,6 +6,7 @@ import {
 	updateTierlist,
 } from "@/lib/tierlists";
 import type { TierMovie } from "@prisma/client";
+import { waitUntil } from "@vercel/functions";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -81,6 +83,13 @@ export async function PUT(
 					destinationTierId,
 				});
 				console.log("updated tierlist", res);
+				if (
+					res.tier?.tierlist.user &&
+					(res.tier.value === 1 || res.tier.value === 2)
+				) {
+					// update recommended for the user
+					waitUntil(updateRecommended(res.movie, res.tier.tierlist.user));
+				}
 				return NextResponse.json({ ok: true, data: res });
 			}
 		} catch (e) {

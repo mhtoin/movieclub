@@ -64,9 +64,9 @@ export default function ResultTab() {
 					</span>
 				)}
 
-				{data?.pages.map((page) => (
+				{data?.pages?.map((page) => (
 					<Fragment key={page.page}>
-						{page.results.map((result: TMDBMovieResponse) => (
+						{page?.results?.map((result: TMDBMovieResponse) => (
 							<MovieCard key={result.id} movie={result} showActions />
 						))}
 					</Fragment>

@@ -153,8 +153,19 @@ export async function rankMovie({
 					tierId: destinationTierId,
 					position: sourceData.position,
 				},
-				include: {
+				select: {
+					id: true,
 					movie: true,
+					tier: {
+						select: {
+							value: true,
+							tierlist: {
+								select: {
+									user: true,
+								},
+							},
+						},
+					},
 				},
 			});
 

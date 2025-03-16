@@ -4,8 +4,12 @@
 
 import type { MovieWithReviews, MovieWithUser } from "@/types/movie.type";
 import type { ShortlistWithMovies } from "@/types/shortlist.type";
-import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import type { Provider } from "@prisma/client";
+import type {
+	TMDBMovieResponse,
+	TMDBSearchResponse,
+	TMDBSearchResult,
+} from "@/types/tmdb.type";
+import type { Provider, SiteConfig } from "@prisma/client";
 import type { User as DatabaseUser } from "@prisma/client";
 import { formatISO, nextWednesday, previousWednesday, set } from "date-fns";
 import { getBaseURL, keyBy } from "lib/utils";
@@ -58,6 +62,7 @@ export const searchMovies = async (
 	page = 1,
 	searchValue = "with_watch_providers=8",
 	type: "discover" | "search" = "discover",
+	showOnlyAvailable = true,
 ) => {
 	const searchQuery =
 		type === "search"
@@ -66,7 +71,6 @@ export const searchMovies = async (
 				? `discover/movie?${searchValue}&page=${page}&watch_region=FI`
 				: "discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773";
 
-	//console.log('searching for', searchQuery)
 	const initialSearch = await fetch(
 		`https://api.themoviedb.org/3/${searchQuery}`,
 		{
@@ -77,6 +81,41 @@ export const searchMovies = async (
 			},
 		},
 	);
+
+	if (type === "search" && showOnlyAvailable) {
+		const siteConfig = await fetch(`${getBaseURL()}/api/siteConfig`);
+		const siteConfigData: SiteConfig = await siteConfig.json();
+		const data: TMDBSearchResponse = await initialSearch.json();
+		const results = data.results;
+		const filteredResults: TMDBSearchResult[] = [];
+
+		for (const result of results) {
+			const movie = await getMovie(result.id);
+			const flatrate = movie["watch/providers"]?.results.FI?.flatrate;
+			const free = movie["watch/providers"]?.results.FI?.free;
+
+			if (
+				flatrate?.find((provider) =>
+					siteConfigData.watchProviders.find(
+						(watchProvider) => provider.provider_id === watchProvider.provider_id,
+					),
+				) ||
+				free?.find((provider) =>
+					siteConfigData.watchProviders.find(
+						(watchProvider) => provider.provider_id === watchProvider.provider_id,
+					),
+				)
+			) {
+				filteredResults.push(result);
+			}
+		}
+		return {
+			page: data.page,
+			results: filteredResults,
+			total_pages: Math.ceil(filteredResults.length / 20),
+			total_results: filteredResults.length,
+		};
+	}
 	return initialSearch.json();
 };
 
