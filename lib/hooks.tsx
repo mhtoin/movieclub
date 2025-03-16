@@ -94,12 +94,19 @@ export const useDiscoverSuspenseInfiniteQuery = () => {
 export const useSearchQuery = () => {
 	const searchParams = useSearchParams();
 	const titleSearch = searchParams.get("query");
+	const showOnlyAvailable = searchParams.get("showOnlyAvailable");
 	const searchParamsString = searchParams.toString();
+	console.log("searchParamsString", searchParamsString);
 
 	return useInfiniteQuery({
-		queryKey: ["search", titleSearch],
+		queryKey: ["search", titleSearch, showOnlyAvailable ?? ""],
 		queryFn: async ({ pageParam }) =>
-			searchMovies(pageParam, searchParamsString, "search"),
+			searchMovies(
+				pageParam,
+				titleSearch ?? "",
+				"search",
+				showOnlyAvailable === "true",
+			),
 		getNextPageParam: (lastPage) => {
 			const { page, total_pages: totalPages } = lastPage;
 

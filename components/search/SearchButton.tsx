@@ -24,7 +24,7 @@ export default function SearchButton() {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const resultsContainerRef = useRef<HTMLDivElement>(null);
 	const [inputValue, setInputValue] = useState(searchParams.get("query") || "");
-
+	const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true";
 	const [activeTab, setActiveTab] = useState<"results" | "recommended">(
 		(searchParams.get("query")?.length ?? 0) > 0 ? "results" : "recommended",
 	);
@@ -75,6 +75,12 @@ export default function SearchButton() {
 		setOpen(false);
 		const params = new URLSearchParams(searchParams.toString());
 		params.delete("query");
+		router.push(`${pathname}?${params.toString()}`, { scroll: false });
+	};
+
+	const handleShowOnlyAvailable = (value: boolean) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("showOnlyAvailable", value.toString());
 		router.push(`${pathname}?${params.toString()}`, { scroll: false });
 	};
 
@@ -164,8 +170,8 @@ export default function SearchButton() {
 							className="overflow-hidden"
 						>
 							<div className="flex flex-col items-center bg-transparent overflow-hidden gap-2">
-								<div className="flex w-full justify-between items-center h-full overflow-hidden bg-transparent">
-									<TabsList className="h-[38px] bg-transparent">
+								<div className="flex w-full h-full overflow-hidden bg-transparent">
+									<TabsList className="h-[38px] bg-transparent flex flex-row items-center justify-between w-full">
 										<div className="flex flex-row gap-2 bg-transparent">
 											<TabsTrigger
 												value="recommended"
@@ -179,6 +185,19 @@ export default function SearchButton() {
 											>
 												Results
 											</TabsTrigger>
+										</div>
+										<div className="flex flex-row gap-2 bg-transparent items-center">
+											<Input
+												type="checkbox"
+												className="w-4 h-4"
+												checked={showOnlyAvailable}
+												onChange={(e) => {
+													handleShowOnlyAvailable(e.target.checked);
+												}}
+											/>
+											<span className="text-sm text-muted-foreground">
+												Show only available
+											</span>
 										</div>
 									</TabsList>
 								</div>

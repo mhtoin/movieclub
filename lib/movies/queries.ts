@@ -62,15 +62,15 @@ export const searchMovies = async (
 	page = 1,
 	searchValue = "with_watch_providers=8",
 	type: "discover" | "search" = "discover",
-	showOnlyAvailable = true,
+	showOnlyAvailable = false,
 ) => {
 	const searchQuery =
 		type === "search"
-			? `search/movie?${searchValue}&page=${page}`
+			? `search/movie?query=${searchValue}&page=${page}`
 			: searchValue
 				? `discover/movie?${searchValue}&page=${page}&watch_region=FI`
 				: "discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773";
-
+	console.log("searchQuery", searchQuery);
 	const initialSearch = await fetch(
 		`https://api.themoviedb.org/3/${searchQuery}`,
 		{
@@ -82,7 +82,8 @@ export const searchMovies = async (
 		},
 	);
 
-	if (type === "search" && showOnlyAvailable) {
+	if (type === "search" && showOnlyAvailable === true) {
+		console.log("showOnlyAvailable", showOnlyAvailable);
 		const siteConfig = await fetch(`${getBaseURL()}/api/siteConfig`);
 		const siteConfigData: SiteConfig = await siteConfig.json();
 		const data: TMDBSearchResponse = await initialSearch.json();
@@ -116,6 +117,7 @@ export const searchMovies = async (
 			total_results: filteredResults.length,
 		};
 	}
+	console.log("initialSearch", initialSearch);
 	return initialSearch.json();
 };
 
