@@ -308,9 +308,6 @@ export default function DnDTierContainer({
 		},
 		onSuccess: (_data, _variables, _context) => {
 			toast.success("Tierlist updated!");
-			console.log(_data);
-			console.log(_variables);
-			console.log(_context);
 			queryClient.invalidateQueries({
 				queryKey: ["tierlists", tierlistId],
 			});

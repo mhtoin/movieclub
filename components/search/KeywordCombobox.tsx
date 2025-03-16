@@ -39,8 +39,7 @@ export default function KeywordCombobox({
 				value={inputValue}
 				setValueOnChange={(value) => {
 					const target = value.target as HTMLInputElement;
-					console.log("target", target.value);
-					console.log("searchValue", searchValue);
+
 					combobox.setValue(target.value);
 					setInputValue(target.value);
 					return true;

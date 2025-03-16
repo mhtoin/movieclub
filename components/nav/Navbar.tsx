@@ -31,7 +31,6 @@ export default function NavBar() {
 	}, [pathname]); // Re-run effect when path changes
 
 	const isHome = pathname === "/home";
-	console.log(isHome);
 
 	if (isMobile) {
 		return (

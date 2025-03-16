@@ -11,8 +11,6 @@ export async function POST(request: NextRequest, _response: NextResponse) {
 	}: { movies: MovieWithUser[]; startingUserId: string } = await request.json();
 	const noSave = cookies().get("noSave")?.value === "true";
 
-	console.log("noSave", noSave);
-
 	const chosen = sample([...movies], true);
 	if (!chosen) {
 		return NextResponse.json({ error: "No movie chosen" }, { status: 400 });

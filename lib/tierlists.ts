@@ -205,9 +205,6 @@ export async function updateTierlist(
 	sourceData: TierMovie,
 	destinationData: TierMovie,
 ) {
-	console.log("sourceData", sourceData);
-	console.log("destinationData", destinationData);
-
 	const sourceUpdateData: TierUpdateData = {
 		position: sourceData.position,
 	};
@@ -249,9 +246,6 @@ export async function updateTierlist(
 			console.error("error updating tierlist", e);
 			throw new Error("error updating tierlist");
 		});
-
-	console.log("updated source", source);
-	console.log("updated destination", destination);
 
 	return {
 		source,

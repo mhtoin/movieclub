@@ -95,8 +95,6 @@ export const useSearchQuery = () => {
 	const searchParams = useSearchParams();
 	const titleSearch = searchParams.get("query");
 	const showOnlyAvailable = searchParams.get("showOnlyAvailable");
-	const searchParamsString = searchParams.toString();
-	console.log("searchParamsString", searchParamsString);
 
 	return useInfiniteQuery({
 		queryKey: ["search", titleSearch, showOnlyAvailable ?? ""],
@@ -379,7 +377,6 @@ export const useUpdateShortlistMutation = () => {
 			});
 		},
 		onError: (_error, variables) => {
-			console.log("error", _error);
 			if (!isOpen) {
 				setIsOpen(true);
 				setMovie(variables.movie);
@@ -724,9 +721,7 @@ export function useSocket() {
 					};
 
 					webSocket.onmessage = (event) => {
-						console.log("WebSocket message received:", event.data);
 						const message = JSON.parse(event.data);
-						console.log("message", message);
 						if ("queryKey" in message) {
 							queryClient.invalidateQueries({
 								queryKey: message.queryKey,
@@ -762,7 +757,6 @@ export function useMagneticHover() {
 	useEffect(() => {
 		const nav = navRef.current;
 		if (!nav) return;
-		console.log("nav", nav);
 
 		const supportsAnchorPos = "anchorName" in document.documentElement.style;
 
@@ -805,7 +799,6 @@ export function useMagneticHover() {
 			if (supportsAnchorPos) {
 				nav.style.setProperty("--item-active", `--item-${index + 1}`);
 			} else {
-				console.log("falloff", index);
 				nav.style.setProperty("--item-active-x", `var(--item-${index + 1}-x)`);
 
 				nav.style.setProperty("--item-active-y", `var(--item-${index + 1}-y)`);
@@ -817,7 +810,6 @@ export function useMagneticHover() {
 					"--item-active-height",
 					`var(--item-${index + 1}-height)`,
 				);
-				console.log("nav", nav.style);
 			}
 		};
 

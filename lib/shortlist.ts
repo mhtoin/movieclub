@@ -307,7 +307,6 @@ export async function replaceShortlistMovie(
 	// if tmdbId is present, it means replacingWithMovie is of type Movie
 	// so we can just insert it directly
 	if ("tmdbId" in replacingWithMovie) {
-		console.log("tmdbId in replacingWithMovie");
 		const updated = await prisma.shortlist.update({
 			where: {
 				id: shortlistId,
@@ -331,7 +330,6 @@ export async function replaceShortlistMovie(
 
 		return updated;
 	}
-	console.log("updating with search result movie");
 	const movieObject = await createDbMovie(replacingWithMovie);
 
 	const updatedShortlist = await prisma.shortlist.update({
@@ -357,8 +355,6 @@ export async function replaceShortlistMovie(
 			},
 		},
 	});
-
-	console.log("updatedShortlist", updatedShortlist);
 
 	return updatedShortlist;
 }

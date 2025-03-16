@@ -86,16 +86,6 @@ export default React.memo(
 					const willWrap =
 						firstHalfWidth + spaceWidth + secondHalfWidth > availableWidth;
 
-					// Debug the actual measurements
-					console.log({
-						firstHalfWidth,
-						secondHalfWidth,
-						spaceWidth,
-						totalWidth: firstHalfWidth + spaceWidth + secondHalfWidth,
-						availableWidth,
-						willWrap,
-					});
-
 					setIsWrapped(willWrap);
 				}
 			}

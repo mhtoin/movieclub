@@ -106,7 +106,6 @@ export default function ReviewDialog({
 												value={rating}
 												id={latestMovieData.id}
 												onChange={(newValue) => {
-													console.log("new value", newValue);
 													setRating(newValue);
 												}}
 											/>

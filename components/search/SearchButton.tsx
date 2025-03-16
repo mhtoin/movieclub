@@ -124,7 +124,6 @@ export default function SearchButton() {
 									behavior: "smooth",
 								});
 							} else {
-								console.log("scrolling to top");
 								recommendedRef.current?.scrollTo({ top: 0, behavior: "smooth" });
 							}
 						}}

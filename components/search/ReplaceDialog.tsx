@@ -114,7 +114,6 @@ export default function ReplaceDialog() {
 								variant={"outline"}
 								size={"icon"}
 								onClick={() => {
-									console.log("clicked", movie);
 									if (movie) {
 										if ("tmdbId" in movie) {
 											shortlistUpdateMutation.mutate({
@@ -123,7 +122,6 @@ export default function ReplaceDialog() {
 												shortlistId: shortlist.id,
 											});
 										} else if (typeof movie.id === "number") {
-											console.log("tmdbId not in movie");
 											shortlistUpdateMutation.mutate({
 												replacedMovie: shortlistMovie,
 												replacingWithMovie: movie,

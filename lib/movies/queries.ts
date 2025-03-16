@@ -70,7 +70,7 @@ export const searchMovies = async (
 			: searchValue
 				? `discover/movie?${searchValue}&page=${page}&watch_region=FI`
 				: "discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773";
-	console.log("searchQuery", searchQuery);
+
 	const initialSearch = await fetch(
 		`https://api.themoviedb.org/3/${searchQuery}`,
 		{
@@ -83,7 +83,6 @@ export const searchMovies = async (
 	);
 
 	if (type === "search" && showOnlyAvailable === true) {
-		console.log("showOnlyAvailable", showOnlyAvailable);
 		const siteConfig = await fetch(`${getBaseURL()}/api/siteConfig`);
 		const siteConfigData: SiteConfig = await siteConfig.json();
 		const data: TMDBSearchResponse = await initialSearch.json();
@@ -117,7 +116,7 @@ export const searchMovies = async (
 			total_results: filteredResults.length,
 		};
 	}
-	console.log("initialSearch", initialSearch);
+
 	return initialSearch.json();
 };
 
@@ -282,7 +281,6 @@ export function findMovieDate(
 				});
 
 	const movieOnDate = movies ? movies[dateAttempt.toISOString()] : null;
-	//console.log("movieOnDate", movieOnDate);
 
 	if (movieOnDate) {
 		return dateAttempt;
@@ -294,12 +292,11 @@ export async function getAllShortlistsGroupedById(): Promise<
 	Record<string, ShortlistWithMovies>
 > {
 	const fetchUrl = `${getBaseURL()}/api/shortlist`;
-	//console.log("fetchUrl", fetchUrl);
+
 	const response = await fetch(fetchUrl);
-	//console.log("response", response.body);
+
 	try {
 		const data: ShortlistWithMovies[] = await response.json();
-		//console.log("data", data);
 		const groupedData = keyBy(data, (shortlist) => shortlist.id);
 		return groupedData;
 	} catch (error) {

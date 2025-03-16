@@ -196,7 +196,6 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 }
 
 export async function getMoviesUntil(date: string) {
-	console.log("getting movies until", date);
 	const movies = await prisma.movie.findMany({
 		where: {
 			watchDate: {
@@ -406,7 +405,6 @@ export async function postRaffleWork({
 
 	// await the timeout
 	await new Promise((resolve) => setTimeout(resolve, runtime));
-	console.log("Raffle finished");
 
 	const participants = [...new Set(movies.map((movie) => movie.user?.id ?? ""))];
 
@@ -477,7 +475,6 @@ export async function postRaffleWork({
 			}
 		}
 	}
-	console.log("sending notification");
 	sendNotification(
 		{ message: `${winner.user?.name} won the raffle!` },
 		startingUserId,

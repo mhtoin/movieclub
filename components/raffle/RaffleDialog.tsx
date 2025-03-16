@@ -85,7 +85,7 @@ export default function RaffleDialog() {
 		if (isPlaying) {
 			if (currentIndex === data?.chosenIndex && count > 3) {
 				setIsPlaying(false);
-				console.log("finishing up the raffle");
+
 				setTimeout(() => {
 					setFinished(true);
 				}, 1000);

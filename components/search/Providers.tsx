@@ -13,7 +13,6 @@ export default function Providers() {
 		useGetWatchProvidersQuery();
 
 	const handleProviderSelect = (value: string) => {
-		console.log("value", value);
 		const params = new URLSearchParams(searchParams.toString());
 		params.delete("query");
 		const providers = params.get("with_watch_providers")?.split("|") || [];

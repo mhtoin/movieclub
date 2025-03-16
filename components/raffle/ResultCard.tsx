@@ -10,7 +10,6 @@ import TrailerLink from "./TrailerLink";
 import UserPortrait from "./UserPortrait";
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
-	console.log("result card", movie);
 	const watchproviders = movie?.watchProviders?.providers;
 	const backdrop = movie?.images?.backdrops[0];
 	const poster = movie?.images?.posters[0];

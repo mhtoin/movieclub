@@ -125,7 +125,6 @@ export function sortByISODate(a: string, b: string, direction: "asc" | "desc") {
 
 export function sendShortlistUpdate(userId: string) {
 	"use client";
-	console.log("sending shortlist update", userId);
 	publishMessage({ queryKey: ["shortlists"] }, "shortlist", userId);
 }
 

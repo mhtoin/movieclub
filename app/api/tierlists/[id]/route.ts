@@ -45,7 +45,6 @@ export async function PUT(
 		try {
 			if (sourceData && destinationData) {
 				const res = await updateTierlist(params.id, sourceData, destinationData);
-				console.log("updated tierlist", res);
 				return NextResponse.json({ ok: true, data: res });
 			}
 		} catch (e) {
@@ -64,7 +63,7 @@ export async function PUT(
 					sourceTierId,
 					destinationTierId,
 				});
-				console.log("updated tierlist", res);
+
 				return NextResponse.json({ ok: true, data: res });
 			}
 		} catch (e) {
@@ -82,7 +81,7 @@ export async function PUT(
 					sourceTierId,
 					destinationTierId,
 				});
-				console.log("updated tierlist", res);
+
 				if (
 					res.tier?.tierlist.user &&
 					(res.tier.value === 1 || res.tier.value === 2)

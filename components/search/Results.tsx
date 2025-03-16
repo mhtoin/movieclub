@@ -31,7 +31,6 @@ export default function Results() {
 		const observer = new IntersectionObserver(
 			(entries) => {
 				for (const entry of entries) {
-					console.log(entry);
 					if (entry.isIntersecting) {
 						fetchNextPage();
 					}

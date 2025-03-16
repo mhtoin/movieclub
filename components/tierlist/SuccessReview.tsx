@@ -104,7 +104,6 @@ export default function SuccessReview({
 												value={rating}
 												id={latestMovieData.id}
 												onChange={(newValue) => {
-													console.log("new value", newValue);
 													setRating(newValue);
 												}}
 											/>
