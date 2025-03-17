@@ -685,69 +685,103 @@ export function useCreateQueryString(searchParams: URLSearchParams) {
 }
 
 export function useSocket() {
+	const [isConnected, setIsConnected] = useState(false);
 	const [isRegistered, setIsRegistered] = useState(false);
-	const [_isConnected, _setIsConnected] = useState(false);
-	const [connection, setConnection] = useState<WebSocket | null>(null);
+	const webSocketRef = useRef<WebSocket | null>(null);
 	const { data: user } = useValidateSession();
 	const queryClient = useQueryClient();
 
-	useEffect(() => {
-		async function connect() {
-			if (!isRegistered && user) {
-				// register the client first
-				const res = await fetch(
-					`${
-						process.env.NODE_ENV === "development"
-							? "http://localhost:8080"
-							: process.env.NEXT_PUBLIC_RELAY_URL
-					}/register`,
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							user_id: user.id,
-							topic: "shortlist",
-						}),
-					},
-				);
+	// Reconnection logic
+	const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+	const reconnectAttempts = useRef(0);
+	const MAX_RECONNECT_ATTEMPTS = 5;
+	const RECONNECT_INTERVAL = 3000;
 
-				if (res.ok) {
-					const data = await res.json();
-					const webSocket = new WebSocket(data.url);
-					webSocket.onopen = () => {
-						console.log("WebSocket connection established successfully");
-					};
+	const connect = useCallback(async () => {
+		if (!user || isRegistered) return;
 
-					webSocket.onmessage = (event) => {
-						const message = JSON.parse(event.data);
-						if ("queryKey" in message) {
-							queryClient.invalidateQueries({
-								queryKey: message.queryKey,
-							});
-						} else if ("message" in message) {
-							toast.success(message.message);
-						} else {
-							toast.error("Unknown message type");
-						}
-					};
+		try {
+			const res = await fetch(
+				`${
+					process.env.NODE_ENV === "development"
+						? "http://localhost:8080"
+						: process.env.NEXT_PUBLIC_RELAY_URL
+				}/register`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						user_id: user.id,
+						topic: "shortlist",
+					}),
+				},
+			);
 
-					webSocket.onclose = () => {
-						console.log("WebSocket connection closed");
-					};
+			if (!res.ok) throw new Error("Registration failed");
 
-					setConnection(webSocket);
-					setIsRegistered(true);
-					console.log("WebSocket connection established");
+			const data = await res.json();
+			const ws = new WebSocket(data.url);
+			webSocketRef.current = ws;
+
+			ws.onopen = () => {
+				setIsConnected(true);
+				setIsRegistered(true);
+				reconnectAttempts.current = 0;
+				console.log("WebSocket connected");
+			};
+
+			ws.onmessage = (event) => {
+				try {
+					const message = JSON.parse(event.data);
+					if ("queryKey" in message) {
+						queryClient.invalidateQueries({ queryKey: message.queryKey });
+					} else if ("message" in message) {
+						toast.success(message.message);
+					}
+				} catch (error) {
+					console.error("Failed to parse WebSocket message:", error);
 				}
-			}
+			};
+
+			ws.onclose = () => {
+				setIsConnected(false);
+				// Only attempt reconnect if we haven't exceeded max attempts
+				if (reconnectAttempts.current < MAX_RECONNECT_ATTEMPTS) {
+					reconnectTimeoutRef.current = setTimeout(() => {
+						reconnectAttempts.current += 1;
+						connect();
+					}, RECONNECT_INTERVAL);
+				}
+			};
+
+			ws.onerror = (error) => {
+				console.error("WebSocket error:", error);
+				ws.close();
+			};
+		} catch (error) {
+			console.error("Failed to establish WebSocket connection:", error);
+			setIsRegistered(false);
 		}
+	}, [user, isRegistered, queryClient]);
 
+	useEffect(() => {
 		connect();
-	}, [isRegistered, user, queryClient]);
 
-	return { connection };
+		return () => {
+			// Cleanup function
+			if (reconnectTimeoutRef.current) {
+				clearTimeout(reconnectTimeoutRef.current);
+			}
+			if (webSocketRef.current) {
+				webSocketRef.current.close();
+			}
+		};
+	}, [connect]);
+
+	return {
+		isConnected,
+		connection: webSocketRef.current,
+	};
 }
 
 export function useMagneticHover() {
