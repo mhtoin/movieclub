@@ -252,7 +252,7 @@ export default React.memo(
 							transition={{ duration: 0.5, delay: 0.2 }}
 						>
 							<div className="w-full h-full p-10 flex flex-col gap-4">
-								<div className="flex flex-col gap-1 bg-card/60 backdrop-blur-md rounded-md p-2">
+								<div className="flex flex-col gap-1 bg-card/60 backdrop-blur-md rounded-md p-2 overflow-y-auto max-h-[250px]">
 									<h2 className="text-2xl font-bold text-primary-foreground/60">
 										Overview
 									</h2>

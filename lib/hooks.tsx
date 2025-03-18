@@ -747,6 +747,7 @@ export function useSocket() {
 				setIsConnected(false);
 				// Only attempt reconnect if we haven't exceeded max attempts
 				if (reconnectAttempts.current < MAX_RECONNECT_ATTEMPTS) {
+					console.log("Reconnecting...");
 					reconnectTimeoutRef.current = setTimeout(() => {
 						reconnectAttempts.current += 1;
 						connect();
