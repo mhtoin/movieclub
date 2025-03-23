@@ -69,7 +69,7 @@ export default function MovieReviews({
 	}, [updateScrollButtonsState]);
 
 	return (
-		<div className="absolute inset-0 top-16 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
+		<div className="absolute inset-0 top-5 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
 			<div className="relative w-full max-w-3xl">
 				{/* Scroll buttons */}
 				<Button
