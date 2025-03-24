@@ -18,7 +18,7 @@ export const ParticipationButton = forwardRef<HTMLInputElement, CheckboxProps>(
 
 		return (
 			<label
-				className={`flex select-none items-center gap-2 border rounded-md p-3 transition-all duration-500 ${
+				className={`flex select-none items-center gap-2 border rounded-md p-3 hover:bg-accent/20 transition-all duration-500 ${
 					props.checked ? "border-accent" : "border-border"
 				}`}
 				data-checked={props.checked}
