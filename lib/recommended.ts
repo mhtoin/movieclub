@@ -1,11 +1,15 @@
 import { createDbMovie } from "@/lib/createDbMovie";
+import { getQueryClient } from "@/lib/getQueryClient";
 import prisma from "@/lib/prisma";
 import type {
 	TMDBMovieResponse,
 	TMDBRecommendationResponse,
 } from "@/types/tmdb.type";
 import type { Movie, User } from "@prisma/client";
+import { QueryClient } from "@tanstack/react-query";
 export async function updateRecommended(sourceMovie: Movie, user: User) {
+	const queryClient = getQueryClient();
+
 	const siteConfig = await prisma.siteConfig.findUnique({
 		where: {
 			id: process.env.SITE_CONFIG_ID,
@@ -155,4 +159,26 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 		console.log("page", page);
 		page++;
 	}
+	queryClient.invalidateQueries({
+		queryKey: ["users", user.id, "recommendedMovies"],
+	});
+}
+
+export async function removeRecommended(sourceMovieId: string, user: User) {
+	const queryClient = new QueryClient();
+
+	const recommendedMovies = await prisma.recommendedMovie.deleteMany({
+		where: {
+			userId: user.id,
+			sourceMovieId: sourceMovieId,
+		},
+	});
+
+	console.log("removed recommended movies", recommendedMovies);
+	console.log("invalidating recommended movies", user.id);
+	queryClient.invalidateQueries({
+		queryKey: ["users", user.id, "recommendedMovies"],
+	});
+
+	return recommendedMovies;
 }

@@ -101,14 +101,35 @@ export async function updateTierMove({
 	sourceTierId?: string;
 	destinationTierId?: string;
 }) {
-	await prisma
+	const result = await prisma
 		.$transaction(async (tx) => {
 			// move the source item to the destination tier
-			await tx.tierMovie.update({
+			const destinationTierValue = await tx.tierMovie.update({
 				where: { id: sourceData.id },
 				data: {
 					tierId: destinationTierId,
 					position: updatedSourceData.position,
+				},
+				select: {
+					id: true,
+					movie: true,
+					tier: {
+						select: {
+							value: true,
+							tierlist: {
+								select: {
+									user: true,
+								},
+							},
+						},
+					},
+				},
+			});
+
+			const sourceTierValue = await tx.tier.findUnique({
+				where: { id: sourceTierId },
+				select: {
+					value: true,
 				},
 			});
 
@@ -128,12 +149,20 @@ export async function updateTierMove({
 					position: { increment: 1 },
 				},
 			});
+
+			return {
+				tierMovieId: sourceData.id,
+				destination: destinationTierValue?.tier?.value,
+				source: sourceTierValue?.value,
+				movie: destinationTierValue?.movie,
+				user: destinationTierValue?.tier?.tierlist?.user,
+			};
 		})
 		.catch((e) => {
 			console.error("error updating tierlist", e);
 			throw new Error("error updating tierlist");
 		});
-	return { ok: true };
+	return result;
 }
 
 export async function rankMovie({

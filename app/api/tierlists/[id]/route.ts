@@ -1,4 +1,4 @@
-import { updateRecommended } from "@/lib/recommended";
+import { removeRecommended, updateRecommended } from "@/lib/recommended";
 import {
 	getTierlist,
 	rankMovie,
@@ -63,6 +63,21 @@ export async function PUT(
 					sourceTierId,
 					destinationTierId,
 				});
+
+				if ((res.source === 1 || res.source === 2) && res.destination > 2) {
+					// remove recommended for this movie for the user
+					if (res.user) {
+						waitUntil(removeRecommended(res.movie.id, res.user));
+					}
+				}
+
+				if (res.destination <= 2 && res.source && res.source > 2) {
+					// add recommended for this movie for the user
+					console.log("adding recommended for this movie for the user", res);
+					if (res.user) {
+						waitUntil(updateRecommended(res.movie, res.user));
+					}
+				}
 
 				return NextResponse.json({ ok: true, data: res });
 			}

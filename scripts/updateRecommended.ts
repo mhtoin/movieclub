@@ -4,7 +4,7 @@ async function updateRecommendations() {
 	console.log("Updating recommended movies");
 	const user = await prisma.user.findUnique({
 		where: {
-			id: "648875d9b274755f19862cbf",
+			id: "6526deb063803415502c443d",
 		},
 		include: {
 			tierlist: {
