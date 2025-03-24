@@ -13,13 +13,13 @@ export default function SearchSidebarContent() {
 			<TabsList className="grid w-full grid-cols-2 bg-transparent gap-1 px-2">
 				<TabsTrigger
 					value="discover"
-					className="bg-transparent border border-t-0 border-r-0 border-l-0 rounded-tr-none rounded-tl-none bg-card data-[state=active]:bg-accent/50"
+					className="bg-transparent border border-t-0 border-r-0 border-l-0 rounded-tr-none rounded-tl-none bg-card data-[state=active]:bg-accent/50 text-accent-foreground"
 				>
 					Discover
 				</TabsTrigger>
 				<TabsTrigger
 					value="shortlist"
-					className="bg-transparent border border-t-0 border-r-0 border-l-0 rounded-tr-none rounded-tl-none bg-card data-[state=active]:bg-accent/50"
+					className="bg-transparent border border-t-0 border-r-0 border-l-0 rounded-tr-none rounded-tl-none bg-card data-[state=active]:bg-accent/50 text-accent-foreground"
 				>
 					Shortlist
 				</TabsTrigger>

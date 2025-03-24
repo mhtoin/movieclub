@@ -19,19 +19,19 @@ export default function RangeSlider<T extends number | number[]>({
 	return (
 		<Slider
 			{...props}
-			className="grid grid-cols-[1fr_auto] items-center gap-2 w-full px-7"
+			className="grid grid-cols-[1fr_auto]  gap-2 w-full"
 			aria-label={label}
 		>
-			<SliderTrack className="group col-span-2 h-6 flex items-center px-2">
+			<SliderTrack className="group col-span-2 h-6 flex items-center">
 				{({ state }) => {
 					const minPercent = state.getThumbPercent(0) * 100;
 					const maxPercent = state.getThumbPercent(1) * 100;
 					return (
 						<>
 							<div className="relative w-full h-[8px]">
-								<div className="absolute rounded-full h-full bg-secondary w-full" />
+								<div className="absolute rounded-full h-full bg-accent/50 w-full" />
 								<div
-									className="absolute rounded-full h-full bg-accent"
+									className="absolute rounded-full h-full bg-accent w-full"
 									style={{
 										left: `${minPercent}%`,
 										width: `${maxPercent - minPercent}%`,

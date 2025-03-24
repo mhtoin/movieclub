@@ -9,7 +9,7 @@ export default function KeywordTag({
 	handleClick: (keyword: { id: number; name: string }) => void;
 }) {
 	return (
-		<div className="h-7 px-3 py-1 text-xs relative bg-secondary text-secondary-foreground inline-flex items-center gap-1.5 rounded-full font-medium transition-colors hover:bg-secondary/80">
+		<div className="h-7 px-3 py-1 text-xs relative bg-secondary text-primary-foreground inline-flex items-center gap-1.5 rounded-full font-medium transition-colors hover:bg-secondary/80">
 			<span className="max-w-[120px] truncate">{keyword?.name}</span>
 			<Button
 				variant={"ghost"}

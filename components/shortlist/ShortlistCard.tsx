@@ -29,7 +29,7 @@ export default function ShortlistCard({
 	return (
 		<div
 			key={`fragment-${shortlist?.id}`}
-			className="overflow-clip flex flex-col justify-between border border-border rounded-xl md:gap-2 md:p-2 bg-card/20 h-full backdrop-blur-lg shadow-lg"
+			className="overflow-clip flex flex-col justify-between dark:border border-border rounded-xl md:gap-2 md:p-2 bg-card/20 h-full backdrop-blur-lg shadow-lg"
 		>
 			<div
 				key={`${shortlist?.id}-container`}

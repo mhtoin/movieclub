@@ -16,7 +16,7 @@ export default function ExpandableSidebar({
 		<aside
 			className={`hidden md:block relative h-full transition-all max-${width} duration-300 ${isExpanded ? width : "w-0"}`}
 		>
-			<div className="relative border-r border-border/50 gap-5 h-full overflow-y-auto no-scrollbar mt-1.5 pb-4 ">
+			<div className="relative border-r border-border/10 dark:border-border/40 gap-5 h-full overflow-y-auto no-scrollbar mt-1.5 pb-4 ">
 				{children}
 			</div>
 			<Button

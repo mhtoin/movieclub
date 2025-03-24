@@ -11,7 +11,6 @@ import {
 } from "@ariakit/react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import LogicToggle from "./LogicToggle";
 
 interface SelectProps {
 	label: string;
@@ -44,11 +43,11 @@ export default function FilterSelect({
 				<Select
 					store={store}
 					className={cn(
-						"flex flex-none h-10 select-none items-center gap-1 whitespace-nowrap rounded-lg border pl-4 pr-4 text-[1rem] leading-6 [text-decoration-line:none] outline-[2px] outline-offset-[2px] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] justify-between",
-						"border-accent/80 text-accent-foreground",
+						"flex bg-input flex-none h-10 select-none items-center gap-1 whitespace-nowrap rounded-lg border pl-4 pr-4 text-[1rem] leading-6 [text-decoration-line:none] outline-[2px] outline-offset-[2px] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] justify-between",
+						"border-accent/80 text-foreground",
 					)}
 				>
-					<div className="relative overflow-visible">
+					<div className="relative overflow-visible ">
 						{value.length > 0 ? (
 							<div className="group flex items-center">
 								<div className="truncate max-w-[160px] pl-2 transition-all duration-300 group-hover:max-w-[270px]">
@@ -86,7 +85,6 @@ export default function FilterSelect({
 					unmountOnHide
 					className="popover bg-popover w-[300px] z-50 max-h-[var(--popover-available-height,300px)] flex flex-col gap-2 justify-center items-center overscroll-contain rounded-lg border border-solid p-2 overflow-auto text-[white] [box-shadow:0_10px_15px_-3px_rgb(0_0_0_/_0.25),_0_4px_6px_-4px_rgb(0_0_0_/_0.1)]"
 				>
-					<LogicToggle />
 					<div className="grid grid-cols-2 justify-between justify-items-stretch min-h-[48px]">
 						{options?.map((option) => (
 							<SelectItem

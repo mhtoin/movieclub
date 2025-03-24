@@ -23,7 +23,7 @@ export default function RecommendedTab() {
 			<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
 				{recommended && Object.keys(recommended).length > 0 ? (
 					Object.keys(recommended).map((sourceMovie) => (
-						<div key={sourceMovie} className="w-full bg-input/80  ">
+						<div key={sourceMovie} className="w-full">
 							<h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent rounded-md w-fit text-accent-foreground">
 								Because you liked: {sourceMovie}
 							</h3>
