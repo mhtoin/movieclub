@@ -307,7 +307,10 @@ export async function getAllShortlistsGroupedById(): Promise<
 
 export const getMoviesOfTheMonth = async (month: string) => {
 	const response = await fetch(`${getBaseURL()}/api/movies?month=${month}`);
-	const data: { month: string; movies: MovieWithReviews[] } =
-		await response.json();
+	const data: {
+		month: string;
+		movies: MovieWithReviews[];
+		lastMonth: string | null;
+	} = await response.json();
 	return data;
 };

@@ -84,9 +84,33 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
 	return grouped;
 }
 
+export async function getLastMonth() {
+	const lastMovie = await prisma.movie.findFirst({
+		where: {
+			watchDate: {
+				not: null,
+			},
+		},
+		orderBy: {
+			watchDate: "asc",
+		},
+		select: {
+			watchDate: true,
+		},
+	});
+
+	if (!lastMovie?.watchDate) {
+		return null;
+	}
+
+	return lastMovie.watchDate.split("-").splice(0, 2).join("-");
+}
+
 export async function getMoviesOfTheWeekByMonth(month: string) {
 	const currentMonth = format(new Date(), "yyyy-MM");
 	const targetMonth = month || currentMonth;
+
+	const lastMonth = await getLastMonth();
 
 	// First get the tierMovies that have valid tiers to avoid the null tier issue
 	const validTierMovies = await prisma.tierMovie.findMany({
@@ -138,6 +162,14 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 		},
 	});
 
+	if (!movies) {
+		return {
+			month: null,
+			movies: null,
+			lastMonth: null,
+		};
+	}
+
 	if (currentMonth === targetMonth && movies.length === 1) {
 		// most recent is the same as all of the movies of the month
 		// so we need to skip ahead
@@ -179,6 +211,7 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 		return {
 			month: nextMonth,
 			movies: nextMonthMovies,
+			lastMonth: lastMonth,
 		};
 	}
 
@@ -192,6 +225,7 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 	return {
 		month: targetMonth,
 		movies: movies,
+		lastMonth: lastMonth,
 	};
 }
 

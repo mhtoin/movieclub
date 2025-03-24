@@ -16,8 +16,15 @@ export async function GET(
 > {
 	const month = request.nextUrl.searchParams.get("month");
 	if (month) {
-		const movies = await getMoviesOfTheWeekByMonth(month);
-		return NextResponse.json(movies, { status: 200 });
+		const moviesResponse = await getMoviesOfTheWeekByMonth(month);
+
+		if (
+			moviesResponse.month &&
+			moviesResponse.movies &&
+			moviesResponse.movies.length > 0
+		) {
+			return NextResponse.json(moviesResponse, { status: 200 });
+		}
 	}
 	try {
 		const movies = await getMoviesOfTheWeek();

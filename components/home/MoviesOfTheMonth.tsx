@@ -20,9 +20,14 @@ export default function MoviesOfTheMonth() {
 			initialPageParam: currentMonth,
 			getNextPageParam: (lastPage) => {
 				if (!lastPage?.month) return undefined;
-				const { month } = lastPage;
+				const { month, lastMonth } = lastPage;
 				// Get the next month from the current month. The shape is YYYY-MM, so we need to add one month
-				return getNextMonth(month);
+				const nextMonth = getNextMonth(month);
+
+				if (currentMonth === lastMonth) {
+					return undefined;
+				}
+				return nextMonth;
 			},
 			staleTime: 1000 * 60 * 60 * 24,
 			gcTime: 1000 * 60 * 60 * 24,
@@ -76,22 +81,22 @@ export default function MoviesOfTheMonth() {
 
 	return (
 		<>
-			{data?.pages.map((page) => {
-				const alwaysExpanded = page.movies.length === 1;
+			{data?.pages?.map((page) => {
+				const alwaysExpanded = page?.movies?.length === 1;
 				return (
 					<div
-						key={page.month}
-						data-month={page.month}
+						key={page?.month}
+						data-month={page?.month}
 						className="gallery snap-start min-h-screen shrink-0 listview-section relative"
 					>
-						{page.movies.map((movie: MovieWithReviews) => (
+						{page?.movies?.map((movie: MovieWithReviews) => (
 							<MovieGalleryItem
 								key={movie.id}
 								movie={movie}
 								alwaysExpanded={alwaysExpanded}
 							/>
 						))}
-						{isFetchingNextPage && (
+						{isFetchingNextPage && hasNextPage && (
 							<div className="fixed bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
 								<Loader2Icon className="animate-spin" />
 							</div>
