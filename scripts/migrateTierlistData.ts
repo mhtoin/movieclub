@@ -47,7 +47,7 @@ const createTier = async (
 export const migrateTierlistData = async () => {
 	const tierlist = await prisma.tierlists.findUnique({
 		where: {
-			id: "649af84d8a23bc809570da2d",
+			id: "6539332947d18fb57c3e31bc",
 		},
 	});
 

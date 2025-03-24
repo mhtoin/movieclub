@@ -97,10 +97,10 @@ export default function Tier({
 			) : (
 				<div
 					className={
-						"hidden md:flex border rounded-tl-md rounded-bl-md p-2 bg-accent items-center justify-center w-24"
+						"hidden md:flex border rounded-tl-md rounded-bl-md p-2 bg-accent items-center justify-center w-full max-w-44"
 					}
 				>
-					<span className="text-lg font-bold whitespace-normal w-24 text-center">
+					<span className="text-lg font-bold whitespace-normal text-center w-full">
 						{label}
 					</span>
 				</div>

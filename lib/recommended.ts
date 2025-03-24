@@ -13,7 +13,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 	});
 	const recomendedMovies = [];
 	let page = 1;
-
+	console.log("config", siteConfig);
 	console.log("Because you liked", sourceMovie.title);
 
 	while (recomendedMovies.length < 5) {
@@ -152,6 +152,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 		}
 		if (recomendedMovies.length >= 5) break;
 		if (data.total_pages === page) break;
+		console.log("page", page);
 		page++;
 	}
 }
