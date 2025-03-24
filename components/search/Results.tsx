@@ -75,7 +75,6 @@ export default function Results() {
 			</div>
 
 			<div className="relative h-dvh w-full overflow-y-auto no-scrollbar">
-				{/* Add top gradient overlay */}
 				<div className="absolute top-0 left-0 right-0 h-5 bg-gradient-to-b from-background to-transparent z-10" />
 				<div
 					ref={resultsContainerRef}
@@ -109,8 +108,7 @@ export default function Results() {
 						</Button>
 					)}
 				</div>
-				{/* Add bottom gradient overlay */}
-				<div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-background to-transparent z-10" />
+				<div className="fixed bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-background to-transparent z-10" />
 			</div>
 		</div>
 	);
