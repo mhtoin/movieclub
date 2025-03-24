@@ -49,8 +49,12 @@ export default function SearchButton() {
 		const down = (e: KeyboardEvent) => {
 			if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
+				const params = new URLSearchParams(searchParams.toString());
+				params.set("showOnlyAvailable", "true");
 				setOpen(true);
+
 				inputRef.current?.focus();
+				router.push(`${pathname}?${params.toString()}`, { scroll: false });
 			}
 		};
 		const up = (e: KeyboardEvent) => {
@@ -61,13 +65,19 @@ export default function SearchButton() {
 		document.addEventListener("keydown", down);
 		document.addEventListener("keyup", up);
 		return () => document.removeEventListener("keydown", down);
-	}, []);
+	}, [pathname, router, searchParams]);
 
 	useEffect(() => {
 		if (inputRef.current) {
-			inputRef.current.addEventListener("focus", () => setOpen(true));
+			inputRef.current.addEventListener("focus", () => {
+				const params = new URLSearchParams(searchParams.toString());
+				params.set("showOnlyAvailable", "true");
+				setOpen(true);
+
+				router.push(`${pathname}?${params.toString()}`, { scroll: false });
+			});
 		}
-	}, []);
+	}, [pathname, router, searchParams]);
 
 	const handleSearch = (value: string) => {
 		const params = new URLSearchParams(searchParams.toString());
