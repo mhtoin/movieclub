@@ -75,7 +75,7 @@ export default function Tier({
 				</span>
 			</div>
 			<button
-				className={`hidden md:flex z-[9990] items-center justify-center absolute top-0 left-24 w-20 h-full bg-gradient-to-b from-transparent to-background group-hover:opacity-100 opacity-0 transition-all duration-300 hover:bg-accent/10 ${
+				className={`hidden md:flex z-[9990] items-center justify-center absolute top-0 left-44 w-20 h-full bg-gradient-to-b from-transparent to-background group-hover:opacity-100 opacity-0 transition-all duration-300 hover:bg-accent/10 ${
 					canScrollLeft ? "visible" : "invisible"
 				}`}
 				type="button"

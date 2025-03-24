@@ -23,7 +23,7 @@ export default function ExpandableSidebar({
 				variant={"outline"}
 				size={"icon"}
 				onClick={() => setIsExpanded(!isExpanded)}
-				className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2  transition-colors"
+				className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 transition-colors z-10"
 			>
 				{isExpanded ? (
 					<ChevronLeft className="w-6 h-6" />

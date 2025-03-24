@@ -17,7 +17,7 @@ export default function WatchlistContainer() {
 
 	const watchlistMovieIds = watchlist ? watchlist?.map((movie) => movie.id) : [];
 	return (
-		<div className="flex flex-col m-5 p-10 py-20 overflow-y-auto no-scrollbar gap-5">
+		<div className="flex flex-col m-5 p-10 py-20 overflow-y-auto no-scrollbar gap-5 w-full h-full relative">
 			{session && !session.accountId && (
 				<div className="alert alert-error w-1/3">
 					<svg
@@ -40,13 +40,14 @@ export default function WatchlistContainer() {
 			<div className="flex flex-col items-center gap-5">
 				<h1 className="text-2xl font-bold">Watchlist</h1>
 			</div>
-			<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-				{watchlist?.map((movie) => {
-					return (
-						<div
-							key={`container-${movie.id}`}
-							className="flex flex-col items-center gap-2"
-						>
+
+			<div className="relative h-dvh w-full overflow-y-auto no-scrollbar">
+				{/* Top gradient overlay */}
+				<div className="absolute top-0 left-0 right-0 h-5 bg-gradient-to-b from-background to-transparent z-10" />
+
+				<div className="h-full w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 overflow-y-auto no-scrollbar bg-background">
+					{watchlist?.map((movie) => {
+						return (
 							<MovieCard
 								key={movie.id}
 								movie={movie}
@@ -54,9 +55,12 @@ export default function WatchlistContainer() {
 								inWatchlist={watchlistMovieIds?.includes(movie.id)}
 								showActions
 							/>
-						</div>
-					);
-				})}
+						);
+					})}
+				</div>
+
+				{/* Bottom gradient overlay */}
+				<div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-background to-transparent z-10" />
 			</div>
 		</div>
 	);

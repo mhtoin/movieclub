@@ -73,37 +73,44 @@ export default function Results() {
 					<ChevronUp className="w-4 h-4" />
 				</Button>
 			</div>
-			<div
-				ref={resultsContainerRef}
-				className="h-dvh w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 overflow-y-auto no-scrollbar bg-background"
-			>
-				{data
-					? data?.pages?.map((page) => (
-							<Fragment key={page.page}>
-								{page.results.map((movie: TMDBMovieResponse) => {
-									return (
-										<MovieCard
-											key={movie.id}
-											movie={movie}
-											added={shortlistMovieIds?.includes(movie.id)}
-											inWatchlist={watchlistMovieIds?.includes(movie.id)}
-											showActions
-										/>
-									);
-								})}
-							</Fragment>
-						))
-					: []}
-				{hasNextPage && (
-					<Button
-						variant="outline"
-						size="lg"
-						className="max-w-sm m-auto opacity-0 h-[1px] min-h-[1px]"
-						ref={loadMoreButtonRef}
-					>
-						Load More
-					</Button>
-				)}
+
+			<div className="relative h-dvh w-full overflow-y-auto no-scrollbar">
+				{/* Add top gradient overlay */}
+				<div className="absolute top-0 left-0 right-0 h-5 bg-gradient-to-b from-background to-transparent z-10" />
+				<div
+					ref={resultsContainerRef}
+					className="h-dvh w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 overflow-y-auto no-scrollbar bg-background relative"
+				>
+					{data
+						? data?.pages?.map((page) => (
+								<Fragment key={page.page}>
+									{page.results.map((movie: TMDBMovieResponse) => {
+										return (
+											<MovieCard
+												key={movie.id}
+												movie={movie}
+												added={shortlistMovieIds?.includes(movie.id)}
+												inWatchlist={watchlistMovieIds?.includes(movie.id)}
+												showActions
+											/>
+										);
+									})}
+								</Fragment>
+							))
+						: []}
+					{hasNextPage && (
+						<Button
+							variant="outline"
+							size="lg"
+							className="max-w-sm m-auto opacity-0 h-[1px] min-h-[1px]"
+							ref={loadMoreButtonRef}
+						>
+							Load More
+						</Button>
+					)}
+				</div>
+				{/* Add bottom gradient overlay */}
+				<div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-background to-transparent z-10" />
 			</div>
 		</div>
 	);
