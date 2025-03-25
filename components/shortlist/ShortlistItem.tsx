@@ -152,7 +152,7 @@ export default function ShortListItem({
 			)}
 			<div className="info">
 				<h1 className="title line-clamp-2">{movie.title}</h1>
-				<div className="flex flex-row gap-2 flex-wrap">
+				<div className="overview flex flex-row gap-2 flex-wrap">
 					<span className="text-xs flex flex-row items-center gap-1">
 						<Star className="w-4 h-4" />
 						{movie.vote_average.toFixed(1)}

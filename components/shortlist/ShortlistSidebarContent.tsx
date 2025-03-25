@@ -1,6 +1,6 @@
 "use client";
 import { ParticipationButton } from "components/raffle/ParticipationButton";
-import { useValidateSession } from "lib/hooks";
+import { useGetWatchlistQuery, useValidateSession } from "lib/hooks";
 
 import {
 	useSuspenseShortlistsQuery,
@@ -20,6 +20,7 @@ export default function ShortlistSidebarContent() {
 		: null;
 	const readyStateMutation = useUpdateReadyStateMutation();
 	const participationMutation = useUpdateParticipationMutation();
+	const { data: watchlist } = useGetWatchlistQuery(user || null);
 	return (
 		<div className="flex flex-col items-center justify-center gap-5 ">
 			<div className="bg-background flex flex-col items-center justify-center gap-10 z-20 w-full py-5">
@@ -84,7 +85,9 @@ export default function ShortlistSidebarContent() {
 								removeFromShortList={user?.id === userShortlist.userId}
 								index={index}
 								showActions={true}
-								isInWatchlist={false}
+								isInWatchlist={watchlist?.some(
+									(watchlistItem) => watchlistItem.id === movie.tmdbId,
+								)}
 							/>
 						))
 					: null}

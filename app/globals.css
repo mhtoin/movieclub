@@ -1091,6 +1091,7 @@
 
 	.moviecard:hover .info {
 		opacity: 1;
+		transform: translateY(0);
 	}
 
 	.moviecard::before {
@@ -1123,7 +1124,7 @@
 		z-index: 3;
 		color: white;
 		opacity: 0;
-		transform: translateY(10px);
+		transform: translateY(20px);
 		transition: 0.5s;
 		display: flex;
 		flex-direction: column;
@@ -1136,9 +1137,24 @@
 		margin: 0;
 		font-size: 14px;
 		font-weight: bold;
+		transform: translateX(-20px);
+		transition: 0.5s;
 		@media (max-width: 550px) {
 			font-size: 12px;
 		}
+	}
+
+	.moviecard:hover .info h1 {
+		transform: translateX(0);
+	}
+
+	.moviecard .info .overview {
+		transform: translateX(20px);
+		transition: 0.5s;
+	}
+
+	.moviecard:hover .info .overview {
+		transform: translateX(0);
 	}
 
 	.moviecard .info p {
