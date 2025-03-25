@@ -1,3 +1,4 @@
+import { getQueryClient } from "@/lib/getQueryClient";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { useNotificationStore } from "@/stores/useNotificationStore";
 import { useRaffleStore } from "@/stores/useRaffleStore";
@@ -303,6 +304,7 @@ export const useUpdateSelectionMutation = () => {
 
 export const useAddToWatchlistMutation = () => {
 	const { data: session } = useValidateSession();
+	const queryClient = getQueryClient();
 	return useMutation({
 		mutationFn: async ({ movieId }: { movieId: number }) => {
 			const requestBody = JSON.stringify({
@@ -324,10 +326,18 @@ export const useAddToWatchlistMutation = () => {
 				},
 			);
 
-			return await response.json();
+			const data = await response.json();
+
+			console.log("data", data);
+
+			return data;
 		},
 		onSuccess: () => {
-			toast.success("Movie added to watchlist");
+			queryClient.invalidateQueries({
+				queryKey: ["watchlist"],
+				refetchType: "all",
+			});
+			toast.success("Watchlist updated");
 		},
 	});
 };
@@ -525,9 +535,9 @@ export const useGetWatchlistQuery = (user: DatabaseUser | null) => {
 				return getWatchlist(user);
 			}
 		},
-		enabled: !!user && !!user.sessionId && !!user.accountId,
-		staleTime: Number.POSITIVE_INFINITY,
-		gcTime: Number.POSITIVE_INFINITY,
+		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+		staleTime: 1000 * 60 * 5, // 5 minutes
 	});
 };
 

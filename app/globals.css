@@ -1083,7 +1083,6 @@
 		border: 2px solid transparent;
 		backdrop-filter: blur(10px);
 		position: relative;
-		z-index: 1;
 	}
 
 	.moviecard:hover::before {

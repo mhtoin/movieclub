@@ -52,11 +52,11 @@ export default function ActionButtons({
 		<div className="flex flex-row gap-2 items-center justify-center">
 			<TooltipProvider>
 				<Tooltip>
-					<TooltipTrigger className="cursor-not-allowed">
+					<TooltipTrigger asChild>
 						<Button
 							variant={"outline"}
 							size={"default"}
-							className="py-5"
+							className={`py-5 ${disabled ? "cursor-not-allowed" : ""}`}
 							disabled={disabled}
 							onClick={() => {
 								if (!isPlaying) {
