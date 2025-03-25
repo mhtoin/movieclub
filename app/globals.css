@@ -1078,8 +1078,12 @@
 		}
 	}
 
-	.moviecard:hover {
-		transform: translateY(2px);
+	.highlight {
+		background: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+		border: 2px solid transparent;
+		backdrop-filter: blur(10px);
+		position: relative;
+		z-index: 1;
 	}
 
 	.moviecard:hover::before {
@@ -1088,7 +1092,6 @@
 
 	.moviecard:hover .info {
 		opacity: 1;
-		transform: translateY(0);
 	}
 
 	.moviecard::before {

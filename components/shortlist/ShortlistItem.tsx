@@ -57,7 +57,7 @@ export default function ShortListItem({
 	return (
 		<div
 			className={`moviecard group rounded-none md:rounded-md ${
-				highlight ? "border-accent border-b-4 transition-all duration-700" : ""
+				highlight ? "highlight " : ""
 			}`}
 		>
 			{showActions && requiresSelection && shortlistId === user?.shortlistId && (
@@ -76,9 +76,9 @@ export default function ShortListItem({
 						isLoading={selectionMutation.isPending}
 					>
 						{highlight ? (
-							<TicketCheck className="w-5 h-5" />
+							<TicketCheck className="w-5 h-5 text-primary" />
 						) : (
-							<TicketPlus className="w-5 h-5" />
+							<TicketPlus className="w-5 h-5 text-primary" />
 						)}
 					</Button>
 				</div>
@@ -99,7 +99,7 @@ export default function ShortListItem({
 							}}
 							isLoading={removeMutation.isPending}
 						>
-							<X />
+							<X className="w-5 h-5 text-primary" />
 						</Button>
 					) : (
 						<Button
@@ -114,7 +114,7 @@ export default function ShortListItem({
 							}}
 							isLoading={addMutation.isPending}
 						>
-							<Plus />
+							<Plus className="w-5 h-5 text-primary" />
 						</Button>
 					)}
 					<Button
@@ -128,7 +128,11 @@ export default function ShortListItem({
 						isLoading={watchlistMutation.isPending}
 						tooltip={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
 					>
-						{isInWatchlist ? <BookmarkMinus /> : <BookmarkPlus />}
+						{isInWatchlist ? (
+							<BookmarkMinus className="w-5 h-5 text-primary" />
+						) : (
+							<BookmarkPlus className="w-5 h-5 text-primary" />
+						)}
 					</Button>
 				</div>
 			)}

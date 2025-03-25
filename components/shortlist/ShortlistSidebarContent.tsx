@@ -68,9 +68,7 @@ export default function ShortlistSidebarContent() {
 					</span>
 				</div>
 			</div>
-			{/* Sticky Header End */}
-
-			<div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar ">
+			<div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar pb-10">
 				{userShortlist
 					? userShortlist.movies.map((movie, index) => (
 							<ShortListItem
