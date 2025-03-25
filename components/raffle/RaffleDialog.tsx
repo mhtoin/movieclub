@@ -115,7 +115,12 @@ export default function RaffleDialog() {
 
 	return (
 		<>
-			<Button onClick={dialog.show} variant={"outline"} size={"icon"}>
+			<Button
+				onClick={dialog.show}
+				variant={"outline"}
+				size={"iconLg"}
+				className="rounded-full"
+			>
 				<Dices className="w-6 h-6" />
 			</Button>
 			<Ariakit.Dialog
