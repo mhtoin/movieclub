@@ -69,10 +69,10 @@ export default function NavBar() {
 		>
 			<div className="w-[90%] h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
 				{/**Right side */}
-				<div className="flex items-center justify-center gap-5">
+				<div className="flex items-center justify-center gap-5 lg:gap-10">
 					{<Menubar />}
 					<span
-						className={`font-bold ${isHome ? "text-primary-foreground" : "text-foreground"}`}
+						className={`font-bold text-xl lg:text-2xl siteTitle ${isHome ? "text-primary-foreground" : "text-foreground"}`}
 					>
 						leffaseura
 					</span>
