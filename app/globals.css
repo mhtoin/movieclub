@@ -1165,6 +1165,15 @@
 		}
 	}
 
+	.moviecard .actionButtons {
+		transform: translateX(-20px);
+		transition: 0.5s;
+	}
+
+	.moviecard:hover .actionButtons {
+		transform: translateX(0);
+	}
+
 	.upright {
 		writing-mode: vertical-lr;
 		text-orientation: upright;

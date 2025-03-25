@@ -61,7 +61,7 @@ export default function ShortListItem({
 			}`}
 		>
 			{showActions && requiresSelection && shortlistId === user?.shortlistId && (
-				<div className="opacity-0 group-hover:opacity-80 backdrop-blur-md transition-opacity duration-300 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
+				<div className="opacity-0 -translate-x-20 group-hover:opacity-80 group-hover:translate-x-0 backdrop-blur-md transition-all duration-500 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-lg p-2">
 					<Button
 						variant={"ghost"}
 						size={"iconSm"}
@@ -84,7 +84,7 @@ export default function ShortListItem({
 				</div>
 			)}
 			{showActions && (
-				<div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card/80 rounded-bl-lg rounded-tr-lg p-2">
+				<div className="translate-x-20 opacity-0 group-hover:opacity-80 group-hover:translate-x-0 backdrop-blur-md border border-border/50 transition-all duration-500 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card/80 rounded-bl-lg rounded-tr-lg p-2">
 					{removeFromShortList ? (
 						<Button
 							variant={"ghost"}
