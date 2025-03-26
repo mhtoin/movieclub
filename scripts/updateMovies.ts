@@ -83,6 +83,10 @@ export default async function updateMovies() {
 	const movies = await prisma.movie.findMany();
 
 	for (const movie of movies) {
+		if (movie.images) {
+			continue;
+		}
+
 		const res = await fetch(
 			`https://api.themoviedb.org/3/movie/${movie.tmdbId}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
 			{
