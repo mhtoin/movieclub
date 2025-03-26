@@ -215,12 +215,33 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 		};
 	}
 
+	// check if the most recent movie would be included in the movies of the month
+	const mostRecentMovie = await prisma.movie.findFirst({
+		where: {
+			watchDate: {
+				not: null,
+			},
+		},
+		orderBy: {
+			watchDate: "desc",
+		},
+	});
+
+	if (movies.some((movie) => movie.id === mostRecentMovie?.id)) {
+		return {
+			month: targetMonth,
+			movies: movies.slice(1),
+			lastMonth: lastMonth,
+		};
+	}
+
+	/*
 	if (currentMonth === targetMonth && movies.length > 1) {
 		return {
 			month: targetMonth,
 			movies: movies.slice(1),
 		};
-	}
+	}*/
 
 	return {
 		month: targetMonth,
