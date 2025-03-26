@@ -29,7 +29,10 @@ const reorder = (
 	const result = Array.from(tier);
 	const [removed] = result.splice(startIndex, 1);
 	result.splice(endIndex, 0, removed);
-	return result;
+	return result.map((item, index) => ({
+		...item,
+		position: index,
+	}));
 };
 
 const moveItem = (
@@ -173,24 +176,11 @@ export default function DnDTierContainer({
 		}
 
 		if (sInd === dInd) {
-			const sourceData = tierlistData.tierlistTiers[sInd].tierMovies[source.index];
-			const destinationData =
-				tierlistData.tierlistTiers[dInd].tierMovies[destination.index];
 			const items = reorder(
 				containerState?.[sInd],
 				source.index,
 				destination.index,
 			);
-
-			const newSourceData = {
-				...sourceData,
-				position: destination.index,
-			};
-
-			const newDestinationData = {
-				...destinationData,
-				position: source.index,
-			};
 
 			/**
 			 * Newstate contains the movies in the correct order
@@ -203,13 +193,20 @@ export default function DnDTierContainer({
 			 * source now has the destination index, and the destination has the source index
 			 */
 
+			// get the affected items
+			const startIdx = Math.min(source.index, destination.index);
+			const endIdx = Math.max(source.index, destination.index);
+			const affectedItems = items.slice(startIdx, endIdx + 1);
+
+			console.log("startIdx", startIdx, source.index, destination.index);
+			console.log("endIdx", endIdx, source.index, destination.index);
+
 			setContainerState(newState);
 			//queryClient.setQueryData(["tierlists", tierlistId], saveState);
 
 			saveMutation.mutate({
 				data: {
-					sourceData: newSourceData,
-					destinationData: newDestinationData,
+					items: affectedItems,
 				},
 				operation: "reorder",
 			});
@@ -280,11 +277,12 @@ export default function DnDTierContainer({
 			operation,
 		}: {
 			data: {
-				sourceData: TierMovie;
+				sourceData?: TierMovie;
 				updatedSourceData?: TierMovie;
 				sourceTierId?: string;
 				destinationTierId?: string;
 				destinationData?: TierMovie;
+				items?: TierMovie[];
 			};
 			operation: "reorder" | "move" | "rank";
 		}) => {

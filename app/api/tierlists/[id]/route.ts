@@ -30,21 +30,22 @@ export async function PUT(
 			updatedSourceData: TierMovie;
 			sourceTierId: string;
 			destinationTierId: string;
+			items: TierMovie[];
 		};
 	} = await request.json();
 	const {
 		sourceData,
-		destinationData,
 		updatedSourceData,
 		sourceTierId,
 		destinationTierId,
+		items,
 	} = data;
 	const operation = request.nextUrl.searchParams.get("operation");
 
 	if (operation === "reorder") {
 		try {
-			if (sourceData && destinationData) {
-				const res = await updateTierlist(params.id, sourceData, destinationData);
+			if (items) {
+				const res = await updateTierlist(params.id, items);
 				return NextResponse.json({ ok: true, data: res });
 			}
 		} catch (e) {

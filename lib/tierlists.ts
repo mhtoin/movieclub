@@ -4,11 +4,6 @@ import prisma from "./prisma";
 
 export const revalidate = 10;
 
-type TierUpdateData = {
-	position: number;
-	tierId?: string;
-};
-
 export async function getTierlists() {
 	return await prisma.tierlists.findMany({
 		include: {
@@ -229,57 +224,16 @@ export async function rankMovie({
 	return newTierMovie;
 }
 
-export async function updateTierlist(
-	_id: string,
-	sourceData: TierMovie,
-	destinationData: TierMovie,
-) {
-	const sourceUpdateData: TierUpdateData = {
-		position: sourceData.position,
-	};
-
-	if (sourceData.tierId) {
-		sourceUpdateData.tierId = sourceData.tierId;
-	}
-
-	const destinationUpdateData: TierUpdateData = {
-		position: destinationData.position,
-	};
-
-	if (destinationData.tierId) {
-		destinationUpdateData.tierId = destinationData.tierId;
-	}
-
-	const source = await prisma.tierMovie
-		.update({
-			where: { id: sourceData.id },
-			data: sourceUpdateData,
-			include: {
-				movie: true,
-			},
-		})
-		.catch((e) => {
-			console.error("error updating tierlist", e);
-			throw new Error("error updating tierlist");
-		});
-
-	const destination = await prisma.tierMovie
-		.update({
-			where: { id: destinationData.id },
-			data: destinationUpdateData,
-			include: {
-				movie: true,
-			},
-		})
-		.catch((e) => {
-			console.error("error updating tierlist", e);
-			throw new Error("error updating tierlist");
-		});
-
-	return {
-		source,
-		destination,
-	};
+export async function updateTierlist(_id: string, items: TierMovie[]) {
+	const result = await prisma.$transaction(async (tx) => {
+		for (const item of items) {
+			await tx.tierMovie.update({
+				where: { id: item.id },
+				data: { position: item.position },
+			});
+		}
+	});
+	return result;
 }
 
 export async function modifyTierlist(formData: FormData) {
