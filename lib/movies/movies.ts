@@ -482,6 +482,14 @@ export async function postRaffleWork({
 	// update the winner with the watch date
 	await updateChosenMovie(winner, winner.user?.id ?? "");
 
+	// reset the selection status of everyone
+	await prisma.shortlist.updateMany({
+		data: {
+			requiresSelection: false,
+			selectedIndex: null,
+		},
+	});
+
 	// update shortlist states, remove the winning movie from all shortlists
 	for (const participant of participants) {
 		const shortlist = await prisma.shortlist.findUnique({
