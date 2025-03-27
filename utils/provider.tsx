@@ -1,29 +1,20 @@
 "use client";
 
-import { PusherPovider } from "@/utils/PusherProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Pusher from "pusher-js";
-import { useState } from "react";
+import { getQueryClient } from "@/lib/getQueryClient";
 
-function Providers({ children }: React.PropsWithChildren) {
-  const [client] = useState(
-    new QueryClient({
-      defaultOptions: { queries: { staleTime: 60 * 1000, gcTime: 0 } },
-    })
-  );
+export default function Providers({ children }: { children: React.ReactNode }) {
+  // NOTE: Avoid useState when initializing the query client if you don't
+  //       have a suspense boundary between this and the code that may
+  //       suspend because React will throw away the client on the initial
+  //       render if it suspends and there is no boundary
+  const queryClient = getQueryClient();
 
-  const [pusher] = useState(
-    new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    })
-  );
   return (
-    <QueryClientProvider client={client}>
-      <PusherPovider pusher={pusher}>{children}</PusherPovider>
-      <ReactQueryDevtools initialIsOpen={false} position="top" />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
+      {children}
     </QueryClientProvider>
   );
 }
-
-export default Providers;

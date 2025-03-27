@@ -1,77 +1,80 @@
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
-import { getServerSession } from "next-auth";
+import type { Video } from "@/types/tmdb.type";
+import { validateRequest } from "./auth";
 
 export const revalidate = 10;
 
 export async function getAdditionalInfo(tmdbId: number) {
-  let tmdbDetailsRes = await fetch(
-    `https://api.themoviedb.org/3/movie/${tmdbId}?language=${"en-US"}&append_to_response=videos,watch/providers`,
-    {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
-      },
-    }
-  );
+	const tmdbDetailsRes = await fetch(
+		`https://api.themoviedb.org/3/movie/${tmdbId}?language=${"en-US"}&append_to_response=videos,watch/providers`,
+		{
+			method: "GET",
+			headers: {
+				accept: "application/json",
+				Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
+			},
+		},
+	);
 
-  let tmdbDetails = await tmdbDetailsRes.json();
+	const tmdbDetails = await tmdbDetailsRes.json();
 
-  let trailers = tmdbDetails.videos?.results
-    .filter(
-      (video: any) =>
-        video.type === "Trailer" && video.official && video.site === "YouTube"
-    )
-    .map((trailer: any) => {
-      return {
-        name: trailer.name,
-        id: trailer.id,
-        key: trailer.key,
-      };
-    }) as Trailer[];
+	const trailers = tmdbDetails.videos?.results
+		.filter(
+			(video: Video) =>
+				video.type === "Trailer" && video.official && video.site === "YouTube",
+		)
+		.map((trailer: Video) => {
+			return {
+				name: trailer.name,
+				id: trailer.id,
+				key: trailer.key,
+			};
+		});
 
-  let watchProviders = tmdbDetails["watch/providers"]?.results?.["FI"];
+	const watchProviders = tmdbDetails["watch/providers"]?.results?.FI;
 
-  return {
-    trailers: trailers,
-    watchProviders: watchProviders,
-    tagline: tmdbDetails.tagline,
-  };
+	return {
+		trailers: trailers,
+		watchProviders: watchProviders,
+		tagline: tmdbDetails.tagline,
+	};
 }
 
 export async function getWatchlist() {
-  const session = await getServerSession(authOptions);
+	const { user } = await validateRequest();
 
-  let pagesLeft = true;
-  let page = 1;
-  const movies = [];
+	if (!user) {
+		return [];
+	}
 
-  do {
-    let watchlist = await fetch(
-      `https://api.themoviedb.org/3/account/${session?.user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${session?.user.sessionId}&sort_by=created_at.asc`,
-      {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
-        },
-        cache: "no-store",
-      }
-    );
+	let pagesLeft = true;
+	let page = 1;
+	const movies = [];
 
-    let data = await watchlist.json();
-    let results = data && data.results ? data.results : [];
-    movies.push(results);
+	do {
+		const watchlist = await fetch(
+			`https://api.themoviedb.org/3/account/${user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.sessionId}&sort_by=created_at.asc`,
+			{
+				method: "GET",
+				headers: {
+					accept: "application/json",
+					Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
+				},
+				cache: "no-store",
+			},
+		);
 
-    let pages = data && data.total_pages ? data.total_pages : "";
-    
-    if (pages && pages >= page) {
-      page++;
-    } else {
-      pagesLeft = false;
-    }
-  } while (pagesLeft);
+		const data = await watchlist.json();
+		const results = data?.results ? data.results : [];
+		movies.push(results);
 
-  return movies.flat();
+		const pages = data?.total_pages ? data.total_pages : "";
+
+		if (pages && pages >= page) {
+			page++;
+		} else {
+			pagesLeft = false;
+		}
+	} while (pagesLeft);
+
+	return movies.flat();
 }

@@ -1,0 +1,35 @@
+import { getCurrentSession } from "@/lib/authentication/session";
+import { getQueryClient } from "@/lib/getQueryClient";
+import { getTierlist } from "@/lib/tierlists";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import TierContainer from "components/tierlist/TierContainer";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+
+export default async function Page({ params }: { params: { id: string } }) {
+	const { user } = await getCurrentSession();
+	if (!user) {
+		redirect("/");
+	}
+	const queryClient = getQueryClient();
+
+	queryClient.prefetchQuery({
+		queryKey: ["tierlists", params.id],
+		queryFn: () => getTierlist(params.id),
+	});
+
+	const dehydratedState = dehydrate(queryClient);
+
+	return (
+		<div className="flex flex-col gap-10 md:gap-5 py-20 items-center">
+			<HydrationBoundary state={dehydratedState}>
+				<Suspense fallback={<div>Loading...</div>}>
+					<TierContainer
+						tierlistId={params.id}
+						authorized={user.tierlistId === params.id}
+					/>
+				</Suspense>
+			</HydrationBoundary>
+		</div>
+	);
+}
