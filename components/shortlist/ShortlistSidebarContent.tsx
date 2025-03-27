@@ -10,6 +10,7 @@ import {
 import ShortListItem from "@/components/shortlist/ShortlistItem";
 import UserAvatar from "@/components/shortlist/UserAvatar";
 import { useUpdateParticipationMutation } from "@/lib/hooks";
+import { InfoIcon } from "lucide-react";
 
 export default function ShortlistSidebarContent() {
 	const { data: user } = useValidateSession();
@@ -69,7 +70,14 @@ export default function ShortlistSidebarContent() {
 					</span>
 				</div>
 			</div>
-			<div className="flex flex-col items-center gap-2 overflow-y-scroll no-scrollbar pb-10">
+			<div className="flex flex-col items-center gap-4 overflow-y-scroll no-scrollbar pb-10">
+				{userShortlist?.requiresSelection &&
+					userShortlist.selectedIndex === null && (
+						<div className="flex flex-row items-center justify-center gap-2 bg-secondary p-2 rounded-md">
+							<InfoIcon className="w-4 h-4" />
+							<span>You can only have 1 candidate</span>
+						</div>
+					)}
 				{userShortlist
 					? userShortlist.movies.map((movie, index) => (
 							<ShortListItem
