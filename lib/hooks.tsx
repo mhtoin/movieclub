@@ -33,6 +33,13 @@ import {
 import { getMovie } from "./movies/queries";
 import { sendShortlistUpdate } from "./utils";
 
+interface ShortlistErrorResponse {
+	ok: false;
+	message: string;
+	code?: string;
+	limit?: number;
+}
+
 export const useValidateSession = () => {
 	return useQuery({
 		queryKey: ["me"],
@@ -365,11 +372,10 @@ export const useUpdateShortlistMutation = () => {
 
 			if (!response.ok) {
 				const error = await response.json();
-				throw new Error(error.message);
+				throw error;
 			}
 
 			const data: ShortlistWithMovies = await response.json();
-
 			return data;
 		},
 		onSuccess: (data, variables) => {
@@ -386,10 +392,12 @@ export const useUpdateShortlistMutation = () => {
 				queryKey: ["shortlist", variables.shortlistId],
 			});
 		},
-		onError: (_error, variables) => {
-			if (!isOpen) {
+		onError: (error: ShortlistErrorResponse, variables) => {
+			if (!isOpen && error?.code === "SHORTLIST_LIMIT_REACHED") {
 				setIsOpen(true);
 				setMovie(variables.movie);
+			} else {
+				toast.error(error.message);
 			}
 		},
 	});

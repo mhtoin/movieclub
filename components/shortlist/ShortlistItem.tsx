@@ -109,7 +109,7 @@ export default function ShortListItem({
 							onClick={() => {
 								addMutation.mutate({
 									movie: movie,
-									shortlistId: shortlistId,
+									shortlistId: user?.shortlistId || "",
 								});
 							}}
 							isLoading={addMutation.isPending}
