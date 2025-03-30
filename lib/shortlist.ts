@@ -12,6 +12,18 @@ import { keyBy } from "./utils";
 
 export const revalidate = 10;
 
+export class ShortlistLimitError extends Error {
+	code: string;
+	limit: number;
+
+	constructor(limit: number) {
+		super(`Only ${limit} movies allowed, remove to make room`);
+		this.name = "ShortlistLimitError";
+		this.code = "SHORTLIST_LIMIT_REACHED";
+		this.limit = limit;
+	}
+}
+
 export async function getChosenMovie() {
 	// set today to 18:00:00 and check if it is a wednesday
 	const nextMovieDate = set(nextWednesday(new Date()), {
@@ -114,7 +126,7 @@ export async function connectMovieToShortlist(
 	});
 
 	if (shortlist?.movies.length && shortlist.movies.length >= 3) {
-		throw new Error("Only 3 movies allowed, remove to make room");
+		throw new ShortlistLimitError(3);
 	}
 
 	const updatedShortlist = await prisma.shortlist.update({
