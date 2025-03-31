@@ -102,23 +102,25 @@ export const useDiscoverSuspenseInfiniteQuery = () => {
 export const useSearchQuery = () => {
 	const searchParams = useSearchParams();
 	const titleSearch = searchParams.get("query");
-	const showOnlyAvailable = searchParams.get("showOnlyAvailable");
+	const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true";
 
 	return useInfiniteQuery({
-		queryKey: ["search", titleSearch, showOnlyAvailable ?? ""],
-		queryFn: async ({ pageParam }) =>
-			searchMovies(
+		queryKey: ["search", titleSearch ?? "", showOnlyAvailable],
+		queryFn: async ({ pageParam }) => {
+			return searchMovies(
 				pageParam,
 				titleSearch ?? "",
 				"search",
-				showOnlyAvailable === "true",
-			),
+				showOnlyAvailable,
+			);
+		},
 		getNextPageParam: (lastPage) => {
 			const { page, total_pages: totalPages } = lastPage;
 
 			return page < totalPages ? page + 1 : undefined;
 		},
 		initialPageParam: 1,
+		enabled: !!titleSearch,
 	});
 };
 
