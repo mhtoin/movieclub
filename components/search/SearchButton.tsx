@@ -12,7 +12,6 @@ import { userKeys } from "@/lib/users/userKeys";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Button } from "components/ui/Button";
-import { ChevronUp } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 
@@ -25,14 +24,12 @@ export default function SearchButton() {
 	const { setInitialRoute } = useDialogStore();
 	const [open, setOpen] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const resultsContainerRef = useRef<HTMLDivElement>(null);
 	const [inputValue, setInputValue] = useState(searchParams.get("query") || "");
 	const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true";
 	const [activeTab, setActiveTab] = useState<"results" | "recommended">(
 		(searchParams.get("query")?.length ?? 0) > 0 ? "results" : "recommended",
 	);
 	const modalRef = useRef<HTMLDivElement>(null);
-	const recommendedRef = useRef<HTMLDivElement>(null);
 	const queryClient = getQueryClient();
 
 	useEffect(() => {
@@ -44,6 +41,16 @@ export default function SearchButton() {
 			inputRef.current.focus();
 		}
 	}, [searchParams]);
+
+	// Effect to invalidate the search query when showOnlyAvailable changes
+	useEffect(() => {
+		if (inputValue.length > 0) {
+			// Invalidate and refetch the search query
+			queryClient.invalidateQueries({
+				queryKey: ["search", inputValue, showOnlyAvailable.toString()],
+			});
+		}
+	}, [showOnlyAvailable, inputValue, queryClient]);
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -125,25 +132,6 @@ export default function SearchButton() {
 				}`}
 			>
 				<div className="flex flex-col gap-2 relative h-full">
-					<Button
-						variant="outline"
-						size="icon"
-						className={`absolute bottom-0 right-0 z-30 ${
-							open ? "visible" : "invisible"
-						}`}
-						onClick={() => {
-							if (activeTab === "results") {
-								resultsContainerRef.current?.scrollTo({
-									top: 0,
-									behavior: "smooth",
-								});
-							} else {
-								recommendedRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-							}
-						}}
-					>
-						<ChevronUp className="w-4 h-4" />
-					</Button>
 					<div
 						className={`flex px-2 items-center justify-center bg-transparent h-[38px] ${
 							open ? "rounded-md border" : ""
@@ -206,7 +194,7 @@ export default function SearchButton() {
 										<div className="flex flex-row gap-2 bg-transparent items-center">
 											<Input
 												type="checkbox"
-												className="w-4 h-4"
+												className="w-4 h-4 accent-accent"
 												checked={showOnlyAvailable}
 												onChange={(e) => {
 													handleShowOnlyAvailable(e.target.checked);
