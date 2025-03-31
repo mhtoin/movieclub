@@ -4,7 +4,7 @@ import type { MovieWithUser } from "@/types/movie.type";
 import * as Ariakit from "@ariakit/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Dices } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/Button";
 import ActionButtons from "./ActionButtons";
 import Participants from "./Participants";
@@ -60,13 +60,29 @@ export default function RaffleDialog() {
 			: false;
 	}, [allShortlists]);
 
+	const raffleItemsContainerRef = useRef<HTMLDivElement>(null);
+
 	const nextIndex = useCallback(() => {
-		setCurrentIndex((currentIndex + 1) % movies.length);
+		const nextIndex = (currentIndex + 1) % movies.length;
+		setCurrentIndex(nextIndex);
 		const nextMovie = document.getElementById(
-			`movie-${movies[currentIndex].id}-${movies[currentIndex].user?.id}`,
+			`movie-${shuffledMovies[nextIndex].id}-${shuffledMovies[nextIndex].user?.id}`,
 		);
-		nextMovie?.scrollIntoView({ behavior: "smooth" });
-	}, [currentIndex, movies]);
+
+		if (nextMovie && raffleItemsContainerRef.current) {
+			const containerRect =
+				raffleItemsContainerRef.current.getBoundingClientRect();
+			const nextMovieRect = nextMovie.getBoundingClientRect();
+
+			const isVisible =
+				nextMovieRect.top >= containerRect.top &&
+				nextMovieRect.bottom <= containerRect.bottom;
+
+			if (!isVisible) {
+				nextMovie.scrollIntoView({ behavior: "smooth" });
+			}
+		}
+	}, [currentIndex, movies, shuffledMovies]);
 
 	const resetRaffle = useCallback(() => {
 		setCurrentIndex(0);
@@ -83,7 +99,7 @@ export default function RaffleDialog() {
 
 	useEffect(() => {
 		if (isPlaying) {
-			if (currentIndex === data?.chosenIndex && count > 3) {
+			if (currentIndex === data?.chosenIndex && count > 2) {
 				setIsPlaying(false);
 
 				setTimeout(() => {
@@ -100,7 +116,7 @@ export default function RaffleDialog() {
 					}
 					nextIndex();
 				},
-				count > 3 ? 500 : 200,
+				count > 2 ? 500 : 300,
 			);
 			return () => clearInterval(interval);
 		}
@@ -201,6 +217,7 @@ export default function RaffleDialog() {
 									shuffledMovies={shuffledMovies}
 									currentIndex={currentIndex}
 									started={started}
+									containerRef={raffleItemsContainerRef}
 								/>
 							</div>
 						</motion.div>
