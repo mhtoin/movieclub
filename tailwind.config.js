@@ -138,6 +138,15 @@ module.exports = {
 					"0%": { backgroundPosition: "0% 0%" },
 					"100%": { backgroundPosition: "100% 0%" },
 				},
+				"loading-pulse": {
+					"0%": { filter: "brightness(0.7) saturate(0.8)" },
+					"50%": {
+						filter: "brightness(1.2) saturate(1.2)",
+					},
+					"100%": {
+						filter: "brightness(0.7) saturate(0.8)",
+					},
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
@@ -154,6 +163,7 @@ module.exports = {
 				slideDownAndFade: "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
 				slideLeftAndFade: "slideLeftAndFade 1000ms cubic-bezier(0.16, 1, 0.3, 1)",
 				shimmer: "shimmer 2s infinite linear",
+				"loading-pulse": "loading-pulse 3s ease-in-out infinite",
 			},
 			backgroundImage: {
 				"gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
