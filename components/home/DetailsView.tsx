@@ -109,7 +109,7 @@ export default React.memo(
 								{movie.genres.map((genre) => (
 									<div
 										key={genre.id}
-										className="text-md text-primary-foreground/60 bg-card rounded-md px-4 py-4 h-full flex items-center justify-center"
+										className="text-md text-accent-foreground bg-accent rounded-md px-4 py-4 h-full flex items-center justify-center"
 									>
 										{genre.name}
 									</div>
@@ -252,11 +252,11 @@ export default React.memo(
 							transition={{ duration: 0.5, delay: 0.2 }}
 						>
 							<div className="w-full h-full p-10 flex flex-col gap-4">
-								<div className="flex flex-col gap-1 bg-card/60 backdrop-blur-md rounded-md p-2 overflow-y-auto max-h-[250px]">
-									<h2 className="text-2xl font-bold text-primary-foreground/60">
+								<div className="flex flex-col gap-1 bg-accent/80 backdrop-blur-md rounded-md p-2 overflow-y-auto max-h-[250px]">
+									<h2 className="text-2xl font-bold text-accent-foreground/60">
 										Overview
 									</h2>
-									<p className="text-xs text-primary-foreground/60 ">{movie.overview}</p>
+									<p className="text-xs text-accent-foreground/60 ">{movie.overview}</p>
 								</div>
 								<div className="flex flex-col gap-2">
 									<img
