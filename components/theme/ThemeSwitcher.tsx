@@ -68,7 +68,7 @@ export default function ThemeSwitcher() {
 			variant={"ghost"}
 			size={"icon"}
 			onClick={() => toggleTheme(theme === "dark" ? "light" : "dark")}
-			className="relative overflow-hidden"
+			className="relative overflow-hidden hover:bg-transparent group"
 		>
 			<div className="relative w-full h-full flex items-center justify-center">
 				<motion.div
@@ -80,7 +80,7 @@ export default function ThemeSwitcher() {
 					transition={{ duration: 0.3 }}
 					className="absolute"
 				>
-					<MoonIcon />
+					<MoonIcon className="font-bold shadow-lg h-5 w-5 drop-shadow-lg group-hover:text-gray-300 group-hover:drop-shadow-md transition-all duration-300" />
 				</motion.div>
 
 				<motion.div
@@ -92,7 +92,7 @@ export default function ThemeSwitcher() {
 					transition={{ duration: 0.3 }}
 					className="absolute"
 				>
-					<SunIcon className="text-yellow-400 font-bold shadow-lg" />
+					<SunIcon className="text-yellow-700 font-bold drop-shadow-lg h-5 w-5 group-hover:text-yellow-500 group-hover:drop-shadow-md transition-all duration-300" />
 				</motion.div>
 			</div>
 		</Button>
