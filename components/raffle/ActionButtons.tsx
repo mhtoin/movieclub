@@ -1,8 +1,9 @@
 import { useValidateSession } from "@/lib/hooks";
+import { shuffle } from "@/lib/utils";
 import type { MovieWithUser } from "@/types/movie.type";
 import type { UseMutateFunction } from "@tanstack/react-query";
 import { Dices } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "../ui/Button";
 import {
 	Tooltip,
@@ -39,6 +40,7 @@ export default function ActionButtons({
 	setIsPlaying,
 	setStarted,
 	shuffledMovies,
+	setShuffledMovies,
 	raffle,
 	disabled,
 }: ActionButtonsProps) {
@@ -48,6 +50,49 @@ export default function ActionButtons({
 	const isDev =
 		process.env.NODE_ENV === "development" ||
 		process.env.VERCEL_ENV === "preview";
+
+	const performShuffles = useCallback(
+		async (movies: MovieWithUser[], shuffleCount = 4) => {
+			let currentMovies = [...movies];
+
+			for (let i = 0; i < shuffleCount; i++) {
+				await new Promise((resolve) => setTimeout(resolve, 500));
+
+				currentMovies = shuffle(currentMovies);
+				setShuffledMovies(currentMovies);
+			}
+
+			return currentMovies;
+		},
+		[setShuffledMovies],
+	);
+
+	const startRaffle = useCallback(async () => {
+		if (isPlaying) {
+			setIsPlaying(false);
+			return;
+		}
+		const finalShuffledMovies = await performShuffles(shuffledMovies);
+
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+
+		setStarted(true);
+		setIsPlaying(true);
+
+		raffle({
+			movies: finalShuffledMovies,
+			startingUserId: user?.id || "",
+		});
+	}, [
+		isPlaying,
+		setIsPlaying,
+		setStarted,
+		performShuffles,
+		shuffledMovies,
+		raffle,
+		user,
+	]);
+
 	return (
 		<div className="flex flex-row gap-2 items-center justify-center">
 			<TooltipProvider>
@@ -58,18 +103,7 @@ export default function ActionButtons({
 							size={"default"}
 							className={`py-5 ${disabled ? "cursor-not-allowed" : ""}`}
 							disabled={disabled}
-							onClick={() => {
-								if (!isPlaying) {
-									setStarted(true);
-									setIsPlaying(true);
-									raffle({
-										movies: shuffledMovies,
-										startingUserId: user?.id || "",
-									});
-								} else {
-									setIsPlaying(false);
-								}
-							}}
+							onClick={startRaffle}
 						>
 							<div className="flex flex-row gap-2 items-center">
 								<Dices className="w-6 h-6" />

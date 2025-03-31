@@ -19,6 +19,9 @@ export async function POST(request: NextRequest, _response: NextResponse) {
 		(movie: MovieWithUser) => movie.tmdbId === chosen.tmdbId,
 	);
 
+	console.log("chosen", chosen);
+	console.log("chosenIndex", chosenIndex);
+
 	if (!noSave) {
 		waitUntil(postRaffleWork({ movies, winner: chosen, startingUserId }));
 	}
