@@ -11,9 +11,7 @@ export default function ProfileMenu() {
 	const { data: user, status } = useValidateSession();
 	const [open, setOpen] = useState(false);
 	const menu = Ariakit.useMenuStore({ open, setOpen });
-	const { isConnected } = useSocket();
-
-	const isConnecting = true;
+	const { isConnected, isConnecting } = useSocket();
 
 	return (
 		<Ariakit.MenuProvider>
