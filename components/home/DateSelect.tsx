@@ -118,7 +118,7 @@ export default function DateSelect({ months }: DateSelectProps) {
 	return (
 		<div className="flex flex-col gap-2 items-center justify-center w-full">
 			<div className="flex gap-1 flex-row items-center justify-center w-full">
-				<span className="text-xs whitespace-nowrap">
+				<span className="text-xs whitespace-nowrap text-primary-foreground">
 					{monthAndYear && date
 						? `${new Date(`${monthAndYear[0]}-${monthAndYear[1]}`).toLocaleDateString(
 								"en-US",
