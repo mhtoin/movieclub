@@ -11,7 +11,8 @@ export default function ProfileMenu() {
 	const { data: user, status } = useValidateSession();
 	const [open, setOpen] = useState(false);
 	const menu = Ariakit.useMenuStore({ open, setOpen });
-	const { isConnected } = useSocket();
+	const { isConnected, isConnecting } = useSocket();
+
 	return (
 		<Ariakit.MenuProvider>
 			<Ariakit.MenuButton
@@ -33,7 +34,7 @@ export default function ProfileMenu() {
 				<div
 					className={`absolute bottom-0 right-0 w-3 h-3 rounded-full transition-all duration-300 ${
 						isConnected ? "bg-success" : "bg-error"
-					}`}
+					} ${isConnecting ? "animate-pulse" : ""}`}
 				/>
 			</Ariakit.MenuButton>
 			<Ariakit.Menu
