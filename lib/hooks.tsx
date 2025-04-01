@@ -102,23 +102,25 @@ export const useDiscoverSuspenseInfiniteQuery = () => {
 export const useSearchQuery = () => {
 	const searchParams = useSearchParams();
 	const titleSearch = searchParams.get("query");
-	const showOnlyAvailable = searchParams.get("showOnlyAvailable");
+	const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true";
 
 	return useInfiniteQuery({
-		queryKey: ["search", titleSearch, showOnlyAvailable ?? ""],
-		queryFn: async ({ pageParam }) =>
-			searchMovies(
+		queryKey: ["search", titleSearch ?? "", showOnlyAvailable],
+		queryFn: async ({ pageParam }) => {
+			return searchMovies(
 				pageParam,
 				titleSearch ?? "",
 				"search",
-				showOnlyAvailable === "true",
-			),
+				showOnlyAvailable,
+			);
+		},
 		getNextPageParam: (lastPage) => {
 			const { page, total_pages: totalPages } = lastPage;
 
 			return page < totalPages ? page + 1 : undefined;
 		},
 		initialPageParam: 1,
+		enabled: !!titleSearch,
 	});
 };
 
@@ -705,6 +707,7 @@ export function useCreateQueryString(searchParams: URLSearchParams) {
 export function useSocket() {
 	const [isConnected, setIsConnected] = useState(false);
 	const [isRegistered, setIsRegistered] = useState(false);
+	const [isConnecting, setIsConnecting] = useState(false);
 	const webSocketRef = useRef<WebSocket | null>(null);
 	const { data: user } = useValidateSession();
 	const queryClient = useQueryClient();
@@ -717,6 +720,8 @@ export function useSocket() {
 
 	const connect = useCallback(async () => {
 		if (!user || isRegistered) return;
+
+		setIsConnecting(true);
 
 		try {
 			const res = await fetch(
@@ -744,6 +749,7 @@ export function useSocket() {
 			ws.onopen = () => {
 				setIsConnected(true);
 				setIsRegistered(true);
+				setIsConnecting(false);
 				reconnectAttempts.current = 0;
 				console.log("WebSocket connected");
 			};
@@ -763,13 +769,15 @@ export function useSocket() {
 
 			ws.onclose = () => {
 				setIsConnected(false);
-				// Only attempt reconnect if we haven't exceeded max attempts
 				if (reconnectAttempts.current < MAX_RECONNECT_ATTEMPTS) {
 					console.log("Reconnecting...");
+					setIsConnecting(true);
 					reconnectTimeoutRef.current = setTimeout(() => {
 						reconnectAttempts.current += 1;
 						connect();
 					}, RECONNECT_INTERVAL);
+				} else {
+					setIsConnecting(false);
 				}
 			};
 
@@ -780,6 +788,7 @@ export function useSocket() {
 		} catch (error) {
 			console.error("Failed to establish WebSocket connection:", error);
 			setIsRegistered(false);
+			setIsConnecting(false);
 		}
 	}, [user, isRegistered, queryClient]);
 
@@ -799,6 +808,7 @@ export function useSocket() {
 
 	return {
 		isConnected,
+		isConnecting,
 		connection: webSocketRef.current,
 	};
 }

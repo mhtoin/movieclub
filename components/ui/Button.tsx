@@ -20,7 +20,7 @@ const buttonVariants = cva(
 				destructive:
 					"bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
 				outline:
-					"border border-input bg-background shadow-sm hover:bg-accent/80 hover:text-accent-foreground",
+					"border border-input bg-background shadow-sm hover:bg-accent/80 hover:border-accent/80 hover:text-accent-foreground",
 				secondary:
 					"bg-secondary text-secondary-foreground shadow-sm hover:bg-accent/80",
 				ghost: "hover:bg-accent/80 hover:text-accent-foreground",
@@ -72,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		return tooltip ? (
 			<TooltipProvider delayDuration={0}>
 				<Tooltip>
-					<TooltipTrigger className="cursor-not-allowed">
+					<TooltipTrigger asChild>
 						<Comp
 							className={cn(buttonVariants({ variant, size, className }))}
 							ref={ref}
@@ -82,7 +82,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 						</Comp>
 					</TooltipTrigger>
 					<TooltipPortal>
-						<TooltipContent className="bg-card max-w-20 whitespace-pre-wrap p-2 z-[9999] hidden lg:block text-foreground relative">
+						<TooltipContent
+							className="bg-card max-w-xs whitespace-pre-wrap p-2 z-[9999] text-foreground relative hidden lg:block"
+							sideOffset={10}
+							align="center"
+							side="right"
+						>
 							{tooltip}
 						</TooltipContent>
 					</TooltipPortal>

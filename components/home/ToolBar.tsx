@@ -17,7 +17,7 @@ export default function ToolBar({
 
 	if (pathname && pathname !== "/home") {
 		return (
-			<div className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group">
+			<div className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-[8000]">
 				<RaffleDialog />
 			</div>
 		);
@@ -25,11 +25,11 @@ export default function ToolBar({
 	return (
 		<button
 			type="button"
-			className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group"
+			className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-[8000]"
 			onClick={() => setIsExpanded(!isExpanded)}
 		>
 			<div
-				className="w-14 h-14 flex items-center justify-center gap-2 flex-col bg-background relative border rounded-full p-4 hover:bg-background/20 group-hover:scale-105 group-hover:shadow-lg group-hover:bg-card/20 transition-all duration-300"
+				className="w-14 h-14 flex items-center justify-center gap-2 flex-col bg-background relative border rounded-full p-4 hover:bg-accent/20 group-hover:scale-105 group-hover:shadow-lg group-hover:bg-accent transition-all duration-300"
 				data-expanded={isExpanded}
 			>
 				<WrenchIcon className="w-6 h-6" />
@@ -48,7 +48,9 @@ export default function ToolBar({
 							}}
 							onClick={(e) => e.stopPropagation()}
 						>
-							<span className="text-xs font-medium">Raffle</span>
+							<span className="text-xs font-medium text-primary-foreground">
+								Raffle
+							</span>
 							<RaffleDialog />
 						</motion.div>
 					)}
@@ -73,7 +75,7 @@ export default function ToolBar({
 					)}
 				</AnimatePresence>
 			</div>
-			<p className="text-xs font-medium">Tools</p>
+			<p className="text-xs font-medium text-primary-foreground">Tools</p>
 		</button>
 	);
 }

@@ -1,8 +1,10 @@
+import { Button } from "@/components/ui/Button";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import RecommendedCard from "components/search/RecommendedCard";
 import { TabsContent } from "components/ui/Tabs";
 import { useValidateSession } from "lib/hooks";
 import { userKeys } from "lib/users/userKeys";
+import { ChevronUp } from "lucide-react";
 import { useRef } from "react";
 
 export default function RecommendedTab() {
@@ -20,7 +22,17 @@ export default function RecommendedTab() {
 			style={{ maxHeight: "calc(90vh - 150px)" }}
 			ref={recommendedRef}
 		>
-			<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
+			<Button
+				variant="outline"
+				size="icon"
+				className="absolute bottom-0 right-0 z-30"
+				onClick={() => {
+					recommendedRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+				}}
+			>
+				<ChevronUp className="w-4 h-4" />
+			</Button>
+			<div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center relative">
 				{recommended && Object.keys(recommended).length > 0 ? (
 					Object.keys(recommended).map((sourceMovie) => (
 						<div key={sourceMovie} className="w-full">

@@ -83,38 +83,47 @@ export const searchMovies = async (
 	);
 
 	if (type === "search" && showOnlyAvailable === true) {
-		const siteConfig = await fetch(`${getBaseURL()}/api/siteConfig`);
-		const siteConfigData: SiteConfig = await siteConfig.json();
-		const data: TMDBSearchResponse = await initialSearch.json();
-		const results = data.results;
-		const filteredResults: TMDBSearchResult[] = [];
+		try {
+			const siteConfig = await fetch(`${getBaseURL()}/api/siteConfig`);
+			const siteConfigData: SiteConfig = await siteConfig.json();
+			const data: TMDBSearchResponse = await initialSearch.json();
+			const results = data.results;
+			const filteredResults: TMDBSearchResult[] = [];
 
-		for (const result of results) {
-			const movie = await getMovie(result.id);
-			const flatrate = movie["watch/providers"]?.results.FI?.flatrate;
-			const free = movie["watch/providers"]?.results.FI?.free;
+			await Promise.all(
+				results.map(async (result) => {
+					const movie = await getMovie(result.id);
+					const flatrate = movie["watch/providers"]?.results.FI?.flatrate;
+					const free = movie["watch/providers"]?.results.FI?.free;
 
-			if (
-				flatrate?.find((provider) =>
-					siteConfigData.watchProviders.find(
-						(watchProvider) => provider.provider_id === watchProvider.provider_id,
-					),
-				) ||
-				free?.find((provider) =>
-					siteConfigData.watchProviders.find(
-						(watchProvider) => provider.provider_id === watchProvider.provider_id,
-					),
-				)
-			) {
-				filteredResults.push(result);
-			}
+					if (
+						flatrate?.find((provider) =>
+							siteConfigData.watchProviders.find(
+								(watchProvider) => provider.provider_id === watchProvider.provider_id,
+							),
+						) ||
+						free?.find((provider) =>
+							siteConfigData.watchProviders.find(
+								(watchProvider) => provider.provider_id === watchProvider.provider_id,
+							),
+						)
+					) {
+						filteredResults.push(result);
+					}
+				}),
+			);
+
+			return {
+				page: data.page,
+				results: filteredResults,
+				total_pages: Math.ceil(filteredResults.length / 20),
+				total_results: filteredResults.length,
+			};
+		} catch (error) {
+			console.error("Error filtering movies by availability:", error);
+			// Fallback to returning unfiltered results
+			return initialSearch.json();
 		}
-		return {
-			page: data.page,
-			results: filteredResults,
-			total_pages: Math.ceil(filteredResults.length / 20),
-			total_results: filteredResults.length,
-		};
 	}
 
 	return initialSearch.json();
