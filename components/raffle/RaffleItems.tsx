@@ -21,7 +21,7 @@ export default function RaffleItems({
 		>
 			<motion.div
 				layout
-				className="grid @5xl/items:grid-cols-6 @4xl/items:grid-cols-5 @3xl/items:grid-cols-4 @2xl/items:grid-cols-3 @lg/items:grid-cols-2 @xl/items:grid-cols-3 @xs/items:grid-cols-2 gap-7 p-5"
+				className="grid @5xl/items:grid-cols-4 @4xl/items:grid-cols-5 @3xl/items:grid-cols-4 @2xl/items:grid-cols-3 @lg/items:grid-cols-2 @xl/items:grid-cols-3 @xs/items:grid-cols-2 gap-7 p-5"
 			>
 				<AnimatePresence mode="sync" initial={false}>
 					{shuffledMovies.map((movie, index) => {
@@ -43,7 +43,7 @@ export default function RaffleItems({
 								}}
 								exit={{ opacity: 0, scale: 0.8 }}
 								transition={{
-									duration: 0.3,
+									duration: 0.5,
 									layout: {
 										type: "spring",
 										stiffness: 200,

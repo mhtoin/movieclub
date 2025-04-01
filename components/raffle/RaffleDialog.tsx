@@ -99,7 +99,7 @@ export default function RaffleDialog() {
 
 	useEffect(() => {
 		if (isPlaying) {
-			if (currentIndex === data?.chosenIndex && count > 2) {
+			if (currentIndex === data?.chosenIndex && count >= 2) {
 				setIsPlaying(false);
 
 				setTimeout(() => {
@@ -116,7 +116,32 @@ export default function RaffleDialog() {
 					}
 					nextIndex();
 				},
-				count > 2 ? 500 : 300,
+				(() => {
+					const targetIndex =
+						movies.length * 3 - (movies.length - (data?.chosenIndex ?? 0));
+
+					const currentPosition = movies.length * count + currentIndex;
+
+					const distanceToTarget = Math.abs(targetIndex - currentPosition);
+
+					const baseTiming = 200;
+
+					const smallSlowdown = distanceToTarget <= movies.length / 2 ? 100 : 0;
+
+					const mediumSlowdown = distanceToTarget <= movies.length / 4 ? 200 : 0;
+
+					const largeSlowdown = distanceToTarget <= movies.length / 8 ? 300 : 0;
+
+					const dramaticSlowdown = distanceToTarget <= 3 ? 400 : 0;
+
+					return (
+						baseTiming +
+						largeSlowdown +
+						mediumSlowdown +
+						smallSlowdown +
+						dramaticSlowdown
+					);
+				})(),
 			);
 			return () => clearInterval(interval);
 		}
