@@ -105,6 +105,18 @@ export default React.memo(
 							exit={{ opacity: 0, x: 100 }}
 							transition={{ duration: 0.5 }}
 						>
+							{movie.user && (
+								<div className="flex flex-col gap-2">
+									<img
+										src={movie.user.image}
+										alt={movie.user.name}
+										className="w-10 h-10 rounded-full"
+									/>
+									<span className="text-sm text-accent-foreground/60">
+										{movie.user.name}
+									</span>
+								</div>
+							)}
 							<div className="flex flex-row gap-2 h-10">
 								{movie.genres.map((genre) => (
 									<div
