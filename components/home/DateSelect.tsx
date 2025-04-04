@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/Button";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/Popover";
 import { getMoviesOfTheMonth } from "@/lib/movies/queries";
 import { getNextMonth } from "@/lib/utils";
 import type { MovieWithReviews } from "@/types/movie.type";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "components/ui/Button";
+import { Popover, PopoverContent, PopoverTrigger } from "components/ui/Popover";
 import {
 	Select,
 	SelectContent,

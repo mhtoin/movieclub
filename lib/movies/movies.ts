@@ -449,10 +449,12 @@ export async function postRaffleWork({
 	movies,
 	winner,
 	startingUserId,
+	watchDate,
 }: {
 	movies: MovieWithUser[];
 	winner: MovieWithUser;
 	startingUserId: string;
+	watchDate: Date;
 }) {
 	// estimate the time it takes to run the raffle
 	// 200ms per movie * 4 rounds + 500ms per movie for the last round is the absolute maximum
@@ -480,7 +482,7 @@ export async function postRaffleWork({
 	});
 
 	// update the winner with the watch date
-	await updateChosenMovie(winner, winner.user?.id ?? "");
+	await updateChosenMovie(winner, winner.user?.id ?? "", watchDate);
 
 	// reset the selection status of everyone
 	await prisma.shortlist.updateMany({
@@ -544,15 +546,19 @@ export async function postRaffleWork({
 	);
 }
 
-export async function updateChosenMovie(movie: Movie, userId: string) {
-	const nextDate = getNextDate();
+export async function updateChosenMovie(
+	movie: Movie,
+	userId: string,
+	watchDate: Date,
+) {
+	//const nextDate = getNextDate();
 
 	const updatedMovie = await prisma.movie.update({
 		where: {
 			id: movie.id,
 		},
 		data: {
-			watchDate: nextDate,
+			watchDate: format(watchDate, "yyyy-MM-dd"),
 			user: {
 				connect: {
 					id: userId,
@@ -634,7 +640,7 @@ export async function getStatistics() {
 	return dataObj;
 }
 
-function getNextDate() {
+function _getNextDate() {
 	return formatISO(nextWednesday(new Date()), {
 		representation: "date",
 	});

@@ -2,6 +2,7 @@ import ToolBar from "@/components/home/ToolBar";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { getAllMonths } from "@/lib/movies/movies";
 import { getAllShortlistsGroupedById } from "@/lib/shortlist";
+import { getSiteConfig } from "@/lib/siteConfig";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { SocketClient } from "components/common/SocketClient";
 import ReplaceDialog from "components/search/ReplaceDialog";
@@ -22,6 +23,9 @@ export default async function HomeLayout({
 }) {
 	const queryClient = getQueryClient();
 	const months = await getAllMonths();
+	const siteConfig = await getSiteConfig();
+
+	console.log(siteConfig);
 
 	queryClient.prefetchQuery({
 		queryKey: ["shortlists"],
@@ -40,7 +44,7 @@ export default async function HomeLayout({
 				{searchModal}
 
 				{children}
-				<ToolBar months={months} />
+				{siteConfig && <ToolBar months={months} siteConfig={siteConfig} />}
 			</HydrationBoundary>
 		</>
 	);

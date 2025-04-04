@@ -146,13 +146,20 @@ export const useRaffle = () => {
 		mutationFn: async ({
 			movies,
 			startingUserId,
+			watchDate,
 		}: {
 			movies: MovieWithUser[];
 			startingUserId: string;
+			watchDate: Date;
 		}) => {
 			const res = await fetch("/api/weeklyRaffle", {
 				method: "POST",
-				body: JSON.stringify({ userId: session?.id, movies, startingUserId }),
+				body: JSON.stringify({
+					userId: session?.id,
+					movies,
+					startingUserId,
+					watchDate,
+				}),
 			});
 			const data: { movie: MovieWithUser; chosenIndex: number } = await res.json();
 			return data;

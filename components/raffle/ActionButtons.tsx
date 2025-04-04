@@ -1,6 +1,8 @@
+import { WatchdatePicker } from "@/components/raffle/WatchdatePicker";
 import { useValidateSession } from "@/lib/hooks";
-import { shuffle } from "@/lib/utils";
+import { getNextDefaultWatchDate, shuffle } from "@/lib/utils";
 import type { MovieWithUser } from "@/types/movie.type";
+import type { SiteConfig } from "@prisma/client";
 import type { UseMutateFunction } from "@tanstack/react-query";
 import { Dices } from "lucide-react";
 import { useCallback, useState } from "react";
@@ -29,10 +31,12 @@ interface ActionButtonsProps {
 		{
 			movies: MovieWithUser[];
 			startingUserId: string;
+			watchDate: Date;
 		},
 		unknown
 	>;
 	disabled: boolean;
+	siteConfig: SiteConfig;
 }
 
 export default function ActionButtons({
@@ -43,10 +47,14 @@ export default function ActionButtons({
 	setShuffledMovies,
 	raffle,
 	disabled,
+	siteConfig,
 }: ActionButtonsProps) {
 	const { data: user } = useValidateSession();
 	const [noSave, setNoSave] = useState(false);
 	const [resultScreen, setResultScreen] = useState(false);
+	const [watchDate, setWatchDate] = useState<Date>(
+		new Date(getNextDefaultWatchDate(siteConfig.watchWeekDay)),
+	);
 	const isDev =
 		process.env.NODE_ENV === "development" ||
 		process.env.VERCEL_ENV === "preview";
@@ -82,6 +90,7 @@ export default function ActionButtons({
 		raffle({
 			movies: finalShuffledMovies,
 			startingUserId: user?.id || "",
+			watchDate,
 		});
 	}, [
 		isPlaying,
@@ -91,6 +100,7 @@ export default function ActionButtons({
 		shuffledMovies,
 		raffle,
 		user,
+		watchDate,
 	]);
 
 	return (
@@ -122,6 +132,7 @@ export default function ActionButtons({
 					</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
+			<WatchdatePicker watchDate={watchDate} setWatchDate={setWatchDate} />
 			{isDev && (
 				<DevTools
 					noSave={noSave}
