@@ -279,5 +279,6 @@ model TierMovie {
 model SiteConfig {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   watchProviders Provider[]
+  watchWeekDay String
 }
 

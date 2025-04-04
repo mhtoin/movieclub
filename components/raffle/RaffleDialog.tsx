@@ -2,6 +2,7 @@
 import { useRaffle, useShortlistsQuery } from "@/lib/hooks";
 import type { MovieWithUser } from "@/types/movie.type";
 import * as Ariakit from "@ariakit/react";
+import type { SiteConfig } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Dices } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -11,7 +12,11 @@ import Participants from "./Participants";
 import RaffleItems from "./RaffleItems";
 import ResultCard from "./ResultCard";
 
-export default function RaffleDialog() {
+export default function RaffleDialog({
+	siteConfig,
+}: {
+	siteConfig: SiteConfig;
+}) {
 	const dialog = Ariakit.useDialogStore();
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [count, setCount] = useState(0);
@@ -170,7 +175,7 @@ export default function RaffleDialog() {
 				backdrop={
 					<div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
 				}
-				className="fixed z-[9999] inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
+				className="fixed z-[9999] inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background/80 backdrop-blur-md origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
 			>
 				{finished && data ? (
 					<AnimatePresence mode="wait" presenceAffectsLayout>
@@ -236,6 +241,7 @@ export default function RaffleDialog() {
 									resetRaffle={resetRaffle}
 									raffle={raffle}
 									disabled={!allReady}
+									siteConfig={siteConfig}
 								/>
 
 								<RaffleItems

@@ -2,6 +2,7 @@
 
 import DateSelect from "@/components/home/DateSelect";
 import RaffleDialog from "@/components/raffle/RaffleDialog";
+import type { SiteConfig } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { WrenchIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -9,8 +10,10 @@ import { useState } from "react";
 
 export default function ToolBar({
 	months,
+	siteConfig,
 }: {
 	months: { month: string; label: string }[];
+	siteConfig: SiteConfig;
 }) {
 	const pathname = usePathname();
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -18,7 +21,7 @@ export default function ToolBar({
 	if (pathname && pathname !== "/home") {
 		return (
 			<div className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-[8000]">
-				<RaffleDialog />
+				<RaffleDialog siteConfig={siteConfig} />
 			</div>
 		);
 	}
@@ -51,7 +54,7 @@ export default function ToolBar({
 							<span className="text-xs font-medium text-primary-foreground">
 								Raffle
 							</span>
-							<RaffleDialog />
+							<RaffleDialog siteConfig={siteConfig} />
 						</motion.div>
 					)}
 				</AnimatePresence>

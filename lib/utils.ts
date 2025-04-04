@@ -1,5 +1,6 @@
 import { isServer } from "@tanstack/react-query";
 import { type ClassValue, clsx } from "clsx";
+import { type Day, format, nextDay } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function omit<T extends object, K extends keyof T>(
@@ -207,3 +208,28 @@ const getSecureRandom = (max: number) => {
 	crypto.getRandomValues(array);
 	return array[0] % max;
 };
+
+export function getNextDefaultWatchDate(dayOfTheWeek: string) {
+	const day = dayOfTheWeek.toLowerCase();
+
+	// map the day to the day of the week for date-fns
+	const dayMap: Record<string, Day> = {
+		sunday: 0,
+		monday: 1,
+		tuesday: 2,
+		wednesday: 3,
+		thursday: 4,
+		friday: 5,
+		saturday: 6,
+	};
+
+	const dayNumber = dayMap[day];
+
+	if (dayNumber === undefined) {
+		throw new Error(`Invalid day of the week: ${dayOfTheWeek}`);
+	}
+
+	const nextDate = nextDay(new Date(), dayNumber);
+
+	return format(nextDate, "yyyy-MM-dd");
+}
