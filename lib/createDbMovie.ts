@@ -4,36 +4,48 @@ import type { Prisma } from "@prisma/client";
 import type { SingleImage as MovieImage } from "@prisma/client";
 import { getBlurDataUrl } from "lib/utils";
 
-/**
- * Including all the images and videos is probably not necessary
- * so need to cull some of them using some criteria
- * Build a function that sorts the images according to the following criteria:
- * 1. ISO 639-1 is "en" or then the original language of the movie
- * 2. Vote average is greater than 0
- * 3. Height is greater than 1920
- * 4. Width is greater than 1080
- */
-function sortImages(images: Array<Image>, originalLanguage: string) {
-	return [...images].sort((a, b) => {
-		// First priority: dimensions that meet requirements
-		const aMeetsDimensions = a.height > 1080 && a.width > 1920;
-		const bMeetsDimensions = b.height > 1080 && b.width > 1920;
+type RankObject = {
+	[key: string]: {
+		image: Image;
+		points: number;
+	};
+};
 
-		if (aMeetsDimensions !== bMeetsDimensions) {
-			return bMeetsDimensions ? 1 : -1;
+function rankImages(images: Array<Image>, originalLanguage: string) {
+	const rankObject: RankObject = images.reduce((acc, image) => {
+		let points = 0;
+		if (
+			image.iso_639_1 === "en" ||
+			image.iso_639_1 === originalLanguage ||
+			!image.iso_639_1
+		) {
+			points += 3;
+		} else {
+			points -= 1;
+		}
+		if (image.vote_average > 5) {
+			points += 2;
+		}
+		if (image.vote_average > 0) {
+			points += 1;
+		}
+		if (image.height > 1920 && image.width > 1080) {
+			points += 2;
 		}
 
-		// Second priority: vote average (descending)
-		const voteDiff = b.vote_average - a.vote_average;
-		if (voteDiff !== 0) return voteDiff;
+		if (image.height === 1920 && image.width === 1080) {
+			points += 1;
+		}
+		acc[image.file_path] = {
+			image,
+			points: points,
+		};
+		return acc;
+	}, {} as RankObject);
 
-		// Third priority: language preference (en first, then original language)
-		const aLang = a.iso_639_1 === "en" || a.iso_639_1 === originalLanguage;
-		const bLang = b.iso_639_1 === "en" || b.iso_639_1 === originalLanguage;
-		if (aLang !== bLang) return aLang ? -1 : 1;
-
-		return 0;
-	});
+	return Object.values(rankObject)
+		.sort((a, b) => b.points - a.points)
+		.map((image) => image.image);
 }
 
 export const createDbMovie = async (
@@ -57,7 +69,7 @@ export const createDbMovie = async (
 	);
 
 	const backdrops = movieData.images?.backdrops
-		? sortImages(movieData.images.backdrops, movieData.original_language)
+		? rankImages(movieData.images.backdrops, movieData.original_language)
 		: [];
 	const backdropsWithBlurDataUrl: Array<MovieImage> = [];
 
@@ -74,7 +86,7 @@ export const createDbMovie = async (
 
 	// include only english posters
 	const posters = movieData.images?.posters
-		? sortImages(movieData.images.posters, movieData.original_language)
+		? rankImages(movieData.images.posters, movieData.original_language)
 		: [];
 	const postersWithBlurDataUrl: Array<MovieImage> = [];
 

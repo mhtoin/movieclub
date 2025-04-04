@@ -180,6 +180,9 @@ importers:
       '@types/node':
         specifier: 20.2.5
         version: 20.2.5
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       knip:
         specifier: ^5.46.2
         version: 5.46.2(@types/node@20.2.5)(typescript@5.8.2)
@@ -2080,6 +2083,10 @@ packages:
 
   dnd-core@16.0.1:
     resolution: {integrity: sha512-HK294sl7tbw6F6IeuK16YSBUoorvHpY8RHO+9yFfaJyCDVb6n7PRcezrOEOa2SBCqiYpemh5Jx20ZcjKdFAVng==}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   easing-coordinates@2.0.2:
     resolution: {integrity: sha512-uQpJaLQX2CKVnN27YvN4sL4pXyEFGAv00y4zgrC46H0EBHrDhJc/8OsT2CQ5/6yz6+d+u8ACGd9bo4v83FNVlg==}
@@ -5310,6 +5317,8 @@ snapshots:
       '@react-dnd/asap': 5.0.2
       '@react-dnd/invariant': 4.0.2
       redux: 4.2.1
+
+  dotenv@16.4.7: {}
 
   easing-coordinates@2.0.2: {}
 
