@@ -4,6 +4,7 @@ import { getNextDefaultWatchDate, shuffle } from "@/lib/utils";
 import type { MovieWithUser } from "@/types/movie.type";
 import type { SiteConfig } from "@prisma/client";
 import type { UseMutateFunction } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { Dices } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "../ui/Button";
@@ -31,7 +32,7 @@ interface ActionButtonsProps {
 		{
 			movies: MovieWithUser[];
 			startingUserId: string;
-			watchDate: Date;
+			watchDate: string;
 		},
 		unknown
 	>;
@@ -90,7 +91,7 @@ export default function ActionButtons({
 		raffle({
 			movies: finalShuffledMovies,
 			startingUserId: user?.id || "",
-			watchDate,
+			watchDate: format(watchDate, "yyyy-MM-dd"),
 		});
 	}, [
 		isPlaying,
