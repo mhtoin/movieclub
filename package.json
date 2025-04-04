@@ -23,7 +23,8 @@
 		"update-tiers": "tsx scripts/updateTiers.ts",
 		"migrate-tierlist": "tsx scripts/migrateTierlistData.ts",
 		"create-site-config": "tsx scripts/createSiteConfig.ts",
-		"prune-recommended": "tsx scripts/pruneRecommended.ts"
+		"prune-recommended": "tsx scripts/pruneRecommended.ts",
+		"add-movie": "tsx scripts/addMovieOfTheWeek.ts"
 	},
 	"dependencies": {
 		"@ariakit/react": "^0.4.15",
@@ -85,6 +86,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@tailwindcss/typography": "^0.5.9",
 		"@types/node": "20.2.5",
+		"dotenv": "^16.4.7",
 		"knip": "^5.46.2",
 		"typescript": "5.8.2"
 	},
