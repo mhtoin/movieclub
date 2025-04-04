@@ -23,6 +23,7 @@ const createSiteConfig = async () => {
 					provider_id: 496,
 				},
 			],
+			watchWeekDay: "wednesday",
 		},
 	});
 };
