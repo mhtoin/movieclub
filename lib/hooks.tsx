@@ -150,7 +150,7 @@ export const useRaffle = () => {
 		}: {
 			movies: MovieWithUser[];
 			startingUserId: string;
-			watchDate: Date;
+			watchDate: string;
 		}) => {
 			const res = await fetch("/api/weeklyRaffle", {
 				method: "POST",

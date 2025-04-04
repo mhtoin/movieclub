@@ -454,7 +454,7 @@ export async function postRaffleWork({
 	movies: MovieWithUser[];
 	winner: MovieWithUser;
 	startingUserId: string;
-	watchDate: Date;
+	watchDate: string;
 }) {
 	// estimate the time it takes to run the raffle
 	// 200ms per movie * 4 rounds + 500ms per movie for the last round is the absolute maximum
@@ -549,7 +549,7 @@ export async function postRaffleWork({
 export async function updateChosenMovie(
 	movie: Movie,
 	userId: string,
-	watchDate: Date,
+	watchDate: string,
 ) {
 	//const nextDate = getNextDate();
 
@@ -558,7 +558,7 @@ export async function updateChosenMovie(
 			id: movie.id,
 		},
 		data: {
-			watchDate: format(watchDate, "yyyy-MM-dd"),
+			watchDate: watchDate,
 			user: {
 				connect: {
 					id: userId,

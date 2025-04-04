@@ -2,7 +2,6 @@ import { postRaffleWork } from "@/lib/movies/movies";
 import { sample } from "@/lib/utils";
 import type { MovieWithUser } from "@/types/movie.type";
 import { waitUntil } from "@vercel/functions";
-import { format } from "date-fns";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest, _response: NextResponse) {
@@ -10,12 +9,10 @@ export async function POST(request: NextRequest, _response: NextResponse) {
 		movies,
 		startingUserId,
 		watchDate,
-	}: { movies: MovieWithUser[]; startingUserId: string; watchDate: Date } =
+	}: { movies: MovieWithUser[]; startingUserId: string; watchDate: string } =
 		await request.json();
 	const noSave = cookies().get("noSave")?.value === "true";
-
-	const formattedWatchDate = format(watchDate, "yyyy-MM-dd");
-	console.log("formattedWatchDate", formattedWatchDate);
+	console.log("watchDate", watchDate);
 
 	const chosen = sample([...movies], true);
 	if (!chosen) {
