@@ -640,20 +640,6 @@ export async function getStatistics() {
 	return dataObj;
 }
 
-function _getNextDate() {
-	return formatISO(nextWednesday(new Date()), {
-		representation: "date",
-	});
-
-	/*
-  return set(nextWednesday(new Date()), {
-    hours: 18,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });*/
-}
-
 export async function getAllMonths() {
 	const movies = await prisma.movie.findMany({
 		where: {
