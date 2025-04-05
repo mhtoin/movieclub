@@ -72,6 +72,17 @@ export async function GET(request: Request): Promise<Response> {
 	});
 
 	if (existingUser !== null) {
+		const discordAvatar = `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`;
+		if (existingUser?.user?.image !== discordAvatar) {
+			await db?.user.update({
+				where: {
+					id: existingUser.userId,
+				},
+				data: {
+					image: discordAvatar,
+				},
+			});
+		}
 		const sessionToken = generateSessionToken();
 		const session = await createSession(sessionToken, existingUser.userId);
 		setSessionTokenCookie(sessionToken, session.expiresAt);
