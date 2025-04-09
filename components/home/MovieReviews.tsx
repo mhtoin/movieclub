@@ -32,7 +32,6 @@ export default function MovieReviews({
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(true);
 
-	// Function to scroll to the next or previous review
 	const scroll = (direction: "left" | "right") => {
 		if (!scrollContainerRef.current) return;
 
@@ -43,7 +42,6 @@ export default function MovieReviews({
 		container.scrollBy({ left: scrollAmount, behavior: "smooth" });
 	};
 
-	// Update scroll buttons state
 	const updateScrollButtonsState = useCallback(() => {
 		if (!scrollContainerRef.current) return;
 
@@ -54,12 +52,10 @@ export default function MovieReviews({
 		);
 	}, []);
 
-	// Add scroll event listener
 	useEffect(() => {
 		const container = scrollContainerRef.current;
 		if (container) {
 			container.addEventListener("scroll", updateScrollButtonsState);
-			// Initial check
 			updateScrollButtonsState();
 
 			return () => {
@@ -71,28 +67,29 @@ export default function MovieReviews({
 	return (
 		<div className="absolute inset-0 top-5 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
 			<div className="relative w-full max-w-3xl">
-				{/* Scroll buttons */}
-				<Button
-					onClick={() => scroll("left")}
-					variant="outline"
-					disabled={!canScrollLeft}
-					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
-					aria-label="Previous review"
-				>
-					<ChevronLeftIcon className="h-5 w-5" />
-				</Button>
+				{canScrollLeft && (
+					<Button
+						onClick={() => scroll("left")}
+						variant="outline"
+						disabled={!canScrollLeft}
+						className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+						aria-label="Previous review"
+					>
+						<ChevronLeftIcon className="h-5 w-5" />
+					</Button>
+				)}
+				{canScrollRight && (
+					<Button
+						onClick={() => scroll("right")}
+						disabled={!canScrollRight}
+						className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+						aria-label="Next review"
+						variant="outline"
+					>
+						<ChevronRightIcon className="h-5 w-5" />
+					</Button>
+				)}
 
-				<Button
-					onClick={() => scroll("right")}
-					disabled={!canScrollRight}
-					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
-					aria-label="Next review"
-					variant="outline"
-				>
-					<ChevronRightIcon className="h-5 w-5" />
-				</Button>
-
-				{/* Carousel container */}
 				<div
 					ref={scrollContainerRef}
 					className="w-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
