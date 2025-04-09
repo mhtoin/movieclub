@@ -182,7 +182,7 @@ export default React.memo(
 								exit={{ opacity: 0, x: -20 }}
 								transition={{ duration: 0.3 }}
 							>
-								<MovieReviews movieReviews={movie?.tierMovies} />
+								<MovieReviews movieReviews={movie?.tierMovies} movieId={movie?.id} />
 							</motion.div>
 						)}
 					</AnimatePresence>

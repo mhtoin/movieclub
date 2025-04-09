@@ -1,28 +1,30 @@
+import CreateReviewDialog from "@/components/home/CreateReviewDialog";
+import { useValidateSession } from "@/lib/hooks";
 import type { MovieReview } from "@/types/movie.type";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { type JSONContent, generateHTML } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import StarRadio from "components/tierlist/StarRadio";
 import { Button } from "components/ui/Button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function MovieReviews({
 	movieReviews,
-}: { movieReviews: MovieReview[] }) {
-	// Filter out reviews with null tier fields
+	movieId,
+}: { movieReviews: MovieReview[]; movieId: string }) {
 	const validReviews = movieReviews.filter(
 		(review) =>
 			review?.tier?.tierlist?.user && (review?.review || review?.rating !== "0"),
 	);
 
-	// If there are no valid reviews, show a message instead
 	if (!validReviews.length) {
 		return (
-			<div className="absolute inset-0 top-16 flex items-center justify-center">
+			<div className="absolute inset-0 top-16 flex flex-col gap-4 items-center justify-center">
 				<div className="p-6 border border-border/30 bg-card/50 backdrop-blur-sm rounded-md">
 					<h2 className="text-lg font-bold">No reviews available</h2>
 					<p>There are no reviews for this movie yet.</p>
 				</div>
+				<CreateReviewDialog movieId={movieId} />
 			</div>
 		);
 	}
@@ -31,6 +33,7 @@ export default function MovieReviews({
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(true);
+	const { data: user } = useValidateSession();
 
 	const scroll = (direction: "left" | "right") => {
 		if (!scrollContainerRef.current) return;
@@ -162,6 +165,16 @@ export default function MovieReviews({
 								aria-label={`Go to review ${index + 1}`}
 							/>
 						))}
+						{reviews.find(
+							(review) => review.tier?.tierlist?.user?.id === user?.id,
+						) && (
+							<Button
+								type="button"
+								variant="ghost"
+								onClick={() => {}}
+								className="w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors"
+							/>
+						)}
 					</div>
 				)}
 			</div>
