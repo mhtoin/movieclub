@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
@@ -14,6 +15,8 @@ export async function POST(request: NextRequest) {
 		where: { id },
 		data: { rating: rating.toString() },
 	});
+
+	revalidatePath("/home");
 
 	return NextResponse.json({ message: "Rating saved" });
 }

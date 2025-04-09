@@ -40,6 +40,9 @@ export default function StarRadio({
 			queryClient.invalidateQueries({
 				queryKey: ["tierlists", tierlistId],
 			});
+			queryClient.invalidateQueries({
+				queryKey: ["pastMovies"],
+			});
 		},
 		onError: () => {
 			toast.error("Failed to save rating");
