@@ -132,37 +132,38 @@ export default function MovieReviews({
 					</div>
 				</div>
 
-				{/* Pagination dots */}
-				<div className="flex justify-center gap-2 mt-4">
-					{reviews.map((_, index) => (
-						<Button
-							type="button"
-							key={index}
-							variant="ghost"
-							onClick={() => {
-								if (!scrollContainerRef.current) return;
-								const container = scrollContainerRef.current;
-								const itemWidth = container.offsetWidth;
-								container.scrollTo({
-									left: itemWidth * index,
-									behavior: "smooth",
-								});
-							}}
-							className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${
-								scrollContainerRef.current &&
-								Math.round(
-									scrollContainerRef.current.scrollLeft /
-										scrollContainerRef.current.offsetWidth,
-								) === index
-									? "bg-primary/70"
-									: !scrollContainerRef.current && index === 0
+				{reviews.length > 1 && (
+					<div className="flex justify-center gap-2 mt-4">
+						{reviews.map((_, index) => (
+							<Button
+								type="button"
+								key={index}
+								variant="ghost"
+								onClick={() => {
+									if (!scrollContainerRef.current) return;
+									const container = scrollContainerRef.current;
+									const itemWidth = container.offsetWidth;
+									container.scrollTo({
+										left: itemWidth * index,
+										behavior: "smooth",
+									});
+								}}
+								className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${
+									scrollContainerRef.current &&
+									Math.round(
+										scrollContainerRef.current.scrollLeft /
+											scrollContainerRef.current.offsetWidth,
+									) === index
 										? "bg-primary/70"
-										: ""
-							}`}
-							aria-label={`Go to review ${index + 1}`}
-						/>
-					))}
-				</div>
+										: !scrollContainerRef.current && index === 0
+											? "bg-primary/70"
+											: ""
+								}`}
+								aria-label={`Go to review ${index + 1}`}
+							/>
+						))}
+					</div>
+				)}
 			</div>
 		</div>
 	);
