@@ -198,9 +198,6 @@ export default function DnDTierContainer({
 			const endIdx = Math.max(source.index, destination.index);
 			const affectedItems = items.slice(startIdx, endIdx + 1);
 
-			console.log("startIdx", startIdx, source.index, destination.index);
-			console.log("endIdx", endIdx, source.index, destination.index);
-
 			setContainerState(newState);
 			//queryClient.setQueryData(["tierlists", tierlistId], saveState);
 

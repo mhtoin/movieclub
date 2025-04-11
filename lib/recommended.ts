@@ -17,8 +17,6 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 	});
 	const recomendedMovies = [];
 	let page = 1;
-	console.log("config", siteConfig);
-	console.log("Because you liked", sourceMovie.title);
 
 	while (recomendedMovies.length < 5) {
 		const response = await fetch(
@@ -50,13 +48,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 						),
 				);
 				if (watchProviderExists) {
-					console.log(
-						"found provider for",
-						existingMovie.title,
-						watchProviderExists,
-					);
 					recomendedMovies.push(existingMovie);
-					console.log("Movie already exists", existingMovie.title);
 					await prisma.movie.update({
 						where: {
 							id: existingMovie.id,
@@ -78,13 +70,10 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 							},
 						},
 					});
-				} else {
-					console.log("no provider for", existingMovie.title);
 				}
 				if (recomendedMovies.length >= 5) break;
 			} else {
 				// fetch details from tmdb
-				console.log("Movie does not exist", movie.title);
 				const detailsRes = await fetch(
 					`https://api.themoviedb.org/3/movie/${movie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
 					{
@@ -108,7 +97,6 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 								(provider) => provider.provider_id === service.provider_id,
 							);
 							if (provider) {
-								console.log("found provider for", movieDetails.title, provider);
 								hasStreamingService = true;
 							}
 						}
@@ -119,13 +107,11 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 								(provider) => provider.provider_id === service.provider_id,
 							);
 							if (provider) {
-								console.log("found provider for", movieDetails.title, provider);
 								hasStreamingService = true;
 							}
 						}
 					}
 					if (hasStreamingService) {
-						console.log("has streaming service", movieDetails.title);
 						const movieObject = await createDbMovie(movieDetails);
 						await prisma.movie.create({
 							data: {
@@ -148,15 +134,12 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 						});
 						recomendedMovies.push(movieDetails);
 						if (recomendedMovies.length >= 5) break;
-					} else {
-						console.log("no streaming service for", movieDetails.title);
 					}
 				}
 			}
 		}
 		if (recomendedMovies.length >= 5) break;
 		if (data.total_pages === page) break;
-		console.log("page", page);
 		page++;
 	}
 	queryClient.invalidateQueries({
@@ -174,8 +157,6 @@ export async function removeRecommended(sourceMovieId: string, user: User) {
 		},
 	});
 
-	console.log("removed recommended movies", recommendedMovies);
-	console.log("invalidating recommended movies", user.id);
 	queryClient.invalidateQueries({
 		queryKey: ["users", user.id, "recommendedMovies"],
 	});
