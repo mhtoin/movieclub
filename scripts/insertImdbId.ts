@@ -18,7 +18,6 @@ async function main() {
 			);
 			const data = await response.json();
 			const fetchedImdbId = data.imdb_id;
-			console.log(fetchedImdbId);
 
 			if (fetchedImdbId) {
 				await prisma.movie.update({
