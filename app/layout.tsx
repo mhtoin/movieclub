@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter } from "next/font/google";
 export const metadata = {
 	title: "movieclub",
-	description: "Th app for your long-distance movie club",
+	description: "The app for your long-distance movie club",
 };
 
 const inter = Inter({
@@ -19,11 +19,7 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
-			<head>
-				<script dangerouslySetInnerHTML={{ __html: getTheme }} />
-				<script dangerouslySetInnerHTML={{ __html: getAccent }} />
-			</head>
+		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
 			>
@@ -31,6 +27,8 @@ export default async function RootLayout({
 					{children}
 					<SpeedInsights />
 				</Providers>
+				<script dangerouslySetInnerHTML={{ __html: getTheme }} />
+				<script dangerouslySetInnerHTML={{ __html: getAccent }} />
 			</body>
 		</html>
 	);
