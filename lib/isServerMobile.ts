@@ -6,7 +6,7 @@ import { userAgentFromString } from "next/server";
  * @description next.js mobile detection
  */
 export async function isServerMobile() {
-  const headersList = headers();
+  const headersList = await headers();
   const userAgent = headersList.get("user-agent");
   const { device } = userAgentFromString(userAgent || undefined);
 

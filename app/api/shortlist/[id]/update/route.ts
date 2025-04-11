@@ -2,22 +2,20 @@ import { getCurrentSession } from "@/lib/authentication/session";
 import { ShortlistLimitError, connectMovieToShortlist } from "@/lib/shortlist";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function PUT(
-	request: NextRequest,
-	{ params }: { params: { id: string } },
-) {
-	const { user } = await getCurrentSession();
-	if (!user || user.shortlistId !== params.id) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
+    const { user } = await getCurrentSession();
+    if (!user || user.shortlistId !== params.id) {
 		return NextResponse.json(
 			{ ok: false, message: "Unauthorized" },
 			{ status: 401 },
 		);
 	}
-	const { movie } = await request.json();
-	const movieId = "id" in movie ? movie.id : movie.tmdbId;
-	const shortlistId = params.id;
+    const { movie } = await request.json();
+    const movieId = "id" in movie ? movie.id : movie.tmdbId;
+    const shortlistId = params.id;
 
-	try {
+    try {
 		const updatedShortlist = await connectMovieToShortlist(movieId, shortlistId);
 		return NextResponse.json(updatedShortlist);
 	} catch (e) {

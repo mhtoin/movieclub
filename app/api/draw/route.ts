@@ -2,7 +2,7 @@ import { simulateRaffle } from "@/lib/movies/movies";
 // @ts-nocheck
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest, _response: NextResponse) {
+export async function POST(request: NextRequest) {
 	try {
 		// get all shortlists and check that everyone is ready
 		const body = await request.json();

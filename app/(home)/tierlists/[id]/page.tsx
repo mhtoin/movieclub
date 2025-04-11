@@ -6,21 +6,22 @@ import TierContainer from "components/tierlist/TierContainer";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-export default async function Page({ params }: { params: { id: string } }) {
-	const { user } = await getCurrentSession();
-	if (!user) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+    const params = await props.params;
+    const { user } = await getCurrentSession();
+    if (!user) {
 		redirect("/");
 	}
-	const queryClient = getQueryClient();
+    const queryClient = getQueryClient();
 
-	queryClient.prefetchQuery({
+    queryClient.prefetchQuery({
 		queryKey: ["tierlists", params.id],
 		queryFn: () => getTierlist(params.id),
 	});
 
-	const dehydratedState = dehydrate(queryClient);
+    const dehydratedState = dehydrate(queryClient);
 
-	return (
+    return (
 		<div className="flex flex-col gap-10 md:gap-5 py-20 items-center">
 			<HydrationBoundary state={dehydratedState}>
 				<Suspense fallback={<div>Loading...</div>}>
