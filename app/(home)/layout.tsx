@@ -5,12 +5,10 @@ import { getAllShortlistsGroupedById } from "@/lib/shortlist";
 import { getSiteConfig } from "@/lib/siteConfig";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { SocketClient } from "components/common/SocketClient";
+import NavbarWrapper from "components/nav/NavbarWrapper";
 import ReplaceDialog from "components/search/ReplaceDialog";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { Toaster } from "sonner";
-
-const NavBar = dynamic(() => import("components/nav/Navbar"));
 
 export default async function HomeLayout({
 	searchModal,
@@ -31,7 +29,7 @@ export default async function HomeLayout({
 		<>
 			<HydrationBoundary state={dehydrate(queryClient)}>
 				<Suspense fallback={null}>
-					<NavBar />
+					<NavbarWrapper />
 				</Suspense>
 				<SocketClient />
 
