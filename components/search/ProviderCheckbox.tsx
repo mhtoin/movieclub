@@ -14,7 +14,10 @@ interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
 }
 
 export const ProviderCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
-	function ProviderCheckbox({ children, provider, isLoading, ...props }, ref) {
+	function ProviderCheckbox(
+		{ children, provider, isLoading, handleClick, ...props },
+		ref,
+	) {
 		const [checked, setChecked] = useState(props.defaultChecked ?? false);
 		const [focusVisible, setFocusVisible] = useState(false);
 
@@ -40,7 +43,7 @@ export const ProviderCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
 						onChange={(event) => {
 							setChecked(event.target.checked);
 							props.onChange?.(event);
-							props.handleClick?.(provider.provider_id.toString());
+							handleClick?.(provider.provider_id.toString());
 						}}
 					/>
 				</Ariakit.VisuallyHidden>
