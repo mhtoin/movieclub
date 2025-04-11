@@ -40,13 +40,11 @@ async function generateTestData() {
 
 	// take 3 * users.length movies out of the movies array and allocate them to shortlists
 	const shortlistMovies = movies.slice(0, 3 * users.length);
-	console.log(shortlistMovies.length);
-	console.log(shortlistMovies);
+
 	const shortlists: Array<Array<string>> = Array.from(
 		{ length: users.length },
 		() => [],
 	);
-	console.log(shortlists);
 	for (const [index, movie] of shortlistMovies.entries()) {
 		const res = await fetch(
 			`https://api.themoviedb.org/3/movie/${movie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
@@ -115,8 +113,6 @@ async function generateTestData() {
 		const randomUser = users[Math.floor(Math.random() * users.length)];
 		dbMovie.watchDate = watchDates[index];
 		dbMovie.user = { connect: { id: randomUser.id } };
-
-		console.log("pushing to db", data.id, data.title);
 
 		// save to db
 		try {

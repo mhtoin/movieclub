@@ -22,16 +22,14 @@ export default async function addMovieOfTheWeek() {
 		},
 	);
 	const data: TMDBMovieResponse = await res.json();
-	console.log(data);
-	const movie = await createDbMovie(data);
-	console.log(movie);
 
-	const movieToUpdate = await prisma.movie.findUnique({
+	const movie = await createDbMovie(data);
+
+	await prisma.movie.findUnique({
 		where: {
 			id: "67e436aa9b65666e6e718029",
 		},
 	});
-	console.log(movieToUpdate);
 
 	await prisma.movie.update({
 		where: { id: "67e436aa9b65666e6e718029" },

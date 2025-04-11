@@ -344,8 +344,6 @@ export const useAddToWatchlistMutation = () => {
 
 			const data = await response.json();
 
-			console.log("data", data);
-
 			return data;
 		},
 		onSuccess: () => {
@@ -448,7 +446,6 @@ export const useRemoveFromShortlistMutation = () => {
 			sendShortlistUpdate(variables.userId);
 		},
 		onError: (_error, _variables) => {
-			console.log("error", _error);
 			if (!isOpen) {
 				setIsOpen(true);
 				//setMovie(variables.movie);
@@ -758,7 +755,6 @@ export function useSocket() {
 				setIsRegistered(true);
 				setIsConnecting(false);
 				reconnectAttempts.current = 0;
-				console.log("WebSocket connected");
 			};
 
 			ws.onmessage = (event) => {
@@ -777,7 +773,6 @@ export function useSocket() {
 			ws.onclose = () => {
 				setIsConnected(false);
 				if (reconnectAttempts.current < MAX_RECONNECT_ATTEMPTS) {
-					console.log("Reconnecting...");
 					setIsConnecting(true);
 					reconnectTimeoutRef.current = setTimeout(() => {
 						reconnectAttempts.current += 1;
