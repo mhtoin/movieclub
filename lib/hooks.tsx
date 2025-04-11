@@ -720,7 +720,7 @@ export function useSocket() {
 	const queryClient = useQueryClient();
 
 	// Reconnection logic
-	const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+	const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const reconnectAttempts = useRef(0);
 	const MAX_RECONNECT_ATTEMPTS = 5;
 	const RECONNECT_INTERVAL = 3000;
