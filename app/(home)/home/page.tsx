@@ -30,7 +30,6 @@ export default async function HomePage() {
 		<div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth relative bg-mainBackground">
 			<div className="snap-start min-h-screen shrink-0">
 				<Suspense fallback={null}>
-					{/* @ts-expect-error Server Component */}
 					<CurrentMovieWrapper />
 				</Suspense>
 			</div>
