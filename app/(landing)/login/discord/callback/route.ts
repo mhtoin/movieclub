@@ -13,7 +13,7 @@ export async function GET(request: Request): Promise<Response> {
 	const url = new URL(request.url);
 	const code = url.searchParams.get("code");
 	const state = url.searchParams.get("state");
-	const cookieStore = cookies();
+	const cookieStore = await cookies();
 	const storedState = cookieStore.get("discord_oauth_state")?.value ?? null;
 
 	if (!code || state === null || storedState === null) {

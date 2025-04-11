@@ -11,16 +11,18 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
 	_request: Request,
-	{ params }: { params: { id: string } },
+	props: { params: Promise<{ id: string }> },
 ) {
+	const params = await props.params;
 	const tierlist = await getTierlist(params.id);
 	return NextResponse.json(tierlist);
 }
 
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } },
+	props: { params: Promise<{ id: string }> },
 ) {
+	const params = await props.params;
 	const {
 		data,
 	}: {
@@ -74,7 +76,6 @@ export async function PUT(
 
 				if (res.destination <= 2 && res.source && res.source > 2) {
 					// add recommended for this movie for the user
-					console.log("adding recommended for this movie for the user", res);
 					if (res.user) {
 						waitUntil(updateRecommended(res.movie, res.user));
 					}
