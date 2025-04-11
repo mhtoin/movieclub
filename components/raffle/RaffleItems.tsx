@@ -1,7 +1,7 @@
 import type { MovieWithUser } from "@/types/movie.type";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import type { RefObject } from "react";
+import type { JSX, RefObject } from "react";
 
 export default function RaffleItems({
 	shuffledMovies,
@@ -12,7 +12,7 @@ export default function RaffleItems({
 	shuffledMovies: MovieWithUser[];
 	currentIndex: number;
 	started: boolean;
-	containerRef: RefObject<HTMLDivElement>;
+	containerRef: RefObject<HTMLDivElement | null>;
 }): JSX.Element {
 	return (
 		<div
