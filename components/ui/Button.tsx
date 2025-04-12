@@ -9,7 +9,6 @@ import {
 	TooltipTrigger,
 } from "components/ui/Tooltip";
 import { Loader2 } from "lucide-react";
-import * as React from "react";
 
 const buttonVariants = cva(
 	"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -48,61 +47,51 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+	extends React.ComponentProps<"button">,
 		VariantProps<typeof buttonVariants> {
 	asChild?: boolean;
 	isLoading?: boolean;
 	tooltip?: string;
 }
 
-const Button = (
-    {
-        ref,
-        className,
-        variant,
-        size,
-        asChild = false,
-        isLoading = false,
-        tooltip,
-        ...props
-    }: ButtonProps & {
-        ref: React.RefObject<HTMLButtonElement>;
-    }
-) => {
-    const Comp = asChild ? Slot : "button";
-    return tooltip ? (
-        <TooltipProvider delayDuration={0}>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Comp
-                        className={cn(buttonVariants({ variant, size, className }))}
-                        ref={ref}
-                        {...props}
-                    >
-                        {isLoading ? <Loader2 className="animate-spin" /> : props.children}
-                    </Comp>
-                </TooltipTrigger>
-                <TooltipPortal>
-                    <TooltipContent
-                        className="bg-card max-w-xs whitespace-pre-wrap p-2 z-9999 text-foreground relative hidden lg:block"
-                        sideOffset={10}
-                        align="center"
-                        side="right"
-                    >
-                        {tooltip}
-                    </TooltipContent>
-                </TooltipPortal>
-            </Tooltip>
-        </TooltipProvider>
-    ) : (
-        <Comp
-            className={cn(buttonVariants({ variant, size, className }))}
-            ref={ref}
-            {...props}
-        >
-            {isLoading ? <Loader2 className="animate-spin" /> : props.children}
-        </Comp>
-    );
+const Button: React.FC<ButtonProps> = ({
+	className,
+	variant,
+	size,
+	asChild = false,
+	isLoading = false,
+	tooltip,
+	...props
+}) => {
+	const Comp = asChild ? Slot : "button";
+	return tooltip ? (
+		<TooltipProvider delayDuration={0}>
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Comp
+						className={cn(buttonVariants({ variant, size, className }))}
+						{...props}
+					>
+						{isLoading ? <Loader2 className="animate-spin" /> : props.children}
+					</Comp>
+				</TooltipTrigger>
+				<TooltipPortal>
+					<TooltipContent
+						className="bg-card max-w-xs whitespace-pre-wrap p-2 z-9999 text-foreground relative hidden lg:block"
+						sideOffset={10}
+						align="center"
+						side="right"
+					>
+						{tooltip}
+					</TooltipContent>
+				</TooltipPortal>
+			</Tooltip>
+		</TooltipProvider>
+	) : (
+		<Comp className={cn(buttonVariants({ variant, size, className }))} {...props}>
+			{isLoading ? <Loader2 className="animate-spin" /> : props.children}
+		</Comp>
+	);
 };
 Button.displayName = "Button";
 
