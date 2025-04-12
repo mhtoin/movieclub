@@ -55,55 +55,55 @@ export interface ButtonProps
 	tooltip?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	(
-		{
-			className,
-			variant,
-			size,
-			asChild = false,
-			isLoading = false,
-			tooltip,
-			...props
-		},
-		ref,
-	) => {
-		const Comp = asChild ? Slot : "button";
-		return tooltip ? (
-			<TooltipProvider delayDuration={0}>
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<Comp
-							className={cn(buttonVariants({ variant, size, className }))}
-							ref={ref}
-							{...props}
-						>
-							{isLoading ? <Loader2 className="animate-spin" /> : props.children}
-						</Comp>
-					</TooltipTrigger>
-					<TooltipPortal>
-						<TooltipContent
-							className="bg-card max-w-xs whitespace-pre-wrap p-2 z-9999 text-foreground relative hidden lg:block"
-							sideOffset={10}
-							align="center"
-							side="right"
-						>
-							{tooltip}
-						</TooltipContent>
-					</TooltipPortal>
-				</Tooltip>
-			</TooltipProvider>
-		) : (
-			<Comp
-				className={cn(buttonVariants({ variant, size, className }))}
-				ref={ref}
-				{...props}
-			>
-				{isLoading ? <Loader2 className="animate-spin" /> : props.children}
-			</Comp>
-		);
-	},
-);
+const Button = (
+    {
+        ref,
+        className,
+        variant,
+        size,
+        asChild = false,
+        isLoading = false,
+        tooltip,
+        ...props
+    }: ButtonProps & {
+        ref: React.RefObject<HTMLButtonElement>;
+    }
+) => {
+    const Comp = asChild ? Slot : "button";
+    return tooltip ? (
+        <TooltipProvider delayDuration={0}>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Comp
+                        className={cn(buttonVariants({ variant, size, className }))}
+                        ref={ref}
+                        {...props}
+                    >
+                        {isLoading ? <Loader2 className="animate-spin" /> : props.children}
+                    </Comp>
+                </TooltipTrigger>
+                <TooltipPortal>
+                    <TooltipContent
+                        className="bg-card max-w-xs whitespace-pre-wrap p-2 z-9999 text-foreground relative hidden lg:block"
+                        sideOffset={10}
+                        align="center"
+                        side="right"
+                    >
+                        {tooltip}
+                    </TooltipContent>
+                </TooltipPortal>
+            </Tooltip>
+        </TooltipProvider>
+    ) : (
+        <Comp
+            className={cn(buttonVariants({ variant, size, className }))}
+            ref={ref}
+            {...props}
+        >
+            {isLoading ? <Loader2 className="animate-spin" /> : props.children}
+        </Comp>
+    );
+};
 Button.displayName = "Button";
 
 export { Button, buttonVariants };
