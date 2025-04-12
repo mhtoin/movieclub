@@ -20,7 +20,7 @@ export default function ToolBar({
 
 	if (pathname && pathname !== "/home") {
 		return (
-			<div className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-[8000]">
+			<div className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-8000">
 				<RaffleDialog siteConfig={siteConfig} />
 			</div>
 		);
@@ -28,7 +28,7 @@ export default function ToolBar({
 	return (
 		<button
 			type="button"
-			className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-[8000]"
+			className="fixed flex flex-col items-center justify-center gap-2 bottom-5 left-5 group isolate z-8000"
 			onClick={() => setIsExpanded(!isExpanded)}
 		>
 			<div

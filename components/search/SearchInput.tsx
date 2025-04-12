@@ -124,7 +124,7 @@ export default function SearchInput({
 				className="relative w-full min-h-12 flex flex-col gap-2 border border-border/80 rounded-lg transition-all duration-300 bg-input p-2"
 			>
 				<div className="flex items-center">
-					<div className="flex-grow">
+					<div className="grow">
 						<KeywordCombobox handleSelect={handleKeywordSelect} />
 					</div>
 					{keywords.length > 0 && (
@@ -157,7 +157,7 @@ export default function SearchInput({
 			<Input
 				type="text"
 				placeholder="Search movies by title"
-				className="border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-sm placeholder:text-sm w-full text-foreground"
+				className="border-none ring-0 outline-hidden focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-sm placeholder:text-sm w-full text-foreground"
 				value={value}
 				onChange={(e) => setValue(e.target.value)}
 			/>

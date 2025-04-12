@@ -35,7 +35,7 @@ export default function NavBar() {
 	if (isMobile) {
 		return (
 			<div
-				className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+				className={`min-w-screen w-screen flex items-center justify-center p-2 z-100 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
 					isTransparent
 						? "bg-transparent"
 						: "bg-background/80 backdrop-blur-md border-b"
@@ -61,7 +61,7 @@ export default function NavBar() {
 	}
 	return (
 		<div
-			className={`min-w-screen w-screen flex items-center justify-center p-2 z-[100] fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+			className={`min-w-screen w-screen flex items-center justify-center p-2 z-100 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
 				isTransparent
 					? "bg-transparent  "
 					: "bg-background/80 backdrop-blur-md border-b border-border/10 dark:border-border/40"

@@ -43,7 +43,7 @@ export default function WatchlistContainer() {
 
 			<div className="relative h-dvh w-full overflow-y-auto no-scrollbar">
 				{/* Top gradient overlay */}
-				<div className="absolute top-0 left-0 right-0 h-5 bg-gradient-to-b from-background to-transparent z-10" />
+				<div className="absolute top-0 left-0 right-0 h-5 bg-linear-to-b from-background to-transparent z-10" />
 
 				<div className="h-full w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 overflow-y-auto no-scrollbar bg-background">
 					{watchlist?.map((movie) => {
@@ -60,7 +60,7 @@ export default function WatchlistContainer() {
 				</div>
 
 				{/* Bottom gradient overlay */}
-				<div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-background to-transparent z-10" />
+				<div className="absolute bottom-0 left-0 right-0 h-5 bg-linear-to-t from-background to-transparent z-10" />
 			</div>
 		</div>
 	);

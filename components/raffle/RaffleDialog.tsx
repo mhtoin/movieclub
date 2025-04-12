@@ -173,9 +173,9 @@ export default function RaffleDialog({
 				store={dialog}
 				onClose={resetRaffle}
 				backdrop={
-					<div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-[enter]:opacity-100 data-[enter]:backdrop-blur-sm " />
+					<div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-enter:opacity-100 data-enter:backdrop-blur-xs " />
 				}
-				className="fixed z-[9999] inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background/80 backdrop-blur-md origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-[enter]:opacity-100 data-[enter]:scale-100"
+				className="fixed z-9999 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background/80 backdrop-blur-md origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-enter:opacity-100 data-enter:scale-100"
 			>
 				{finished && data ? (
 					<AnimatePresence mode="wait" presenceAffectsLayout>
