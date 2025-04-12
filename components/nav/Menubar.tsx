@@ -95,18 +95,18 @@ export default function Menubar() {
 				store={menu}
 				onMouseEnter={() => menu.show()}
 				onMouseLeave={() => menu.hide()}
-				className="focus:outline-none"
+				className="focus:outline-hidden"
 			>
 				<HamburgerMenu open={open} />
 			</Ariakit.MenuButton>
 
 			<Ariakit.Menu
 				gutter={10}
-				className="menu z-[9999] focus:outline-none"
+				className="menu z-9999 focus:outline-hidden"
 				store={menu}
 				onMouseLeave={() => menu.hide()}
 			>
-				<nav data-magnetic className="z-[9999]" ref={navRef}>
+				<nav data-magnetic className="z-9999" ref={navRef}>
 					<ul>
 						<MenuItem store={menu}>
 							<Link href={"/home"}>

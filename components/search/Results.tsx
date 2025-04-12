@@ -78,7 +78,7 @@ export default function Results() {
 				className="relative h-dvh w-full overflow-y-auto no-scrollbar"
 				ref={resultsContainerRef}
 			>
-				<div className="sticky top-0 left-0 right-0 h-5 bg-gradient-to-b from-background to-transparent z-10" />
+				<div className="sticky top-0 left-0 right-0 h-5 bg-linear-to-b from-background to-transparent z-10" />
 				<div className="h-dvh w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 bg-background relative">
 					{data
 						? data?.pages?.map((page) => (
@@ -108,7 +108,7 @@ export default function Results() {
 						</Button>
 					)}
 				</div>
-				<div className="fixed bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-background to-transparent z-10" />
+				<div className="fixed bottom-0 left-0 right-0 h-5 bg-linear-to-t from-background to-transparent z-10" />
 			</div>
 		</div>
 	);

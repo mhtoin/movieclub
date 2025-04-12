@@ -142,7 +142,7 @@ export default function ShortListItem({
 				width={"150"}
 				height={"150"}
 				className={
-					"primary-img w-[150px] h-auto 2xl:w-[150px] !rounded-none md:rounded-md"
+					"primary-img w-[150px] h-auto 2xl:w-[150px] rounded-none! md:rounded-md"
 				}
 				priority={removeFromShortList}
 				loading={removeFromShortList ? "eager" : "lazy"}

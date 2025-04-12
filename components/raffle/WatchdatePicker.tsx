@@ -29,7 +29,7 @@ export function WatchdatePicker({
 					{watchDate ? format(watchDate, "PPP") : <span>Pick a date</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-auto p-0 z-[9999]">
+			<PopoverContent className="w-auto p-0 z-9999">
 				<Calendar
 					mode="single"
 					weekStartsOn={1}

@@ -58,7 +58,7 @@ export default function SuccessReview({
 			}}
 		>
 			<DialogContent
-				className="max-w-4xl max-h-[90vh] h-[90vh] overflow-hidden p-0 z-[9999]"
+				className="max-w-4xl max-h-[90vh] h-[90vh] overflow-hidden p-0 z-9999"
 				variant="noClose"
 			>
 				{isLoading ? (
@@ -73,7 +73,7 @@ export default function SuccessReview({
 								src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.backdrop_path || latestMovieData.movie.poster_path}`}
 								alt={latestMovieData.movie.title}
 								fill
-								className="object-cover opacity-30 blur-sm"
+								className="object-cover opacity-30 blur-xs"
 								priority
 							/>
 							{/* Dark overlay for better readability */}
@@ -82,7 +82,7 @@ export default function SuccessReview({
 
 						{/* Content container with proper padding and z-index */}
 						<div className="relative z-10 grid grid-cols-2 gap-4 p-6 w-full h-full">
-							<div className="flex-shrink-0 col-span-1 h-full w-full border">
+							<div className="shrink-0 col-span-1 h-full w-full border">
 								<Image
 									src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.poster_path}`}
 									alt={latestMovieData.movie.title}

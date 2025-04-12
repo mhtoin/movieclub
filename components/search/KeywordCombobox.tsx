@@ -45,7 +45,7 @@ export default function KeywordCombobox({
 					return true;
 				}}
 				placeholder="Search for a keyword"
-				className=" h-10 text-foreground placeholder:text-foreground/70 w-full rounded-md border bg-input px-3 py-2 text-xs lg:text-sm border-none ring-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+				className=" h-10 text-foreground placeholder:text-foreground/70 w-full rounded-md border bg-input px-3 py-2 text-xs lg:text-sm border-none ring-0 outline-hidden focus-visible:ring-0 focus-visible:ring-offset-0 "
 			/>
 
 			<Ariakit.ComboboxPopover
@@ -58,7 +58,7 @@ export default function KeywordCombobox({
 						<Ariakit.ComboboxItem
 							key={keyword.id}
 							value={keyword.id.toString()}
-							className="flex cursor-default items-center gap-2 rounded p-2 !outline-[none] hover:bg-secondary"
+							className="flex cursor-default items-center gap-2 rounded p-2 outline-[none]! hover:bg-secondary"
 						>
 							{keyword.name}
 						</Ariakit.ComboboxItem>

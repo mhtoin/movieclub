@@ -159,7 +159,7 @@ export default function SearchButton() {
 								// prefetch recommended movies
 								queryClient.prefetchQuery(userKeys.recommended(user?.id ?? ""));
 							}}
-							className="bg-transparent focus:outline-none focus:outline-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 border-none z-20 flex-1 w-full"
+							className="bg-transparent focus:outline-hidden focus:outline-0 outline-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none z-20 flex-1 w-full"
 						/>
 						<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 z-20">
 							<span className="text-xs">⌘</span>K
@@ -180,13 +180,13 @@ export default function SearchButton() {
 										<div className="flex flex-row gap-2 bg-transparent">
 											<TabsTrigger
 												value="recommended"
-												className="bg-background/40 [&[data-state=active]]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
+												className="bg-background/40 data-[state=active]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
 											>
 												Recommended
 											</TabsTrigger>
 											<TabsTrigger
 												value="results"
-												className="bg-background/40 [&[data-state=active]]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
+												className="bg-background/40 data-[state=active]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
 											>
 												Results
 											</TabsTrigger>
@@ -221,7 +221,7 @@ export default function SearchButton() {
 
 			{open && (
 				<div
-					className="fixed top-0 left-0 w-screen h-screen bg-background/50 backdrop-blur-sm z-10"
+					className="fixed top-0 left-0 w-screen h-screen bg-background/50 backdrop-blur-xs z-10"
 					onClick={handleClose}
 					onKeyDown={handleClose}
 				/>

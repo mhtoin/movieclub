@@ -135,12 +135,12 @@ export default React.memo(
 					{isExpanded &&
 						!alwaysExpanded &&
 						createPortal(
-							<div className="fixed top-5 right-5 z-[101]">
+							<div className="fixed top-5 right-5 z-101">
 								<Button
 									variant="ghost"
 									size="iconLg"
 									onClick={handleClose}
-									className="z-[101]"
+									className="z-101"
 									tabIndex={isExpanded ? 0 : -1}
 								>
 									<X className="w-8 h-8 text-primary-foreground" />
