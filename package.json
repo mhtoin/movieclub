@@ -79,6 +79,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-react-aria-components": "^1.1.3",
     "tsx": "^4.7.1",
+    "tw-animate-css": "^1.2.8",
     "vaul": "^0.9.9",
     "zustand": "^4.3.9"
   },

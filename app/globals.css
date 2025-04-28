@@ -1,16 +1,199 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @config '../tailwind.config.js';
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+:root {
+	color-scheme: light;
+	--background: hsl(40 20% 98%);
+	--foreground: hsl(240 10% 3.9%);
+	--card: hsl(0 0% 100%);
+	--card-foreground: hsl(240 10% 3.9%);
+	--popover: hsl(0 0% 80%);
+	--popover-foreground: hsl(240 10% 3.9%);
+	--primary: hsl(240 5.9% 10%);
+	--primary-foreground: hsl(0 0% 98%);
+	--secondary: hsl(240 4.8% 95.9%);
+	--secondary-foreground: hsl(240 5.9% 10%);
+	--muted: hsl(240 4.8% 95.9%);
+	--muted-foreground: hsl(240 3.8% 46.1%);
+	--accent: hsl(181, 47%, 45%);
+	--accent-foreground: hsl(0, 0%, 100%);
+	--destructive: hsl(0 84.2% 60.2%);
+	--destructive-foreground: hsl(0 0% 98%);
+	--border: hsl(0, 0%, 27%);
+	--input: hsl(240 5.9% 90%);
+	--ring: hsl(240 5.9% 10%);
+	--radius: 0.5rem;
+	--ring: hsl(216 34% 17%);
+	--success: hsl(113, 93%, 38%);
+	--error: hsl(0, 99%, 32%);
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+	--mobilenav: hsl(164 64% 42%);
+	--popoverBackground: hsl(204 4% 16%);
+
+	/* Add transition for all CSS variables */
+	transition:
+		color 0.3s ease,
+		background-color 0.3s ease,
+		border-color 0.3s ease,
+		--background 0.3s ease,
+		--foreground 0.3s ease,
+		--card 0.3s ease,
+		--card-foreground 0.3s ease,
+		--popover 0.3s ease,
+		--popover-foreground 0.3s ease,
+		--primary 0.3s ease,
+		--primary-foreground 0.3s ease,
+		--secondary 0.3s ease,
+		--secondary-foreground 0.3s ease,
+		--muted 0.3s ease,
+		--muted-foreground 0.3s ease,
+		--accent 0.3s ease,
+		--accent-foreground 0.3s ease,
+		--destructive 0.3s ease,
+		--destructive-foreground 0.3s ease,
+		--border 0.3s ease,
+		--input 0.3s ease,
+		--ring 0.3s ease;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	/*
+    * Surfaces
+    */
+	--background: hsl(0, 0%, 2%);
+	--main-background: hsl(0, 0%, 2%);
+	--card: hsl(0, 0%, 10%);
+	--popover: hsl(0, 0%, 12%);
+	--navigation: hsl(0, 0%, 25%);
+	--dialog: hsl(240 10% 3.9%);
+	--opaque-card: hsl(0, 0%, 15%);
+	/*
+    * Components
+    */
+	--primary: hsl(0 0% 98%);
+	--secondary: hsl(0, 0%, 25%);
+	--muted: hsl(240 3.7% 15.9%);
+	--accent: hsl(203, 5%, 35%);
+	--destructive: hsl(0 62.8% 30.6%);
+	--border: hsl(0, 0%, 25%);
+	--input: hsl(240 3.7% 15.9%);
+	--ring: hsl(240 4.9% 83.9%);
+	/*
+    * Typography
+    */
+	--primary-foreground: hsl(0, 0%, 100%);
+	--foreground: hsl(0 0% 98%);
+	--card-foreground: hsl(0 0% 98%);
+	--secondary-foreground: hsl(0, 0%, 100%);
+	--popover-foreground: hsl(0, 0%, 100%);
+	--muted-foreground: hsl(240 5% 64.9%);
+	--accent-foreground: hsl(0 0% 98%);
+	--destructive-foreground: hsl(0 0% 98%);
+	--ring: hsl(216 34% 17%);
+	--success: hsl(113 100% 40%);
+	--error: hsl(9 100% 40%);
+	--mobilenav: hsl(191 100% 39%);
+}
+
+.light {
+	--background: hsl(50 20% 98%);
+	--main-background: hsl(0 0% 2%);
+	--foreground: hsl(240 10% 3.9%);
+	--card: hsl(220, 20%, 97%);
+	--card-foreground: hsl(240 10% 3.9%);
+	--popover: hsl(220, 20%, 97%);
+	--popover-foreground: hsl(240 10% 3.9%);
+	--primary: hsl(0, 0%, 27%);
+	--primary-foreground: hsl(0 0% 98%);
+	--secondary: hsl(0, 0%, 39%);
+	--secondary-foreground: hsl(240 5.9% 10%);
+	--muted: hsl(240 4.8% 95.9%);
+	--muted-foreground: hsl(240, 4%, 33%);
+	--accent: hsl(181, 47%, 45%);
+	--accent-foreground: hsl(0, 0%, 100%);
+	--destructive: hsl(0 84.2% 60.2%);
+	--destructive-foreground: hsl(0 0% 98%);
+	--border: hsl(240, 7%, 30%);
+	--input: hsl(181, 20%, 95%);
+	--ring: hsl(240 5.9% 10%);
+	--radius: 0.5rem;
+	--ring: hsl(216 34% 17%);
+	--success: hsl(113 100% 40%);
+	--error: hsl(9 100% 40%);
+	--mobilenav: hsl(164 64% 42%);
+	--popoverBackground: hsl(204 4% 16%);
+	--opaque-card: hsl(0, 0%, 15%);
+}
+
+:root[data-theme="light"][data-accent="magenta"] {
+	--accent: hsl(340, 82%, 52%);
+	--accent-foreground: hsl(0, 0%, 6%);
+	--secondary: hsl(340, 82%, 52%);
+	--secondary-foreground: hsl(240 10% 3.9%);
+}
+
+:root[data-theme="light"][data-accent="aqua"] {
+	--accent: hsl(187, 49%, 17%);
+	--accent-foreground: hsl(0, 0%, 6%);
+	--secondary: hsl(188, 9%, 52%);
+	--secondary-foreground: hsl(0, 0%, 100%);
+}
+
+:root[data-theme="light"][data-accent="orange"] {
+	--accent: hsl(25, 97%, 53%);
+	--accent-foreground: hsl(0, 0%, 6%);
+	--secondary: hsl(25, 97%, 53%);
+	--secondary-foreground: hsl(0, 0%, 0%);
+}
+
+/**
+	 * @theme dark
+	 */
+
+
+
+:root[data-theme="dark"][data-accent="Magenta"] {
+	--accent: hsl(340, 82%, 52%);
+	--accent-foreground: hsl(0, 0%, 100%);
+	--secondary: hsl(345, 84%, 61%);
+	--secondary-foreground: hsl(240 10% 3.9%);
+}
+
+:root[data-theme="dark"][data-accent="Aqua"] {
+	--accent: hsl(187, 49%, 17%);
+	--accent-foreground: hsl(0, 0%, 100%);
+	--secondary: hsl(188, 9%, 52%);
+	--secondary-foreground: hsl(0, 0%, 100%);
+	--card: hsl(0, 0%, 4%);
+}
+
+:root[data-theme="dark"][data-accent="Purple"] {
+	--accent: hsl(291, 65%, 34%);
+	--accent-foreground: hsl(0, 0%, 100%);
+	--secondary: hsl(265, 48%, 70%);
+	--secondary-foreground: hsl(240 10% 3.9%);
+}
+
+:root[data-theme="dark"][data-accent="Orange"] {
+	--accent: hsl(25, 97%, 53%);
+	--accent-foreground: hsl(0, 0%, 100%);
+	--secondary: hsl(25, 97%, 53%);
+	--secondary-foreground: hsl(0, 0%, 100%);
+}
+
 @layer base {
+
+	/* Apply transition to all elements that use theme colors */
+	* {
+		transition-property: color, background-color, border-color, outline-color,
+			fill, stroke;
+		transition-timing-function: ease;
+		transition-duration: 0.3s;
+	}
+
 	*,
 	::after,
 	::before,
@@ -21,13 +204,17 @@
 }
 
 @utility no-scrollbar {
+
 	/* Hide scrollbar for Chrome, Safari and Opera */
 	&::-webkit-scrollbar {
 		display: none;
 	}
+
 	/* Hide scrollbar for IE, Edge and Firefox */
-	-ms-overflow-style: none; /* IE and Edge */
-	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
 }
 
 @utility menu {
@@ -131,7 +318,7 @@
 		background-color: var(--accent);
 	}
 
-	.arrow:where(&, & *) > svg {
+	.arrow:where(&, & *)>svg {
 		fill: hsl(204 4% 16%);
 		stroke: hsl(204 4% 24%);
 	}
@@ -196,10 +383,12 @@
 			color: var(--accent-foreground);
 		}
 	}
+
 	font-size: 0.8rem;
 	color: var(--foreground);
 	opacity: 0.5;
 	transition: all 0.3s ease-in-out;
+
 	a:hover & {
 		color: var(--secondary-foreground);
 		transition: color 0.3s ease-in-out;
@@ -229,6 +418,7 @@
 	justify-content: center;
 	perspective: 1000px;
 	position: relative;
+
 	&::before {
 		background-color: var(--background);
 		border-bottom: 1px solid var(--border);
@@ -388,7 +578,7 @@
 		translate: 0 -0.5rem;
 	}
 
-	&[data-enter] > .arrow {
+	&[data-enter]>.arrow {
 		@apply rotate-180;
 	}
 
@@ -406,17 +596,17 @@
 }
 
 @utility arrow {
-	& > svg {
+	&>svg {
 		fill: hsl(204 4% 16%);
 		stroke: hsl(204 4% 24%);
 	}
 
-	&:where(.dark, .dark *) > svg {
+	&:where(.dark, .dark *)>svg {
 		fill: hsl(204 4% 16%);
 		stroke: hsl(204 4% 24%);
 	}
 
-	.popover[data-enter] > & {
+	.popover[data-enter]>& {
 		@apply rotate-180;
 	}
 
@@ -455,7 +645,7 @@
 }
 
 @utility flow {
-	& > * + * {
+	&>*+* {
 		margin-top: var(--flow-space, 1em);
 	}
 
@@ -482,7 +672,7 @@
 	border-radius: 0.625rem;
 	box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
 
-	& > * {
+	&>* {
 		grid-column: 1 / 2;
 		grid-row: 1 / 2;
 	}
@@ -520,7 +710,7 @@
 			transform: scale(1.3);
 		}
 
-		&:hover .shortlist__card__content--container > :not(.shortlist__card__title) {
+		&:hover .shortlist__card__content--container> :not(.shortlist__card__title) {
 			opacity: 1;
 			transition: opacity 500ms ease-in;
 			transition-delay: 1000ms;
@@ -532,9 +722,7 @@
 			transition-delay: 1000ms;
 		}
 
-		&:focus-within
-			.shortlist__card__content--container
-			> :not(.shortlist__card__title) {
+		&:focus-within .shortlist__card__content--container> :not(.shortlist__card__title) {
 			opacity: 1;
 			transition: opacity 500ms ease-in;
 			transition-delay: 1000ms;
@@ -616,14 +804,12 @@
 	width: 100%;
 	padding: 10% 1.15rem 1.775rem;
 	border: 1px solid red;
-	background: linear-gradient(
-		180deg,
-		hsla(0, 0%, 0%, 0) 0%,
-		hsla(0, 0%, 0%, 0.3) 10%,
-		hsla(0, 0%, 0%, 0.5) 20%,
-		hsla(0, 0%, 0%, 0.5) 80%,
-		hsl(0, 0%, 0%) 100%
-	);
+	background: linear-gradient(180deg,
+			hsla(0, 0%, 0%, 0) 0%,
+			hsla(0, 0%, 0%, 0.3) 10%,
+			hsla(0, 0%, 0%, 0.5) 20%,
+			hsla(0, 0%, 0%, 0.5) 80%,
+			hsl(0, 0%, 0%) 100%);
 
 	@media (any-hover: hover) and (any-pointer: fine) {
 		/**
@@ -665,18 +851,18 @@
 	--flow-space: 1.15rem;
 
 	@media (any-hover: hover) and (any-pointer: fine) {
-		& > :not(.shortlist__card__title) {
+		&> :not(.shortlist__card__title) {
 			opacity: 0;
 			transition: transform 500ms ease-out, opacity 500ms ease-out;
 		}
 
-		.shortlist__card:hover & > :not(.shortlist__card__title) {
+		.shortlist__card:hover &> :not(.shortlist__card__title) {
 			opacity: 1;
 			transition: opacity 500ms ease-in;
 			transition-delay: 1000ms;
 		}
 
-		.shortlist__card:focus-within & > :not(.shortlist__card__title) {
+		.shortlist__card:focus-within &> :not(.shortlist__card__title) {
 			opacity: 1;
 			transition: opacity 500ms ease-in;
 			transition-delay: 1000ms;
@@ -753,7 +939,8 @@
 @utility shortlist__card__button {
 	padding: 0.75em 1.6em;
 	width: fit-content;
-	width: -moz-fit-content; /* Prefijo necesario para Firefox  */
+	width: -moz-fit-content;
+	/* Prefijo necesario para Firefox  */
 	font-variant: small-caps;
 	font-weight: bold;
 	border-radius: 0.45em;
@@ -967,12 +1154,10 @@
 	bottom: 0;
 	width: 100%;
 	height: 80%;
-	background: linear-gradient(
-		180deg,
-		hsla(0, 0%, 0%, 0) 0%,
-		hsla(0, 0%, 0%, 0.2) 10%,
-		hsl(0, 0%, 0%) 100%
-	);
+	background: linear-gradient(180deg,
+			hsla(0, 0%, 0%, 0) 0%,
+			hsla(0, 0%, 0%, 0.2) 10%,
+			hsl(0, 0%, 0%) 100%);
 
 	@media (any-hover: hover) and (any-pointer: fine) {
 		transform: translateY(75%);
@@ -1197,14 +1382,18 @@
 	overflow: hidden;
 	padding: 1rem;
 	border-radius: var(--radius);
-	aspect-ratio: 2 / 3; /* Maintain poster aspect ratio */
-	width: 100%; /* Fill container width */
-	max-width: 230px; /* Optional maximum size */
+	aspect-ratio: 2 / 3;
+	/* Maintain poster aspect ratio */
+	width: 100%;
+	/* Fill container width */
+	max-width: 230px;
+	/* Optional maximum size */
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-start;
 	transition: 0.4s ease-out;
 	box-shadow: 0px 7px 10px rgba(black, 0.5);
+
 	@media (max-width: 550px) {
 		max-width: 150px;
 	}
@@ -1263,6 +1452,7 @@
 		font-weight: bold;
 		transform: translateX(-20px);
 		transition: 0.5s;
+
 		@media (max-width: 550px) {
 			font-size: 12px;
 		}
@@ -1284,6 +1474,7 @@
 	& .info p {
 		letter-spacing: 1px;
 		font-size: 10px;
+
 		@media (max-width: 550px) {
 			font-size: 8px;
 		}
@@ -1356,6 +1547,7 @@
 		font-weight: bold;
 		transform: translateX(-20px);
 		transition: 0.5s;
+
 		@media (max-width: 550px) {
 			font-size: 12px;
 		}
@@ -1377,6 +1569,7 @@
 	.moviecard & p {
 		letter-spacing: 1px;
 		font-size: 10px;
+
 		@media (max-width: 550px) {
 			font-size: 8px;
 		}
@@ -1532,16 +1725,23 @@
 }
 
 @utility gallery {
-	--s: 0px; /* control the slanted part */
+	--s: 0px;
+	/* control the slanted part */
 	display: grid;
-	height: 100vh; /* Fill viewport height */
-	width: 100vw; /* Fill viewport width */
+	height: 100vh;
+	/* Fill viewport height */
+	width: 100vw;
+	/* Fill viewport width */
 	gap: 0px;
 	grid-auto-flow: column;
 	place-items: center;
-	margin: 0; /* Remove any default margins */
-	padding: 0; /* Remove any default padding */
-	overflow: hidden; /* Prevent scrolling */
+	margin: 0;
+	/* Remove any default margins */
+	padding: 0;
+	/* Remove any default padding */
+	overflow: hidden;
+
+	/* Prevent scrolling */
 	@media (max-width: 768px) {
 		--s: 0px;
 		grid-auto-flow: row;
@@ -1567,14 +1767,16 @@
 	--s: 0px;
 	width: 0;
 	min-width: calc(100% + var(--s));
-	height: 100vh; /* Fill viewport height */
+	height: 100vh;
+	/* Fill viewport height */
 	object-fit: cover;
 	clip-path: polygon(var(--s) 0, 100% 0, calc(100% - var(--s)) 100%, 0 100%);
 	cursor: pointer;
 	transition: 0.5s;
 
 	&[data-expanded="true"] {
-		width: 98vw; /* Increased width on hover for better visibility at full viewport */
+		width: 98vw;
+		/* Increased width on hover for better visibility at full viewport */
 	}
 
 	&:first-child {
@@ -1589,6 +1791,7 @@
 
 		clip-path: polygon(var(--s) 0, 100% 0, 100% 100%, 0 100%);
 	}
+
 	@media (max-width: 768px) {
 		--s: 0px;
 		width: 100vw;
@@ -1653,9 +1856,9 @@
       learn more https://developer.chrome.com/docs/css-ui/access-colors-spaces#color_interpolation
     */
 		to right in oklch,
-		/* use the variables in a gradient (or wherever!) */ var(--＠color-1),
-		var(--＠color-2)
-	);
+		/* use the variables in a gradient (or wherever!) */
+		var(--＠color-1),
+		var(--＠color-2));
 
 	/* old browser support */
 	-webkit-background-clip: text;
@@ -1685,202 +1888,12 @@ body {
     rgb(var(--background-start-rgb));
 }*/
 
-@layer base {
-	:root {
-		color-scheme: light;
-		--background: hsl(40 20% 98%);
-		--foreground: hsl(240 10% 3.9%);
-		--card: hsl(0 0% 100%);
-		--card-foreground: hsl(240 10% 3.9%);
-		--popover: hsl(0 0% 80%);
-		--popover-foreground: hsl(240 10% 3.9%);
-		--primary: hsl(240 5.9% 10%);
-		--primary-foreground: hsl(0 0% 98%);
-		--secondary: hsl(240 4.8% 95.9%);
-		--secondary-foreground: hsl(240 5.9% 10%);
-		--muted: hsl(240 4.8% 95.9%);
-		--muted-foreground: hsl(240 3.8% 46.1%);
-		--accent: hsl(181, 47%, 45%);
-		--accent-foreground: hsl(0, 0%, 100%);
-		--destructive: hsl(0 84.2% 60.2%);
-		--destructive-foreground: hsl(0 0% 98%);
-		--border: hsl(0, 0%, 27%);
-		--input: hsl(240 5.9% 90%);
-		--ring: hsl(240 5.9% 10%);
-		--radius: 0.5rem;
-		--ring: hsl(216 34% 17%);
-		--success: hsl(113, 93%, 38%);
-		--error: hsl(0, 99%, 32%);
-
-		--mobilenav: hsl(164 64% 42%);
-		--popoverBackground: hsl(204 4% 16%);
-
-		/* Add transition for all CSS variables */
-		transition:
-			color 0.3s ease,
-			background-color 0.3s ease,
-			border-color 0.3s ease,
-			--background 0.3s ease,
-			--foreground 0.3s ease,
-			--card 0.3s ease,
-			--card-foreground 0.3s ease,
-			--popover 0.3s ease,
-			--popover-foreground 0.3s ease,
-			--primary 0.3s ease,
-			--primary-foreground 0.3s ease,
-			--secondary 0.3s ease,
-			--secondary-foreground 0.3s ease,
-			--muted 0.3s ease,
-			--muted-foreground 0.3s ease,
-			--accent 0.3s ease,
-			--accent-foreground 0.3s ease,
-			--destructive 0.3s ease,
-			--destructive-foreground 0.3s ease,
-			--border 0.3s ease,
-			--input 0.3s ease,
-			--ring 0.3s ease;
-	}
-
-	/* Apply transition to all elements that use theme colors */
-	* {
-		transition-property: color, background-color, border-color, outline-color,
-			fill, stroke;
-		transition-timing-function: ease;
-		transition-duration: 0.3s;
-	}
-	/**
-	 * @theme light
-	 */
-
-	.light {
-		--background: hsl(50 20% 98%);
-		--main-background: hsl(0 0% 2%);
-		--foreground: hsl(240 10% 3.9%);
-		--card: hsl(220, 20%, 97%);
-		--card-foreground: hsl(240 10% 3.9%);
-		--popover: hsl(220, 20%, 97%);
-		--popover-foreground: hsl(240 10% 3.9%);
-		--primary: hsl(0, 0%, 27%);
-		--primary-foreground: hsl(0 0% 98%);
-		--secondary: hsl(0, 0%, 39%);
-		--secondary-foreground: hsl(240 5.9% 10%);
-		--muted: hsl(240 4.8% 95.9%);
-		--muted-foreground: hsl(240, 4%, 33%);
-		--accent: hsl(181, 47%, 45%);
-		--accent-foreground: hsl(0, 0%, 100%);
-		--destructive: hsl(0 84.2% 60.2%);
-		--destructive-foreground: hsl(0 0% 98%);
-		--border: hsl(240, 7%, 30%);
-		--input: hsl(181, 20%, 95%);
-		--ring: hsl(240 5.9% 10%);
-		--radius: 0.5rem;
-		--ring: hsl(216 34% 17%);
-		--success: hsl(113 100% 40%);
-		--error: hsl(9 100% 40%);
-		--mobilenav: hsl(164 64% 42%);
-		--popoverBackground: hsl(204 4% 16%);
-		--opaque-card: hsl(0, 0%, 15%);
-	}
-
-	:root[data-theme="light"][data-accent="magenta"] {
-		--accent: hsl(340, 82%, 52%);
-		--accent-foreground: hsl(0, 0%, 6%);
-		--secondary: hsl(340, 82%, 52%);
-		--secondary-foreground: hsl(240 10% 3.9%);
-	}
-
-	:root[data-theme="light"][data-accent="aqua"] {
-		--accent: hsl(187, 49%, 17%);
-		--accent-foreground: hsl(0, 0%, 6%);
-		--secondary: hsl(188, 9%, 52%);
-		--secondary-foreground: hsl(0, 0%, 100%);
-	}
-
-	:root[data-theme="light"][data-accent="orange"] {
-		--accent: hsl(25, 97%, 53%);
-		--accent-foreground: hsl(0, 0%, 6%);
-		--secondary: hsl(25, 97%, 53%);
-		--secondary-foreground: hsl(0, 0%, 0%);
-	}
-
-	/**
-	 * @theme dark
-	 */
-
-	:root[data-theme="dark"] {
-		color-scheme: dark;
-		/*
-    * Surfaces
-    */
-		--background: hsl(0, 0%, 2%);
-		--main-background: hsl(0, 0%, 2%);
-		--card: hsl(0, 0%, 10%);
-		--popover: hsl(0, 0%, 12%);
-		--navigation: hsl(0, 0%, 25%);
-		--dialog: hsl(240 10% 3.9%);
-		--opaque-card: hsl(0, 0%, 15%);
-		/*
-    * Components
-    */
-		--primary: hsl(0 0% 98%);
-		--secondary: hsl(0, 0%, 25%);
-		--muted: hsl(240 3.7% 15.9%);
-		--accent: hsl(203, 5%, 35%);
-		--destructive: hsl(0 62.8% 30.6%);
-		--border: hsl(0, 0%, 25%);
-		--input: hsl(240 3.7% 15.9%);
-		--ring: hsl(240 4.9% 83.9%);
-		/*
-    * Typography
-    */
-		--primary-foreground: hsl(0, 0%, 100%);
-		--foreground: hsl(0 0% 98%);
-		--card-foreground: hsl(0 0% 98%);
-		--secondary-foreground: hsl(0, 0%, 100%);
-		--popover-foreground: hsl(0, 0%, 100%);
-		--muted-foreground: hsl(240 5% 64.9%);
-		--accent-foreground: hsl(0 0% 98%);
-		--destructive-foreground: hsl(0 0% 98%);
-		--ring: hsl(216 34% 17%);
-		--success: hsl(113 100% 40%);
-		--error: hsl(9 100% 40%);
-		--mobilenav: hsl(191 100% 39%);
-	}
-
-	:root[data-theme="dark"][data-accent="Magenta"] {
-		--accent: hsl(340, 82%, 52%);
-		--accent-foreground: hsl(0, 0%, 100%);
-		--secondary: hsl(345, 84%, 61%);
-		--secondary-foreground: hsl(240 10% 3.9%);
-	}
-
-	:root[data-theme="dark"][data-accent="Aqua"] {
-		--accent: hsl(187, 49%, 17%);
-		--accent-foreground: hsl(0, 0%, 100%);
-		--secondary: hsl(188, 9%, 52%);
-		--secondary-foreground: hsl(0, 0%, 100%);
-		--card: hsl(0, 0%, 4%);
-	}
-
-	:root[data-theme="dark"][data-accent="Purple"] {
-		--accent: hsl(291, 65%, 34%);
-		--accent-foreground: hsl(0, 0%, 100%);
-		--secondary: hsl(265, 48%, 70%);
-		--secondary-foreground: hsl(240 10% 3.9%);
-	}
-
-	:root[data-theme="dark"][data-accent="Orange"] {
-		--accent: hsl(25, 97%, 53%);
-		--accent-foreground: hsl(0, 0%, 100%);
-		--secondary: hsl(25, 97%, 53%);
-		--secondary-foreground: hsl(0, 0%, 100%);
-	}
-}
 
 @layer base {
 	* {
 		@apply border-border;
 	}
+
 	body {
 		@apply text-foreground;
 		font-feature-settings: "rlig" 1, "calt" 1;
@@ -1916,6 +1929,7 @@ body {
 		li a {
 			border-radius: var(--radius);
 		}
+
 		li a:hover {
 			background-color: color-mix(in lch, var(--accent), transparent 20%);
 		}
@@ -1936,36 +1950,42 @@ body {
 		--item-active-width: var(--item-1-width);
 		--item-active-height: var(--item-1-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(2) a:is(:hover, :focus-visible)) {
 		--item-active-y: var(--item-2-y);
 		--item-active-x: var(--item-2-x);
 		--item-active-width: var(--item-2-width);
 		--item-active-height: var(--item-2-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(3) a:is(:hover, :focus-visible)) {
 		--item-active-y: var(--item-3-y);
 		--item-active-x: var(--item-3-x);
 		--item-active-width: var(--item-3-width);
 		--item-active-height: var(--item-3-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(4) a:is(:hover, :focus-visible)) {
 		--item-active-y: var(--item-4-y);
 		--item-active-x: var(--item-4-x);
 		--item-active-width: var(--item-4-width);
 		--item-active-height: var(--item-4-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(5) a:is(:hover, :focus-visible)) {
 		--item-active-y: var(--item-5-y);
 		--item-active-x: var(--item-5-x);
 		--item-active-width: var(--item-5-width);
 		--item-active-height: var(--item-5-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(6) a:is(:hover, :focus-visible)) {
 		--item-active-y: var(--item-6-y);
 		--item-active-x: var(--item-6-x);
 		--item-active-width: var(--item-6-width);
 		--item-active-height: var(--item-6-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(7) a:is(:hover, :focus-visible)) {
 		--item-active-y: var(--item-7-y);
 		--item-active-x: var(--item-7-x);
@@ -1979,36 +1999,42 @@ body {
 		--target-width: var(--item-1-width);
 		--target-height: var(--item-1-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(2) a:target) {
 		--target-y: var(--item-2-y);
 		--target-x: var(--item-2-x);
 		--target-width: var(--item-2-width);
 		--target-height: var(--item-2-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(3) a:target) {
 		--target-y: var(--item-3-y);
 		--target-x: var(--item-3-x);
 		--target-width: var(--item-3-width);
 		--target-height: var(--item-3-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(4) a:target) {
 		--target-y: var(--item-4-y);
 		--target-x: var(--item-4-x);
 		--target-width: var(--item-4-width);
 		--target-height: var(--item-4-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(5) a:target) {
 		--target-y: var(--item-5-y);
 		--target-x: var(--item-5-x);
 		--target-width: var(--item-5-width);
 		--target-height: var(--item-5-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(6) a:target) {
 		--target-y: var(--item-6-y);
 		--target-x: var(--item-6-x);
 		--target-width: var(--item-6-width);
 		--target-height: var(--item-6-height);
 	}
+
 	[data-no-anchor] ul:has(li:nth-of-type(7) a:target) {
 		--target-y: var(--item-7-y);
 		--target-x: var(--item-7-x);
@@ -2019,6 +2045,7 @@ body {
 	ul:has(a:is(:focus-visible, :hover)) {
 		--intent: 1;
 	}
+
 	/*hover box */
 	ul::before,
 	ul::after {
@@ -2039,23 +2066,22 @@ body {
 			left var(--transition), height var(--transition),
 			opacity var(--transition), color var(--transition),
 			width var(--transition);
-		transition-timing-function: linear(
-			0 0%,
-			0.2342 12.49%,
-			0.4374 24.99%,
-			0.6093 37.49%,
-			0.6835 43.74%,
-			0.7499 49.99%,
-			0.8086 56.25%,
-			0.8593 62.5%,
-			0.9023 68.75%,
-			0.9375 75%,
-			0.9648 81.25%,
-			0.9844 87.5%,
-			0.9961 93.75%,
-			1 100%
-		);
+		transition-timing-function: linear(0 0%,
+				0.2342 12.49%,
+				0.4374 24.99%,
+				0.6093 37.49%,
+				0.6835 43.74%,
+				0.7499 49.99%,
+				0.8086 56.25%,
+				0.8593 62.5%,
+				0.9023 68.75%,
+				0.9375 75%,
+				0.9648 81.25%,
+				0.9844 87.5%,
+				0.9961 93.75%,
+				1 100%);
 	}
+
 	/* underline*/
 	ul::after {
 		top: calc(var(--target-y) * 1px);
@@ -2078,21 +2104,27 @@ body {
 		nav li:nth-of-type(1) {
 			anchor-name: --item-1;
 		}
+
 		nav li:nth-of-type(2) {
 			anchor-name: --item-2;
 		}
+
 		nav li:nth-of-type(3) {
 			anchor-name: --item-3;
 		}
+
 		nav li:nth-of-type(4) {
 			anchor-name: --item-4;
 		}
+
 		nav li:nth-of-type(5) {
 			anchor-name: --item-5;
 		}
+
 		nav li:nth-of-type(6) {
 			anchor-name: --item-6;
 		}
+
 		nav li:nth-of-type(7) {
 			anchor-name: --item-7;
 		}
@@ -2100,21 +2132,27 @@ body {
 		nav:has(li:nth-of-type(1) a:is(:hover, :focus-visible)) {
 			--anchor: --item-1;
 		}
+
 		nav:has(li:nth-of-type(2) a:is(:hover, :focus-visible)) {
 			--anchor: --item-2;
 		}
+
 		nav:has(li:nth-of-type(3) a:is(:hover, :focus-visible)) {
 			--anchor: --item-3;
 		}
+
 		nav:has(li:nth-of-type(4) a:is(:hover, :focus-visible)) {
 			--anchor: --item-4;
 		}
+
 		nav:has(li:nth-of-type(5) a:is(:hover, :focus-visible)) {
 			--anchor: --item-5;
 		}
+
 		nav:has(li:nth-of-type(6) a:is(:hover, :focus-visible)) {
 			--anchor: --item-6;
 		}
+
 		nav:has(li:nth-of-type(7) a:is(:hover, :focus-visible)) {
 			--anchor: --item-7;
 		}
@@ -2122,21 +2160,27 @@ body {
 		nav:has(li:nth-of-type(1) a:target) {
 			--target: --item-1;
 		}
+
 		nav:has(li:nth-of-type(2) a:target) {
 			--target: --item-2;
 		}
+
 		nav:has(li:nth-of-type(3) a:target) {
 			--target: --item-3;
 		}
+
 		nav:has(li:nth-of-type(4) a:target) {
 			--target: --item-4;
 		}
+
 		nav:has(li:nth-of-type(5) a:target) {
 			--target: --item-5;
 		}
+
 		nav:has(li:nth-of-type(6) a:target) {
 			--target: --item-6;
 		}
+
 		nav:has(li:nth-of-type(7) a:target) {
 			--target: --item-7;
 		}
@@ -2165,6 +2209,7 @@ body {
 		from {
 			transform: rotateX(90deg);
 		}
+
 		to {
 			transform: rotateX(0deg);
 		}
