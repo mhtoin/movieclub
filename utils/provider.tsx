@@ -1,5 +1,6 @@
 "use client";
 
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { getQueryClient } from "@/lib/getQueryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -14,7 +15,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ReactQueryDevtools />
-			{children}
+			<ThemeProvider
+				attribute="class"
+				defaultTheme="system"
+				enableSystem
+				disableTransitionOnChange
+			>
+				{children}
+			</ThemeProvider>
 		</QueryClientProvider>
 	);
 }
