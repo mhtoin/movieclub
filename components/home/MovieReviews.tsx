@@ -76,7 +76,7 @@ export default function MovieReviews({
 					onClick={() => scroll("left")}
 					variant="outline"
 					disabled={!canScrollLeft}
-					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaque-card/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Previous review"
 				>
 					<ChevronLeftIcon className="h-5 w-5" />
@@ -85,7 +85,7 @@ export default function MovieReviews({
 				<Button
 					onClick={() => scroll("right")}
 					disabled={!canScrollRight}
-					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaque-card/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Next review"
 					variant="outline"
 				>
@@ -151,17 +151,16 @@ export default function MovieReviews({
 									behavior: "smooth",
 								});
 							}}
-							className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${
-								scrollContainerRef.current &&
-								Math.round(
-									scrollContainerRef.current.scrollLeft /
+							className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${scrollContainerRef.current &&
+									Math.round(
+										scrollContainerRef.current.scrollLeft /
 										scrollContainerRef.current.offsetWidth,
-								) === index
+									) === index
 									? "bg-primary/70"
 									: !scrollContainerRef.current && index === 0
 										? "bg-primary/70"
 										: ""
-							}`}
+								}`}
 							aria-label={`Go to review ${index + 1}`}
 						/>
 					))}

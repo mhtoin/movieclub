@@ -20,7 +20,7 @@ export default async function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${inter.className} antialiased min-h-screen no-scrollbar relative bg-background`}
+				className={`${inter.className} antialiased min-h-screen no-scrollbar relative`}
 			>
 				<Providers>
 					{children}
