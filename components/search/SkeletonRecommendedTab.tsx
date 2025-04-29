@@ -28,7 +28,7 @@ export default function SkeletonRecommendedTab() {
 									className="flex flex-col m-2 space-y-3 bg-card/50 rounded-lg"
 								>
 									{/* Skeleton poster */}
-									<div className="w-full aspect-[2/3] bg-accent/60 rounded-md animate-pulse" />
+									<div className="w-full aspect-2/3 bg-accent/60 rounded-md animate-pulse" />
 								</div>
 							))}
 						</div>

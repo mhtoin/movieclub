@@ -23,7 +23,7 @@ export default function TierDateFilter({
 			value={selectedDate}
 		>
 			<SelectTrigger className="max-w-48">
-				<SelectValue placeholder={"Choose a date"} asChild>
+				<SelectValue placeholder={"Choose a date"}>
 					<span>{selectedDate}</span>
 				</SelectValue>
 			</SelectTrigger>

@@ -88,8 +88,8 @@ export default function ReplaceDialog() {
 			store={dialog}
 			open={isOpen}
 			onClose={() => setIsOpen(false)}
-			backdrop={<div className="bg-black/5 backdrop-blur-sm " />}
-			className="fixed z-[9999] inset-3 flex flex-col gap-1 overflow-auto border rounded-lg max-w-fit min-w-96 py-2 m-auto bg-background"
+			backdrop={<div className="bg-black/5 backdrop-blur-xs " />}
+			className="fixed z-9999 inset-3 flex flex-col gap-1 overflow-auto border rounded-lg max-w-fit min-w-96 py-2 m-auto bg-background"
 		>
 			<div className="flex flex-col gap-5 overflow-auto w-full h-full items-center justify-center p-5">
 				<div className="flex flex-col gap-2 justify-center items-center">

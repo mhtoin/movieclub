@@ -139,7 +139,7 @@ export default function DateSelect({ months }: DateSelectProps) {
 				<PopoverContent
 					side="top"
 					align="end"
-					className="w-48 p-2 z-[9999] bg-background"
+					className="w-48 p-2 z-9999 bg-background"
 				>
 					<Select
 						onValueChange={(value) => scrollToMonth(value)}
@@ -148,7 +148,7 @@ export default function DateSelect({ months }: DateSelectProps) {
 						<SelectTrigger className="w-full">
 							<SelectValue placeholder="Select month" />
 						</SelectTrigger>
-						<SelectContent className="max-h-60 overflow-y-auto z-[9999] bg-background">
+						<SelectContent className="max-h-60 overflow-y-auto z-9999 bg-background">
 							{months.map((item) => (
 								<SelectItem key={item.month} value={item.month}>
 									{item.label}

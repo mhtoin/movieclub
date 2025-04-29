@@ -186,12 +186,12 @@ module.exports = {
 		},
 	},
 	plugins: [
-		require("@tailwindcss/typography"),
-		require("tailwindcss-animate"),
-		require("tailwind-gradient-mask-image"),
-		require("tailwindcss-react-aria-components"),
-		require("@tailwindcss/container-queries"),
-		require("tailwind-easing-gradients")({
+		//require("@tailwindcss/typography"),
+		//require("tailwindcss-animate"),
+		//require("tailwind-gradient-mask-image"),
+		//require("tailwindcss-react-aria-components"),
+		//require("@tailwindcss/container-queries"),
+		/*require("tailwind-easing-gradients")({
 			variants: ["responsive"],
 			// required
 			gradients: {
@@ -215,7 +215,7 @@ module.exports = {
 				b: "to bottom",
 				l: "to left",
 			},
-		}),
+		}),*/
 		({ addUtilities }) => {
 			const newUtilities = {
 				".ul-li-p-reset": {

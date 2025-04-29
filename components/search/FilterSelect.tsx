@@ -91,7 +91,7 @@ export default function FilterSelect({
 								key={option.value}
 								value={option?.value.toString()}
 								store={store}
-								className="flex cursor-pointer items-center gap-2 rounded p-2 !outline-[none] text-foreground  hover:bg-accent/80 hover:text-accent-foreground"
+								className="flex cursor-pointer items-center gap-2 rounded p-2 outline-[none]! text-foreground  hover:bg-accent/80 hover:text-accent-foreground"
 							>
 								<SelectItemCheck />
 								{option?.label}

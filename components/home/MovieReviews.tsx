@@ -19,7 +19,7 @@ export default function MovieReviews({
 	if (!validReviews.length) {
 		return (
 			<div className="absolute inset-0 top-16 flex items-center justify-center">
-				<div className="p-6 border border-border/30 bg-card/50 backdrop-blur-sm rounded-md">
+				<div className="p-6 border border-border/30 bg-card/50 backdrop-blur-xs rounded-md">
 					<h2 className="text-lg font-bold">No reviews available</h2>
 					<p>There are no reviews for this movie yet.</p>
 				</div>
@@ -76,7 +76,7 @@ export default function MovieReviews({
 					onClick={() => scroll("left")}
 					variant="outline"
 					disabled={!canScrollLeft}
-					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaque-card/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Previous review"
 				>
 					<ChevronLeftIcon className="h-5 w-5" />
@@ -85,7 +85,7 @@ export default function MovieReviews({
 				<Button
 					onClick={() => scroll("right")}
 					disabled={!canScrollRight}
-					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaqueCard/80 backdrop-blur-sm border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaque-card/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
 					aria-label="Next review"
 					variant="outline"
 				>
@@ -106,7 +106,7 @@ export default function MovieReviews({
 							return (
 								<div
 									key={`${review?.tier?.tierlist?.user?.id || index}`}
-									className="flex-shrink-0 w-full snap-center flex flex-col rounded-md p-6 gap-5 border border-border/30 bg-opaqueCard/50 backdrop-blur-sm"
+									className="shrink-0 w-full snap-center flex flex-col rounded-md p-6 gap-5 border border-border/30 bg-opaqueCard/50 backdrop-blur-xs"
 								>
 									<h2 className="text-lg font-bold text-primary-foreground">
 										{review.tier?.tierlist?.user?.name}
@@ -125,7 +125,7 @@ export default function MovieReviews({
 									</div>
 									<div className="flex flex-col gap-2 overflow-y-auto max-h-[50vh] no-scrollbar">
 										<div
-											className="no-scrollbar overflow-y-auto prose prose-sm sm:prose-base prose-neutral dark:prose-invert ul-li-p-reset h-full focus:outline-none"
+											className="no-scrollbar overflow-y-auto prose prose-sm sm:prose-base prose-neutral dark:prose-invert ul-li-p-reset h-full focus:outline-hidden"
 											dangerouslySetInnerHTML={{ __html: reviewText }}
 										/>
 									</div>
@@ -151,17 +151,16 @@ export default function MovieReviews({
 									behavior: "smooth",
 								});
 							}}
-							className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${
-								scrollContainerRef.current &&
-								Math.round(
-									scrollContainerRef.current.scrollLeft /
+							className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${scrollContainerRef.current &&
+									Math.round(
+										scrollContainerRef.current.scrollLeft /
 										scrollContainerRef.current.offsetWidth,
-								) === index
+									) === index
 									? "bg-primary/70"
 									: !scrollContainerRef.current && index === 0
 										? "bg-primary/70"
 										: ""
-							}`}
+								}`}
 							aria-label={`Go to review ${index + 1}`}
 						/>
 					))}
