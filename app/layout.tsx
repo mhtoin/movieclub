@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/Toaster";
 import Providers from "@/utils/provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter } from "next/font/google";
@@ -25,6 +26,7 @@ export default async function RootLayout({
 				<Providers>
 					{children}
 					<SpeedInsights />
+					<Toaster position="bottom-center" closeButton />
 				</Providers>
 				{/*<script dangerouslySetInnerHTML={{ __html: getTheme }} /> */}
 				{/*<script dangerouslySetInnerHTML={{ __html: getAccent }} />*/}
