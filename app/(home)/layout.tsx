@@ -8,7 +8,6 @@ import { SocketClient } from "components/common/SocketClient";
 import NavbarWrapper from "components/nav/NavbarWrapper";
 import ReplaceDialog from "components/search/ReplaceDialog";
 import { Suspense } from "react";
-import { Toaster } from "sonner";
 
 export default async function HomeLayout({
 	searchModal,
@@ -32,8 +31,6 @@ export default async function HomeLayout({
 					<NavbarWrapper />
 				</Suspense>
 				<SocketClient />
-
-				<Toaster position="top-center" />
 				<ReplaceDialog />
 				{searchModal}
 
