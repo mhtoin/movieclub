@@ -7,7 +7,9 @@ import { useState } from "react";
 import { Button } from "../ui/Button";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import HamburgerMenu from "./HamburgerMenu";
+import styles from "./menu.module.css";
 import MenuItem from "./MenuItem";
+;
 
 export default function Menubar() {
 	const [open, setOpen] = useState(false);
@@ -33,7 +35,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Home</span>
-							<span className="menu-label">View home page</span>
+							<span className={styles['menu-label']}>View home page</span>
 						</Link>
 						<Link
 							href={"/dashboard"}
@@ -41,7 +43,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Dashboard</span>
-							<span className="menu-label">View stats</span>
+							<span className={styles['menu-label']}>View stats</span>
 						</Link>
 						<Link
 							href={"/home/shortlist"}
@@ -49,7 +51,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Shortlist</span>
-							<span className="menu-label">View all shortlists</span>
+							<span className={styles['menu-label']}>View all shortlists</span>
 						</Link>
 						<Link
 							href={`/home/${SEARCH_ROUTE}`}
@@ -57,7 +59,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Discover</span>
-							<span className="menu-label">Discover movies</span>
+							<span className={styles['menu-label']}>Discover movies</span>
 						</Link>
 						<Link
 							href={"/home/shortlist/edit/watchlist"}
@@ -65,7 +67,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Watchlist</span>
-							<span className="menu-label">View your watchlist</span>
+							<span className={styles['menu-label']}>View your watchlist</span>
 						</Link>
 						<Link
 							href={"/tierlists"}
@@ -73,7 +75,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Tierlists</span>
-							<span className="menu-label">View all tierlists from users</span>
+							<span className={styles['menu-label']}>View all tierlists from users</span>
 						</Link>
 						<Link
 							href={`/tierlists/${user?.tierlistId}`}
@@ -81,7 +83,7 @@ export default function Menubar() {
 							onClick={() => setOpen(false)}
 						>
 							<span className="text-foreground">Edit</span>
-							<span className="menu-label">Edit your tierlist</span>
+							<span className={styles['menu-label']}>Edit your tierlist</span>
 						</Link>
 					</div>
 				</DrawerContent>
@@ -102,7 +104,7 @@ export default function Menubar() {
 
 			<Ariakit.Menu
 				gutter={10}
-				className="menu z-9999 focus:outline-hidden"
+				className={`${styles.menu} z-9999 focus:outline-hidden`}
 				store={menu}
 				onMouseLeave={() => menu.hide()}
 			>
@@ -111,43 +113,43 @@ export default function Menubar() {
 						<MenuItem store={menu}>
 							<Link href={"/home"}>
 								<span className="text-foreground">Home</span>
-								<span className="menu-label">View home page</span>
+								<span className={styles['menu-label']}>View home page</span>
 							</Link>
 						</MenuItem>
 						<MenuItem store={menu}>
 							<Link href={"/dashboard"}>
 								<span className="text-foreground">Dashboard</span>
-								<span className="menu-label">View stats</span>
+								<span className={styles['menu-label']}>View stats</span>
 							</Link>
 						</MenuItem>
 						<MenuItem store={menu}>
 							<Link href={"/home/shortlist"}>
 								<span className="text-foreground">Shortlist</span>
-								<span className="menu-label">View all shortlists</span>
+								<span className={styles['menu-label']}>View all shortlists</span>
 							</Link>
 						</MenuItem>
 						<MenuItem className="ml-6 " store={menu}>
 							<Link href={`/home/${SEARCH_ROUTE}`}>
 								<span className="text-foreground">Discover</span>
-								<span className="menu-label">Discover movies</span>
+								<span className={styles['menu-label']}>Discover movies</span>
 							</Link>
 						</MenuItem>
 						<MenuItem className="ml-6" store={menu}>
 							<Link href={"/home/shortlist/edit/watchlist"}>
 								<span className="text-foreground">Watchlist</span>
-								<span className="menu-label">View your watchlist</span>
+								<span className={styles['menu-label']}>View your watchlist</span>
 							</Link>
 						</MenuItem>
 						<MenuItem store={menu}>
 							<Link href={"/tierlists"}>
 								<span className="text-foreground">Tierlists</span>
-								<span className="menu-label">View all tierlists from users</span>
+								<span className={styles['menu-label']}>View all tierlists from users</span>
 							</Link>
 						</MenuItem>
 						<MenuItem className="ml-6" store={menu}>
 							<Link href={`/tierlists/${user?.tierlistId}`}>
 								<span className="text-foreground">Edit</span>
-								<span className="menu-label">Edit your tierlist</span>
+								<span className={styles['menu-label']}>Edit your tierlist</span>
 							</Link>
 						</MenuItem>
 					</ul>

@@ -1,0 +1,81 @@
+.menu {
+    position: relative;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border-radius: 0.25rem;
+    min-width: 180px;
+    background-color: var(--color-popover);
+    z-index: 50;
+    border-width: 1px;
+    padding: 1.25rem;
+    color: var(--color-foreground)
+}
+
+.menu-label {
+    @supports not (anchor-name: --a) {
+        li a:hover & {
+            color: var(--color-accent-foreground);
+        }
+    }
+
+    font-size: 0.8rem;
+    color: var(--color-foreground);
+    opacity: 0.5;
+    transition: all 0.3s ease-in-out;
+
+    a:hover & {
+        color: var(--secondary-foreground);
+        transition: color 0.3s ease-in-out;
+    }
+}
+
+@utility menu-item {
+    display: flex;
+    flex-direction: column;
+    cursor: default;
+    scroll-margin: 0.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    outline: none !important;
+    align-items: flex-start;
+
+    @property --＠color-1 {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: hsl(98 100% 62%);
+    }
+
+    @property --＠color-2 {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: hsl(204 100% 59%);
+    }
+}
+
+@utility menu-item-inner {
+    margin-left: 2rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+
+    &::before {
+        content: "|";
+    }
+
+    @property --＠color-1 {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: hsl(98 100% 62%);
+    }
+
+    @property --＠color-2 {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: hsl(204 100% 59%);
+    }
+}
