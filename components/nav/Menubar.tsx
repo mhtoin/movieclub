@@ -9,7 +9,6 @@ import { Drawer, DrawerContent, DrawerTrigger } from "../ui/Drawer";
 import HamburgerMenu from "./HamburgerMenu";
 import styles from "./menu.module.css";
 import MenuItem from "./MenuItem";
-;
 
 export default function Menubar() {
 	const [open, setOpen] = useState(false);
