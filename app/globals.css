@@ -1,7 +1,36 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@config '../tailwind.config.js';
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+	--color-background: var(--background);
+	--color-main-background: var(--main-background);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-navigation: var(--navigation);
+	--color-dialog: var(--dialog);
+	--color-opaque-card: var(--opaque-card);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-success: var(--success);
+	--color-error: var(--error);
+	--color-mobilenav: var(--mobilenav);
+	--color-foreground: var(--foreground);
+}
 
 :root {
 	--background: oklch(0.99 0.0023 97.29);
@@ -30,38 +59,9 @@
 	--mobilenav: oklch(0.68 0.1252 169.79);
 	--popoverBackground: oklch(0.28 0.0037 236.63);
 	--opaque-card: oklch(0.27 0 0);
-
-	/* Add transition for all CSS variables */
-	transition:
-		color 0.3s ease,
-		background-color 0.3s ease,
-		border-color 0.3s ease,
-		--background 0.3s ease,
-		--foreground 0.3s ease,
-		--card 0.3s ease,
-		--card-foreground 0.3s ease,
-		--popover 0.3s ease,
-		--popover-foreground 0.3s ease,
-		--primary 0.3s ease,
-		--primary-foreground 0.3s ease,
-		--secondary 0.3s ease,
-		--secondary-foreground 0.3s ease,
-		--muted 0.3s ease,
-		--muted-foreground 0.3s ease,
-		--accent 0.3s ease,
-		--accent-foreground 0.3s ease,
-		--destructive 0.3s ease,
-		--destructive-foreground 0.3s ease,
-		--border 0.3s ease,
-		--input 0.3s ease,
-		--ring 0.3s ease;
 }
 
 .dark {
-
-	/*
-    * Surfaces
-    */
 	--background: oklch(0.12 0 0);
 	--main-background: oklch(0.12 0 0);
 	--card: oklch(0.22 0 0);
@@ -69,9 +69,6 @@
 	--navigation: oklch(0.37 0 0);
 	--dialog: oklch(0.14 0.0044 285.82);
 	--opaque-card: oklch(0.27 0 0);
-	/*
-    * Components
-    */
 	--primary: oklch(0.98 0 0);
 	--secondary: oklch(0.37 0 0);
 	--muted: oklch(0.27 0.0055 286.03);
@@ -80,9 +77,6 @@
 	--border: oklch(0.37 0 0);
 	--input: oklch(0.27 0.0055 286.03);
 	--ring: oklch(0.87 0.0055 286.29);
-	/*
-    * Typography
-    */
 	--primary-foreground: oklch(1 0 0);
 	--foreground: oklch(0.98 0 0);
 	--card-foreground: oklch(0.98 0 0);
@@ -148,13 +142,9 @@
 	--secondary-foreground: oklch(1 0 0);
 }
 
+
+
 @layer base {
-	* {
-		transition-property: color, background-color, border-color, outline-color,
-			fill, stroke;
-		transition-timing-function: ease;
-		transition-duration: 0.3s;
-	}
 
 	*,
 	::after,
@@ -1831,34 +1821,14 @@
 	color: transparent;
 }
 
-/*
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}*/
-
 
 @layer base {
 	* {
-		@apply border-border;
+		@apply border-border outline-ring/50;
 	}
 
 	body {
-		@apply text-foreground;
-		font-feature-settings: "rlig" 1, "calt" 1;
+		@apply bg-background text-foreground;
 	}
 }
 
