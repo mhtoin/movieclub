@@ -1,4 +1,4 @@
-import { discord } from "@/lib/auth";
+import { discord } from "@/lib/authentication/discord";
 import { generateState } from "arctic";
 import { cookies } from "next/headers";
 
