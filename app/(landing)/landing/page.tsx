@@ -1,8 +1,8 @@
-import { validateRequest } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/authentication/session";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
-	const { user } = await validateRequest();
+	const { user } = await getCurrentSession();
 
 	if (!user) {
 		redirect("/login");
@@ -11,7 +11,7 @@ export default async function Home() {
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between p-24 no-scrollbar">
 			<div className="flex flex-col items-center justify-center">
-				<h1 className="text-4xl font-bold">Welcome, {user?.username}</h1>
+				<h1 className="text-4xl font-bold">Welcome, {user?.name}</h1>
 				<p className="text-2xl">You are logged in</p>
 			</div>
 		</main>

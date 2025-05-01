@@ -1,5 +1,5 @@
 import type { TierMovie, TierlistTier } from "@prisma/client";
-import { validateRequest } from "./auth";
+import { getCurrentSession } from "./authentication/session";
 import prisma from "./prisma";
 
 export const revalidate = 10;
@@ -56,7 +56,11 @@ export async function getTierlist(id: string) {
 }
 
 export async function createTierlist(formData: FormData) {
-	const { user } = await validateRequest();
+	const { user } = await getCurrentSession();
+
+	if (!user) {
+		throw new Error("User not authenticated");
+	}
 
 	const userId = user?.id;
 
@@ -237,7 +241,11 @@ export async function updateTierlist(_id: string, items: TierMovie[]) {
 }
 
 export async function modifyTierlist(formData: FormData) {
-	const { user } = await validateRequest();
+	const { user } = await getCurrentSession();
+
+	if (!user) {
+		throw new Error("User not authenticated");
+	}
 
 	const userId = user?.id;
 	const tierlistTiers = parseTiers(formData);
