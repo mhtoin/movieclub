@@ -11,7 +11,7 @@ export async function GET(): Promise<Response> {
 	}
 
 	await invalidateSession(session.id);
-	deleteSessionTokenCookie();
+	await deleteSessionTokenCookie();
 	return new Response(null, {
 		status: 302,
 		headers: { Location: "/" },
