@@ -1,5 +1,5 @@
 import type { Video } from "@/types/tmdb.type";
-import { validateRequest } from "./auth";
+import { getCurrentSession } from "./authentication/session";
 
 export const revalidate = 10;
 
@@ -40,10 +40,10 @@ export async function getAdditionalInfo(tmdbId: number) {
 }
 
 export async function getWatchlist() {
-	const { user } = await validateRequest();
+	const { user } = await getCurrentSession();
 
 	if (!user) {
-		return [];
+		throw new Error("User not authenticated");
 	}
 
 	let pagesLeft = true;
