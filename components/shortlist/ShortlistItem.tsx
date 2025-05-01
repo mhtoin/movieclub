@@ -12,20 +12,18 @@ import {
 	useValidateSession,
 } from "lib/hooks";
 import {
-	BookmarkMinus,
-	BookmarkPlus,
-	Plus,
+	EllipsisVertical,
 	Star,
 	TicketCheck,
 	TicketPlus,
 	TrendingUp,
-	Users,
-	X,
+	Users
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaImdb } from "react-icons/fa";
 import { SiThemoviedatabase } from "react-icons/si";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/Dropdown";
 
 interface SearchResultCardProps {
 	movie: MovieWithUser | Movie;
@@ -56,9 +54,8 @@ export default function ShortListItem({
 
 	return (
 		<div
-			className={`moviecard group rounded-none md:rounded-md ${
-				highlight ? "highlight " : ""
-			}`}
+			className={`moviecard group rounded-none md:rounded-md ${highlight ? "highlight " : ""
+				}`}
 		>
 			{showActions && requiresSelection && shortlistId === user?.shortlistId && (
 				<div className="opacity-0 -translate-x-20 group-hover:opacity-80 group-hover:translate-x-0 backdrop-blur-md transition-all duration-500 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-md p-2">
@@ -85,55 +82,55 @@ export default function ShortListItem({
 			)}
 			{showActions && (
 				<div className="translate-x-20 opacity-0 group-hover:opacity-80 group-hover:translate-x-0 backdrop-blur-md border border-border/50 transition-all duration-500 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-none md:rounded-tr-md p-2">
-					{removeFromShortList ? (
-						<Button
-							variant={"ghost"}
-							size={"iconXs"}
-							tooltip="Remove"
-							onClick={() => {
-								removeMutation.mutate({
-									userId: user?.id || "",
-									shortlistId: user?.shortlistId || "",
-									movieId: movie.id || "",
-								});
-							}}
-							isLoading={removeMutation.isPending}
-						>
-							<X className="w-5 h-5 text-primary" />
-						</Button>
-					) : (
-						<Button
-							variant={"ghost"}
-							size={"iconXs"}
-							tooltip="Add"
-							onClick={() => {
-								addMutation.mutate({
-									movie: movie,
-									shortlistId: user?.shortlistId || "",
-								});
-							}}
-							isLoading={addMutation.isPending}
-						>
-							<Plus className="w-5 h-5 text-primary" />
-						</Button>
-					)}
-					<Button
-						variant="ghost"
-						size="iconXs"
-						onClick={() => {
-							watchlistMutation.mutate({
-								movieId: movie.tmdbId,
-							});
-						}}
-						isLoading={watchlistMutation.isPending}
-						tooltip={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
-					>
-						{isInWatchlist ? (
-							<BookmarkMinus className="w-5 h-5 text-primary" />
-						) : (
-							<BookmarkPlus className="w-5 h-5 text-primary" />
-						)}
-					</Button>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								variant={"ghost"}
+								size={"iconSm"}
+								tooltip={"Actions"}
+							>
+								<EllipsisVertical className="w-5 h-5 text-primary" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent className="w-56">
+							<DropdownMenuLabel>Actions</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem>
+								{removeFromShortList ? (
+									<Button
+										variant={"ghost"}
+										size={"iconSm"}
+										onClick={() => {
+											removeMutation.mutate({
+												userId: user?.id || "",
+												shortlistId: shortlistId,
+												movieId: movie.id,
+											});
+										}}
+										isLoading={removeMutation.isPending}
+									>
+										Remove from shortlist
+									</Button>
+								) : (
+									<Button
+										variant={"ghost"}
+										size={"iconXs"}
+										tooltip="Add"
+										onClick={() => {
+											addMutation.mutate({
+												movie: movie,
+												shortlistId: user?.shortlistId || "",
+											});
+										}}
+										isLoading={addMutation.isPending}
+									>
+										Add to shortlist
+									</Button>
+								)}
+
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 			)}
 			<Image
