@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	output: "standalone",
-	experimental: {},
+	experimental: {
+		reactCompiler: true,
+	},
 	images: {
 		remotePatterns: [
 			{
