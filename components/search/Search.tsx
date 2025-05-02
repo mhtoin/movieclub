@@ -4,7 +4,7 @@ import Results from './Results'
 
 export default function Search() {
   return (
-    <div className="flex flex-col justify-center items-center gap-2 rounded-lg relative">
+    <div className="relative flex flex-col items-center justify-center gap-2 rounded-lg">
       <Suspense fallback={<div>Loading...</div>}>
         <FilterBar />
       </Suspense>

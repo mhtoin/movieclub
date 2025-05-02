@@ -15,7 +15,7 @@ export default function ViewModeButtons() {
     setViewMode('reviews')
   }, [setViewMode])
   return (
-    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-28 z-10">
+    <div className="absolute bottom-0 left-1/2 z-10 h-28 -translate-x-1/2">
       <div className="flex flex-row gap-2">
         <Button
           variant="outline"
@@ -23,7 +23,7 @@ export default function ViewModeButtons() {
           onClick={handleDetailsClick}
           disabled={viewMode === 'details'}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
           <span>Details</span>
         </Button>
         <Button
@@ -33,7 +33,7 @@ export default function ViewModeButtons() {
           disabled={viewMode === 'reviews'}
         >
           <span>Reviews</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
     </div>

@@ -105,7 +105,7 @@ export default function ActionButtons({
   ])
 
   return (
-    <div className="flex flex-row gap-2 items-center justify-center">
+    <div className="flex flex-row items-center justify-center gap-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -116,8 +116,8 @@ export default function ActionButtons({
               disabled={disabled}
               onClick={startRaffle}
             >
-              <div className="flex flex-row gap-2 items-center">
-                <Dices className="w-6 h-6" />
+              <div className="flex flex-row items-center gap-2">
+                <Dices className="h-6 w-6" />
                 Start
               </div>
             </Button>

@@ -48,12 +48,12 @@ export default async function Tierlists() {
         {allTierlists.map((tierlist) => {
           return (
             <div
-              className="border rounded-xl p-2 flex flex-col items-center gap-2"
+              className="flex flex-col items-center gap-2 rounded-xl border p-2"
               key={tierlist.id}
             >
               <span className="text-sm font-bold">{tierlist.user?.name}</span>
               <Link href={`/tierlists/${tierlist.id}`}>
-                <div className="border rounded-md overflow-hidden">
+                <div className="overflow-hidden rounded-md border">
                   <div className="w-24">
                     <img src={tierlist.user?.image} alt="user" />
                   </div>

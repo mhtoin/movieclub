@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="flex flex-col items-center justify-center align-middle min-h-screen min-w-full">
+    <div className="flex min-h-screen min-w-full flex-col items-center justify-center align-middle">
       <span className="loading loading-ring loading-lg" />
     </div>
   )

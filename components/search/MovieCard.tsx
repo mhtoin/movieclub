@@ -65,7 +65,7 @@ export default function MovieCard({
       }}
     >
       {showActions && (
-        <div className="opacity-0 group-hover:opacity-80 backdrop-blur-md border border-border/50 transition-opacity duration-300 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-lg p-2">
+        <div className="border-border/50 fill-accent stroke-foreground bg-card absolute top-0 right-0 z-10 flex flex-col items-center justify-center gap-2 rounded-tr-lg rounded-bl-lg border p-2 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-80">
           {added ? (
             <Button
               variant={'ghost'}
@@ -119,21 +119,21 @@ export default function MovieCard({
         alt=""
         width={250}
         height={375}
-        className="w-full h-full object-cover absolute top-0 left-0"
+        className="absolute top-0 left-0 h-full w-full object-cover"
       />
       <div className="info">
         <h1 className="title line-clamp-2">{movie?.title}</h1>
-        <div className="flex flex-row gap-2 flex-wrap">
-          <span className="text-xs flex flex-row items-center gap-1">
-            <Star className="w-4 h-4" />
+        <div className="flex flex-row flex-wrap gap-2">
+          <span className="flex flex-row items-center gap-1 text-xs">
+            <Star className="h-4 w-4" />
             {movie?.vote_average?.toFixed(1)}
           </span>
-          <span className="text-xs flex flex-row items-center gap-1">
-            <Users className="w-4 h-4" />
+          <span className="flex flex-row items-center gap-1 text-xs">
+            <Users className="h-4 w-4" />
             {movie?.vote_count}
           </span>
-          <span className="text-xs flex flex-row items-center gap-1">
-            <TrendingUp className="w-4 h-4" />
+          <span className="flex flex-row items-center gap-1 text-xs">
+            <TrendingUp className="h-4 w-4" />
             {movie?.popularity?.toFixed(1)}
           </span>
         </div>
@@ -146,7 +146,7 @@ export default function MovieCard({
                 target="_blank"
               >
                 <Button variant="ghost" size="icon">
-                  <SiThemoviedatabase className="w-6 h-6" />
+                  <SiThemoviedatabase className="h-6 w-6" />
                 </Button>
               </Link>
               <Link
@@ -158,7 +158,7 @@ export default function MovieCard({
                   size="icon"
                   isLoading={status === 'pending'}
                 >
-                  <FaImdb className="w-6 h-6" />
+                  <FaImdb className="h-6 w-6" />
                 </Button>
               </Link>
             </div>

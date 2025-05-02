@@ -322,7 +322,7 @@ export default function DnDTierContainer({
 
   return (
     <>
-      <div className="flex flex-row items-center gap-5 w-full justify-center">
+      <div className="flex w-full flex-row items-center justify-center gap-5">
         <TierDateFilter
           values={['2023', '2024', '2025']}
           selectedDate={selectedDate}

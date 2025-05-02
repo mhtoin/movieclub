@@ -41,7 +41,7 @@ export default function Providers() {
     }
   }
   return (
-    <div className="flex flex-row gap-4 py-2 px-1 overflow-x-scroll w-full h-full no-scrollbar overflow-visible flex-wrap">
+    <div className="no-scrollbar flex h-full w-full flex-row flex-wrap gap-4 overflow-visible overflow-x-scroll px-1 py-2">
       {providers && providersStatus === 'success'
         ? providers?.map((provider: Provider) => {
             return (
@@ -58,7 +58,7 @@ export default function Providers() {
         : Array.from({ length: 7 }).map((_, index) => (
             <div
               key={index}
-              className="w-10 h-10 lg:w-12 lg:h-12 bg-card rounded-md animate-pulse"
+              className="bg-card h-10 w-10 animate-pulse rounded-md lg:h-12 lg:w-12"
             />
           ))}
     </div>

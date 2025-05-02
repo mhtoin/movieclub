@@ -20,7 +20,7 @@ export default function TrailerLink({
             href={`https://www.youtube.com/watch?v=${video.key}`}
             target="_blank"
           >
-            <SiYoutube className="w-6 h-6" />
+            <SiYoutube className="h-6 w-6" />
           </Link>
         </TooltipTrigger>
         <TooltipContent className="bg-card max-w-40">

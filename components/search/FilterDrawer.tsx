@@ -47,10 +47,10 @@ export default function FilterDrawer({
         <DrawerHeader>
           <DrawerTitle>Filters</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 flex flex-col h-full gap-5">
+        <div className="flex h-full flex-col gap-5 p-4">
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium mb-2">Genres</h3>
-            <div className="grid grid-cols-2 gap-2 h-[400px] overflow-y-auto w-full">
+            <h3 className="mb-2 text-sm font-medium">Genres</h3>
+            <div className="grid h-[400px] w-full grid-cols-2 gap-2 overflow-y-auto">
               {genres?.map((genre) => (
                 <Checkbox
                   key={genre.value}
@@ -67,8 +67,8 @@ export default function FilterDrawer({
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium mb-2">Rating</h3>
-            <div className="flex flex-col gap-2 items-center">
+            <h3 className="mb-2 text-sm font-medium">Rating</h3>
+            <div className="flex flex-col items-center gap-2">
               <RangeSlider
                 label="Rating"
                 value={value}

@@ -34,12 +34,12 @@ export default function TierCreate({ tierlistId }: { tierlistId: string }) {
   }
   return (
     <div
-      className={`hidden md:flex border rounded-tl-md w-24 rounded-bl-md p-2 bg-accent/80 items-center justify-center transition-all duration-300 ${
+      className={`bg-accent/80 hidden w-24 items-center justify-center rounded-tl-md rounded-bl-md border p-2 transition-all duration-300 md:flex ${
         createFormState === 'open' ? 'h-[300px]' : 'h-24'
       }`}
     >
       <form
-        className="flex flex-col gap-2 items-center justify-center"
+        className="flex flex-col items-center justify-center gap-2"
         onSubmit={(e) => {
           e.preventDefault()
         }}
@@ -48,7 +48,7 @@ export default function TierCreate({ tierlistId }: { tierlistId: string }) {
           <>
             <label
               htmlFor="tier-name"
-              className="text-sm text-muted-foreground"
+              className="text-muted-foreground text-sm"
             >
               Tier name
             </label>

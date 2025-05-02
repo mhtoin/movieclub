@@ -1,6 +1,6 @@
-import prisma from "../lib/prisma";
+import prisma from '../lib/prisma'
 async function generateTierlists() {
-	await prisma.tier.deleteMany();
+  await prisma.tier.deleteMany()
 }
 
-generateTierlists();
+generateTierlists()

@@ -23,14 +23,14 @@ export default function ShortlistSidebarContent() {
   const participationMutation = useUpdateParticipationMutation()
   const { data: watchlist } = useGetWatchlistQuery(user || null)
   return (
-    <div className="flex flex-col items-center justify-center gap-5 ">
-      <div className="bg-background flex flex-col items-center justify-center gap-10 z-20 w-full py-5">
-        <div className="w-1/2 h-[1px] bg-secondary relative">
-          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+    <div className="flex flex-col items-center justify-center gap-5">
+      <div className="bg-background z-20 flex w-full flex-col items-center justify-center gap-10 py-5">
+        <div className="bg-secondary relative h-[1px] w-1/2">
+          <span className="bg-background absolute -top-3 left-1/2 flex -translate-x-1/2 items-center justify-center px-2">
             {userShortlist?.user?.name}
           </span>
         </div>
-        <div className="flex flex-col items-center justify-center gap-5 bg-background ">
+        <div className="bg-background flex flex-col items-center justify-center gap-5">
           <UserAvatar
             userShortlist={userShortlist}
             readyStateMutation={readyStateMutation}
@@ -64,17 +64,17 @@ export default function ShortlistSidebarContent() {
             </div>
           </div>
         </div>
-        <div className="w-1/2 h-[1px] bg-secondary relative">
-          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+        <div className="bg-secondary relative h-[1px] w-1/2">
+          <span className="bg-background absolute -top-3 left-1/2 flex -translate-x-1/2 items-center justify-center px-2">
             Movies
           </span>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 overflow-y-scroll no-scrollbar pb-10">
+      <div className="no-scrollbar flex flex-col items-center gap-4 overflow-y-scroll pb-10">
         {userShortlist?.requiresSelection &&
           userShortlist.selectedIndex === null && (
-            <div className="flex flex-row items-center justify-center gap-2 bg-secondary p-2 rounded-md">
-              <InfoIcon className="w-4 h-4" />
+            <div className="bg-secondary flex flex-row items-center justify-center gap-2 rounded-md p-2">
+              <InfoIcon className="h-4 w-4" />
               <span>You can only have 1 candidate</span>
             </div>
           )}

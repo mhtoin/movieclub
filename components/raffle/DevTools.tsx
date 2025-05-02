@@ -19,14 +19,14 @@ export default function DevTools({
 
   return (
     <div className="flex flex-row gap-5">
-      <div className="flex flex-col gap-2 items-center">
+      <div className="flex flex-col items-center gap-2">
         <label htmlFor="dev-mode" className="text-xs font-bold">
           No save
         </label>
         <Input
           type="checkbox"
           id="dev-mode"
-          className="w-5 h-5"
+          className="h-5 w-5"
           checked={noSave}
           onChange={() => {
             startTransition(() => {
@@ -37,14 +37,14 @@ export default function DevTools({
           }}
         />
       </div>
-      <div className="flex flex-col gap-2 items-center">
+      <div className="flex flex-col items-center gap-2">
         <label htmlFor="dev-mode" className="text-xs font-bold">
           Result screen
         </label>
         <Input
           type="checkbox"
           id="dev-mode"
-          className="w-5 h-5"
+          className="h-5 w-5"
           checked={resultScreen}
           onChange={() => {
             startTransition(() => {

@@ -22,7 +22,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const dehydratedState = dehydrate(queryClient)
 
   return (
-    <div className="flex flex-col gap-10 md:gap-5 py-20 items-center">
+    <div className="flex flex-col items-center gap-10 py-20 md:gap-5">
       <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div>Loading...</div>}>
           <TierContainer

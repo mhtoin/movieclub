@@ -29,7 +29,7 @@ export const ProviderCheckbox: React.FC<CheckboxProps> = ({
 
   return (
     <label
-      className="flex items-center gap-1 h-10 w-10 lg:h-12 lg:w-12 aspect-square  rounded cursor-pointer hover:scale-105 transition-transform ease-in-out duration-200"
+      className="flex aspect-square h-10 w-10 cursor-pointer items-center gap-1 rounded transition-transform duration-200 ease-in-out hover:scale-105 lg:h-12 lg:w-12"
       data-checked={checked}
       data-focus-visible={focusVisible || undefined}
       htmlFor={`provider-${provider.provider_id}`}
@@ -50,9 +50,9 @@ export const ProviderCheckbox: React.FC<CheckboxProps> = ({
       </Ariakit.VisuallyHidden>
       <img
         src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
-        className={`transition-all ease-in-out duration-200 object-fill aspect-square object-center rounded  ${
+        className={`aspect-square rounded object-fill object-center transition-all duration-200 ease-in-out ${
           checked
-            ? 'grayscale-0  opacity-100 border border-border'
+            ? 'border-border border opacity-100 grayscale-0'
             : 'opacity-20 grayscale'
         } ${isLoading ? 'animate-pulse' : ''}`}
         alt={provider.provider_name}

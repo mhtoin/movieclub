@@ -9,7 +9,7 @@ export default async function SearchPage() {
     redirect('/')
   }
   return (
-    <main className="flex flex-col items-center justify-center gap-5 p-2 w-full h-full">
+    <main className="flex h-full w-full flex-col items-center justify-center gap-5 p-2">
       <Results />
     </main>
   )

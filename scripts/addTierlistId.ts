@@ -1,18 +1,18 @@
-import prisma from "../lib/prisma";
+import prisma from '../lib/prisma'
 
 async function main() {
-	const tierlists = await prisma.tierlists.findMany();
+  const tierlists = await prisma.tierlists.findMany()
 
-	for (const tierlist of tierlists) {
-		await prisma.user.update({
-			where: {
-				id: tierlist.userId,
-			},
-			data: {
-				tierlistId: tierlist.id,
-			},
-		});
-	}
+  for (const tierlist of tierlists) {
+    await prisma.user.update({
+      where: {
+        id: tierlist.userId,
+      },
+      data: {
+        tierlistId: tierlist.id,
+      },
+    })
+  }
 }
 
-main();
+main()

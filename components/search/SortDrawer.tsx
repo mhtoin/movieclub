@@ -54,9 +54,9 @@ export default function SortDrawer() {
         <DrawerHeader>
           <DrawerTitle>Sort</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4 flex flex-col h-full gap-5">
+        <div className="flex h-full flex-col gap-5 p-4">
           <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium mb-2">Direction</h3>
+            <h3 className="mb-2 text-sm font-medium">Direction</h3>
             <div className="flex flex-col gap-2">
               <Radio
                 values={[
@@ -67,7 +67,7 @@ export default function SortDrawer() {
                 defaultValue={selectedDirection}
               />
             </div>
-            <h3 className="text-sm font-medium mb-2">Sort by</h3>
+            <h3 className="mb-2 text-sm font-medium">Sort by</h3>
             <div className="flex flex-col gap-2">
               <Radio
                 values={Object.entries(SORT_OPTIONS).map(([key, value]) => ({

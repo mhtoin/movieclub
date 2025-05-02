@@ -18,9 +18,9 @@ export default function AriaDialog({
       open={open}
       onClose={onClose}
       backdrop={
-        <div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-enter:opacity-100 data-enter:backdrop-blur-xs " />
+        <div className="bg-black/5 opacity-0 backdrop-blur-none transition-all duration-300 data-enter:opacity-100 data-enter:backdrop-blur-xs" />
       }
-      className="fixed z-50 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-fit min-w-96 lg:min-w-[1000px] m-auto bg-background origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-enter:opacity-100 data-enter:scale-100"
+      className="bg-background fixed inset-3 z-50 m-auto flex max-w-fit min-w-96 origin-bottom-right scale-95 flex-col gap-1 overflow-auto rounded-md border opacity-0 transition-all duration-300 data-enter:scale-100 data-enter:opacity-100 lg:min-w-[1000px]"
     >
       {children}
     </Ariakit.Dialog>

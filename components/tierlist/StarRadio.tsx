@@ -162,7 +162,7 @@ export default function StarRadio({
     }
 
     return (
-      <div className="relative group">
+      <div className="group relative">
         {/* Base star (outline) */}
         <Star
           className={`${sizeClasses[size]} stroke-yellow-400 transition-all duration-200 ${
@@ -188,8 +188,8 @@ export default function StarRadio({
 
         {/* Hover indicator - shows the potential fill amount */}
         {!disabled && !saveRatingMutation.isPending && (
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <div className="bg-yellow-400/20 rounded-full w-1/2 h-1/2 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+            <div className="flex h-1/2 w-1/2 items-center justify-center rounded-full bg-yellow-400/20">
               {fillPercentage > 0 && (
                 <span
                   className={`text-[8px] font-bold ${fillPercentage > 25 ? 'text-background' : 'text-white'}`}
@@ -229,7 +229,7 @@ export default function StarRadio({
             htmlFor={`${name}-${starIndex + 1}`}
             className={`cursor-pointer transition-transform duration-200 hover:scale-110 ${
               disabled || saveRatingMutation.isPending
-                ? 'opacity-60 cursor-not-allowed hover:scale-100'
+                ? 'cursor-not-allowed opacity-60 hover:scale-100'
                 : ''
             }`}
             onMouseMove={(e) => handleMouseMove(e, starIndex)}
@@ -244,12 +244,12 @@ export default function StarRadio({
 
       {/* Display the numeric value or loading spinner */}
       {saveRatingMutation.isPending ? (
-        <span className="ml-3 flex items-center bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md">
-          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+        <span className="ml-3 flex items-center rounded-md bg-yellow-100 px-2 py-1 text-yellow-800">
+          <Loader2 className="mr-1 h-4 w-4 animate-spin" />
           <span className="text-sm font-medium">Saving...</span>
         </span>
       ) : displayValue > 0 ? (
-        <span className="ml-3 text-sm font-medium bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md transition-all duration-200">
+        <span className="ml-3 rounded-md bg-yellow-100 px-2 py-1 text-sm font-medium text-yellow-800 transition-all duration-200">
           {displayValue.toFixed(2)}
         </span>
       ) : null}

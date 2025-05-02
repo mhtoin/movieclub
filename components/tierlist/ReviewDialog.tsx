@@ -52,7 +52,7 @@ export default function ReviewDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Star
-          className={`w-4 h-4 text-yellow-500 hover:scale-110 fill-transparent hover:fill-accent hover:text-accent transition-all duration-300 ${
+          className={`hover:fill-accent hover:text-accent h-4 w-4 fill-transparent text-yellow-500 transition-all duration-300 hover:scale-110 ${
             Number.parseFloat(movie.rating) > 0 || movie.review
               ? 'fill-yellow-500'
               : ''
@@ -60,17 +60,17 @@ export default function ReviewDialog({
         />
       </DialogTrigger>
       <DialogContent
-        className="max-w-4xl max-h-[90vh] h-[90vh] overflow-hidden p-0 z-9999"
+        className="z-9999 h-[90vh] max-h-[90vh] max-w-4xl overflow-hidden p-0"
         variant="noClose"
       >
         {isLoading ? (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex h-full items-center justify-center">
             <Loader2 className="animate-spin" />
           </div>
         ) : (
-          <div className="relative w-full h-full">
+          <div className="relative h-full w-full">
             {/* Background image with overlay */}
-            <div className="absolute inset-0 w-full h-full">
+            <div className="absolute inset-0 h-full w-full">
               <Image
                 src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.backdrop_path || latestMovieData.movie.poster_path}`}
                 alt={latestMovieData.movie.title}
@@ -83,14 +83,14 @@ export default function ReviewDialog({
             </div>
 
             {/* Content container with proper padding and z-index */}
-            <div className="relative z-10 grid grid-cols-2 gap-4 p-6 w-full h-full">
-              <div className="shrink-0 col-span-1 h-full w-full border">
+            <div className="relative z-10 grid h-full w-full grid-cols-2 gap-4 p-6">
+              <div className="col-span-1 h-full w-full shrink-0 border">
                 <Image
                   src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.poster_path}`}
                   alt={latestMovieData.movie.title}
                   width={500}
                   height={750}
-                  className="rounded-md shadow-lg object-cover h-full w-full"
+                  className="h-full w-full rounded-md object-cover shadow-lg"
                 />
               </div>
               <div>
@@ -99,9 +99,9 @@ export default function ReviewDialog({
                     {latestMovieData.movie.title}
                   </DialogTitle>
                 </DialogHeader>
-                <div className="flex gap-6 bg-transparent w-full h-full p-2 overflow-hidden">
-                  <div className="flex flex-col gap-4 text-white w-full h-full items-start">
-                    <div className="flex flex-col gap-2 max-w-sm shrink-0 grow-0">
+                <div className="flex h-full w-full gap-6 overflow-hidden bg-transparent p-2">
+                  <div className="flex h-full w-full flex-col items-start gap-4 text-white">
+                    <div className="flex max-w-sm shrink-0 grow-0 flex-col gap-2">
                       <StarRadio
                         value={rating}
                         id={latestMovieData.id}
@@ -110,7 +110,7 @@ export default function ReviewDialog({
                         }}
                       />
                     </div>
-                    <div className="flex flex-col gap-2 w-full h-full">
+                    <div className="flex h-full w-full flex-col gap-2">
                       <h2 className="text-lg font-semibold">Review</h2>
                       <ReviewEditor movieData={latestMovieData} />
                     </div>

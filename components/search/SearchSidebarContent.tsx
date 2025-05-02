@@ -8,17 +8,17 @@ import ShortlistSidebarContent from '@/components/shortlist/ShortlistSidebarCont
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 export default function SearchSidebarContent() {
   return (
-    <Tabs defaultValue="discover" className="flex flex-col gap-4 w-full h-full">
-      <TabsList className="grid w-full grid-cols-2 bg-transparent gap-1 px-2">
+    <Tabs defaultValue="discover" className="flex h-full w-full flex-col gap-4">
+      <TabsList className="grid w-full grid-cols-2 gap-1 bg-transparent px-2">
         <TabsTrigger
           value="discover"
-          className="border border-t-0 border-r-0 border-l-0 rounded-tr-none rounded-tl-none bg-card data-[state=active]:bg-accent/50 text-accent-foreground"
+          className="bg-card data-[state=active]:bg-accent/50 text-accent-foreground rounded-tl-none rounded-tr-none border border-t-0 border-r-0 border-l-0"
         >
           Discover
         </TabsTrigger>
         <TabsTrigger
           value="shortlist"
-          className="border border-t-0 border-r-0 border-l-0 rounded-tr-none rounded-tl-none bg-card data-[state=active]:bg-accent/50 text-accent-foreground"
+          className="bg-card data-[state=active]:bg-accent/50 text-accent-foreground rounded-tl-none rounded-tr-none border border-t-0 border-r-0 border-l-0"
         >
           Shortlist
         </TabsTrigger>
@@ -29,24 +29,24 @@ export default function SearchSidebarContent() {
           <div className="flex flex-col gap-4">
             <SearchInput type="discover" />
             <div className="flex flex-col gap-2">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Discover movies by keywords
               </p>
             </div>
           </div>
           <Providers />
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Filter by streaming providers
             </p>
           </div>
           <GenreFilters />
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-muted-foreground">Filter by genres</p>
+            <p className="text-muted-foreground text-sm">Filter by genres</p>
           </div>
           <VoteRange />
           <div className="flex flex-col gap-2">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Filter by vote average
             </p>
           </div>

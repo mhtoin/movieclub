@@ -16,12 +16,12 @@ export default function RaffleItems({
 }): JSX.Element {
   return (
     <div
-      className="flex flex-col gap-5 items-center overflow-scroll"
+      className="flex flex-col items-center gap-5 overflow-scroll"
       ref={containerRef}
     >
       <motion.div
         layout
-        className="grid @5xl/items:grid-cols-4 @4xl/items:grid-cols-5 @3xl/items:grid-cols-4 @2xl/items:grid-cols-3 @lg/items:grid-cols-2 @xl/items:grid-cols-3 @xs/items:grid-cols-2 gap-7 p-5"
+        className="grid gap-7 p-5 @xs/items:grid-cols-2 @lg/items:grid-cols-2 @xl/items:grid-cols-3 @2xl/items:grid-cols-3 @3xl/items:grid-cols-4 @4xl/items:grid-cols-5 @5xl/items:grid-cols-4"
       >
         <AnimatePresence mode="sync" initial={false}>
           {shuffledMovies.map((movie, index) => {
@@ -59,7 +59,7 @@ export default function RaffleItems({
                   priority={false}
                   loading="lazy"
                   sizes="(max-width: 768px) 20vw, (max-width: 1200px) 20vw, 33vw"
-                  className={`w-[150px] h-auto 2xl:w-[150px] transition-all duration-300 ease-in-out rounded-md ${
+                  className={`h-auto w-[150px] rounded-md transition-all duration-300 ease-in-out 2xl:w-[150px] ${
                     index === currentIndex && started
                       ? 'saturate-100'
                       : 'saturate-0'

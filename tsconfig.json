@@ -1,42 +1,42 @@
 {
-	"compilerOptions": {
-		"baseUrl": ".",
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"target": "es6",
-		"lib": ["dom", "dom.iterable", "esnext", "ESNext.Array"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": false,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"typeRoots": ["./types", "./node_modules/@types"],
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
-		"paths": {
-			"@/*": ["./*"],
-			"components/*": ["./components/*"],
-			"lib/*": ["./lib/*"]
-		}
-	},
-	"include": [
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		".next/types/**/*.ts",
-		"app/scripts/normalizeDates.msj",
-		"scripts/normalizeDates.js",
-		"scripts/generateTestData.js"
-	],
-	"exclude": ["node_modules"]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext", "ESNext.Array"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"],
+      "components/*": ["./components/*"],
+      "lib/*": ["./lib/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/scripts/normalizeDates.msj",
+    "scripts/normalizeDates.js",
+    "scripts/generateTestData.js"
+  ],
+  "exclude": ["node_modules"]
 }

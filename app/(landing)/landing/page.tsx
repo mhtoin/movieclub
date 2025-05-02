@@ -9,7 +9,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 no-scrollbar">
+    <main className="no-scrollbar flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center justify-center">
         <h1 className="text-4xl font-bold">Welcome, {user?.name}</h1>
         <p className="text-2xl">You are logged in</p>

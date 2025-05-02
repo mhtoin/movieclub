@@ -77,7 +77,7 @@ const Button: React.FC<ButtonProps> = ({
         </TooltipTrigger>
         <TooltipPortal>
           <TooltipContent
-            className="bg-card max-w-xs whitespace-pre-wrap p-2 z-9999 text-foreground relative hidden lg:block"
+            className="bg-card text-foreground relative z-9999 hidden max-w-xs p-2 whitespace-pre-wrap lg:block"
             sideOffset={10}
             align="center"
             side="right"

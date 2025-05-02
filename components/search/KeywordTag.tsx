@@ -9,19 +9,19 @@ export default function KeywordTag({
   handleClick: (keyword: { id: number; name: string }) => void
 }) {
   return (
-    <div className="h-7 px-3 py-1 text-xs relative bg-secondary text-primary-foreground inline-flex items-center gap-1.5 rounded-full font-medium transition-colors hover:bg-secondary/80">
+    <div className="bg-secondary text-primary-foreground hover:bg-secondary/80 relative inline-flex h-7 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors">
       <span className="max-w-[120px] truncate">{keyword?.name}</span>
       <Button
         variant={'ghost'}
         size={'icon'}
-        className="w-4 h-4 p-0 rounded-full hover:bg-destructive/20 hover:text-destructive"
+        className="hover:bg-destructive/20 hover:text-destructive h-4 w-4 rounded-full p-0"
         onClick={(e) => {
           e.preventDefault()
           handleClick(keyword)
         }}
         aria-label={`Remove ${keyword?.name} keyword`}
       >
-        <X className="w-3 h-3" />
+        <X className="h-3 w-3" />
       </Button>
     </div>
   )
