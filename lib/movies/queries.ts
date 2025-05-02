@@ -9,11 +9,9 @@ import type {
 	TMDBSearchResponse,
 	TMDBSearchResult,
 } from "@/types/tmdb.type";
-import type { Provider, SiteConfig } from "@prisma/client";
-import type { User as DatabaseUser } from "@prisma/client";
+import type { Provider, SiteConfig, User } from "@prisma/client";
 import { formatISO, nextWednesday, previousWednesday, set } from "date-fns";
 import { getBaseURL, keyBy } from "lib/utils";
-import type { User } from "lucia";
 
 export const searchKeywords = async (value: string) => {
 	const res = await fetch(
@@ -138,10 +136,15 @@ export const getUserShortlist = async (id: string) => {
 	//return shortlist;
 };
 
-export const getWatchlist = async (user: User | DatabaseUser | null) => {
+export const getWatchlist = async (user: User | null) => {
 	let pagesLeft = true;
 	let page = 1;
 	const movies: TMDBMovieResponse[] = [];
+
+	if (!user) {
+		throw new Error("User not authenticated");
+	}
+
 
 	do {
 		const watchlist = await fetch(
@@ -277,17 +280,17 @@ export function findMovieDate(
 	const dateAttempt =
 		direction === "previous"
 			? set(previousWednesday(startingDate), {
-					hours: 18,
-					minutes: 0,
-					seconds: 0,
-					milliseconds: 0,
-				})
+				hours: 18,
+				minutes: 0,
+				seconds: 0,
+				milliseconds: 0,
+			})
 			: set(nextWednesday(startingDate), {
-					hours: 18,
-					minutes: 0,
-					seconds: 0,
-					milliseconds: 0,
-				});
+				hours: 18,
+				minutes: 0,
+				seconds: 0,
+				milliseconds: 0,
+			});
 
 	const movieOnDate = movies ? movies[dateAttempt.toISOString()] : null;
 
