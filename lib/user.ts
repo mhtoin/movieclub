@@ -1,33 +1,33 @@
-import type { User } from "@prisma/client";
-import prisma from "./prisma";
+import type { User } from '@prisma/client'
+import prisma from './prisma'
 
 export async function updateUser(user: User, id: string) {
-	const res = await prisma.user.update({
-		where: {
-			id: id,
-		},
-		data: {
-			sessionId: user.sessionId,
-			accountId: user.accountId,
-		},
-	});
+  const res = await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: {
+      sessionId: user.sessionId,
+      accountId: user.accountId,
+    },
+  })
 
-	return res;
+  return res
 }
 
 export async function updateUserImage(id: string, url: string) {
-	const res = await prisma.user.update({
-		where: {
-			id: id,
-		},
-		data: {
-			image: url,
-		},
-	});
+  const res = await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: {
+      image: url,
+    },
+  })
 
-	return res;
+  return res
 }
 
 export async function getUsers() {
-	return await prisma.user.findMany();
+  return await prisma.user.findMany()
 }

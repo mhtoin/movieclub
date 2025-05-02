@@ -1,12 +1,12 @@
-import { createDevCookie } from "@/lib/actions/setDevCookie";
-import { Input } from "../ui/Input";
-import { useTransition } from "react";
+import { createDevCookie } from '@/lib/actions/setDevCookie'
+import { Input } from '../ui/Input'
+import { useTransition } from 'react'
 
 interface DevToolsProps {
-  noSave: boolean;
-  setNoSave: (noSave: boolean) => void;
-  resultScreen: boolean;
-  setResultScreen: (resultScreen: boolean) => void;
+  noSave: boolean
+  setNoSave: (noSave: boolean) => void
+  resultScreen: boolean
+  setResultScreen: (resultScreen: boolean) => void
 }
 
 export default function DevTools({
@@ -15,7 +15,7 @@ export default function DevTools({
   resultScreen,
   setResultScreen,
 }: DevToolsProps) {
-  const [_isPending, startTransition] = useTransition();
+  const [_isPending, startTransition] = useTransition()
 
   return (
     <div className="flex flex-row gap-5">
@@ -30,10 +30,10 @@ export default function DevTools({
           checked={noSave}
           onChange={() => {
             startTransition(() => {
-              const newNoSave = !noSave;
-              setNoSave(newNoSave);
-              createDevCookie("noSave", newNoSave.toString());
-            });
+              const newNoSave = !noSave
+              setNoSave(newNoSave)
+              createDevCookie('noSave', newNoSave.toString())
+            })
           }}
         />
       </div>
@@ -48,13 +48,13 @@ export default function DevTools({
           checked={resultScreen}
           onChange={() => {
             startTransition(() => {
-              const newResultScreen = !resultScreen;
-              setResultScreen(newResultScreen);
-              createDevCookie("resultScreen", newResultScreen.toString());
-            });
+              const newResultScreen = !resultScreen
+              setResultScreen(newResultScreen)
+              createDevCookie('resultScreen', newResultScreen.toString())
+            })
           }}
         />
       </div>
     </div>
-  );
+  )
 }

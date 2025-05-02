@@ -1,372 +1,372 @@
-"server only";
-import { createDbMovie } from "@/lib/createDbMovie";
-import type { MovieWithUser } from "@/types/movie.type";
-import type { TMDBMovieResponse } from "@/types/tmdb.type";
-import type { Movie } from "@prisma/client";
-import { isWednesday, nextWednesday, set } from "date-fns";
-import { NextResponse } from "next/server";
-import { db } from "./db";
-import prisma from "./prisma";
-import { getAdditionalInfo } from "./tmdb";
-import { keyBy } from "./utils";
+'server only'
+import { createDbMovie } from '@/lib/createDbMovie'
+import type { MovieWithUser } from '@/types/movie.type'
+import type { TMDBMovieResponse } from '@/types/tmdb.type'
+import type { Movie } from '@prisma/client'
+import { isWednesday, nextWednesday, set } from 'date-fns'
+import { NextResponse } from 'next/server'
+import { db } from './db'
+import prisma from './prisma'
+import { getAdditionalInfo } from './tmdb'
+import { keyBy } from './utils'
 
-export const revalidate = 10;
+export const revalidate = 10
 
 export class ShortlistLimitError extends Error {
-	code: string;
-	limit: number;
+  code: string
+  limit: number
 
-	constructor(limit: number) {
-		super(`Only ${limit} movies allowed, remove to make room`);
-		this.name = "ShortlistLimitError";
-		this.code = "SHORTLIST_LIMIT_REACHED";
-		this.limit = limit;
-	}
+  constructor(limit: number) {
+    super(`Only ${limit} movies allowed, remove to make room`)
+    this.name = 'ShortlistLimitError'
+    this.code = 'SHORTLIST_LIMIT_REACHED'
+    this.limit = limit
+  }
 }
 
 export async function getChosenMovie() {
-	// set today to 18:00:00 and check if it is a wednesday
-	const nextMovieDate = set(nextWednesday(new Date()), {
-		hours: 18,
-		minutes: 0,
-		seconds: 0,
-		milliseconds: 0,
-	});
+  // set today to 18:00:00 and check if it is a wednesday
+  const nextMovieDate = set(nextWednesday(new Date()), {
+    hours: 18,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  })
 
-	const now = isWednesday(new Date())
-		? set(new Date(), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 })
-		: nextMovieDate;
+  const now = isWednesday(new Date())
+    ? set(new Date(), { hours: 18, minutes: 0, seconds: 0, milliseconds: 0 })
+    : nextMovieDate
 
-	const movie = await prisma.movie.findFirst({
-		where: {
-			OR: [
-				{
-					movieOfTheWeek: {
-						equals: now,
-					},
-				},
-				{
-					movieOfTheWeek: {
-						equals: nextMovieDate,
-					},
-				},
-			],
-		},
-		include: {
-			user: true,
-		},
-	});
+  const movie = await prisma.movie.findFirst({
+    where: {
+      OR: [
+        {
+          movieOfTheWeek: {
+            equals: now,
+          },
+        },
+        {
+          movieOfTheWeek: {
+            equals: nextMovieDate,
+          },
+        },
+      ],
+    },
+    include: {
+      user: true,
+    },
+  })
 
-	const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {};
-	if (movie) {
-		const movieObject = Object.assign(movie, details);
+  const details = movie ? await getAdditionalInfo(movie?.tmdbId) : {}
+  if (movie) {
+    const movieObject = Object.assign(movie, details)
 
-		return movieObject;
-	}
+    return movieObject
+  }
 }
 
 export async function getShortList(id: string) {
-	const shortlist = await prisma.shortlist.findFirst({
-		where: {
-			id: id,
-		},
-		include: {
-			movies: {
-				include: {
-					user: true,
-				},
-			},
-			user: true,
-		},
-	});
+  const shortlist = await prisma.shortlist.findFirst({
+    where: {
+      id: id,
+    },
+    include: {
+      movies: {
+        include: {
+          user: true,
+        },
+      },
+      user: true,
+    },
+  })
 
-	return shortlist;
+  return shortlist
 }
 
 export async function getAllShortLists() {
-	return await db.shortlist.findMany({
-		include: {
-			movies: true,
-			user: true,
-		},
-	});
+  return await db.shortlist.findMany({
+    include: {
+      movies: true,
+      user: true,
+    },
+  })
 }
 
 export const getAllShortlistsGroupedById = async () => {
-	const data = await getAllShortLists();
-	const groupedData = keyBy(data, (shortlist) => shortlist.id);
-	return groupedData;
-};
+  const data = await getAllShortLists()
+  const groupedData = keyBy(data, (shortlist) => shortlist.id)
+  return groupedData
+}
 
 export async function findOrCreateShortList(userId: string) {
-	const shortlist = await prisma.shortlist.upsert({
-		where: {
-			userId: userId,
-		},
-		update: {},
-		create: {
-			userId: userId,
-		},
-	});
+  const shortlist = await prisma.shortlist.upsert({
+    where: {
+      userId: userId,
+    },
+    update: {},
+    create: {
+      userId: userId,
+    },
+  })
 
-	return shortlist;
+  return shortlist
 }
 
 export async function connectMovieToShortlist(
-	movieId: string,
-	shortlistId: string,
+  movieId: string,
+  shortlistId: string,
 ) {
-	const shortlist = await prisma.shortlist.findUnique({
-		where: {
-			id: shortlistId,
-		},
-		include: {
-			movies: true,
-		},
-	});
+  const shortlist = await prisma.shortlist.findUnique({
+    where: {
+      id: shortlistId,
+    },
+    include: {
+      movies: true,
+    },
+  })
 
-	if (shortlist?.movies.length && shortlist.movies.length >= 3) {
-		throw new ShortlistLimitError(3);
-	}
+  if (shortlist?.movies.length && shortlist.movies.length >= 3) {
+    throw new ShortlistLimitError(3)
+  }
 
-	const updatedShortlist = await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			movies: { connect: { id: movieId } },
-		},
-		include: {
-			movies: {
-				include: {
-					user: true,
-				},
-			},
-			user: true,
-		},
-	});
+  const updatedShortlist = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      movies: { connect: { id: movieId } },
+    },
+    include: {
+      movies: {
+        include: {
+          user: true,
+        },
+      },
+      user: true,
+    },
+  })
 
-	return updatedShortlist;
+  return updatedShortlist
 }
 
 export async function addMovieToShortlist(
-	movie: TMDBMovieResponse,
-	shortlistId: string,
+  movie: TMDBMovieResponse,
+  shortlistId: string,
 ) {
-	// check if user has shortlist, create if absent
-	const shortlist = await prisma.shortlist.findFirst({
-		where: {
-			id: shortlistId,
-		},
-		include: {
-			movies: true,
-		},
-	});
+  // check if user has shortlist, create if absent
+  const shortlist = await prisma.shortlist.findFirst({
+    where: {
+      id: shortlistId,
+    },
+    include: {
+      movies: true,
+    },
+  })
 
-	if (shortlist && shortlist.movies.length === 3) {
-		throw new Error("Only 3 movies allowed, remove to make room");
-	}
+  if (shortlist && shortlist.movies.length === 3) {
+    throw new Error('Only 3 movies allowed, remove to make room')
+  }
 
-	const movieObject = await createDbMovie(movie);
+  const movieObject = await createDbMovie(movie)
 
-	const updatedShortlist = await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			movies: {
-				connectOrCreate: {
-					where: {
-						tmdbId: movieObject.tmdbId,
-					},
-					create: movieObject,
-				},
-			},
-		},
-		include: {
-			movies: {
-				include: {
-					user: true,
-				},
-			},
-		},
-	});
+  const updatedShortlist = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      movies: {
+        connectOrCreate: {
+          where: {
+            tmdbId: movieObject.tmdbId,
+          },
+          create: movieObject,
+        },
+      },
+    },
+    include: {
+      movies: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  })
 
-	return updatedShortlist;
+  return updatedShortlist
 }
 
 export async function removeMovieFromShortlist(
-	id: string,
-	shortlistId: string,
+  id: string,
+  shortlistId: string,
 ) {
-	try {
-		const updatedShortlist = await prisma.shortlist.update({
-			where: {
-				id: shortlistId,
-			},
-			data: {
-				movies: {
-					disconnect: [{ id: id }],
-				},
-			},
-			include: {
-				movies: true,
-			},
-		});
+  try {
+    const updatedShortlist = await prisma.shortlist.update({
+      where: {
+        id: shortlistId,
+      },
+      data: {
+        movies: {
+          disconnect: [{ id: id }],
+        },
+      },
+      include: {
+        movies: true,
+      },
+    })
 
-		return updatedShortlist;
-		//return NextResponse.json({ message: "Deleted succesfully" });
-	} catch (_e) {
-		return NextResponse.json(
-			{ message: "Something went wrong" },
-			{ status: 500 },
-		);
-	}
+    return updatedShortlist
+    //return NextResponse.json({ message: "Deleted succesfully" });
+  } catch (_e) {
+    return NextResponse.json(
+      { message: 'Something went wrong' },
+      { status: 500 },
+    )
+  }
 }
 
 export async function updateChosenMovie(movie: Movie) {
-	/**
-	 * First update the last week's movie to false
-	 */
-	const nextDate = set(nextWednesday(new Date()), {
-		hours: 18,
-		minutes: 0,
-		seconds: 0,
-		milliseconds: 0,
-	});
+  /**
+   * First update the last week's movie to false
+   */
+  const nextDate = set(nextWednesday(new Date()), {
+    hours: 18,
+    minutes: 0,
+    seconds: 0,
+    milliseconds: 0,
+  })
 
-	const updatedMovie = await prisma.movie.update({
-		where: {
-			id: movie.id,
-		},
-		data: {
-			movieOfTheWeek: nextDate,
-		},
-	});
+  const updatedMovie = await prisma.movie.update({
+    where: {
+      id: movie.id,
+    },
+    data: {
+      movieOfTheWeek: nextDate,
+    },
+  })
 
-	return updatedMovie;
+  return updatedMovie
 }
 
 export async function updateShortlistState(
-	ready: boolean,
-	shortlistId: string,
+  ready: boolean,
+  shortlistId: string,
 ) {
-	const updated = await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			isReady: ready,
-		},
-	});
+  const updated = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      isReady: ready,
+    },
+  })
 
-	return updated;
+  return updated
 }
 
 export async function updateShortlistParticipationState(
-	participating: boolean,
-	shortlistId: string,
+  participating: boolean,
+  shortlistId: string,
 ) {
-	return await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			participating: participating,
-		},
-	});
+  return await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      participating: participating,
+    },
+  })
 }
 
 export async function updateShortlistSelection(
-	index: number,
-	shortlistId: string,
+  index: number,
+  shortlistId: string,
 ) {
-	const updated = await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			selectedIndex: index,
-		},
-	});
+  const updated = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      selectedIndex: index,
+    },
+  })
 
-	return updated;
+  return updated
 }
 
 export async function updateShortlistSelectionStatus(
-	status: boolean,
-	shortlistId: string,
+  status: boolean,
+  shortlistId: string,
 ) {
-	const updated = await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			requiresSelection: status,
-			selectedIndex: null,
-		},
-	});
+  const updated = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      requiresSelection: status,
+      selectedIndex: null,
+    },
+  })
 
-	return updated;
+  return updated
 }
 
 export async function replaceShortlistMovie(
-	replacedMovie: MovieWithUser | Movie,
-	replacingWithMovie: MovieWithUser | TMDBMovieResponse | Movie,
-	shortlistId: string,
+  replacedMovie: MovieWithUser | Movie,
+  replacingWithMovie: MovieWithUser | TMDBMovieResponse | Movie,
+  shortlistId: string,
 ) {
-	// try to fetch the movie from the db to check if it exists
-	// if tmdbId is present, it means replacingWithMovie is of type Movie
-	// so we can just insert it directly
-	if ("tmdbId" in replacingWithMovie) {
-		const updated = await prisma.shortlist.update({
-			where: {
-				id: shortlistId,
-			},
-			data: {
-				movies: {
-					disconnect: [{ id: replacedMovie.id }],
-					connect: {
-						tmdbId: replacingWithMovie.tmdbId,
-					},
-				},
-			},
-			include: {
-				movies: {
-					include: {
-						user: true,
-					},
-				},
-			},
-		});
+  // try to fetch the movie from the db to check if it exists
+  // if tmdbId is present, it means replacingWithMovie is of type Movie
+  // so we can just insert it directly
+  if ('tmdbId' in replacingWithMovie) {
+    const updated = await prisma.shortlist.update({
+      where: {
+        id: shortlistId,
+      },
+      data: {
+        movies: {
+          disconnect: [{ id: replacedMovie.id }],
+          connect: {
+            tmdbId: replacingWithMovie.tmdbId,
+          },
+        },
+      },
+      include: {
+        movies: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    })
 
-		return updated;
-	}
-	const movieObject = await createDbMovie(replacingWithMovie);
+    return updated
+  }
+  const movieObject = await createDbMovie(replacingWithMovie)
 
-	const updatedShortlist = await prisma.shortlist.update({
-		where: {
-			id: shortlistId,
-		},
-		data: {
-			movies: {
-				disconnect: [{ id: replacedMovie.id }],
-				connectOrCreate: {
-					where: {
-						tmdbId: movieObject.tmdbId,
-					},
-					create: movieObject,
-				},
-			},
-		},
-		include: {
-			movies: {
-				include: {
-					user: true,
-				},
-			},
-		},
-	});
+  const updatedShortlist = await prisma.shortlist.update({
+    where: {
+      id: shortlistId,
+    },
+    data: {
+      movies: {
+        disconnect: [{ id: replacedMovie.id }],
+        connectOrCreate: {
+          where: {
+            tmdbId: movieObject.tmdbId,
+          },
+          create: movieObject,
+        },
+      },
+    },
+    include: {
+      movies: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  })
 
-	return updatedShortlist;
+  return updatedShortlist
 }

@@ -1,16 +1,16 @@
-import { SiYoutube } from "react-icons/si";
+import { SiYoutube } from 'react-icons/si'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/Tooltip";
-import Link from "next/link";
+} from '../ui/Tooltip'
+import Link from 'next/link'
 
 export default function TrailerLink({
   video,
 }: {
-  video: { id: string; key: string; name: string };
+  video: { id: string; key: string; name: string }
 }) {
   return (
     <TooltipProvider>
@@ -30,5 +30,5 @@ export default function TrailerLink({
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
+  )
 }
