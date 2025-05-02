@@ -1,33 +1,33 @@
 .menu {
-    position: relative;
-    gap: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    overscroll-behavior: contain;
-    border-radius: 0.25rem;
-    min-width: 180px;
-    background-color: var(--color-popover);
-    z-index: 50;
-    border-width: 1px;
-    padding: 1.25rem;
-    color: var(--color-foreground)
+  position: relative;
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 0.25rem;
+  min-width: 180px;
+  background-color: var(--color-popover);
+  z-index: 50;
+  border-width: 1px;
+  padding: 1.25rem;
+  color: var(--color-foreground);
 }
 
 .menu-label {
-    @supports not (anchor-name: --a) {
-        li a:hover & {
-            color: var(--color-accent-foreground);
-        }
+  @supports not (anchor-name: --a) {
+    li a:hover & {
+      color: var(--color-accent-foreground);
     }
+  }
 
-    font-size: 0.8rem;
-    color: var(--color-foreground);
-    opacity: 0.5;
-    transition: all 0.3s ease-in-out;
+  font-size: 0.8rem;
+  color: var(--color-foreground);
+  opacity: 0.5;
+  transition: all 0.3s ease-in-out;
 
-    a:hover & {
-        color: var(--secondary-foreground);
-        transition: color 0.3s ease-in-out;
-    }
+  a:hover & {
+    color: var(--secondary-foreground);
+    transition: color 0.3s ease-in-out;
+  }
 }
