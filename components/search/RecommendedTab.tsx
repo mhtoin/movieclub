@@ -25,21 +25,21 @@ export default function RecommendedTab() {
       <Button
         variant="outline"
         size="icon"
-        className="absolute bottom-0 right-0 z-30"
+        className="absolute right-0 bottom-0 z-30"
         onClick={() => {
           recommendedRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
         }}
       >
-        <ChevronUp className="w-4 h-4" />
+        <ChevronUp className="h-4 w-4" />
       </Button>
-      <div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center relative">
+      <div className="relative flex w-full flex-wrap items-center justify-center gap-2 py-2">
         {recommended && Object.keys(recommended).length > 0 ? (
           Object.keys(recommended).map((sourceMovie) => (
             <div key={sourceMovie} className="w-full">
-              <h3 className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent rounded-md w-fit text-accent-foreground">
+              <h3 className="bg-accent text-accent-foreground sticky top-0 z-10 mb-2 w-fit rounded-md p-2 text-sm font-semibold">
                 Because you liked: {sourceMovie}
               </h3>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5  w-full">
+              <div className="grid w-full auto-rows-[min-content] grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-y-5">
                 {recommended[sourceMovie].map((rec, index) => (
                   <RecommendedCard
                     key={`${sourceMovie}-${index}`}
@@ -51,7 +51,7 @@ export default function RecommendedTab() {
             </div>
           ))
         ) : (
-          <div className="flex items-center justify-center w-full py-8">
+          <div className="flex w-full items-center justify-center py-8">
             <p className="text-muted-foreground">
               No recommendations available yet
             </p>

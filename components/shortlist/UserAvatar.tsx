@@ -20,7 +20,7 @@ export default function UserAvatar({
     <Button
       variant={'outline'}
       size={'avatar'}
-      className={`h-14 w-14 flex justify-center transition-colors ${
+      className={`flex h-14 w-14 justify-center transition-colors ${
         disabled ? '' : 'hover:opacity-70'
       } ${readyStateMutation.isPending ? 'animate-pulse' : ''} relative`}
       key={`avatar-${userShortlist?.userId}`}
@@ -35,7 +35,7 @@ export default function UserAvatar({
       }}
     >
       <svg
-        className={'absolute z-50 inset-0 w-full h-full text-success'}
+        className={'text-success absolute inset-0 z-50 h-full w-full'}
         viewBox="0 0 100 100"
       >
         <title>Ready</title>
@@ -55,7 +55,7 @@ export default function UserAvatar({
         />
       </svg>
       <svg
-        className={'absolute z-40 inset-0 w-full h-full text-error'}
+        className={'text-error absolute inset-0 z-40 h-full w-full'}
         viewBox="0 0 100 100"
       >
         <title>Ready</title>

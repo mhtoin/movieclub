@@ -27,7 +27,7 @@ export default function TierDateFilter({
           <span>{selectedDate}</span>
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="max-w-48 bg-background text-foreground">
+      <SelectContent className="bg-background text-foreground max-w-48">
         {values.map((value) => (
           <SelectItem key={value} value={value}>
             {value}

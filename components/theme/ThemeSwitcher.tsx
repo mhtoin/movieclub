@@ -12,9 +12,9 @@ export default function ThemeSwitcher() {
       variant={'ghost'}
       size={'icon'}
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      className="relative overflow-hidden hover:bg-transparent group"
+      className="group relative overflow-hidden hover:bg-transparent"
     >
-      <div className="relative w-full h-full flex items-center justify-center">
+      <div className="relative flex h-full w-full items-center justify-center">
         <motion.div
           animate={{
             opacity: resolvedTheme === 'dark' ? 1 : 0,
@@ -24,7 +24,7 @@ export default function ThemeSwitcher() {
           transition={{ duration: 0.3 }}
           className="absolute"
         >
-          <MoonIcon className="font-bold shadow-lg h-5 w-5 drop-shadow-lg group-hover:text-gray-300 group-hover:drop-shadow-md transition-all duration-300" />
+          <MoonIcon className="h-5 w-5 font-bold shadow-lg drop-shadow-lg transition-all duration-300 group-hover:text-gray-300 group-hover:drop-shadow-md" />
         </motion.div>
 
         <motion.div
@@ -36,7 +36,7 @@ export default function ThemeSwitcher() {
           transition={{ duration: 0.3 }}
           className="absolute"
         >
-          <SunIcon className="text-yellow-700 font-bold drop-shadow-lg h-5 w-5 group-hover:text-yellow-500 group-hover:drop-shadow-md transition-all duration-300" />
+          <SunIcon className="h-5 w-5 font-bold text-yellow-700 drop-shadow-lg transition-all duration-300 group-hover:text-yellow-500 group-hover:drop-shadow-md" />
         </motion.div>
       </div>
     </Button>

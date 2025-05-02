@@ -41,12 +41,12 @@ export default function ResultTab() {
   }, [hasNextPage, fetchNextPage])
 
   return (
-    <TabsContent value="results" className="flex-1 justify-center relative">
+    <TabsContent value="results" className="relative flex-1 justify-center">
       {resultsContainerRef.current && data?.pages?.[0]?.results?.length > 0 && (
         <Button
           variant="outline"
           size="icon"
-          className="absolute bottom-0 right-0 z-30"
+          className="absolute right-0 bottom-0 z-30"
           onClick={() => {
             resultsContainerRef.current?.scrollTo({
               top: 0,
@@ -54,32 +54,32 @@ export default function ResultTab() {
             })
           }}
         >
-          <ChevronUp className="w-4 h-4" />
+          <ChevronUp className="h-4 w-4" />
         </Button>
       )}
       <div
         ref={resultsContainerRef}
-        className="flex flex-wrap gap-5 py-2 w-full items-center justify-center overflow-y-auto max-h-[calc(90vh-150px)] relative"
+        className="relative flex max-h-[calc(90vh-150px)] w-full flex-wrap items-center justify-center gap-5 overflow-y-auto py-2"
       >
         {isInitialLoading && (
           <div className="flex flex-col items-center justify-center p-8">
-            <div className="animate-spin w-8 h-8 mb-2">
-              <Loader2 className="w-full h-full" />
+            <div className="mb-2 h-8 w-8 animate-spin">
+              <Loader2 className="h-full w-full" />
             </div>
-            <span className="text-center text-sm text-muted-foreground">
+            <span className="text-muted-foreground text-center text-sm">
               Searching...
             </span>
           </div>
         )}
 
         {noSearchPerformed && !isInitialLoading && (
-          <span className="text-center text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-center text-sm">
             No search performed yet
           </span>
         )}
 
         {data && data.pages[0].total_results === 0 && !isInitialLoading && (
-          <span className="text-center text-sm text-muted-foreground">
+          <span className="text-muted-foreground text-center text-sm">
             {showOnlyAvailable
               ? "No available movies found. Try unchecking 'Show only available'."
               : 'No results found'}
@@ -97,8 +97,8 @@ export default function ResultTab() {
           <div className="flex h-10 w-full justify-center">
             <div ref={sentinelRef} className="h-1 w-full" />
             {isFetchingNextPage && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                <Loader2 className="w-6 h-6 animate-spin" />
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 transform">
+                <Loader2 className="h-6 w-6 animate-spin" />
               </div>
             )}
           </div>

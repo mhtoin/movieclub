@@ -30,7 +30,7 @@ export default function Popover({ label, children }: PopoverProps) {
     <Ariakit.PopoverProvider store={popover}>
       <Ariakit.PopoverDisclosure
         className={cn(
-          'flex flex-none h-10 select-none items-center gap-1 whitespace-nowrap rounded-lg border pl-4 pr-4 text-[1rem] leading-6 text-accent-foreground [text-decoration-line:none] outline-[2px] outline-offset-[2px] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] justify-between',
+          'text-accent-foreground flex h-10 flex-none items-center justify-between gap-1 rounded-lg border pr-4 pl-4 text-[1rem] leading-6 whitespace-nowrap [text-decoration-line:none] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] outline-[2px] outline-offset-[2px] select-none',
           'border-accent/80',
         )}
       >
@@ -45,7 +45,7 @@ export default function Popover({ label, children }: PopoverProps) {
         modal={!isLarge}
         backdrop={isLarge ? false : <div className="" />}
         updatePosition={isLarge ? undefined : updatePosition}
-        className="z-50 border bg-popover p-4 rounded-lg"
+        className="bg-popover z-50 rounded-lg border p-4"
       >
         {isLarge && <Ariakit.PopoverArrow className="arrow" />}
         {children}

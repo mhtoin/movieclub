@@ -167,21 +167,21 @@ export default function RaffleDialog({
         size={'iconLg'}
         className="rounded-full"
       >
-        <Dices className="w-6 h-6" />
+        <Dices className="h-6 w-6" />
       </Button>
       <Ariakit.Dialog
         store={dialog}
         onClose={resetRaffle}
         backdrop={
-          <div className="bg-black/5 backdrop-blur-none transition-all duration-300 opacity-0 data-enter:opacity-100 data-enter:backdrop-blur-xs " />
+          <div className="bg-black/5 opacity-0 backdrop-blur-none transition-all duration-300 data-enter:opacity-100 data-enter:backdrop-blur-xs" />
         }
-        className="fixed z-9999 inset-3 flex flex-col gap-1 overflow-auto rounded-md border max-w-[80vw] lg:max-w-[70vw] 2xl:max-w-[60vw] m-auto bg-background/80 backdrop-blur-md origin-bottom-right opacity-0 transition-all duration-300 scale-95 data-enter:opacity-100 data-enter:scale-100"
+        className="bg-background/80 fixed inset-3 z-9999 m-auto flex max-w-[80vw] origin-bottom-right scale-95 flex-col gap-1 overflow-auto rounded-md border opacity-0 backdrop-blur-md transition-all duration-300 data-enter:scale-100 data-enter:opacity-100 lg:max-w-[70vw] 2xl:max-w-[60vw]"
       >
         {finished && data ? (
           <AnimatePresence mode="wait" presenceAffectsLayout>
             <motion.div
               key="result-view"
-              className="flex flex-col gap-5 justify-center items-center"
+              className="flex flex-col items-center justify-center gap-5"
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
@@ -194,14 +194,14 @@ export default function RaffleDialog({
           <AnimatePresence mode="wait" presenceAffectsLayout>
             <motion.div
               key="raffle-view"
-              className="flex flex-row gap-5 justify-center items-center h-full w-full"
+              className="flex h-full w-full flex-row items-center justify-center gap-5"
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.5 }}
             >
               <div
-                className={`flex flex-col justify-start gap-5 h-full border-r border-border pt-5 relative transition-all duration-300 ${
+                className={`border-border relative flex h-full flex-col justify-start gap-5 border-r pt-5 transition-all duration-300 ${
                   sidebarExpanded ? 'w-[250px]' : 'w-[0px]'
                 }`}
               >
@@ -216,7 +216,7 @@ export default function RaffleDialog({
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
                   >
                     <ChevronRight
-                      className={`w-4 h-4 transition-transform duration-300 ${
+                      className={`h-4 w-4 transition-transform duration-300 ${
                         sidebarExpanded ? 'rotate-180' : ''
                       }`}
                     />
@@ -233,7 +233,7 @@ export default function RaffleDialog({
                   />
                 </div>
               </div>
-              <div className="flex flex-col gap-5 items-center h-full flex-1 @container/items pt-5 ">
+              <div className="@container/items flex h-full flex-1 flex-col items-center gap-5 pt-5">
                 <h3 className="text-lg font-bold">Movies</h3>
                 <ActionButtons
                   isPlaying={isPlaying}

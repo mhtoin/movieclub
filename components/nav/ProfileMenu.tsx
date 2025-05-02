@@ -18,7 +18,7 @@ export default function ProfileMenu() {
   return (
     <Ariakit.MenuProvider>
       <Ariakit.MenuButton
-        className="relative w-12 h-12 border rounded-full  flex items-center justify-center focus:outline-hidden"
+        className="relative flex h-12 w-12 items-center justify-center rounded-full border focus:outline-hidden"
         store={menu}
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
@@ -28,13 +28,13 @@ export default function ProfileMenu() {
             src={user?.image || ''}
             alt="P"
             fill
-            className="object-cover rounded-full"
+            className="rounded-full object-cover"
           />
         ) : (
           <Loader2 className="animate-spin" />
         )}
         <div
-          className={`absolute bottom-0 right-0 w-3 h-3 rounded-full ${
+          className={`absolute right-0 bottom-0 h-3 w-3 rounded-full ${
             isConnected ? 'bg-success' : 'bg-error'
           } ${isConnecting ? 'animate-loading-pulse' : ''}`}
         />
@@ -49,12 +49,12 @@ export default function ProfileMenu() {
         <nav data-magnetic className="z-9999">
           <ul>
             <MenuItem store={menu}>
-              <Link href={'/dashboard'} className="text-lg text-foreground">
+              <Link href={'/dashboard'} className="text-foreground text-lg">
                 Profile
               </Link>
             </MenuItem>
             <MenuItem store={menu}>
-              <Link href={'/logout'} className="text-lg text-foreground">
+              <Link href={'/logout'} className="text-foreground text-lg">
                 Logout
               </Link>
             </MenuItem>

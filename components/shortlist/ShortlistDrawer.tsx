@@ -38,18 +38,18 @@ export default function ShortlistDrawer() {
           className="flex flex-row items-center gap-2 rounded-tr-2xl rounded-br-none p-5"
         >
           <Clapperboard />
-          <span className="text-xs relative">Your Shortlist</span>
-          <span className="absolute top-1 -right-1 bg-transparent text-xs px-2 py-1 rounded-full">
-            <MoveDiagonal className="w-3 h-3 bg-transparent" />
+          <span className="relative text-xs">Your Shortlist</span>
+          <span className="absolute top-1 -right-1 rounded-full bg-transparent px-2 py-1 text-xs">
+            <MoveDiagonal className="h-3 w-3 bg-transparent" />
           </span>
         </Button>
       </DrawerTrigger>
       <DrawerContent className="max-h-[95dvh]">
-        <div className="flex flex-col gap-5 overflow-y-auto no-scrollbar pt-5">
-          <DrawerHeader className="flex flex-col items-center justify-center gap-5 w-full">
-            <DrawerTitle className="flex flex-col items-center justify-center gap-5 w-full">
-              <div className="w-1/2 h-[1px] bg-secondary relative">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+        <div className="no-scrollbar flex flex-col gap-5 overflow-y-auto pt-5">
+          <DrawerHeader className="flex w-full flex-col items-center justify-center gap-5">
+            <DrawerTitle className="flex w-full flex-col items-center justify-center gap-5">
+              <div className="bg-secondary relative h-[1px] w-1/2">
+                <span className="bg-background absolute -top-3 left-1/2 flex -translate-x-1/2 items-center justify-center px-2">
                   {userShortlist?.user?.name}
                 </span>
               </div>
@@ -93,8 +93,8 @@ export default function ShortlistDrawer() {
           </DrawerHeader>
 
           <div className="flex flex-col items-center justify-center gap-5">
-            <div className="w-1/2 h-[1px] bg-secondary relative">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-background flex items-center justify-center px-2">
+            <div className="bg-secondary relative h-[1px] w-1/2">
+              <span className="bg-background absolute -top-3 left-1/2 flex -translate-x-1/2 items-center justify-center px-2">
                 Movies
               </span>
             </div>

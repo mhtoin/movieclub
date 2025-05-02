@@ -34,7 +34,7 @@ export default function Menubar() {
           <div className="flex flex-col gap-4 p-5 pb-10">
             <Link
               href={'/home'}
-              className="flex flex-col p-2 border-b"
+              className="flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Home</span>
@@ -42,7 +42,7 @@ export default function Menubar() {
             </Link>
             <Link
               href={'/dashboard'}
-              className="flex flex-col p-2 border-b"
+              className="flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Dashboard</span>
@@ -50,7 +50,7 @@ export default function Menubar() {
             </Link>
             <Link
               href={'/home/shortlist'}
-              className="flex flex-col p-2 border-b"
+              className="flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Shortlist</span>
@@ -58,7 +58,7 @@ export default function Menubar() {
             </Link>
             <Link
               href={`/home/${SEARCH_ROUTE}`}
-              className="flex flex-col ml-5 p-2 border-b"
+              className="ml-5 flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Discover</span>
@@ -66,7 +66,7 @@ export default function Menubar() {
             </Link>
             <Link
               href={'/home/shortlist/edit/watchlist'}
-              className="flex flex-col ml-5 p-2 border-b"
+              className="ml-5 flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Watchlist</span>
@@ -74,7 +74,7 @@ export default function Menubar() {
             </Link>
             <Link
               href={'/tierlists'}
-              className="flex flex-col p-2 border-b"
+              className="flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Tierlists</span>
@@ -84,7 +84,7 @@ export default function Menubar() {
             </Link>
             <Link
               href={`/tierlists/${user?.tierlistId}`}
-              className="flex flex-col ml-5 p-2 border-b"
+              className="ml-5 flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
               <span className="text-foreground">Edit</span>
@@ -135,7 +135,7 @@ export default function Menubar() {
                 </span>
               </Link>
             </MenuItem>
-            <MenuItem className="ml-6 " store={menu}>
+            <MenuItem className="ml-6" store={menu}>
               <Link href={`/home/${SEARCH_ROUTE}`}>
                 <span className="text-foreground">Discover</span>
                 <span className={styles['menu-label']}>Discover movies</span>

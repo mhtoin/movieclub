@@ -11,12 +11,12 @@ export default function CastPopover({ cast }: { cast: Array<CastMember> }) {
         <Button
           variant="ghost"
           size="icon"
-          className="p-0 text-primary-foreground"
+          className="text-primary-foreground p-0"
         >
           <List />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-2 max-h-[500px] overflow-y-auto">
+      <PopoverContent className="flex max-h-[500px] flex-col gap-2 overflow-y-auto">
         <div className="flex flex-row flex-wrap gap-5">
           {cast.map((c) => (
             <CastPortrait cast={c} key={c.id} />

@@ -17,12 +17,12 @@ export default function WatchlistContainer() {
 
   const watchlistMovieIds = watchlist ? watchlist?.map((movie) => movie.id) : []
   return (
-    <div className="flex flex-col m-5 p-10 py-20 overflow-y-auto no-scrollbar gap-5 w-full h-full relative">
+    <div className="no-scrollbar relative m-5 flex h-full w-full flex-col gap-5 overflow-y-auto p-10 py-20">
       {session && !session.accountId && (
         <div className="alert alert-error w-1/3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
+            className="h-6 w-6 shrink-0 stroke-current"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -41,11 +41,11 @@ export default function WatchlistContainer() {
         <h1 className="text-2xl font-bold">Watchlist</h1>
       </div>
 
-      <div className="relative h-dvh w-full overflow-y-auto no-scrollbar">
+      <div className="no-scrollbar relative h-dvh w-full overflow-y-auto">
         {/* Top gradient overlay */}
-        <div className="absolute top-0 left-0 right-0 h-5 bg-linear-to-b from-background to-transparent z-10" />
+        <div className="from-background absolute top-0 right-0 left-0 z-10 h-5 bg-linear-to-b to-transparent" />
 
-        <div className="h-full w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 overflow-y-auto no-scrollbar bg-background">
+        <div className="no-scrollbar bg-background grid h-full w-full auto-rows-[min-content] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] place-items-center gap-y-5 overflow-y-auto lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
           {watchlist?.map((movie) => {
             return (
               <MovieCard
@@ -60,7 +60,7 @@ export default function WatchlistContainer() {
         </div>
 
         {/* Bottom gradient overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-5 bg-linear-to-t from-background to-transparent z-10" />
+        <div className="from-background absolute right-0 bottom-0 left-0 z-10 h-5 bg-linear-to-t to-transparent" />
       </div>
     </div>
   )

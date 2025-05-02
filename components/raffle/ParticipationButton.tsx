@@ -12,7 +12,7 @@ export const ParticipationButton: React.FC<CheckboxProps> = ({ ...props }) => {
 
   return (
     <label
-      className={`flex select-none items-center gap-2 border rounded-md p-3 hover:bg-accent/20 transition-all duration-500 ${
+      className={`hover:bg-accent/20 flex items-center gap-2 rounded-md border p-3 transition-all duration-500 select-none ${
         props.checked ? 'border-accent' : 'border-border'
       }`}
       data-checked={props.checked}

@@ -27,8 +27,8 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth relative bg-main-background">
-      <div className="snap-start min-h-screen shrink-0">
+    <div className="bg-main-background relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+      <div className="min-h-screen shrink-0 snap-start">
         <Suspense fallback={null}>
           <CurrentMovieWrapper />
         </Suspense>

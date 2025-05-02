@@ -5,6 +5,7 @@ This is an app used to host a remote movie club. It allows each user to maintain
 Users can search for movies in the app, or add them from an external watchlist. Currently only The MovieDB integration is included.
 
 ## Getting Started
+
 To run the current version of the app, you will need the following :
 
 - A MongoDB database. You can run one locally or, for example, use [MongoDB Atlas](https://www.mongodb.com/atlas/database)

@@ -65,7 +65,7 @@ export default function Profile() {
         <div className="alert alert-success max-w-md">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
+            className="h-6 w-6 shrink-0 stroke-current"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -81,7 +81,7 @@ export default function Profile() {
         </div>
       )}
       <div>Welcome {session?.name}</div>
-      <details className="collapse collapse-arrow border border-base-300 bg-base-200 max-w-sm">
+      <details className="collapse-arrow border-base-300 bg-base-200 collapse max-w-sm border">
         <summary className="collapse-title text-xl font-medium">
           TMDB Account Settings
         </summary>

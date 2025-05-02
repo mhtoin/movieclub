@@ -35,13 +35,13 @@ export default function NavBar() {
   if (isMobile) {
     return (
       <div
-        className={`min-w-screen w-screen flex items-center justify-center p-2 z-100 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+        className={`fixed top-0 z-100 flex h-[70px] min-h-[70px] w-screen min-w-screen items-center justify-center p-2 transition-all duration-300 ${
           isTransparent
             ? 'bg-transparent'
-            : 'bg-background/80 backdrop-blur-md border-b'
+            : 'bg-background/80 border-b backdrop-blur-md'
         }`}
       >
-        <div className="w-full py-5 px-1 rounded flex justify-between items-center">
+        <div className="flex w-full items-center justify-between rounded px-1 py-5">
           <div className="flex items-center justify-center gap-2">
             <ProfileMenu />
             <span
@@ -50,7 +50,7 @@ export default function NavBar() {
               leffaseura
             </span>
           </div>
-          <div className="flex gap-2 h-full items-center relative">
+          <div className="relative flex h-full items-center gap-2">
             <ThemeSwitcher />
             <SearchButton />
             <Menubar />
@@ -61,23 +61,23 @@ export default function NavBar() {
   }
   return (
     <div
-      className={`min-w-screen w-screen flex items-center justify-center p-2 z-100 fixed top-0 h-[70px] min-h-[70px] transition-all duration-300 ${
+      className={`fixed top-0 z-100 flex h-[70px] min-h-[70px] w-screen min-w-screen items-center justify-center p-2 transition-all duration-300 ${
         isTransparent
-          ? 'bg-transparent  '
-          : 'bg-background/80 backdrop-blur-md border-b border-border/10 dark:border-border/40'
+          ? 'bg-transparent'
+          : 'bg-background/80 border-border/10 dark:border-border/40 border-b backdrop-blur-md'
       }`}
     >
-      <div className="w-[90%] h-[70px] min-h-[70px] p-5 rounded hidden sm:flex justify-between items-center">
+      <div className="hidden h-[70px] min-h-[70px] w-[90%] items-center justify-between rounded p-5 sm:flex">
         {/**Right side */}
         <div className="flex items-center justify-center gap-5 lg:gap-10">
           {<Menubar />}
           <span
-            className={`font-bold text-xl lg:text-2xl siteTitle ${isHome ? 'text-primary-foreground' : 'text-foreground'}`}
+            className={`siteTitle text-xl font-bold lg:text-2xl ${isHome ? 'text-primary-foreground' : 'text-foreground'}`}
           >
             leffaseura
           </span>
         </div>
-        <div className="flex gap-10 h-full items-center">
+        <div className="flex h-full items-center gap-10">
           <Suspense fallback={null}>
             <SearchButton />
           </Suspense>

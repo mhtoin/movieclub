@@ -118,7 +118,7 @@ export default function SearchButton() {
         size={'icon'}
         className="rounded-full p-0"
       >
-        <MagnifyingGlassIcon className="w-5 h-5" />
+        <MagnifyingGlassIcon className="h-5 w-5" />
       </Button>
     )
   }
@@ -127,13 +127,13 @@ export default function SearchButton() {
     <>
       <div
         ref={modalRef}
-        className={`fixed top-4 left-1/2 -translate-x-1/2 border px-4 flex flex-col gap-5 transition-all duration-300 rounded-md bg-input hover:bg-input/80 z-20 w-[300px] h-10 ${
-          open ? 'w-[600px] h-[90vh] max-h-[90vh] py-2' : ''
+        className={`bg-input hover:bg-input/80 fixed top-4 left-1/2 z-20 flex h-10 w-[300px] -translate-x-1/2 flex-col gap-5 rounded-md border px-4 transition-all duration-300 ${
+          open ? 'h-[90vh] max-h-[90vh] w-[600px] py-2' : ''
         }`}
       >
-        <div className="flex flex-col gap-2 relative h-full">
+        <div className="relative flex h-full flex-col gap-2">
           <div
-            className={`flex px-2 items-center justify-center bg-transparent h-[38px] ${
+            className={`flex h-[38px] items-center justify-center bg-transparent px-2 ${
               open ? 'rounded-md border' : ''
             } ${inputRef.current?.matches(':focus') ? 'border-2' : ''}`}
           >
@@ -159,9 +159,9 @@ export default function SearchButton() {
                 // prefetch recommended movies
                 queryClient.prefetchQuery(userKeys.recommended(user?.id ?? ''))
               }}
-              className="bg-transparent focus:outline-hidden focus:outline-0 outline-hidden focus-visible:ring-0 focus-visible:ring-offset-0 border-none z-20 flex-1 w-full"
+              className="z-20 w-full flex-1 border-none bg-transparent outline-hidden focus:outline-hidden focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
-            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 z-20">
+            <kbd className="bg-muted text-muted-foreground pointer-events-none z-20 inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none">
               <span className="text-xs">⌘</span>K
             </kbd>
           </div>
@@ -174,39 +174,39 @@ export default function SearchButton() {
               activationMode="automatic"
               className="overflow-hidden"
             >
-              <div className="flex flex-col items-center bg-transparent overflow-hidden gap-2">
-                <div className="flex w-full h-full overflow-hidden bg-transparent">
-                  <TabsList className="h-[38px] bg-transparent flex flex-row items-center justify-between w-full">
+              <div className="flex flex-col items-center gap-2 overflow-hidden bg-transparent">
+                <div className="flex h-full w-full overflow-hidden bg-transparent">
+                  <TabsList className="flex h-[38px] w-full flex-row items-center justify-between bg-transparent">
                     <div className="flex flex-row gap-2 bg-transparent">
                       <TabsTrigger
                         value="recommended"
-                        className="bg-background/40 data-[state=active]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
+                        className="bg-background/40 data-[state=active]:bg-accent border-border data-[state=active]:text-accent-foreground border-b"
                       >
                         Recommended
                       </TabsTrigger>
                       <TabsTrigger
                         value="results"
-                        className="bg-background/40 data-[state=active]:bg-accent border-b border-border data-[state=active]:text-accent-foreground"
+                        className="bg-background/40 data-[state=active]:bg-accent border-border data-[state=active]:text-accent-foreground border-b"
                       >
                         Results
                       </TabsTrigger>
                     </div>
-                    <div className="flex flex-row gap-2 bg-transparent items-center">
+                    <div className="flex flex-row items-center gap-2 bg-transparent">
                       <Input
                         type="checkbox"
-                        className="w-4 h-4 accent-accent"
+                        className="accent-accent h-4 w-4"
                         checked={showOnlyAvailable}
                         onChange={(e) => {
                           handleShowOnlyAvailable(e.target.checked)
                         }}
                       />
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-muted-foreground text-sm">
                         Show only available
                       </span>
                     </div>
                   </TabsList>
                 </div>
-                <div className="h-0.5 w-full bg-accent" />
+                <div className="bg-accent h-0.5 w-full" />
                 <Suspense fallback={null}>
                   <ResultTab />
                 </Suspense>
@@ -221,7 +221,7 @@ export default function SearchButton() {
 
       {open && (
         <div
-          className="fixed top-0 left-0 w-screen h-screen bg-background/50 backdrop-blur-xs z-10"
+          className="bg-background/50 fixed top-0 left-0 z-10 h-screen w-screen backdrop-blur-xs"
           onClick={handleClose}
           onKeyDown={handleClose}
         />

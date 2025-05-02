@@ -54,8 +54,8 @@ export default function Results() {
 
   const watchlistMovieIds = watchlist?.map((movie) => movie.id) ?? []
   return (
-    <div className="w-full h-full flex flex-col gap-2">
-      <div className="flex flex-row items-center justify-center p-5 gap-5">
+    <div className="flex h-full w-full flex-col gap-2">
+      <div className="flex flex-row items-center justify-center gap-5 p-5">
         <span className="text-md text-muted-foreground">
           {`Showing ${data?.pages[0]?.total_results} results (page ${data?.pages.length} of ${data?.pages[0]?.total_pages})` ||
             'No results found'}
@@ -73,16 +73,16 @@ export default function Results() {
             })
           }}
         >
-          <ChevronUp className="w-4 h-4" />
+          <ChevronUp className="h-4 w-4" />
         </Button>
       </div>
 
       <div
-        className="relative h-dvh w-full overflow-y-auto no-scrollbar"
+        className="no-scrollbar relative h-dvh w-full overflow-y-auto"
         ref={resultsContainerRef}
       >
-        <div className="sticky top-0 left-0 right-0 h-5 bg-linear-to-b from-background to-transparent z-10" />
-        <div className="h-dvh w-full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] place-items-center gap-y-5 bg-background relative">
+        <div className="from-background sticky top-0 right-0 left-0 z-10 h-5 bg-linear-to-b to-transparent" />
+        <div className="bg-background relative grid h-dvh w-full auto-rows-[min-content] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] place-items-center gap-y-5 lg:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
           {data
             ? data?.pages?.map((page) => (
                 <Fragment key={page.page}>
@@ -104,14 +104,14 @@ export default function Results() {
             <Button
               variant="outline"
               size="lg"
-              className="max-w-sm m-auto opacity-0 h-[1px] min-h-[1px]"
+              className="m-auto h-[1px] min-h-[1px] max-w-sm opacity-0"
               ref={loadMoreButtonRef}
             >
               Load More
             </Button>
           )}
         </div>
-        <div className="fixed bottom-0 left-0 right-0 h-5 bg-linear-to-t from-background to-transparent z-10" />
+        <div className="from-background fixed right-0 bottom-0 left-0 z-10 h-5 bg-linear-to-t to-transparent" />
       </div>
     </div>
   )

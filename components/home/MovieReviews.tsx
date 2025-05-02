@@ -22,7 +22,7 @@ export default function MovieReviews({
   if (!validReviews.length) {
     return (
       <div className="absolute inset-0 top-16 flex items-center justify-center">
-        <div className="p-6 border border-border/30 bg-card/50 backdrop-blur-xs rounded-md">
+        <div className="border-border/30 bg-card/50 rounded-md border p-6 backdrop-blur-xs">
           <h2 className="text-lg font-bold">No reviews available</h2>
           <p>There are no reviews for this movie yet.</p>
         </div>
@@ -72,14 +72,14 @@ export default function MovieReviews({
   }, [updateScrollButtonsState])
 
   return (
-    <div className="absolute inset-0 top-5 flex flex-col gap-4 p-4 items-center justify-center w-full h-full">
+    <div className="absolute inset-0 top-5 flex h-full w-full flex-col items-center justify-center gap-4 p-4">
       <div className="relative w-full max-w-3xl">
         {/* Scroll buttons */}
         <Button
           onClick={() => scroll('left')}
           variant="outline"
           disabled={!canScrollLeft}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 p-2 rounded-full bg-opaque-card/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+          className="bg-opaque-card/80 border-border absolute top-1/2 left-0 z-10 -translate-x-12 -translate-y-1/2 rounded-full border p-2 backdrop-blur-xs disabled:cursor-not-allowed disabled:opacity-30"
           aria-label="Previous review"
         >
           <ChevronLeftIcon className="h-5 w-5" />
@@ -88,7 +88,7 @@ export default function MovieReviews({
         <Button
           onClick={() => scroll('right')}
           disabled={!canScrollRight}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 p-2 rounded-full bg-opaque-card/80 backdrop-blur-xs border border-border disabled:opacity-30 disabled:cursor-not-allowed"
+          className="bg-opaque-card/80 border-border absolute top-1/2 right-0 z-10 translate-x-12 -translate-y-1/2 rounded-full border p-2 backdrop-blur-xs disabled:cursor-not-allowed disabled:opacity-30"
           aria-label="Next review"
           variant="outline"
         >
@@ -98,10 +98,10 @@ export default function MovieReviews({
         {/* Carousel container */}
         <div
           ref={scrollContainerRef}
-          className="w-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
+          className="no-scrollbar w-full snap-x snap-mandatory overflow-x-auto"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <div className="flex flex-row w-full">
+          <div className="flex w-full flex-row">
             {reviews?.map((review, index) => {
               const reviewText = review.review
                 ? generateHTML(review?.review as JSONContent, [StarterKit])
@@ -109,16 +109,16 @@ export default function MovieReviews({
               return (
                 <div
                   key={`${review?.tier?.tierlist?.user?.id || index}`}
-                  className="shrink-0 w-full snap-center flex flex-col rounded-md p-6 gap-5 border border-border/30 bg-opaqueCard/50 backdrop-blur-xs"
+                  className="border-border/30 bg-opaqueCard/50 flex w-full shrink-0 snap-center flex-col gap-5 rounded-md border p-6 backdrop-blur-xs"
                 >
-                  <h2 className="text-lg font-bold text-primary-foreground">
+                  <h2 className="text-primary-foreground text-lg font-bold">
                     {review.tier?.tierlist?.user?.name}
                   </h2>
-                  <div className="flex flex-row gap-5 items-center border-b pb-5">
+                  <div className="flex flex-row items-center gap-5 border-b pb-5">
                     <img
                       src={review.tier?.tierlist?.user?.image}
                       alt={review.tier?.tierlist?.user?.name ?? ''}
-                      className="w-10 h-10 rounded-full"
+                      className="h-10 w-10 rounded-full"
                     />
                     <StarRadio
                       value={Number.parseFloat(review.rating)}
@@ -126,9 +126,9 @@ export default function MovieReviews({
                       disabled={true}
                     />
                   </div>
-                  <div className="flex flex-col gap-2 overflow-y-auto max-h-[50vh] no-scrollbar">
+                  <div className="no-scrollbar flex max-h-[50vh] flex-col gap-2 overflow-y-auto">
                     <div
-                      className="no-scrollbar overflow-y-auto prose prose-sm sm:prose-base prose-neutral dark:prose-invert ul-li-p-reset h-full focus:outline-hidden"
+                      className="no-scrollbar prose prose-sm sm:prose-base prose-neutral dark:prose-invert ul-li-p-reset h-full overflow-y-auto focus:outline-hidden"
                       dangerouslySetInnerHTML={{ __html: reviewText }}
                     />
                   </div>
@@ -139,7 +139,7 @@ export default function MovieReviews({
         </div>
 
         {/* Pagination dots */}
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="mt-4 flex justify-center gap-2">
           {reviews.map((_, index) => (
             <Button
               type="button"
@@ -154,7 +154,7 @@ export default function MovieReviews({
                   behavior: 'smooth',
                 })
               }}
-              className={`w-4 h-4 p-0 rounded-full bg-border hover:bg-primary/70 transition-colors ${
+              className={`bg-border hover:bg-primary/70 h-4 w-4 rounded-full p-0 transition-colors ${
                 scrollContainerRef.current &&
                 Math.round(
                   scrollContainerRef.current.scrollLeft /

@@ -19,19 +19,19 @@ export default function RangeSlider<T extends number | number[]>({
   return (
     <Slider
       {...props}
-      className="grid grid-cols-[1fr_auto]  gap-2 w-full"
+      className="grid w-full grid-cols-[1fr_auto] gap-2"
       aria-label={label}
     >
-      <SliderTrack className="group col-span-2 h-6 flex items-center">
+      <SliderTrack className="group col-span-2 flex h-6 items-center">
         {({ state }) => {
           const minPercent = state.getThumbPercent(0) * 100
           const maxPercent = state.getThumbPercent(1) * 100
           return (
             <>
-              <div className="relative w-full h-[8px]">
-                <div className="absolute rounded-full h-full bg-accent/50 w-full" />
+              <div className="relative h-[8px] w-full">
+                <div className="bg-accent/50 absolute h-full w-full rounded-full" />
                 <div
-                  className="absolute rounded-full h-full bg-accent w-full"
+                  className="bg-accent absolute h-full w-full rounded-full"
                   style={{
                     left: `${minPercent}%`,
                     width: `${maxPercent - minPercent}%`,
@@ -43,9 +43,9 @@ export default function RangeSlider<T extends number | number[]>({
                   key={i}
                   index={i}
                   aria-label={thumbLabels?.[i]}
-                  className="w-8 h-8 mt-8 rounded-full bg-primary border-2 border-border relative flex items-center justify-center"
+                  className="bg-primary border-border relative mt-8 flex h-8 w-8 items-center justify-center rounded-full border-2"
                 >
-                  <SliderOutput className="text-sm text-background font-medium cursor-pointer">
+                  <SliderOutput className="text-background cursor-pointer text-sm font-medium">
                     {({ state }) => state.getThumbValue(i)}
                   </SliderOutput>
                 </SliderThumb>

@@ -93,14 +93,14 @@ export default React.memo(
     }, [movie.title, containerWidth])
 
     return (
-      <div className="grid grid-cols-8 w-full h-full mt-20 relative">
+      <div className="relative mt-20 grid h-full w-full grid-cols-8">
         <div
-          className="col-span-6 relative flex flex-col justify-center overflow-hidden"
+          className="relative col-span-6 flex flex-col justify-center overflow-hidden"
           ref={containerRef}
         >
           <AnimatePresence mode="wait" propagate>
             <motion.div
-              className="flex flex-col w-full p-8  gap-4"
+              className="flex w-full flex-col gap-4 p-8"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 100 }}
@@ -111,80 +111,80 @@ export default React.memo(
                   <img
                     src={movie.user.image}
                     alt={movie.user.name}
-                    className="w-10 h-10 rounded-full"
+                    className="h-10 w-10 rounded-full"
                   />
-                  <span className="text-sm text-accent-foreground/60">
+                  <span className="text-accent-foreground/60 text-sm">
                     {movie.user.name}
                   </span>
                 </div>
               )}
-              <div className="flex flex-row gap-2 h-10">
+              <div className="flex h-10 flex-row gap-2">
                 {movie.genres.map((genre) => (
                   <div
                     key={genre.id}
-                    className="text-md text-accent-foreground bg-accent/50 backdrop-blur-md rounded-md px-4 py-4 h-full flex items-center justify-center"
+                    className="text-md text-accent-foreground bg-accent/50 flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md"
                   >
                     {genre.name}
                   </div>
                 ))}
               </div>
-              <div className="flex flex-row gap-2 4xl:gap-4 flex-wrap items-center px-1">
-                <span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-                  <Calendar className="w-4 h-4 md:w-6 md:h-6" />
+              <div className="4xl:gap-4 flex flex-row flex-wrap items-center gap-2 px-1">
+                <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
+                  <Calendar className="h-4 w-4 md:h-6 md:w-6" />
                   {movie.watchDate
                     ? new Date(movie?.watchDate).toLocaleDateString('fi-FI')
                     : ''}
                 </span>
                 <span className="text-primary-foreground/60">|</span>
-                <span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-                  <Star className="w-4 h-4 md:w-6 md:h-6" />
+                <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
+                  <Star className="h-4 w-4 md:h-6 md:w-6" />
                   {movie?.vote_average.toFixed(1)}
                 </span>
                 <span className="text-primary-foreground/60">|</span>
-                <span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-                  <Users className="w-4 h-4 md:w-6 md:h-6" />
+                <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
+                  <Users className="h-4 w-4 md:h-6 md:w-6" />
                   {movie?.vote_count}
                 </span>
                 <span className="text-primary-foreground/60">|</span>
-                <span className="text-sm md:text-md 4xl:text-lg max-w-[500px] text-primary-foreground/60 flex flex-row items-center gap-2">
-                  <TrendingUp className="w-4 h-4 md:w-6 md:h-6" />
+                <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
+                  <TrendingUp className="h-4 w-4 md:h-6 md:w-6" />
                   {movie?.popularity.toFixed(1)}
                 </span>
               </div>
               <div className="flex flex-row flex-wrap items-center gap-6">
-                <div className="flex flex-row gap-2 flex-wrap items-center">
+                <div className="flex flex-row flex-wrap items-center gap-2">
                   {movie?.watchProviders?.providers?.map((provider) => {
                     return (
                       <Link
                         href={movie?.watchProviders?.link || ''}
                         target="_blank"
                         key={provider.provider_id}
-                        className="rounded-md hover:bg-accent/50 transition-all duration-300 border border-accent/50"
+                        className="hover:bg-accent/50 border-accent/50 rounded-md border transition-all duration-300"
                       >
                         <Image
                           src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
                           alt={provider.provider_name}
                           width={50}
                           height={50}
-                          className="rounded-md w-8 h-8 md:w-10 md:h-10"
+                          className="h-8 w-8 rounded-md md:h-10 md:w-10"
                         />
                       </Link>
                     )
                   })}
                 </div>
-                <div className="h-4/5 w-[1px] bg-primary-foreground/60" />
-                <div className="flex flex-row gap-2 flex-wrap items-center">
+                <div className="bg-primary-foreground/60 h-4/5 w-[1px]" />
+                <div className="flex flex-row flex-wrap items-center gap-2">
                   <Link
                     href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
                     target="_blank"
                   >
-                    <SiThemoviedatabase className="w-8 h-8 text-primary-foreground hover:text-accent" />
+                    <SiThemoviedatabase className="text-primary-foreground hover:text-accent h-8 w-8" />
                   </Link>
                   <Link
                     href={`https://www.imdb.com/title/${movie?.imdbId}`}
                     target="_blank"
                   >
-                    <FaImdb className="w-8 h-8 text-primary-foreground hover:text-accent" />
+                    <FaImdb className="text-primary-foreground hover:text-accent h-8 w-8" />
                   </Link>
                 </div>
               </div>
@@ -208,12 +208,12 @@ export default React.memo(
 
             const titleFontSize = 'text-[clamp(0.5rem,calc(0.05*100vw),3rem)]'
             return (
-              <div className="w-full max-w-full flex flex-col flex-wrap">
+              <div className="flex w-full max-w-full flex-col flex-wrap">
                 <AnimatePresence mode="wait" propagate>
                   <div className="flex flex-wrap px-10">
                     <motion.span
                       key={`first-${isWrapped ? 'wrapped' : 'unwrapped'}`}
-                      className={`${titleFontSize} font-bold font-mono whitespace-nowrap text-primary-foreground`}
+                      className={`${titleFontSize} text-primary-foreground font-mono font-bold whitespace-nowrap`}
                       initial={
                         isWrapped
                           ? { opacity: 0, x: -100 }
@@ -233,14 +233,14 @@ export default React.memo(
                     </motion.span>
                     {words.length > 1 && (
                       <span
-                        className={`${titleFontSize} font-bold font-mono whitespace-nowrap`}
+                        className={`${titleFontSize} font-mono font-bold whitespace-nowrap`}
                       >
                         &nbsp;
                       </span>
                     )}
                     <motion.span
                       key={`second-${isWrapped ? 'wrapped' : 'unwrapped'}`}
-                      className={`${titleFontSize} font-bold font-mono whitespace-nowrap`}
+                      className={`${titleFontSize} font-mono font-bold whitespace-nowrap`}
                       initial={
                         isWrapped
                           ? { opacity: 0, x: 100 }
@@ -288,12 +288,12 @@ export default React.memo(
               }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <div className="w-full h-full p-10 flex flex-col gap-4">
-                <div className="flex flex-col gap-1 bg-accent/60 drop-shadow-md backdrop-blur-md rounded-md p-2 overflow-y-auto max-h-[250px]">
-                  <h2 className="text-2xl font-bold text-accent-foreground/60">
+              <div className="flex h-full w-full flex-col gap-4 p-10">
+                <div className="bg-accent/60 flex max-h-[250px] flex-col gap-1 overflow-y-auto rounded-md p-2 drop-shadow-md backdrop-blur-md">
+                  <h2 className="text-accent-foreground/60 text-2xl font-bold">
                     Overview
                   </h2>
-                  <p className="text-xs text-accent-foreground/60 ">
+                  <p className="text-accent-foreground/60 text-xs">
                     {movie.overview}
                   </p>
                 </div>
@@ -301,7 +301,7 @@ export default React.memo(
                   <img
                     src={`https://image.tmdb.org/t/p/w500/${movie?.images?.posters[0]?.file_path}`}
                     alt={movie.title}
-                    className="w-full h-full object-cover rounded-md"
+                    className="h-full w-full rounded-md object-cover"
                   />
                 </div>
               </div>

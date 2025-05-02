@@ -1,0 +1,17 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+.next/
+out/
+build/
+dist/
+
+# Cache
+.cache/
+
+# Generated files
+public/
+
+# Ignore dump directory
+dump/

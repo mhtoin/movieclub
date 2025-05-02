@@ -14,7 +14,7 @@ export default function Page() {
   const { register } = useForm()
 
   return (
-    <div className="flex flex-col items center">
+    <div className="items center flex flex-col">
       <form
         className="flex flex-col items-center gap-4"
         action={createNewTierlist}

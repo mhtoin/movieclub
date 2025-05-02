@@ -117,7 +117,7 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
     return (
       <form
         onSubmit={handleSubmit}
-        className="relative w-full min-h-12 flex flex-col gap-2 border border-border/80 rounded-lg transition-all duration-300 bg-input p-2"
+        className="border-border/80 bg-input relative flex min-h-12 w-full flex-col gap-2 rounded-lg border p-2 transition-all duration-300"
       >
         <div className="flex items-center">
           <div className="grow">
@@ -147,13 +147,13 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
 
   return (
     <form
-      className="lg:py-7 relative lg:h-12 flex gap-2 border border-border/80 rounded-lg rounded-tl-none items-center group focus-visible:ring-offset-2 bg-input"
+      className="border-border/80 group bg-input relative flex items-center gap-2 rounded-lg rounded-tl-none border focus-visible:ring-offset-2 lg:h-12 lg:py-7"
       onSubmit={handleSubmit}
     >
       <Input
         type="text"
         placeholder="Search movies by title"
-        className="border-none ring-0 outline-hidden focus-visible:ring-0 focus-visible:ring-offset-0 bg-input text-sm placeholder:text-sm w-full text-foreground"
+        className="bg-input text-foreground w-full border-none text-sm ring-0 outline-hidden placeholder:text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />

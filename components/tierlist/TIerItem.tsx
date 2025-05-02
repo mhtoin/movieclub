@@ -11,7 +11,7 @@ export default function TierItem({
 }) {
   return (
     <div
-      className="relative indicator mx-auto rounded-md max-w-[120px] md:max-w-[150px] lg:max-w-[200px] min-w-[120px] md:min-w-[150px] lg:min-w-[200px] shrink-0"
+      className="indicator relative mx-auto max-w-[120px] min-w-[120px] shrink-0 rounded-md md:max-w-[150px] md:min-w-[150px] lg:max-w-[200px] lg:min-w-[200px]"
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
@@ -23,7 +23,7 @@ export default function TierItem({
         width={200}
         height={300}
         alt=""
-        className="h-full w-full object-cover hover:brightness-75 transition-all duration-300 rounded-md"
+        className="h-full w-full rounded-md object-cover transition-all duration-300 hover:brightness-75"
       />
 
       {item.id && (

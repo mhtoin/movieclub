@@ -14,21 +14,21 @@ export default function SkeletonRecommendedTab() {
       style={{ maxHeight: 'calc(90vh - 150px)' }}
       ref={skeletonRef}
     >
-      <div className="flex flex-wrap gap-2 py-2 w-full items-center justify-center">
+      <div className="flex w-full flex-wrap items-center justify-center gap-2 py-2">
         {skeletonSections.map((section) => (
-          <div key={section} className="w-full bg-input/80 p-2 rounded-md">
+          <div key={section} className="bg-input/80 w-full rounded-md p-2">
             {/* Skeleton for "Because you liked" header */}
-            <div className="sticky top-0 z-10 text-sm font-semibold mb-2 p-2 bg-accent/30 rounded-md w-48 h-7 animate-pulse" />
+            <div className="bg-accent/30 sticky top-0 z-10 mb-2 h-7 w-48 animate-pulse rounded-md p-2 text-sm font-semibold" />
 
             {/* Grid of skeleton movie cards */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-[min-content] gap-y-5 w-full">
+            <div className="grid w-full auto-rows-[min-content] grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-y-5">
               {Array.from({ length: 6 }, (_, i) => (
                 <div
                   key={i}
-                  className="flex flex-col m-2 space-y-3 bg-card/50 rounded-lg"
+                  className="bg-card/50 m-2 flex flex-col space-y-3 rounded-lg"
                 >
                   {/* Skeleton poster */}
-                  <div className="w-full aspect-2/3 bg-accent/60 rounded-md animate-pulse" />
+                  <div className="bg-accent/60 aspect-2/3 w-full animate-pulse rounded-md" />
                 </div>
               ))}
             </div>

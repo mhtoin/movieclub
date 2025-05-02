@@ -12,18 +12,18 @@ const ReviewEditor = ({ movieData }: { movieData: TierMovieWithMovieData }) => {
     editorProps: {
       attributes: {
         class:
-          'prose prose-sm sm:prose-base prose-neutral dark:prose-invert ul-li-p-reset m-5 h-full focus:outline-hidden',
+          'prose prose-sm sm:prose-base prose-neutral dark:prose-invert m-5 h-full focus:outline-hidden ul-li-p-reset',
       },
     },
   })
 
   return (
-    <div className="flex flex-col h-full gap-2">
+    <div className="flex h-full flex-col gap-2">
       <MenuBar editor={editor} id={movieData.id} />
-      <div className="grow overflow-hidden relative">
+      <div className="relative grow overflow-hidden">
         <EditorContent
           editor={editor}
-          className="absolute inset-0 bg-input rounded-md overflow-y-auto text-foreground"
+          className="bg-input text-foreground absolute inset-0 overflow-y-auto rounded-md"
         />
       </div>
     </div>

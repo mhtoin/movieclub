@@ -87,7 +87,7 @@ export default function MoviesOfTheMonth() {
           <div
             key={page?.month}
             data-month={page?.month}
-            className="gallery snap-start min-h-screen shrink-0 listview-section relative"
+            className="gallery listview-section relative min-h-screen shrink-0 snap-start"
           >
             {page?.movies?.map((movie: MovieWithReviews) => (
               <MovieGalleryItem

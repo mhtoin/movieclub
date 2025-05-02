@@ -67,15 +67,15 @@ export default function Tier({
   return (
     <div
       key={tierIndex}
-      className="flex gap-2 justify-start border border-border/70 rounded-md relative group max-w-[95dvw] min-h-[200px] min-w-[95dvw]"
+      className="border-border/70 group relative flex min-h-[200px] max-w-[95dvw] min-w-[95dvw] justify-start gap-2 rounded-md border"
     >
-      <div className="flex md:hidden absolute -top-4 bg-background rounded-md px-2">
-        <span className="text-lg font-bold whitespace-normal text-center">
+      <div className="bg-background absolute -top-4 flex rounded-md px-2 md:hidden">
+        <span className="text-center text-lg font-bold whitespace-normal">
           {label}
         </span>
       </div>
       <button
-        className={`hidden md:flex z-9990 items-center justify-center absolute top-0 left-44 w-20 h-full bg-linear-to-b from-transparent to-background group-hover:opacity-100 opacity-0 transition-all duration-300 hover:bg-accent/10 ${
+        className={`to-background hover:bg-accent/10 absolute top-0 left-44 z-9990 hidden h-full w-20 items-center justify-center bg-linear-to-b from-transparent opacity-0 transition-all duration-300 group-hover:opacity-100 md:flex ${
           canScrollLeft ? 'visible' : 'invisible'
         }`}
         type="button"
@@ -85,7 +85,7 @@ export default function Tier({
       </button>
       <button
         type="button"
-        className={`hidden md:flex z-9990 items-center justify-center absolute top-0 right-0 w-20 h-full bg-linear-to-b from-transparent to-background group-hover:opacity-100 opacity-0 transition-all duration-300 hover:bg-accent/10 ${
+        className={`to-background hover:bg-accent/10 absolute top-0 right-0 z-9990 hidden h-full w-20 items-center justify-center bg-linear-to-b from-transparent opacity-0 transition-all duration-300 group-hover:opacity-100 md:flex ${
           canScrollRight ? 'visible' : 'invisible'
         }`}
         onClick={() => handleScrollRight(tierIndex)}
@@ -97,10 +97,10 @@ export default function Tier({
       ) : (
         <div
           className={
-            'hidden md:flex border rounded-tl-md rounded-bl-md p-2 bg-accent items-center justify-center w-full max-w-44'
+            'bg-accent hidden w-full max-w-44 items-center justify-center rounded-tl-md rounded-bl-md border p-2 md:flex'
           }
         >
-          <span className="text-lg font-bold whitespace-normal text-center w-full">
+          <span className="w-full text-center text-lg font-bold whitespace-normal">
             {label}
           </span>
         </div>
@@ -114,7 +114,7 @@ export default function Tier({
           return (
             <div
               ref={provided.innerRef}
-              className="flex flex-row gap-5 overflow-auto px-2 py-5 md:p-5 max-w-[95dvw]"
+              className="flex max-w-[95dvw] flex-row gap-5 overflow-auto px-2 py-5 md:p-5"
               id={`tier-${tierIndex}`}
               {...provided.droppableProps}
             >

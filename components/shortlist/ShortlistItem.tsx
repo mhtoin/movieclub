@@ -57,13 +57,13 @@ export default function ShortListItem({
   return (
     <div
       className={`moviecard group rounded-none md:rounded-md ${
-        highlight ? 'highlight ' : ''
+        highlight ? 'highlight' : ''
       }`}
     >
       {showActions &&
         requiresSelection &&
         shortlistId === user?.shortlistId && (
-          <div className="opacity-0 -translate-x-20 group-hover:opacity-80 group-hover:translate-x-0 backdrop-blur-md transition-all duration-500 absolute top-0 left-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-br-lg rounded-tl-md p-2">
+          <div className="fill-accent stroke-foreground bg-card absolute top-0 left-0 z-10 flex -translate-x-20 flex-col items-center justify-center gap-2 rounded-tl-md rounded-br-lg p-2 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-80">
             <Button
               variant={'ghost'}
               size={'iconSm'}
@@ -78,15 +78,15 @@ export default function ShortListItem({
               isLoading={selectionMutation.isPending}
             >
               {highlight ? (
-                <TicketCheck className="w-5 h-5 text-primary" />
+                <TicketCheck className="text-primary h-5 w-5" />
               ) : (
-                <TicketPlus className="w-5 h-5 text-primary" />
+                <TicketPlus className="text-primary h-5 w-5" />
               )}
             </Button>
           </div>
         )}
       {showActions && (
-        <div className="translate-x-20 opacity-0 group-hover:opacity-80 group-hover:translate-x-0 backdrop-blur-md border border-border/50 transition-all duration-500 absolute top-0 right-0 z-10 fill-accent stroke-foreground flex flex-col items-center justify-center gap-2 bg-card rounded-bl-lg rounded-tr-none md:rounded-tr-md p-2">
+        <div className="border-border/50 fill-accent stroke-foreground bg-card absolute top-0 right-0 z-10 flex translate-x-20 flex-col items-center justify-center gap-2 rounded-tr-none rounded-bl-lg border p-2 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-80 md:rounded-tr-md">
           {removeFromShortList ? (
             <Button
               variant={'ghost'}
@@ -101,7 +101,7 @@ export default function ShortListItem({
               }}
               isLoading={removeMutation.isPending}
             >
-              <X className="w-5 h-5 text-primary" />
+              <X className="text-primary h-5 w-5" />
             </Button>
           ) : (
             <Button
@@ -116,7 +116,7 @@ export default function ShortListItem({
               }}
               isLoading={addMutation.isPending}
             >
-              <Plus className="w-5 h-5 text-primary" />
+              <Plus className="text-primary h-5 w-5" />
             </Button>
           )}
           <Button
@@ -133,9 +133,9 @@ export default function ShortListItem({
             }
           >
             {isInWatchlist ? (
-              <BookmarkMinus className="w-5 h-5 text-primary" />
+              <BookmarkMinus className="text-primary h-5 w-5" />
             ) : (
-              <BookmarkPlus className="w-5 h-5 text-primary" />
+              <BookmarkPlus className="text-primary h-5 w-5" />
             )}
           </Button>
         </div>
@@ -146,27 +146,27 @@ export default function ShortListItem({
         width={'150'}
         height={'150'}
         className={
-          'primary-img w-[150px] h-auto 2xl:w-[150px] rounded-none! md:rounded-md'
+          'primary-img h-auto w-[150px] rounded-none! md:rounded-md 2xl:w-[150px]'
         }
         priority={removeFromShortList}
         loading={removeFromShortList ? 'eager' : 'lazy'}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
-        <span className="loading loading-spinner loading-lg absolute top-0 left-0 bottom-0 right-0 m-auto z-40" />
+        <span className="loading loading-spinner loading-lg absolute top-0 right-0 bottom-0 left-0 z-40 m-auto" />
       )}
       <div className="info">
         <h1 className="title line-clamp-2">{movie.title}</h1>
-        <div className="overview flex flex-row gap-2 flex-wrap">
-          <span className="text-xs flex flex-row items-center gap-1">
-            <Star className="w-4 h-4" />
+        <div className="overview flex flex-row flex-wrap gap-2">
+          <span className="flex flex-row items-center gap-1 text-xs">
+            <Star className="h-4 w-4" />
             {movie.vote_average.toFixed(1)}
           </span>
-          <span className="text-xs flex flex-row items-center gap-1">
-            <Users className="w-4 h-4" />
+          <span className="flex flex-row items-center gap-1 text-xs">
+            <Users className="h-4 w-4" />
             {movie.vote_count}
           </span>
-          <span className="text-xs flex flex-row items-center gap-1">
-            <TrendingUp className="w-4 h-4" />
+          <span className="flex flex-row items-center gap-1 text-xs">
+            <TrendingUp className="h-4 w-4" />
             {movie.popularity.toFixed(1)}
           </span>
         </div>
@@ -179,7 +179,7 @@ export default function ShortListItem({
                 target="_blank"
               >
                 <Button variant="ghost" size="icon">
-                  <SiThemoviedatabase className="w-6 h-6" />
+                  <SiThemoviedatabase className="h-6 w-6" />
                 </Button>
               </Link>
               <Link
@@ -187,7 +187,7 @@ export default function ShortListItem({
                 target="_blank"
               >
                 <Button variant="ghost" size="icon">
-                  <FaImdb className="w-6 h-6" />
+                  <FaImdb className="h-6 w-6" />
                 </Button>
               </Link>
             </div>

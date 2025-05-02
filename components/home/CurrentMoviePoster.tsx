@@ -78,12 +78,12 @@ export default function CurrentMoviePoster({
   const posterBlurDataUrl = mostRecentMovie?.images?.posters[0]?.blurDataUrl
 
   return (
-    <div className="w-full h-full relative" ref={containerRef}>
+    <div className="relative h-full w-full" ref={containerRef}>
       <ViewModeButtons />
       <Image
         src={isMobile ? posterImage : backgroundImage}
         alt={mostRecentMovie?.title}
-        className="object-cover absolute inset-0 sepia-[0.35] [mask-image:radial-gradient(100%_100%_at_100%_0,#fff,transparent)]"
+        className="absolute inset-0 [mask-image:radial-gradient(100%_100%_at_100%_0,#fff,transparent)] object-cover sepia-[0.35]"
         quality={50}
         priority={true}
         fill

@@ -99,13 +99,13 @@ export default React.memo(
 
     return (
       <div
-        className="gallery-item @container group"
+        className="gallery-item group @container"
         key={movie.id}
         data-expanded={isExpanded}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="relative w-full h-full">
+        <div className="relative h-full w-full">
           {isExpanded && <ViewModeButtons />}
           <Image
             src={backgroundImage}
@@ -122,7 +122,7 @@ export default React.memo(
           {/* Gradient Overlay */}
           {/*<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />*/}
           {!isExpanded && (
-            <div className="absolute inset-0 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-full h-full flex items-center justify-center">
+            <div className="absolute inset-0 z-50 flex h-full w-full items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div className="absolute inset-0 z-50 bg-[radial-gradient(transparent_0%,var(--primary)_80%,var(--primary)_100%)] opacity-10 blur-xl" />
               <Button
                 variant="ghost"
@@ -131,7 +131,7 @@ export default React.memo(
                 className="z-50"
                 tabIndex={isExpanded ? -1 : 0}
               >
-                <ChevronsLeftRight className="w-8 h-8 text-primary-foreground" />
+                <ChevronsLeftRight className="text-primary-foreground h-8 w-8" />
               </Button>
             </div>
           )}
@@ -146,7 +146,7 @@ export default React.memo(
                   className="z-101"
                   tabIndex={isExpanded ? 0 : -1}
                 >
-                  <X className="w-8 h-8 text-primary-foreground" />
+                  <X className="text-primary-foreground h-8 w-8" />
                 </Button>
               </div>,
               document.body,

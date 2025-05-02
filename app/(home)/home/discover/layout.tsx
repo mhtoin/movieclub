@@ -27,7 +27,7 @@ export default async function SearchLayout({
   })
 
   return (
-    <div className="pt-16 flex flex-row h-screen overflow-hidden">
+    <div className="flex h-screen flex-row overflow-hidden pt-16">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense>
           <ExpandableSidebar width="w-[36rem]">

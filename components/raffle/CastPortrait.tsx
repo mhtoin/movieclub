@@ -27,7 +27,7 @@ export default function CastPortrait({
               alt={cast.name}
               width={40}
               height={40}
-              className="rounded-lg object-cover border text-[8px] text-foreground/50 "
+              className="text-foreground/50 rounded-lg border object-cover text-[8px]"
             />
           </Link>
         </TooltipTrigger>

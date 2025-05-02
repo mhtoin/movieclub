@@ -115,9 +115,9 @@ export default function DateSelect({ months }: DateSelectProps) {
     }
   }
   return (
-    <div className="flex flex-col gap-2 items-center justify-center w-full">
-      <div className="flex gap-1 flex-row items-center justify-center w-full">
-        <span className="text-xs whitespace-nowrap text-primary-foreground">
+    <div className="flex w-full flex-col items-center justify-center gap-2">
+      <div className="flex w-full flex-row items-center justify-center gap-1">
+        <span className="text-primary-foreground text-xs whitespace-nowrap">
           {monthAndYear && date
             ? `${new Date(
                 `${monthAndYear[0]}-${monthAndYear[1]}`,
@@ -132,7 +132,7 @@ export default function DateSelect({ months }: DateSelectProps) {
         <PopoverTrigger asChild>
           <Button variant={'outline'} size={'icon'} disabled={isLoadingMonths}>
             {isLoadingMonths ? (
-              <div className="w-4 h-4 rounded-full border-2 border-t-transparent border-foreground animate-spin" />
+              <div className="border-foreground h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
             ) : (
               <CalendarRange />
             )}
@@ -141,7 +141,7 @@ export default function DateSelect({ months }: DateSelectProps) {
         <PopoverContent
           side="top"
           align="end"
-          className="w-48 p-2 z-9999 bg-background"
+          className="bg-background z-9999 w-48 p-2"
         >
           <Select
             onValueChange={(value) => scrollToMonth(value)}
@@ -150,7 +150,7 @@ export default function DateSelect({ months }: DateSelectProps) {
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select month" />
             </SelectTrigger>
-            <SelectContent className="max-h-60 overflow-y-auto z-9999 bg-background">
+            <SelectContent className="bg-background z-9999 max-h-60 overflow-y-auto">
               {months.map((item) => (
                 <SelectItem key={item.month} value={item.month}>
                   {item.label}
