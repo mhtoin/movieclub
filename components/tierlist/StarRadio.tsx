@@ -205,7 +205,8 @@ export default function StarRadio({
   }
 
   return (
-    <div
+    <button
+      type="button"
       className="flex items-center gap-2"
       onMouseLeave={handleMouseLeave}
       onMouseUp={(e) => handleMouseUp(e)}
@@ -253,6 +254,6 @@ export default function StarRadio({
           {displayValue.toFixed(2)}
         </span>
       ) : null}
-    </div>
+    </button>
   )
 }
