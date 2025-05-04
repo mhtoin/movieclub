@@ -2,7 +2,9 @@
 const nextConfig = {
   output: 'standalone',
   experimental: {
-    reactCompiler: true,
+    reactCompiler: {
+      compilationMode: 'annotation',
+    },
   },
   images: {
     remotePatterns: [
