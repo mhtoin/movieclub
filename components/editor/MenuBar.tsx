@@ -34,16 +34,9 @@ export const MenuBar = ({
   editor: Editor | null
   id: string
 }) => {
-  if (!editor) {
-    return null
-  }
-
-  const iconVariant = 'outline'
-  const iconSize = 'iconSm'
-
   const saveReviewMutation = useMutation({
     mutationFn: async () => {
-      const content = editor.getJSON()
+      const content = editor?.getJSON()
 
       const res = await fetch(`/api/reviews?id=${id}`, {
         method: 'POST',
@@ -58,6 +51,13 @@ export const MenuBar = ({
       toast.error('Failed to save review')
     },
   })
+
+  if (!editor) {
+    return null
+  }
+
+  const iconVariant = 'outline'
+  const iconSize = 'iconSm'
 
   return (
     <div className="flex flex-row gap-2">

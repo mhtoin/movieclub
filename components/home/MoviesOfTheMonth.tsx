@@ -77,7 +77,7 @@ export default function MoviesOfTheMonth() {
     }
 
     return () => observer.disconnect()
-  }, [data.pages])
+  }, [data.pages, pathname])
 
   return (
     <>

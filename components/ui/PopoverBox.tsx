@@ -12,7 +12,7 @@ export default function Popover({ label, children }: PopoverProps) {
   const popover = Ariakit.usePopoverStore()
   const [_value, _setValue] = useState<string[]>([])
   const isLarge = useMedia('(min-width: 640px)', true)
-  const isOpen = popover.useState('open')
+  const isOpen = Ariakit.useStoreState(popover).open
 
   const updatePosition = () => {
     const { popoverElement, mounted } = popover.getState()

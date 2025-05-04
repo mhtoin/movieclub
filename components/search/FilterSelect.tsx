@@ -8,6 +8,7 @@ import {
   SelectPopover,
   SelectProvider,
   useSelectStore,
+  useStoreState,
 } from '@ariakit/react'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -27,7 +28,7 @@ export default function FilterSelect({
   const searchParams = useSearchParams()
   const selectedGenres = searchParams.get('with_genres')?.split(',') ?? []
   const [value, setValue] = useState<string[]>(selectedGenres)
-  const isOpen = store.useState('open')
+  const isOpen = useStoreState(store).open
 
   return (
     <div className="flex flex-col gap-1 p-1">

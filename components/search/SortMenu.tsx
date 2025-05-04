@@ -11,6 +11,7 @@ import {
   SelectPopover,
   SelectProvider,
   useSelectStore,
+  useStoreState,
 } from '@ariakit/react'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -28,7 +29,7 @@ export default function SortMenu() {
   const [selectedDirection, setSelectedDirection] = useState(
     sort ? sort.split('.')[1] : 'desc',
   )
-  const isOpen = store.useState('open')
+  const isOpen = useStoreState(store).open
 
   const handleSortChange = (value?: string, direction?: string) => {
     if (value) {

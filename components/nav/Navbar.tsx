@@ -15,20 +15,15 @@ const ThemeSwitcher = dynamic(() => import('../theme/ThemeSwitcher'), {
 export default function NavBar() {
   const pathname = usePathname()
   const isMobile = useIsMobile()
-
-  // Define paths where transparent background is wanted (e.g. homepage)
-  const transparentBgPaths = ['/home'] // Add other paths as needed
-
-  // detect if the user has scrolled down
   const [isTransparent, setIsTransparent] = useState(false)
 
   useEffect(() => {
-    if (transparentBgPaths.includes(pathname)) {
+    if (pathname === '/home') {
       setIsTransparent(true)
     } else {
       setIsTransparent(false)
     }
-  }, [pathname]) // Re-run effect when path changes
+  }, [pathname])
 
   const isHome = pathname === '/home'
 
