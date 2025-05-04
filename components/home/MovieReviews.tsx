@@ -11,12 +11,40 @@ export default function MovieReviews({
 }: {
   movieReviews: MovieReview[]
 }) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const updateScrollButtonsState = useCallback(() => {
+    if (!scrollContainerRef.current) return
+
+    const container = scrollContainerRef.current
+    setCanScrollLeft(container.scrollLeft > 0)
+    setCanScrollRight(
+      container.scrollLeft < container.scrollWidth - container.offsetWidth,
+    )
+  }, [])
+
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (container) {
+      container.addEventListener('scroll', updateScrollButtonsState)
+      // Initial check
+      updateScrollButtonsState()
+
+      return () => {
+        container.removeEventListener('scroll', updateScrollButtonsState)
+      }
+    }
+  }, [updateScrollButtonsState])
   // Filter out reviews with null tier fields
   const validReviews = movieReviews.filter(
     (review) =>
       review?.tier?.tierlist?.user &&
       (review?.review || review?.rating !== '0'),
   )
+
+  const reviews = validReviews
 
   // If there are no valid reviews, show a message instead
   if (!validReviews.length) {
@@ -30,12 +58,6 @@ export default function MovieReviews({
     )
   }
 
-  const reviews = validReviews
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-
-  // Function to scroll to the next or previous review
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return
 
@@ -45,31 +67,6 @@ export default function MovieReviews({
 
     container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
   }
-
-  // Update scroll buttons state
-  const updateScrollButtonsState = useCallback(() => {
-    if (!scrollContainerRef.current) return
-
-    const container = scrollContainerRef.current
-    setCanScrollLeft(container.scrollLeft > 0)
-    setCanScrollRight(
-      container.scrollLeft < container.scrollWidth - container.offsetWidth,
-    )
-  }, [])
-
-  // Add scroll event listener
-  useEffect(() => {
-    const container = scrollContainerRef.current
-    if (container) {
-      container.addEventListener('scroll', updateScrollButtonsState)
-      // Initial check
-      updateScrollButtonsState()
-
-      return () => {
-        container.removeEventListener('scroll', updateScrollButtonsState)
-      }
-    }
-  }, [updateScrollButtonsState])
 
   return (
     <div className="absolute inset-0 top-5 flex h-full w-full flex-col items-center justify-center gap-4 p-4">

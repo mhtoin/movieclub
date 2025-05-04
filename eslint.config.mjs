@@ -16,7 +16,6 @@ const eslintConfig = [
       'plugin:prettier/recommended',
       'plugin:jsx-a11y/recommended',
     ],
-
     rules: {
       'prettier/prettier': [
         'error',
@@ -47,6 +46,8 @@ const eslintConfig = [
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
+      '@next/next/no-img-element': 'off',
+      'jsx-a11y/no-static-element-interactions': 'off',
     },
   }),
   reactCompiler.configs.recommended,

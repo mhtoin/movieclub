@@ -57,16 +57,18 @@ export default function CurrentMoviePoster({
       { threshold: 0.3 },
     )
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current)
+    const currentRef = containerRef.current
+
+    if (currentRef) {
+      observer.observe(currentRef)
     }
 
     return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current)
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
-  }, [router, mostRecentMovie, viewMode, params.toString])
+  }, [router, mostRecentMovie, viewMode, params, params.toString])
 
   const backgroundImage = mostRecentMovie?.images?.backdrops[0]?.file_path
     ? `https://image.tmdb.org/t/p/original/${mostRecentMovie?.images?.backdrops[0]?.file_path}`

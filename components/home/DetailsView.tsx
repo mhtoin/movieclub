@@ -1,11 +1,9 @@
 import type { MovieWithReviews } from '@/types/movie.type'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Calendar, TrendingUp, Users } from 'lucide-react'
-import { Star } from 'lucide-react'
+import { Calendar, Star, TrendingUp, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaImdb } from 'react-icons/fa'
 import { SiThemoviedatabase } from 'react-icons/si'
 
@@ -32,16 +30,17 @@ export default React.memo(
       }
 
       updateContainerWidth()
-
-      // Use ResizeObserver for more accurate detection of container size changes
       const resizeObserver = new ResizeObserver(updateContainerWidth)
-      if (containerRef.current) {
-        resizeObserver.observe(containerRef.current)
+
+      const currentRef = containerRef.current
+
+      if (currentRef) {
+        resizeObserver.observe(currentRef)
       }
 
       return () => {
-        if (containerRef.current) {
-          resizeObserver.unobserve(containerRef.current)
+        if (currentRef) {
+          resizeObserver.unobserve(currentRef)
         }
       }
     }, [])
