@@ -1,39 +1,48 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+generator json {
+  provider = "node node_modules/prisma-json-types-generator"
+  output   = "./prisma/json-types"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-type TierlistTier {
-  label String
-  value Int
-  movies String[] @db.ObjectId
-}
-
-model Tierlists {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  tiers  TierlistTier[]
-  tierlistTiers  Tier[]
-  userId String @unique @db.ObjectId
-  user   User?  @relation(fields: [userId], references: [id])
+model Tierlist {
+  id      String   @id @default(uuid())
+  tiers   Tier[]
+  tierIds String[]
+  userId  String   @unique
+  user    User?    @relation(fields: [userId], references: [id])
 }
 
 model Tier {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  id         String          @id @default(uuid())
   label      String
   value      Int
-  movies     Movie[]   @relation(fields: [movieIds], references: [id])
-  movieIds   String[]  @db.ObjectId
-  tierlist   Tierlists @relation(fields: [tierlistId], references: [id])
-  tierlistId String    @db.ObjectId
-  tierMovies TierMovie[]
+  tierlist   Tierlist        @relation(fields: [tierlistId], references: [id])
+  tierlistId String
+  movies     MoviesOnTiers[]
+}
+
+model MoviesOnTiers {
+  position Int
+  movie    Movie  @relation(fields: [movieId], references: [id])
+  movieId  String
+  tier     Tier   @relation(fields: [tierId], references: [id])
+  tierId   String
+
+  @@unique([movieId, tierId])
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  id                String  @id @default(uuid())
   access_token      String?
   expires_at        Int?
   provider          String
@@ -42,164 +51,79 @@ model Account {
   scope             String?
   token_type        String?
   type              String?
-  userId            String  @db.ObjectId
+  userId            String
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
 }
 
 model Shortlist {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @unique @db.ObjectId
+  id                String   @id @default(uuid())
+  userId            String   @unique
   user              User     @relation(fields: [userId], references: [id])
-  movieIDs          String[] @db.ObjectId
-  movies            Movie[]  @relation(fields: [movieIDs], references: [id])
+  movieIDs          String[]
+  movies            Movie[]
   isReady           Boolean  @default(false)
   requiresSelection Boolean? @default(false)
   selectedIndex     Int?
   participating     Boolean  @default(true)
-
-  @@map("shortlist")
 }
 
 model Movie {
-  id                String         @id @default(auto()) @map("_id") @db.ObjectId
-  adult             Boolean
-  backdrop_path     String?        @default("")
-  genre_ids         Int[]
-  tmdbId            Int            @unique
-  imdbId            String?
-  original_language String
-  original_title    String
-  overview          String
-  popularity        Float
-  poster_path       String?        @default("")
-  release_date      String
-  title             String
-  video             Boolean
-  vote_average      Float
-  vote_count        Int
-  movieOfTheWeek    DateTime?
-  watchDate         String?
-  user              User?          @relation(fields: [userId], references: [id])
-  shortlists        Shortlist[]    @relation(fields: [shortlistIDs], references: [id])
-  shortlistIDs      String[]       @db.ObjectId
-  ratings           Rating[]
-  reviews           Review[]
-  userId            String?        @db.ObjectId
-  raffles           Raffle[]       @relation(fields: [raffleIDs], references: [id])
-  raffleIDs         String[]       @db.ObjectId
-  runtime           Int?
-  genres            Genre[]
-  tagline           String?
-  watchProviders    WatchProvider?
-  images            Images?
-  videos            Video[]
-  cast              CastMember[]
-  crew              CrewMember[]
-  tiers             Tier[]         @relation(fields: [tierIds], references: [id])
-  tierIds           String[]       @db.ObjectId
-  recommendations   RecommendedMovie[] @relation("recommendedMovie")
+  id                    String             @id @default(uuid())
+  adult                 Boolean
+  backdrop_path         String?            @default("")
+  genre_ids             Int[]
+  tmdbId                Int                @unique
+  imdbId                String?
+  original_language     String
+  original_title        String
+  overview              String
+  popularity            Float
+  poster_path           String?            @default("")
+  release_date          String
+  title                 String
+  video                 Boolean
+  vote_average          Float
+  vote_count            Int
+  movieOfTheWeek        DateTime?
+  watchDate             String?
+  user                  User?              @relation(fields: [userId], references: [id])
+  shortlists            Shortlist[]
+  shortlistIDs          String[]
+  reviews               Review[]
+  userId                String?
+  raffles               Raffle[]
+  raffleIDs             String[]
+  runtime               Int?
+  /// [GenresType]
+  genres                Json?
+  tagline               String?
+  /// [WatchProvidersType]
+  watchProviders        Json?
+  /// [Images]
+  images                Json?
+  /// [Videos]
+  videos                Json?
+  /// [CastMembers]
+  cast                  Json?
+  /// [CrewMembers]
+  crew                  Json?
+  tiers                 MoviesOnTiers[]
+  tierIds               String[]
+  recommendations       RecommendedMovie[] @relation("recommendedMovie")
   sourceRecommendations RecommendedMovie[] @relation("sourceMovieRelation")
-  tierMovies        TierMovie[]
-
-  @@map("movies")
-}
-
-type CrewMember {
-  adult                Boolean
-  gender               Int
-  id                   Int
-  known_for_department String
-  name                 String
-  original_name        String
-  popularity           Float
-  profile_path         String?
-  credit_id            String
-  department           String
-  job                  String
-}
-
-type CastMember {
-  adult                Boolean
-  gender               Int
-  id                   Int
-  known_for_department String
-  name                 String
-  original_name        String
-  popularity           Float
-  profile_path         String?
-  cast_id              Int
-  character            String
-  credit_id            String
-  order                Int
-}
-
-type WatchProvider {
-  providers Provider[]
-  link      String
-}
-
-type Provider {
-  logo_path        String
-  provider_id      Int
-  provider_name    String
-  display_priority Int
-}
-
-type Images {
-  backdrops SingleImage[]
-  posters   SingleImage[]
-  logos     SingleImage[]
-}
-
-type SingleImage {
-  aspect_ratio Float
-  file_path    String
-  height       Int
-  width        Int
-  iso_639_1    String?
-  vote_average Float
-  vote_count   Int
-  blurDataUrl  String?
-}
-
-type Video {
-  iso_639_1    String
-  iso_3166_1   String
-  name         String
-  key          String
-  site         String
-  size         Int
-  type         String
-  official     Boolean
-  published_at String
-  id           String
-}
-
-model Rating {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  rating  Float
-  userId  String @db.ObjectId
-  user    User   @relation(fields: [userId], references: [id])
-  movieId String @db.ObjectId
-  movie   Movie  @relation(fields: [movieId], references: [id])
 }
 
 model Review {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String @id @default(uuid())
   content   String
-  userId    String @db.ObjectId
+  userId    String
   user      User   @relation(fields: [userId], references: [id])
-  movieId   String @db.ObjectId
+  movieId   String
   movie     Movie  @relation(fields: [movieId], references: [id])
   timestamp String
-}
-
-type Genre {
-  id   Int
-  name String
+  rating    Float
 }
 
 enum Trailer {
@@ -209,76 +133,58 @@ enum Trailer {
 }
 
 model User {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  email         String     @unique
+  id              String             @id @default(uuid())
+  email           String             @unique
   /// Could not determine type: the field only had null or empty values in the sample set.
-  emailVerified DateTime?
-  image         String
-  name          String
-  sessionId     String?
-  accountId     Int?
-  shortlist     Shortlist?
-  shortlistId   String?    @db.ObjectId
-  tierlistId    String?    @db.ObjectId
-  accounts      Account[]
-  tierlist      Tierlists?
-  ratings       Rating[]
-  reviews       Review[]
-  movies        Movie[]
-  Raffle        Raffle[]   @relation(fields: [raffleIDs], references: [id])
-  raffleIDs     String[]   @db.ObjectId
-  sessions      Session[]
+  emailVerified   DateTime?
+  image           String
+  name            String
+  sessionId       String?
+  accountId       Int?
+  shortlist       Shortlist?
+  shortlistId     String?
+  accounts        Account[]
+  tierlists       Tierlist[]
+  reviews         Review[]
+  movies          Movie[]
+  raffle          Raffle[]
+  raffleIDs       String[]
+  sessions        Session[]
   recommendations RecommendedMovie[]
-  @@map("users")
 }
 
 model Session {
-  id        String   @id @map("_id")
-  userId    String   @db.ObjectId
+  id        String   @id @default(uuid())
+  userId    String
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Raffle {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  participants   User[]   @relation(fields: [participantIDs], references: [id])
-  participantIDs String[] @db.ObjectId
-  movieIDs       String[] @db.ObjectId
-  movies         Movie[]  @relation(fields: [movieIDs], references: [id])
-  winningMovieID String   @db.ObjectId
+  id             String   @id @default(uuid())
+  participants   User[]
+  participantIDs String[]
+  movieIDs       String[]
+  movies         Movie[]
+  winningMovieID String
   date           String
 }
 
 model RecommendedMovie {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  movie         Movie   @relation("recommendedMovie", fields: [movieId], references: [id])
-  movieId       String  @db.ObjectId
-  user          User    @relation(fields: [userId], references: [id])
-  userId        String  @db.ObjectId
-  sourceMovie   Movie   @relation("sourceMovieRelation", fields: [sourceMovieId], references: [id])
-  sourceMovieId String  @db.ObjectId
-  
+  id            String @id @default(uuid())
+  movie         Movie  @relation("recommendedMovie", fields: [movieId], references: [id])
+  movieId       String
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String
+  sourceMovie   Movie  @relation("sourceMovieRelation", fields: [sourceMovieId], references: [id])
+  sourceMovieId String
+
   @@unique([movieId, userId, sourceMovieId])
 }
 
-model TierMovie {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  movie    Movie  @relation(fields: [movieId], references: [id])
-  movieId  String @db.ObjectId
-  tier     Tier   @relation(fields: [tierId], references: [id])
-  tierId   String @db.ObjectId
-  position Int    @default(0)
-  rating String    @default("0")
-  review Json?
-
-  
-  @@unique([movieId, tierId])
-  @@map("tier_movies")
-}
-
 model SiteConfig {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  watchProviders Provider[]
-  watchWeekDay String
+  id             String @id @default(uuid())
+  /// [ConfigProviders]
+  watchProviders Json?
+  watchWeekDay   String
 }
-
