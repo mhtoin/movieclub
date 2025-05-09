@@ -1,16 +1,11 @@
 import CurrentMoviePoster from '@/components/home/CurrentMoviePoster'
-import { isServerMobile } from '@/lib/isServerMobile'
 import { getMostRecentMovieOfTheWeek } from '@/lib/movies/movies'
 
 export async function CurrentMovieWrapper() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek()
-  const isMobile = await isServerMobile()
   return (
     <div className="relative flex h-screen w-screen snap-start items-center justify-center overflow-x-hidden">
-      <CurrentMoviePoster
-        mostRecentMovie={mostRecentMovie}
-        isMobile={isMobile}
-      />
+      <CurrentMoviePoster mostRecentMovie={mostRecentMovie} />
     </div>
   )
 }
