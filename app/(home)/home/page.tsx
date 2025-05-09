@@ -1,22 +1,18 @@
-export const revalidate = 0
+import CurrentMoviePoster from '@/components/home/CurrentMoviePoster'
+import { getMostRecentMovieOfTheWeek } from '@/lib/movies/movies'
 
-import { CurrentMovieWrapper } from '@/components/home/CurrentMovieWrapper'
-import { getCurrentSession } from '@/lib/authentication/session'
-import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
 export default async function HomePage() {
-  const { user } = await getCurrentSession()
-
-  if (!user) {
-    redirect('/')
-  }
+  const mostRecentMovie = await getMostRecentMovieOfTheWeek()
 
   return (
     <div className="bg-main-background relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
       <div className="min-h-screen shrink-0 snap-start">
         <Suspense fallback={null}>
-          <CurrentMovieWrapper />
+          <div className="relative flex h-screen w-screen snap-start items-center justify-center overflow-x-hidden">
+            <CurrentMoviePoster mostRecentMovie={mostRecentMovie} />
+          </div>
         </Suspense>
       </div>
     </div>

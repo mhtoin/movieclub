@@ -1,4 +1,5 @@
 import ToolBar from '@/components/home/ToolBar'
+import { getCurrentSession } from '@/lib/authentication/session'
 import { getQueryClient } from '@/lib/getQueryClient'
 import { getAllMonths } from '@/lib/movies/movies'
 import { getAllShortlistsGroupedById } from '@/lib/shortlist'
@@ -7,6 +8,7 @@ import { HydrationBoundary, dehydrate } from '@tanstack/react-query'
 import { SocketClient } from 'components/common/SocketClient'
 import NavbarWrapper from 'components/nav/NavbarWrapper'
 import ReplaceDialog from 'components/search/ReplaceDialog'
+import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
 export default async function HomeLayout({
@@ -16,6 +18,11 @@ export default async function HomeLayout({
   searchModal: React.ReactNode
   children: React.ReactNode
 }) {
+  const { user } = await getCurrentSession()
+
+  if (!user) {
+    redirect('/')
+  }
   const queryClient = getQueryClient()
   const months = await getAllMonths()
   const siteConfig = await getSiteConfig()
