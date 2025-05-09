@@ -2,10 +2,6 @@ export const revalidate = 0
 
 import { CurrentMovieWrapper } from '@/components/home/CurrentMovieWrapper'
 import { getCurrentSession } from '@/lib/authentication/session'
-import { getQueryClient } from '@/lib/getQueryClient'
-import { dehydrate } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import { getMoviesOfTheWeekByMonth } from 'lib/movies/movies'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
