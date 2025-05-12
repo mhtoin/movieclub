@@ -7,19 +7,15 @@ export type MovieWithUser = Prisma.MovieGetPayload<{
 export type MovieWithReviews = Prisma.MovieGetPayload<{
   include: {
     user: true
-    tierMovies: {
+    reviews: {
       select: {
-        review: true
+        id: true
+        content: true
+        user: true
         rating: true
-        tier: {
-          select: {
-            tierlist: {
-              select: {
-                user: true
-              }
-            }
-          }
-        }
+        userId: true
+        timestamp: true
+        movieId: true
       }
     }
   }
@@ -36,7 +32,7 @@ export type RecommendedMovie = Prisma.RecommendedMovieGetPayload<{
   }
 }>
 
-export type MovieReview = Prisma.TierMovieGetPayload<{
+export type MovieReview = Prisma.ReviewGetPayload<{
   select: {
     review: true
     rating: true
@@ -49,5 +45,11 @@ export type MovieReview = Prisma.TierMovieGetPayload<{
         }
       }
     }
+  }
+}>
+
+export type ReviewWithUser = Prisma.ReviewGetPayload<{
+  include: {
+    user: true
   }
 }>

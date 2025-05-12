@@ -9,7 +9,7 @@ export async function GET(
   request: NextRequest,
 ): Promise<
   NextResponse<
-    | { month: string; movies: MovieWithReviews[] }
+    | { month: string; movies: MovieWithReviews[]; lastMonth: string | null }
     | MovieWithReviews[]
     | { ok: boolean; message: string }
   >

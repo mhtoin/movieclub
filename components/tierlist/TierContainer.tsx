@@ -6,7 +6,6 @@ import {
   type DraggableLocation,
   type DropResult,
 } from '@hello-pangea/dnd'
-import type { TierMovie } from '@prisma/client'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getQueryClient } from 'lib/getQueryClient'
 import { tierlistKeys } from 'lib/tierlist/tierlistKeys'
@@ -55,10 +54,10 @@ const moveItem = (
 
 export default function DnDTierContainer({
   tierlistId,
-  authorized,
+  userId,
 }: {
   tierlistId: string
-  authorized: boolean
+  userId: string
 }) {
   const queryClient = getQueryClient()
   const pathname = usePathname()
@@ -77,35 +76,17 @@ export default function DnDTierContainer({
     TierMovieWithMovieData[][] | undefined
   >(undefined)
 
-  const tiers = tierlistData?.tierlistTiers.map((tier) => tier.label)
-
+  const tiers = tierlistData?.tiers.map((tier) => tier.label)
+  const isAuthorized = tierlistData?.userId === userId || false
   useEffect(() => {
-    const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
-      return tier.value === 0
-        ? tier.movies
-            .filter((movie) =>
-              selectedDate
-                ? movie.watchDate?.split('-')[0] === selectedDate
-                : true,
-            )
-            .map((movie, index) => {
-              return {
-                id: '',
-                tierId: tier.id,
-                position: index,
-                movieId: movie.id,
-                movie: movie,
-                rating: '',
-                review: null,
-              }
-            })
-        : tier.tierMovies
-            .filter((movie) =>
-              selectedDate
-                ? movie.movie.watchDate?.split('-')[0] === selectedDate
-                : true,
-            )
-            .map((movie) => movie)
+    const movieMatrix = tierlistData?.tiers.map((tier) => {
+      return tier.movies
+        .filter((movie) =>
+          selectedDate
+            ? movie.movie.watchDate?.split('-')[0] === selectedDate
+            : true,
+        )
+        .map((movie) => movie)
     })
     setContainerState(movieMatrix)
   }, [tierlistData, selectedDate])
@@ -121,39 +102,21 @@ export default function DnDTierContainer({
       scroll: false,
     })
     setSelectedDate(date)
-    const movieMatrix = tierlistData?.tierlistTiers.map((tier) => {
-      return tier.value === 0
-        ? tier.movies
-            .filter((movie) =>
-              selectedDate
-                ? movie.watchDate?.split('-')[0] === selectedDate
-                : true,
-            )
-            .map((movie, index) => {
-              return {
-                id: '',
-                tierId: tier.id,
-                position: index,
-                movieId: movie.id,
-                movie: movie,
-                rating: '',
-                review: null,
-              }
-            })
-        : tier.tierMovies
-            .filter((movie) =>
-              selectedDate
-                ? movie.movie.watchDate?.split('-')[0] === selectedDate
-                : true,
-            )
-            .map((movie) => movie)
+    const movieMatrix = tierlistData?.tiers.map((tier) => {
+      return tier.movies
+        .filter((movieData) =>
+          selectedDate
+            ? movieData?.movie?.watchDate?.split('-')[0] === selectedDate
+            : true,
+        )
+        .map((movieData) => movieData)
     })
 
     setContainerState(movieMatrix)
   }
 
   function onDragEnd(result: DropResult) {
-    if (!authorized || !containerState || !tierlistData) {
+    if (!isAuthorized || !containerState || !tierlistData) {
       return
     }
 
@@ -171,7 +134,7 @@ export default function DnDTierContainer({
     const sInd = +source.droppableId
     const dInd = +destination.droppableId
 
-    const destinationTier = tierlistData.tierlistTiers[dInd]
+    const destinationTier = tierlistData.tiers[dInd]
 
     if (destinationTier.value === 0) {
       // handle case where no sourceData yet
@@ -222,8 +185,8 @@ export default function DnDTierContainer({
       newState[sInd] = result[sInd]
       newState[dInd] = result[dInd]
 
-      const sourceTier = tierlistData.tierlistTiers[sInd]
-      const destinationTier = tierlistData.tierlistTiers[dInd]
+      const sourceTier = tierlistData.tiers[sInd]
+      const destinationTier = tierlistData.tiers[dInd]
 
       if (sourceTier.value === 0) {
         // handle case where no sourceData yet
@@ -234,9 +197,10 @@ export default function DnDTierContainer({
           id: '',
           tierId: destinationTier.id,
           position: destination.index,
-          movieId: sourceData.id,
+          movieId: sourceData.movie.id,
           rating: '',
           review: null,
+          movie: sourceData.movie, // Add the movie object to match TierMovieWithMovieData
         }
 
         // update the tierlist
@@ -249,7 +213,7 @@ export default function DnDTierContainer({
           operation: 'rank',
         })
       } else {
-        const sourceData = sourceTier.tierMovies[source.index]
+        const sourceData = sourceTier.movies[source.index]
 
         const newSourceData = {
           ...sourceData,
@@ -278,12 +242,12 @@ export default function DnDTierContainer({
       operation,
     }: {
       data: {
-        sourceData?: TierMovie
-        updatedSourceData?: TierMovie
+        sourceData?: TierMovieWithMovieData
+        updatedSourceData?: TierMovieWithMovieData
         sourceTierId?: string
         destinationTierId?: string
-        destinationData?: TierMovie
-        items?: TierMovie[]
+        destinationData?: TierMovieWithMovieData
+        items?: TierMovieWithMovieData[]
       }
       operation: 'reorder' | 'move' | 'rank'
     }) => {

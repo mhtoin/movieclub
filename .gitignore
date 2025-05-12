@@ -83,3 +83,4 @@ prisma/migrations/
 /data
 
 scripts/
+generated/
