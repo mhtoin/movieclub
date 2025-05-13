@@ -419,8 +419,6 @@ export const useUpdateShortlistMutation = () => {
 
 export const useRemoveFromShortlistMutation = () => {
   const queryClient = useQueryClient()
-  const isOpen = useDialogStore.use.isOpen()
-  const setIsOpen = useDialogStore.use.setIsOpen()
   return useMutation({
     mutationFn: async ({
       movieId,
