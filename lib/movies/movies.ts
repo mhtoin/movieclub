@@ -38,19 +38,15 @@ export async function getMostRecentMovieOfTheWeek() {
     },
     include: {
       user: true,
-      tierMovies: {
+      reviews: {
         select: {
-          review: true,
+          id: true,
+          content: true,
+          user: true,
           rating: true,
-          tier: {
-            select: {
-              tierlist: {
-                select: {
-                  user: true,
-                },
-              },
-            },
-          },
+          userId: true,
+          timestamp: true,
+          movieId: true,
         },
       },
     },
@@ -73,7 +69,6 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
     include: {
       user: true,
       reviews: true,
-      ratings: true,
     },
   })
 
@@ -112,22 +107,6 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
 
   const lastMonth = await getLastMonth()
 
-  // First get the tierMovies that have valid tiers to avoid the null tier issue
-  const validTierMovies = await prisma.tierMovie.findMany({
-    where: {
-      tier: {
-        tierlistId: {
-          not: undefined,
-        },
-      },
-    },
-    select: {
-      id: true,
-    },
-  })
-
-  const validTierMovieIds = validTierMovies.map((tm) => tm.id)
-
   const movies = await prisma.movie.findMany({
     where: {
       watchDate: {
@@ -139,24 +118,15 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
     },
     include: {
       user: true,
-      tierMovies: {
-        where: {
-          id: {
-            in: validTierMovieIds,
-          },
-        },
+      reviews: {
         select: {
-          review: true,
+          id: true,
+          content: true,
+          user: true,
           rating: true,
-          tier: {
-            select: {
-              tierlist: {
-                select: {
-                  user: true,
-                },
-              },
-            },
-          },
+          userId: true,
+          timestamp: true,
+          movieId: true,
         },
       },
     },
@@ -185,24 +155,15 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
       },
       include: {
         user: true,
-        tierMovies: {
-          where: {
-            id: {
-              in: validTierMovieIds,
-            },
-          },
+        reviews: {
           select: {
-            review: true,
+            id: true,
+            content: true,
+            user: true,
             rating: true,
-            tier: {
-              select: {
-                tierlist: {
-                  select: {
-                    user: true,
-                  },
-                },
-              },
-            },
+            userId: true,
+            timestamp: true,
+            movieId: true,
           },
         },
       },
@@ -235,14 +196,6 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
     }
   }
 
-  /*
-	if (currentMonth === targetMonth && movies.length > 1) {
-		return {
-			month: targetMonth,
-			movies: movies.slice(1),
-		};
-	}*/
-
   return {
     month: targetMonth,
     movies: movies,
@@ -259,19 +212,15 @@ export async function getMoviesUntil(date: string) {
     },
     include: {
       user: true,
-      tierMovies: {
+      reviews: {
         select: {
-          review: true,
+          id: true,
+          content: true,
+          user: true,
           rating: true,
-          tier: {
-            select: {
-              tierlist: {
-                select: {
-                  user: true,
-                },
-              },
-            },
-          },
+          userId: true,
+          timestamp: true,
+          movieId: true,
         },
       },
     },
@@ -308,8 +257,17 @@ export async function getAllMoviesOfTheWeek() {
       },
     },
     include: {
-      reviews: true,
-      ratings: true,
+      reviews: {
+        select: {
+          id: true,
+          content: true,
+          user: true,
+          rating: true,
+          userId: true,
+          timestamp: true,
+          movieId: true,
+        },
+      },
       user: true,
     },
   })
@@ -337,19 +295,15 @@ export async function getMoviesOfTheWeek() {
     },
     include: {
       user: true,
-      tierMovies: {
+      reviews: {
         select: {
-          review: true,
+          id: true,
+          content: true,
+          user: true,
           rating: true,
-          tier: {
-            select: {
-              tierlist: {
-                select: {
-                  user: true,
-                },
-              },
-            },
-          },
+          userId: true,
+          timestamp: true,
+          movieId: true,
         },
       },
     },
@@ -367,6 +321,7 @@ export async function createReview(
       userId: userId,
       movieId: movieId,
       timestamp: format(new Date(), 'dd/MM/yyyy H:m'),
+      rating: 0,
     },
   })
 
@@ -516,23 +471,28 @@ export async function postRaffleWork({
     }
 
     // need to update each user's unranked tier to add the winning movie
-    const tierlist = await prisma.tierlists.findFirst({
+    const tierlist = await prisma.tierlist.findFirst({
       where: {
         userId: participant,
       },
       include: {
-        tierlistTiers: true,
+        tiers: {
+          select: {
+            id: true,
+            value: true,
+            movies: true,
+          },
+        },
       },
     })
     if (tierlist) {
-      for (const tier of tierlist.tierlistTiers) {
+      for (const tier of tierlist.tiers) {
         if (tier.value === 0) {
-          await prisma.tier.update({
-            where: { id: tier.id },
+          await prisma.moviesOnTiers.create({
             data: {
-              movies: {
-                connect: { id: winner.id },
-              },
+              movieId: winner.id,
+              tierId: tier.id,
+              position: tier.movies.length + 1,
             },
           })
           break

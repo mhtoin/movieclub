@@ -83,7 +83,7 @@ export default function Menubar() {
               </span>
             </Link>
             <Link
-              href={`/tierlists/${user?.tierlistId}`}
+              href={`/tierlists/${user?.id}`}
               className="ml-5 flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
             >
@@ -158,7 +158,7 @@ export default function Menubar() {
               </Link>
             </MenuItem>
             <MenuItem className="ml-6" store={menu}>
-              <Link href={`/tierlists/${user?.tierlistId}`}>
+              <Link href={`/tierlists/${user?.id}`}>
                 <span className="text-foreground">Edit</span>
                 <span className={styles['menu-label']}>Edit your tierlist</span>
               </Link>

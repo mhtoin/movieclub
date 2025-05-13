@@ -1,4 +1,4 @@
-import type { CastMember } from '@prisma/client'
+import { CastMember } from '@/types/tmdb.type'
 import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/Popover'
 import { List } from 'lucide-react'
 import { Button } from '../ui/Button'

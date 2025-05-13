@@ -1,3 +1,4 @@
+/*
 'use client'
 import { useQuery } from '@tanstack/react-query'
 import ReviewEditor from 'components/tierlist/ReviewEditor'
@@ -34,12 +35,12 @@ export default function ReviewDialog({
   // Find the latest movie data from the tierlist
   const latestMovieData =
     open && tierlistData
-      ? tierlistData.tierlistTiers
-          .flatMap((tier) => tier.tierMovies)
-          .find((m) => m.id === movie.id) || movie
+      ? tierlistData.tiers
+          .flatMap((tier) => tier.movies)
+          .find((m) => m.movie.id === movie.movie.id) || movie
       : movie
 
-  const [rating, setRating] = useState(Number.parseFloat(movie.rating))
+  const [rating, setRating] = useState(Number.parseFloat(movie.movie))
 
   // Update the rating state when the dialog opens and movie data is available
   useEffect(() => {
@@ -69,7 +70,6 @@ export default function ReviewDialog({
           </div>
         ) : (
           <div className="relative h-full w-full">
-            {/* Background image with overlay */}
             <div className="absolute inset-0 h-full w-full">
               <Image
                 src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.backdrop_path || latestMovieData.movie.poster_path}`}
@@ -78,11 +78,9 @@ export default function ReviewDialog({
                 className="object-cover opacity-30 blur-xs"
                 priority
               />
-              {/* Dark overlay for better readability */}
               <div className="absolute inset-0 bg-black/50" />
             </div>
 
-            {/* Content container with proper padding and z-index */}
             <div className="relative z-10 grid h-full w-full grid-cols-2 gap-4 p-6">
               <div className="col-span-1 h-full w-full shrink-0 border">
                 <Image
@@ -124,3 +122,4 @@ export default function ReviewDialog({
     </Dialog>
   )
 }
+*/

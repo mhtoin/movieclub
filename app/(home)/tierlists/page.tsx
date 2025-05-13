@@ -15,6 +15,7 @@ export default async function Tierlists() {
     redirect('/')
   }
   const allTierlists = await getTierlists()
+  console.log(allTierlists)
   const usersWithTierlist = allTierlists.map((tierlist) => tierlist.userId)
 
   return (

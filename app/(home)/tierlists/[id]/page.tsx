@@ -25,10 +25,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     <div className="flex flex-col items-center gap-10 py-20 md:gap-5">
       <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div>Loading...</div>}>
-          <TierContainer
-            tierlistId={params.id}
-            authorized={user.tierlistId === params.id}
-          />
+          <TierContainer tierlistId={params.id} userId={user.id} />
         </Suspense>
       </HydrationBoundary>
     </div>

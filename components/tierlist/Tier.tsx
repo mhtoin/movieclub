@@ -120,13 +120,13 @@ export default function Tier({
             >
               {tier.map((item, index) => (
                 <Draggable
-                  key={item.id ? item.id : item.movieId}
-                  draggableId={item.id ? item.id : item.movieId}
+                  key={item?.movieId}
+                  draggableId={item?.movieId}
                   index={index}
                 >
                   {(provided, _snapshot) => (
                     <TierItem
-                      key={item.id ? item.id : item.movieId}
+                      key={item?.movieId}
                       item={item}
                       provided={provided}
                     />

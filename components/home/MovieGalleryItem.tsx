@@ -6,13 +6,11 @@ import ViewModeButtons from '@/components/home/ViewModeButtons'
 import { useWatchDateStore } from '@/stores/useWatchDateStore'
 import type { MovieWithReviews } from '@/types/movie.type'
 import { Button } from 'components/ui/Button'
-import { AnimatePresence } from 'framer-motion'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronsLeftRight, X } from 'lucide-react'
 import Image from 'next/image'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import React from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 export default React.memo(
@@ -185,7 +183,7 @@ export default React.memo(
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <MovieReviews movieReviews={movie?.tierMovies} />
+                <MovieReviews movieReviews={movie?.reviews} />
               </motion.div>
             )}
           </AnimatePresence>

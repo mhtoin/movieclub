@@ -1,7 +1,5 @@
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import type { Image } from '@/types/tmdb.type'
+import type { Image, TMDBMovieResponse } from '@/types/tmdb.type'
 import type { Prisma } from '@prisma/client'
-import type { SingleImage as MovieImage } from '@prisma/client'
 import { getBlurDataUrl } from 'lib/utils'
 
 type RankObject = {
@@ -71,7 +69,7 @@ export const createDbMovie = async (
   const backdrops = movieData.images?.backdrops
     ? rankImages(movieData.images.backdrops, movieData.original_language)
     : []
-  const backdropsWithBlurDataUrl: Array<MovieImage> = []
+  const backdropsWithBlurDataUrl: Array<Image> = []
 
   for (const backdrop of backdrops.slice(0, 3)) {
     const blurDataUrl = await getBlurDataUrl(
@@ -88,7 +86,7 @@ export const createDbMovie = async (
   const posters = movieData.images?.posters
     ? rankImages(movieData.images.posters, movieData.original_language)
     : []
-  const postersWithBlurDataUrl: Array<MovieImage> = []
+  const postersWithBlurDataUrl: Array<Image> = []
 
   for (const poster of posters.slice(0, 3)) {
     const blurDataUrl = await getBlurDataUrl(
@@ -124,17 +122,13 @@ export const createDbMovie = async (
     tagline: movieData.tagline,
     genres: movieData.genres,
     watchProviders: {
-      set: {
-        link: providerLink ?? '',
-        providers: finnishProvider ?? [],
-      },
+      link: providerLink ?? '',
+      providers: finnishProvider ?? [],
     },
     images: {
-      set: {
-        backdrops: backdropsWithBlurDataUrl,
-        posters: postersWithBlurDataUrl,
-        logos,
-      },
+      backdrops: backdropsWithBlurDataUrl,
+      posters: postersWithBlurDataUrl,
+      logos,
     },
     videos: trailers,
     cast: cast,

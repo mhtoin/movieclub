@@ -1,19 +1,25 @@
 import type { Prisma } from '@prisma/client'
 
-export type TierlistWithTiers = Prisma.TierlistsGetPayload<{
+export type TierlistWithTiers = Prisma.TierlistGetPayload<{
   include: {
-    tierlistTiers: {
+    tiers: {
       include: {
         movies: {
           include: {
-            user: true
-          }
-        }
-        tierMovies: {
-          include: {
             movie: {
-              include: {
-                user: true
+              select: {
+                id: true
+                images: true
+                title: true
+                watchDate: true
+                poster_path: true
+                user: {
+                  select: {
+                    id: true
+                    name: true
+                    image: true
+                  }
+                }
               }
             }
           }
@@ -21,6 +27,9 @@ export type TierlistWithTiers = Prisma.TierlistsGetPayload<{
             position: 'asc'
           }
         }
+      }
+      orderBy: {
+        value: 'asc'
       }
     }
   }
@@ -30,7 +39,11 @@ export type TierWithMovies = Prisma.TierGetPayload<{
   include: {
     movies: {
       include: {
-        user: true
+        movie: {
+          include: {
+            user: true
+          }
+        }
       }
     }
   }
@@ -38,16 +51,27 @@ export type TierWithMovies = Prisma.TierGetPayload<{
 
 export type TiersWithMovies = Prisma.TierGetPayload<{
   include: {
-    tierMovies: {
-      include: {
-        movie: true
-      }
-    }
+    movies: true
   }
 }>
 
-export type TierMovieWithMovieData = Prisma.TierMovieGetPayload<{
+export type TierMovieWithMovieData = Prisma.MoviesOnTiersGetPayload<{
   include: {
-    movie: true
+    movie: {
+      select: {
+        id: true
+        images: true
+        title: true
+        watchDate: true
+        poster_path: true
+        user: {
+          select: {
+            id: true
+            name: true
+            image: true
+          }
+        }
+      }
+    }
   }
 }>

@@ -118,7 +118,7 @@ export default React.memo(
                 </div>
               )}
               <div className="flex h-10 flex-row gap-2">
-                {movie.genres.map((genre) => (
+                {movie?.genres?.map((genre) => (
                   <div
                     key={genre.id}
                     className="text-md text-accent-foreground bg-accent/50 flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md"
@@ -314,9 +314,7 @@ export default React.memo(
     // Only re-render if the movie ID changes or if it's the same movie with different reviews
     return (
       prevProps.movie.id === nextProps.movie.id &&
-      prevProps.isExpanded === nextProps.isExpanded &&
-      JSON.stringify(prevProps.movie.tierMovies) ===
-        JSON.stringify(nextProps.movie.tierMovies)
+      prevProps.isExpanded === nextProps.isExpanded
     )
   },
 )
