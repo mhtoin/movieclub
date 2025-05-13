@@ -42,8 +42,8 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
 
       if (existingMovie) {
         const watchProviderExists =
-          existingMovie.watchProviders?.providers.find((provider) =>
-            siteConfig?.watchProviders.find(
+          existingMovie.watchProviders?.providers?.find((provider) =>
+            siteConfig?.watchProviders?.find(
               (p) => p.provider_id === provider.provider_id,
             ),
           )
@@ -93,7 +93,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
           let hasStreamingService = false
           if (streamingServices.flatrate) {
             for (const service of streamingServices.flatrate) {
-              const provider = siteConfig?.watchProviders.find(
+              const provider = siteConfig?.watchProviders?.find(
                 (provider) => provider.provider_id === service.provider_id,
               )
               if (provider) {
@@ -103,7 +103,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
           }
           if (streamingServices.free) {
             for (const service of streamingServices.free) {
-              const provider = siteConfig?.watchProviders.find(
+              const provider = siteConfig?.watchProviders?.find(
                 (provider) => provider.provider_id === service.provider_id,
               )
               if (provider) {

@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useMemo } from 'react'
 import { FaImdb } from 'react-icons/fa'
 import { SiThemoviedatabase } from 'react-icons/si'
 
@@ -52,6 +53,14 @@ export default function ShortListItem({
   const watchlistMutation = useAddToWatchlistMutation()
   const addMutation = useUpdateShortlistMutation()
   const { data: user } = useValidateSession()
+
+  const posterIndex = useMemo(
+    () =>
+      Math.floor(
+        Math.random() * Math.min(3, movie?.images?.posters?.length || 1),
+      ),
+    [movie?.images?.posters?.length], // Only recalculate if the array length changes
+  )
 
   return (
     <div
@@ -140,7 +149,7 @@ export default function ShortListItem({
         </div>
       )}
       <Image
-        src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+        src={`https://image.tmdb.org/t/p/original/${movie?.images?.posters[posterIndex]?.file_path}`}
         alt=""
         width={'150'}
         height={'150'}

@@ -25,12 +25,12 @@ import { toast } from 'sonner'
 import { replaceShortlistItem } from './actions/replaceShortlistItem'
 import {
   getAllShortlistsGroupedById,
+  getMovie,
   getShortlist,
   getWatchProviders,
   getWatchlist,
   searchMovies,
 } from './movies/queries'
-import { getMovie } from './movies/queries'
 import { sendShortlistUpdate } from './utils'
 
 interface ShortlistErrorResponse {
@@ -453,10 +453,14 @@ export const useRemoveFromShortlistMutation = () => {
       sendShortlistUpdate(variables.userId)
     },
     onError: (_error, _variables) => {
+      toast.error('Something went wrong', {
+        description: _error.message,
+      })
+      /*
       if (!isOpen) {
         setIsOpen(true)
         //setMovie(variables.movie);
-      }
+      }*/
     },
   })
 }

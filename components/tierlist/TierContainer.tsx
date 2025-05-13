@@ -1,5 +1,4 @@
 'use client'
-import SuccessReview from '@/components/tierlist/SuccessReview'
 import type { TierMovieWithMovieData } from '@/types/tierlist.type'
 import {
   DragDropContext,
@@ -63,8 +62,8 @@ export default function DnDTierContainer({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [selectedMovie, setSelectedMovie] =
-    useState<TierMovieWithMovieData | null>(null)
+  //const [selectedMovie, setSelectedMovie] =
+  //useState<TierMovieWithMovieData | null>(null)
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('date') || '',
   )
@@ -275,9 +274,9 @@ export default function DnDTierContainer({
         queryKey: ['tierlists', tierlistId],
       })
 
-      if (_variables.operation === 'rank' && _data.data) {
+      /*if (_variables.operation === 'rank' && _data.data) {
         setSelectedMovie(_data.data)
-      }
+      }*/
     },
     onError: (_error) => {
       toast.error('Updating tierlist failed!')
@@ -312,12 +311,12 @@ export default function DnDTierContainer({
           )}
         </div>
       )}
-      {selectedMovie && (
+      {/*selectedMovie && (
         <SuccessReview
           movie={selectedMovie}
           onClose={() => setSelectedMovie(null)}
         />
-      )}
+      )*/}
     </>
   )
 }

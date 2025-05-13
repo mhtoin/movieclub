@@ -136,7 +136,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
                 <CastPortrait
                   cast={{
                     ...cast,
-                    profile_path: cast.profile_path || null,
+                    profile_path: cast?.profile_path || undefined,
                   }}
                   key={cast.id}
                 />
@@ -146,7 +146,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
               <CastPopover
                 cast={movie.cast.map((cast) => ({
                   ...cast,
-                  profile_path: cast.profile_path || null,
+                  profile_path: cast?.profile_path || undefined,
                 }))}
               />
             )}

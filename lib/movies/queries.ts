@@ -3,13 +3,14 @@
  */
 
 import type { MovieWithReviews, MovieWithUser } from '@/types/movie.type'
+import { Provider } from '@/types/prisma.types'
 import type { ShortlistWithMovies } from '@/types/shortlist.type'
 import type {
   TMDBMovieResponse,
   TMDBSearchResponse,
   TMDBSearchResult,
 } from '@/types/tmdb.type'
-import type { Provider, SiteConfig, User } from '@prisma/client'
+import type { SiteConfig, User } from '@prisma/client'
 import { formatISO, nextWednesday, previousWednesday, set } from 'date-fns'
 import { getBaseURL, keyBy } from 'lib/utils'
 
@@ -96,13 +97,13 @@ export const searchMovies = async (
 
           if (
             flatrate?.find((provider) =>
-              siteConfigData.watchProviders.find(
+              siteConfigData?.watchProviders?.find(
                 (watchProvider) =>
                   provider.provider_id === watchProvider.provider_id,
               ),
             ) ||
             free?.find((provider) =>
-              siteConfigData.watchProviders.find(
+              siteConfigData?.watchProviders?.find(
                 (watchProvider) =>
                   provider.provider_id === watchProvider.provider_id,
               ),

@@ -1,6 +1,9 @@
 'use client'
-import { useSuspenseShortlistsQuery, useValidateSession } from '@/lib/hooks'
-import { useIsMobile } from '@/lib/hooks'
+import {
+  useIsMobile,
+  useSuspenseShortlistsQuery,
+  useValidateSession,
+} from '@/lib/hooks'
 import ShortlistCard from 'components/shortlist/ShortlistCard'
 import { LoaderCircle } from 'lucide-react'
 import ShortlistDrawer from './ShortlistDrawer'

@@ -25,7 +25,8 @@
     "create-site-config": "tsx scripts/createSiteConfig.ts",
     "prune-recommended": "tsx scripts/pruneRecommended.ts",
     "add-movie": "tsx scripts/addMovieOfTheWeek.ts",
-    "migrateData": "tsx scripts/migrations/migrateData.ts"
+    "migrateData": "tsx scripts/migrations/migrateData.ts",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.15",
@@ -114,7 +115,8 @@
       "@prisma/client",
       "@prisma/engines",
       "@vercel/speed-insights",
-      "prisma"
+      "prisma",
+      "prisma-json-types-generator"
     ],
     "overrides": {
       "@types/react": "19.1.1",

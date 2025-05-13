@@ -1,12 +1,10 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
-  output          = "../generated/client"
 }
 
 generator json {
   provider = "node node_modules/prisma-json-types-generator"
-  output   = "../generated/json-types"
 }
 
 datasource db {
