@@ -103,7 +103,7 @@ export default React.memo(
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 100 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.3 }}
             >
               {movie.user && (
                 <div className="flex flex-col gap-2">
@@ -226,7 +226,7 @@ export default React.memo(
                           ? { opacity: 0, x: 100 }
                           : { opacity: 0, y: 100 }
                       }
-                      transition={{ duration: 0.5 }}
+                      transition={{ duration: 0.3 }}
                     >
                       {firstHalf.toLocaleUpperCase()}
                     </motion.span>
@@ -255,8 +255,8 @@ export default React.memo(
                       }
                       transition={
                         isWrapped
-                          ? { duration: 0.5, delay: 0.2 }
-                          : { duration: 0.5 }
+                          ? { duration: 0.3, delay: 0 }
+                          : { duration: 0.3 }
                       }
                       style={{
                         font: 'Arial',
@@ -285,7 +285,7 @@ export default React.memo(
                 x: -100,
                 transition: { duration: 0.5, delay: 0 },
               }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.3, delay: 0 }}
             >
               <div className="flex h-full w-full flex-col gap-4 p-10">
                 <div className="bg-accent/60 flex max-h-[250px] flex-col gap-1 overflow-y-auto rounded-md p-2 drop-shadow-md backdrop-blur-md">

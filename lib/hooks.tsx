@@ -671,20 +671,26 @@ export const useDebounce = <T extends unknown[]>(
 }
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = useState<boolean>(
+    typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
+  )
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768) // Example breakpoint
+      setIsMobile(window.innerWidth <= 768)
     }
 
-    handleResize() // Set initial value
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    handleResize()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   return isMobile
 }
+
 export function useCreateQueryString(searchParams: URLSearchParams) {
   return useCallback(
     (name: string, value: string[] | string | number[], isRange = false) => {
