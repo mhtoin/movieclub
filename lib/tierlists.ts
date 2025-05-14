@@ -14,6 +14,47 @@ export async function getTierlists() {
   })
 }
 
+export async function getUserTierlists(userId: string) {
+  return await prisma.tierlist.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      user: true,
+      tiers: {
+        include: {
+          movies: {
+            include: {
+              movie: {
+                select: {
+                  id: true,
+                  images: true,
+                  title: true,
+                  watchDate: true,
+                  poster_path: true,
+                  user: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                },
+              },
+            },
+            orderBy: {
+              position: 'asc',
+            },
+          },
+        },
+        orderBy: {
+          value: 'asc',
+        },
+      },
+    },
+  })
+}
+
 export async function getTierlist(id: string) {
   const tierlist = await prisma.tierlist.findUnique({
     where: {
