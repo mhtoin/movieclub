@@ -35,11 +35,6 @@ export function WatchdatePicker({
           weekStartsOn={1}
           selected={watchDate}
           onSelect={(date) => date && setWatchDate(date)}
-          initialFocus
-          classNames={{
-            day_selected: 'bg-accent',
-            day_today: 'bg-transparent',
-          }}
         />
       </PopoverContent>
     </Popover>
