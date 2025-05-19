@@ -6,16 +6,18 @@ import {
   type DropResult,
 } from '@hello-pangea/dnd'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { addDays } from 'date-fns'
 import { getQueryClient } from 'lib/getQueryClient'
 import { tierlistKeys } from 'lib/tierlist/tierlistKeys'
 import { Loader2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { type DateRange } from 'react-day-picker'
 import { toast } from 'sonner'
 import Tier from './Tier'
 import TierCreate from './TierCreate'
 import TierDateFilter from './TierDateFilter'
-
+import DateRangePicker from './TierlistDateRange'
 type MoveItemObject = {
   [x: string]: TierMovieWithMovieData[]
 }
@@ -70,6 +72,10 @@ export default function DnDTierContainer({
   const { data: tierlistData, status: tierlistStatus } = useQuery(
     tierlistKeys.byId(tierlistId),
   )
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: addDays(new Date(), -20),
+    to: new Date(),
+  })
 
   const [containerState, setContainerState] = useState<
     TierMovieWithMovieData[][] | undefined
@@ -285,12 +291,13 @@ export default function DnDTierContainer({
 
   return (
     <>
-      <div className="flex w-full flex-row items-center justify-center gap-5">
+      <div className="flex w-full max-w-[95dvw] min-w-[95dvw] flex-row items-start gap-5">
         <TierDateFilter
           values={['2023', '2024', '2025']}
           selectedDate={selectedDate}
           setSelectedDate={handleDateChange}
         />
+        <DateRangePicker date={date} setDate={setDate} />
       </div>
       {tierlistStatus === 'pending' ? (
         <Loader2 className="animate-spin" />
