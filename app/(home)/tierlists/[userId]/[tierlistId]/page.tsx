@@ -14,6 +14,7 @@ export default async function Page(props: {
   if (!user) {
     redirect('/')
   }
+  const tierlist = await getTierlist(params.tierlistId)
   const queryClient = getQueryClient()
 
   queryClient.prefetchQuery({
@@ -23,11 +24,19 @@ export default async function Page(props: {
 
   const dehydratedState = dehydrate(queryClient)
 
+  if (!tierlist) {
+    return null
+  }
+
   return (
     <div className="flex flex-col items-center gap-10 py-20 md:gap-5">
       <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div>Loading...</div>}>
-          <TierContainer tierlistId={params.tierlistId} userId={user.id} />
+          <TierContainer
+            tierlistId={params.tierlistId}
+            userId={user.id}
+            tierlistData={tierlist}
+          />
         </Suspense>
       </HydrationBoundary>
     </div>

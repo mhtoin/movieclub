@@ -1,4 +1,7 @@
+import TierlistCard from '@/components/tierlist/TierlistCard'
+import { Button } from '@/components/ui/Button'
 import { getUserTierlists } from '@/lib/tierlists'
+import { Plus } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function TierlistPage({
@@ -9,9 +12,15 @@ export default async function TierlistPage({
   const { userId } = await params
   const tierlists = await getUserTierlists(userId)
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold">Tierlist</h1>
-      <p className="text-lg">User ID: {userId}</p>
+    <div className="flex h-screen flex-col items-center justify-center gap-5">
+      <h1 className="text-3xl font-bold">Tierlist</h1>
+      <Button
+        variant={'outline'}
+        size={'sm'}
+        className="flex items-center gap-2"
+      >
+        Create new <Plus className="h-3 w-3" />
+      </Button>
       <div className="mt-4">
         {tierlists.map((tierlist) => (
           <div key={tierlist.id} className="mb-2">
@@ -19,7 +28,7 @@ export default async function TierlistPage({
               href={`/tierlists/${userId}/${tierlist.id}`}
               className="text-blue-500 hover:underline"
             >
-              {tierlist?.id}
+              <TierlistCard />
             </Link>
           </div>
         ))}
