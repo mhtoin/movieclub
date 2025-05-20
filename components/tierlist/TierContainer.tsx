@@ -1,23 +1,25 @@
 'use client'
-import type { TierMovieWithMovieData } from '@/types/tierlist.type'
+import type {
+  TierlistWithTiers,
+  TierMovieWithMovieData,
+} from '@/types/tierlist.type'
 import {
   DragDropContext,
   type DraggableLocation,
   type DropResult,
 } from '@hello-pangea/dnd'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { addDays } from 'date-fns'
+import { useMutation } from '@tanstack/react-query'
+import { endOfYear, startOfYear } from 'date-fns'
 import { getQueryClient } from 'lib/getQueryClient'
-import { tierlistKeys } from 'lib/tierlist/tierlistKeys'
-import { Loader2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { type DateRange } from 'react-day-picker'
 import { toast } from 'sonner'
 import Tier from './Tier'
 import TierCreate from './TierCreate'
 import TierDateFilter from './TierDateFilter'
 import DateRangePicker from './TierlistDateRange'
+
 type MoveItemObject = {
   [x: string]: TierMovieWithMovieData[]
 }
@@ -56,25 +58,39 @@ const moveItem = (
 export default function DnDTierContainer({
   tierlistId,
   userId,
+  tierlistData,
 }: {
   tierlistId: string
   userId: string
+  tierlistData: TierlistWithTiers
 }) {
   const queryClient = getQueryClient()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
-  //const [selectedMovie, setSelectedMovie] =
-  //useState<TierMovieWithMovieData | null>(null)
+  const movieWatchdates = useMemo(() => {
+    return tierlistData?.tiers
+      ?.flatMap((tier) => tier.movies.map((movie) => movie.movie.watchDate))
+      .filter((date) => date !== null && date !== undefined)
+      .sort()
+  }, [tierlistData])
+
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('date') || '',
   )
-  const { data: tierlistData, status: tierlistStatus } = useQuery(
-    tierlistKeys.byId(tierlistId),
-  )
   const [date, setDate] = useState<DateRange | undefined>({
-    from: addDays(new Date(), -20),
-    to: new Date(),
+    from: tierlistData?.watchDate?.from
+      ? new Date(tierlistData?.watchDate?.from)
+      : startOfYear(
+          movieWatchdates?.[0] ? new Date(movieWatchdates[0]) : new Date(),
+        ),
+    to: tierlistData?.watchDate?.to
+      ? new Date(tierlistData?.watchDate?.to)
+      : endOfYear(
+          movieWatchdates?.[movieWatchdates.length - 1]
+            ? new Date(movieWatchdates[movieWatchdates.length - 1])
+            : new Date(),
+        ),
   })
 
   const [containerState, setContainerState] = useState<
@@ -299,25 +315,23 @@ export default function DnDTierContainer({
         />
         <DateRangePicker date={date} setDate={setDate} />
       </div>
-      {tierlistStatus === 'pending' ? (
-        <Loader2 className="animate-spin" />
-      ) : (
-        <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
-          <DragDropContext onDragEnd={onDragEnd}>
-            {containerState?.map((tier, tierIndex) => (
-              <Tier
-                key={tierIndex}
-                tierIndex={tierIndex}
-                tier={tier}
-                label={tiers?.[tierIndex] || ''}
-              />
-            ))}
-          </DragDropContext>
-          {tierlistData?.tiers && tierlistData?.tiers?.length <= 4 && (
-            <TierCreate tierlistId={tierlistId} />
-          )}
-        </div>
-      )}
+
+      <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
+        <DragDropContext onDragEnd={onDragEnd}>
+          {containerState?.map((tier, tierIndex) => (
+            <Tier
+              key={tierIndex}
+              tierIndex={tierIndex}
+              tier={tier}
+              label={tiers?.[tierIndex] || ''}
+            />
+          ))}
+        </DragDropContext>
+        {tierlistData?.tiers && tierlistData?.tiers?.length <= 4 && (
+          <TierCreate tierlistId={tierlistId} />
+        )}
+      </div>
+
       {/*selectedMovie && (
         <SuccessReview
           movie={selectedMovie}

@@ -75,6 +75,10 @@ declare global {
     }
 
     type CastMembers = Array<CastMember>
+    type WatchdateFilter = {
+      from: string
+      to: string
+    }
   }
 }
 
@@ -151,3 +155,8 @@ export type CastMembers = Array<{
   credit_id: string
   order: number
 }>
+
+export type WatchdateFilter = {
+  from: string
+  to: string
+}
