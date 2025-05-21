@@ -102,15 +102,18 @@ export default function DnDTierContainer({
   useEffect(() => {
     const movieMatrix = tierlistData?.tiers.map((tier) => {
       return tier.movies
-        .filter((movie) =>
-          selectedDate
-            ? movie.movie.watchDate?.split('-')[0] === selectedDate
-            : true,
-        )
+        .filter((movie) => {
+          const watchDate = movie.movie.watchDate
+            ? new Date(movie.movie.watchDate)
+            : null
+          return watchDate && date && date.from && date.to
+            ? watchDate >= date.from && watchDate <= date.to
+            : true
+        })
         .map((movie) => movie)
     })
     setContainerState(movieMatrix)
-  }, [tierlistData, selectedDate])
+  }, [tierlistData, selectedDate, date])
 
   const handleDateChange = (date: string) => {
     const params = new URLSearchParams(searchParams.toString())
