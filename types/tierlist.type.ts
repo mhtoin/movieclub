@@ -13,6 +13,7 @@ export type TierlistWithTiers = Prisma.TierlistGetPayload<{
                 title: true
                 watchDate: true
                 poster_path: true
+                genres: true
                 user: {
                   select: {
                     id: true
