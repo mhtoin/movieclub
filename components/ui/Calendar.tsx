@@ -6,6 +6,7 @@ import { differenceInCalendarDays, endOfYear, startOfYear } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import * as React from 'react'
 import {
+  DateRange,
   DayPicker,
   labelNext,
   labelPrevious,
@@ -48,6 +49,7 @@ export type CalendarProps = DayPickerProps & {
   disabledClassName?: string
   rangeMiddleClassName?: string
   hiddenClassName?: string
+  onSelect: (date: DateRange | undefined) => void
 }
 
 type NavView = 'days' | 'years'
@@ -164,9 +166,13 @@ function Calendar({
     props.disabledClassName,
   )
   const _hiddenClassName = cn('invisible flex-1', props.hiddenClassName)
+  const selectedDates = 'selected' in props ? props.selected : undefined
 
   return (
     <div className="flex w-full flex-col items-center justify-center py-2">
+      <Button variant="outline" onClick={() => props?.onSelect(undefined)}>
+        Reset
+      </Button>
       <DayPicker
         showOutsideDays={showOutsideDays}
         className={cn('p-3', className)}
@@ -231,6 +237,7 @@ function Calendar({
               endMonth={endMonth}
               navView={navView}
               setNavView={setNavView}
+              selected={selectedDates}
               {...props}
             >
               {children}
@@ -419,6 +426,7 @@ function MonthGrid({
   endMonth,
   navView,
   setNavView,
+  selected,
   ...props
 }: {
   className?: string
@@ -428,6 +436,7 @@ function MonthGrid({
   endMonth?: Date
   navView: NavView
   setNavView: React.Dispatch<React.SetStateAction<NavView>>
+  selected?: Date | Date[] | DateRange | undefined
 } & React.TableHTMLAttributes<HTMLTableElement>) {
   if (navView === 'years') {
     return (
@@ -438,6 +447,7 @@ function MonthGrid({
         setNavView={setNavView}
         navView={navView}
         className={className}
+        selected={selected}
         {...props}
       />
     )
@@ -456,6 +466,7 @@ function YearGrid({
   endMonth,
   setNavView,
   navView,
+  selected,
   ...props
 }: {
   className?: string
@@ -464,6 +475,7 @@ function YearGrid({
   endMonth?: Date
   setNavView: React.Dispatch<React.SetStateAction<NavView>>
   navView: NavView
+  selected?: Date | Date[] | DateRange | undefined
 } & React.HTMLAttributes<HTMLDivElement>) {
   const { goToMonth } = useDayPicker()
 
@@ -485,6 +497,10 @@ function YearGrid({
             ) > 0
 
           const isDisabled = isBefore || isAfter
+
+          const selectedFromDate = selected && (selected as DateRange).from
+          const selectedToDate = selected && (selected as DateRange).to
+
           return (
             <Button
               key={i}
@@ -498,13 +514,17 @@ function YearGrid({
                 setNavView('days')
 
                 // Get the current month (from the current display or default to January)
+                console.log('selectedFromDate', selectedFromDate)
+                console.log('selectedToDate', selectedToDate)
+                console.log('displayYears', displayYears)
                 const currentDate = new Date()
                 const month = currentDate.getMonth()
-                const targetMonth = isBefore
-                  ? startOfYear(new Date(displayYears.from + i, month, 1))
-                  : endOfYear(new Date(displayYears.from + i, month, 1))
+                const targetMonth = selectedFromDate
+                  ? endOfYear(new Date(displayYears.from + i, month, 1))
+                  : startOfYear(new Date(displayYears.from + i, month, 1))
 
                 // Navigate to the selected year with the current month
+                console.log('targetMonth', targetMonth)
                 goToMonth(targetMonth)
               }}
               disabled={navView === 'years' ? isDisabled : undefined}
