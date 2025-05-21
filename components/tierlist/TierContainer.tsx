@@ -1,8 +1,10 @@
 'use client'
+import { uniqWith } from '@/lib/utils'
 import type {
   TierlistWithTiers,
   TierMovieWithMovieData,
 } from '@/types/tierlist.type'
+import { Genre } from '@/types/tmdb.type'
 import {
   DragDropContext,
   type DraggableLocation,
@@ -15,9 +17,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { type DateRange } from 'react-day-picker'
 import { toast } from 'sonner'
+import GenreFilter from './GenreFilter'
 import Tier from './Tier'
 import TierCreate from './TierCreate'
-import TierDateFilter from './TierDateFilter'
 import DateRangePicker from './TierlistDateRange'
 
 type MoveItemObject = {
@@ -307,16 +309,23 @@ export default function DnDTierContainer({
       toast.error('Updating tierlist failed!')
     },
   })
+  const genreOptions = useMemo(() => {
+    const allGenres = tierlistData?.tiers
+      ?.flatMap((tier) => tier.movies.flatMap((movie) => movie.movie.genres))
+      .flat()
+    const uniqueGenres = allGenres
+      ? uniqWith(allGenres, (a, b) => a?.id === b?.id)
+      : []
+    return uniqueGenres as Genre[]
+  }, [tierlistData])
+
+  console.log('genreOptions', genreOptions)
 
   return (
     <>
       <div className="flex w-full max-w-[95dvw] min-w-[95dvw] flex-row items-start gap-5">
-        <TierDateFilter
-          values={['2023', '2024', '2025']}
-          selectedDate={selectedDate}
-          setSelectedDate={handleDateChange}
-        />
         <DateRangePicker date={date} setDate={setDate} />
+        {genreOptions.length > 0 && <GenreFilter genreOptions={genreOptions} />}
       </div>
 
       <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
