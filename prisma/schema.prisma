@@ -14,11 +14,16 @@ datasource db {
 }
 
 model Tierlist {
-  id      String   @id @default(uuid())
-  tiers   Tier[]
-  tierIds String[]
-  userId  String   @unique
-  user    User?    @relation(fields: [userId], references: [id])
+  id        String   @id @default(uuid())
+  tiers     Tier[]
+  tierIds   String[]
+  userId    String   @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  title     String?
+  /// [WatchdateFilter]
+  watchDate Json?
+  /// [GenresType]
+  genres    Json?
 }
 
 model Tier {

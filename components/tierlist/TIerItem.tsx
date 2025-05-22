@@ -16,9 +16,7 @@ export default function TierItem({
       {...provided.dragHandleProps}
     >
       <Image
-        src={`https://image.tmdb.org/t/p/original/${
-          'poster_path' in item ? item.poster_path : item.movie.poster_path
-        }`}
+        src={`https://image.tmdb.org/t/p/original/${item?.movie?.images?.posters[0]?.file_path}`}
         width={200}
         height={300}
         alt=""
