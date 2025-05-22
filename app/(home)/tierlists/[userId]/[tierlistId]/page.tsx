@@ -1,10 +1,10 @@
-import { getCurrentSession } from '@/lib/authentication/session'
-import { getQueryClient } from '@/lib/getQueryClient'
-import { getTierlist } from '@/lib/tierlists'
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query'
-import TierContainer from 'components/tierlist/TierContainer'
-import { redirect } from 'next/navigation'
-import { Suspense } from 'react'
+import { getCurrentSession } from "@/lib/authentication/session"
+import { getQueryClient } from "@/lib/getQueryClient"
+import { getTierlist } from "@/lib/tierlists"
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query"
+import TierContainer from "components/tierlist/TierContainer"
+import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
 export default async function Page(props: {
   params: Promise<{ userId: string; tierlistId: string }>
@@ -12,22 +12,31 @@ export default async function Page(props: {
   const params = await props.params
   const { user } = await getCurrentSession()
   if (!user) {
-    redirect('/')
+    redirect("/")
   }
+  const tierlist = await getTierlist(params.tierlistId)
   const queryClient = getQueryClient()
 
   queryClient.prefetchQuery({
-    queryKey: ['tierlists', params.tierlistId],
+    queryKey: ["tierlists", params.tierlistId],
     queryFn: () => getTierlist(params.tierlistId),
   })
 
   const dehydratedState = dehydrate(queryClient)
 
+  if (!tierlist) {
+    return null
+  }
+
   return (
     <div className="flex flex-col items-center gap-10 py-20 md:gap-5">
       <HydrationBoundary state={dehydratedState}>
         <Suspense fallback={<div>Loading...</div>}>
-          <TierContainer tierlistId={params.tierlistId} userId={user.id} />
+          <TierContainer
+            tierlistId={params.tierlistId}
+            userId={user.id}
+            tierlistData={tierlist}
+          />
         </Suspense>
       </HydrationBoundary>
     </div>

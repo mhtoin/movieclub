@@ -72,6 +72,7 @@ export async function getTierlist(id: string) {
                   title: true,
                   watchDate: true,
                   poster_path: true,
+                  genres: true,
                   user: {
                     select: {
                       id: true,
