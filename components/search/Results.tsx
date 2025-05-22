@@ -1,23 +1,23 @@
-'use client'
+"use client"
 import {
   useDiscoverSuspenseInfiniteQuery,
   useGetWatchlistQuery,
   useShortlistQuery,
   useValidateSession,
-} from '@/lib/hooks'
-import type { MovieWithUser } from '@/types/movie.type'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import { Button } from 'components/ui/Button'
-import { ChevronUp } from 'lucide-react'
-import { Fragment, useEffect, useRef } from 'react'
-import MovieCard from './MovieCard'
+} from "@/lib/hooks"
+import type { MovieWithUser } from "@/types/movie.type"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import { Button } from "components/ui/Button"
+import { ChevronUp } from "lucide-react"
+import { Fragment, useEffect, useRef } from "react"
+import MovieCard from "./MovieCard"
 
 export default function Results() {
   const { data: user } = useValidateSession()
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null)
   const resultsContainerRef = useRef<HTMLDivElement>(null)
 
-  const { data: shortlist } = useShortlistQuery(user?.shortlistId ?? '')
+  const { data: shortlist } = useShortlistQuery(user?.shortlistId ?? "")
   const { data: watchlist } = useGetWatchlistQuery(user ? user : null)
 
   const { data, hasNextPage, fetchNextPage } =
@@ -36,7 +36,7 @@ export default function Results() {
           }
         }
       },
-      { root: null, rootMargin: '10px', threshold: 0.1 },
+      { root: null, rootMargin: "10px", threshold: 0.1 },
     )
     const el = loadMoreButtonRef?.current
     if (!el) {
@@ -57,8 +57,9 @@ export default function Results() {
     <div className="flex h-full w-full flex-col gap-2">
       <div className="flex flex-row items-center justify-center gap-5 p-5">
         <span className="text-md text-muted-foreground">
-          {`Showing ${data?.pages[0]?.total_results} results (page ${data?.pages.length} of ${data?.pages[0]?.total_pages})` ||
-            'No results found'}
+          {data?.pages[0]?.total_results
+            ? `Showing ${data.pages[0].total_results} results (page ${data.pages.length} of ${data.pages[0].total_pages})`
+            : "No results found"}
         </span>
         {/* Causes hydration error */}
         <Button
@@ -69,7 +70,7 @@ export default function Results() {
           onClick={() => {
             resultsContainerRef.current?.scrollTo({
               top: 0,
-              behavior: 'smooth',
+              behavior: "smooth",
             })
           }}
         >
