@@ -13,7 +13,6 @@ import {
 import { useMutation } from "@tanstack/react-query"
 import { endOfYear, startOfYear } from "date-fns"
 import { getQueryClient } from "lib/getQueryClient"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { type DateRange } from "react-day-picker"
 import { toast } from "sonner"
@@ -67,9 +66,6 @@ export default function DnDTierContainer({
   tierlistData: TierlistWithTiers
 }) {
   const queryClient = getQueryClient()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const router = useRouter()
   const movieWatchdates = useMemo(() => {
     return tierlistData?.tiers
       ?.flatMap((tier) => tier.movies.map((movie) => movie.movie.watchDate))
@@ -77,9 +73,6 @@ export default function DnDTierContainer({
       .sort()
   }, [tierlistData])
 
-  const [selectedDate, setSelectedDate] = useState(
-    searchParams.get("date") || "",
-  )
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>(
     tierlistData?.genres || [],
   )
@@ -118,7 +111,7 @@ export default function DnDTierContainer({
         .map((movie) => movie)
     })
     setContainerState(movieMatrix)
-  }, [tierlistData, selectedDate, date])
+  }, [tierlistData, date])
 
   /*
   const handleDateChange = (date: string) => {
@@ -147,11 +140,6 @@ export default function DnDTierContainer({
 
   function onDragEnd(result: DropResult) {
     if (!isAuthorized || !containerState || !tierlistData) {
-      return
-    }
-
-    if (selectedDate) {
-      toast.error("Reset filters before moving items")
       return
     }
 
