@@ -1,8 +1,6 @@
 import { CreateDialog } from "@/components/tierlist/CreateDialog"
 import TierlistCard from "@/components/tierlist/TierlistCard"
-import { Button } from "@/components/ui/Button"
 import { getUserTierlists } from "@/lib/tierlists"
-import { Plus } from "lucide-react"
 import Link from "next/link"
 
 export default async function TierlistPage({

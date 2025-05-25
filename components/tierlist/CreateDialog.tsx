@@ -13,7 +13,7 @@ import { Info, PlusIcon, X } from "lucide-react"
 import DateRangePicker from "./TierlistDateRange"
 import type { DateRange } from "react-day-picker"
 import { useQuery } from "@tanstack/react-query"
-import { getAvailableGenres, getFilters } from "@/lib/movies/queries"
+import { getAvailableGenres } from "@/lib/movies/queries"
 import { Genre } from "@/types/tmdb.type"
 import GenreFilter from "./GenreFilter"
 import {
@@ -85,7 +85,7 @@ export function CreateDialog() {
             >
               <PlusIcon className="h-4 w-4" />
             </Button>
-            {tiers.map((tier, index) => (
+            {tiers.map((_, index) => (
               <div key={index} className="flex items-center gap-2 relative">
                 <Input
                   type="text"

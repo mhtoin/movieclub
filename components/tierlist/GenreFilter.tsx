@@ -6,7 +6,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/Dropdown"
 import { Button } from "../ui/Button"
-import { Check } from "lucide-react"
 
 export default function GenreFilter({
   genreOptions,
@@ -53,7 +52,7 @@ export default function GenreFilter({
             <span className="w-3 h-3 flex items-center justify-center">
               <div
                 className="check"
-                data-checked={selectedGenres.some(g => g.id === genre.id)}
+                data-checked={selectedGenres.some((g) => g.id === genre.id)}
                 data-variant="ghost"
               >
                 <svg
