@@ -35,20 +35,6 @@ export function CreateDialog() {
     queryFn: getAvailableGenres,
   })
 
-  if (!user) {
-    return (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline" disabled>
-            Create new
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-md">
-          <p>Please log in to create a new tierlist.</p>
-        </DialogContent>
-      </Dialog>
-    )
-  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -152,15 +138,16 @@ export function CreateDialog() {
                       to: date.to,
                     }
                   : undefined
+              if (user) {
+                const createdTierlist = await createTierlist(
+                  user.id,
+                  validTiers,
+                  validDateRange,
+                  selectedGenres,
+                )
 
-              const createdTierlist = await createTierlist(
-                user.id,
-                validTiers,
-                validDateRange,
-                selectedGenres,
-              )
-
-              console.log("Created tierlist in dialog:", createdTierlist)
+                console.log("Created tierlist in dialog:", createdTierlist)
+              }
             }}
           >
             Create Tierlist

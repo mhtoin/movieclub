@@ -44,8 +44,8 @@ export default function GenreFilter({
             onSelect={(event) => {
               event.preventDefault()
               setSelectedGenres((prev: Genre[]) =>
-                prev.includes(genre)
-                  ? prev.filter((g) => g !== genre)
+                prev.some((g) => g.id === genre.id)
+                  ? prev.filter((g) => g.id !== genre.id)
                   : [...prev, genre],
               )
             }}
@@ -53,7 +53,7 @@ export default function GenreFilter({
             <span className="w-3 h-3 flex items-center justify-center">
               <div
                 className="check"
-                data-checked={selectedGenres.includes(genre)}
+                data-checked={selectedGenres.some(g => g.id === genre.id)}
                 data-variant="ghost"
               >
                 <svg
