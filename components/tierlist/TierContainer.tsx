@@ -20,6 +20,7 @@ import GenreFilter from "./GenreFilter"
 import Tier from "./Tier"
 import TierCreate from "./TierCreate"
 import DateRangePicker from "./TierlistDateRange"
+import { Button } from "../ui/Button"
 
 type MoveItemObject = {
   [x: string]: TierMovieWithMovieData[]
@@ -108,10 +109,20 @@ export default function DnDTierContainer({
             ? watchDate >= date.from && watchDate <= date.to
             : true
         })
+        .filter((movie) => {
+          if (selectedGenres.length === 0) {
+            return true
+          }
+          return movie?.movie?.genres?.some((genre) =>
+            selectedGenres.some(
+              (selectedGenre) => selectedGenre.id === genre.id,
+            ),
+          )
+        })
         .map((movie) => movie)
     })
     setContainerState(movieMatrix)
-  }, [tierlistData, date])
+  }, [tierlistData, selectedGenres, date])
 
   /*
   const handleDateChange = (date: string) => {
@@ -326,6 +337,7 @@ export default function DnDTierContainer({
             setSelectedGenres={setSelectedGenres}
           />
         )}
+        <Button variant={"outline"}>Save</Button>
       </div>
 
       <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">

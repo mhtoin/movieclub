@@ -17,7 +17,7 @@ model Tierlist {
   id        String   @id @default(uuid())
   tiers     Tier[]
   tierIds   String[]
-  userId    String   @unique
+  userId    String   
   user      User?    @relation(fields: [userId], references: [id])
   title     String?
   /// [WatchdateFilter]
