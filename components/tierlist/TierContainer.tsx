@@ -4,7 +4,6 @@ import type {
   TierlistWithTiers,
   TierMovieWithMovieData,
 } from "@/types/tierlist.type"
-import { Genre } from "@/types/tmdb.type"
 import {
   DragDropContext,
   type DraggableLocation,
@@ -74,9 +73,10 @@ export default function DnDTierContainer({
       .sort()
   }, [tierlistData])
 
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>(
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
     tierlistData?.genres || [],
   )
+  //const [editState, setEditState] = useState<boolean>(false)
   const [date, setDate] = useState<DateRange | undefined>({
     from: tierlistData?.watchDate?.from
       ? new Date(tierlistData?.watchDate?.from)
@@ -114,9 +114,7 @@ export default function DnDTierContainer({
             return true
           }
           return movie?.movie?.genres?.some((genre) =>
-            selectedGenres.some(
-              (selectedGenre) => selectedGenre.id === genre.id,
-            ),
+            selectedGenres.some((selectedGenre) => selectedGenre === genre),
           )
         })
         .map((movie) => movie)
@@ -318,10 +316,8 @@ export default function DnDTierContainer({
     const allGenres = tierlistData?.tiers
       ?.flatMap((tier) => tier.movies.flatMap((movie) => movie.movie.genres))
       .flat()
-    const uniqueGenres = allGenres
-      ? uniqWith(allGenres, (a, b) => a?.id === b?.id)
-      : []
-    return uniqueGenres as Genre[]
+    const uniqueGenres = allGenres ? uniqWith(allGenres, (a, b) => a === b) : []
+    return uniqueGenres
   }, [tierlistData])
 
   console.log("genreOptions", genreOptions)

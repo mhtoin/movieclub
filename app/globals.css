@@ -43,7 +43,7 @@
   --primary: oklch(0.39 0 0);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.5 0 0);
-  --secondary-foreground: oklch(0.21 0.0059 285.88);
+  --secondary-foreground: oklch(0.97 0 none);
   --muted: oklch(0.97 0.0013 286.38);
   --muted-foreground: oklch(0.44 0.011 285.94);
   --accent: oklch(0.67 0.0952 196.72);
@@ -1476,5 +1476,29 @@
       --＠color-1: hsl(210 100% 59%);
       --＠color-2: hsl(310 100% 59%);
     }
+  }
+
+  @keyframes path-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .animate-path-draw-line {
+    stroke-dasharray: 25;
+    stroke-dashoffset: 25;
+  }
+
+  .animate-path-draw-arrow {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+  }
+
+  .group:hover .animate-path-draw-line {
+    animation: path-draw 0.6s ease-out forwards;
+  }
+
+  .group:hover .animate-path-draw-arrow {
+    animation: path-draw 0.6s ease-out 0.3s forwards;
   }
 }

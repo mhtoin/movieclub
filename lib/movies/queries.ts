@@ -6,7 +6,6 @@ import type { MovieWithReviews, MovieWithUser } from "@/types/movie.type"
 import { Provider } from "@/types/prisma.types"
 import type { ShortlistWithMovies } from "@/types/shortlist.type"
 import type {
-  Genre,
   TMDBMovieResponse,
   TMDBSearchResponse,
   TMDBSearchResult,
@@ -239,7 +238,7 @@ export const getFilters = async () => {
   }
 }
 
-export const getAvailableGenres = async (): Promise<Genre[]> => {
+export const getAvailableGenres = async (): Promise<string[]> => {
   const res = await fetch(
     "https://api.themoviedb.org/3/genre/movie/list?language=en",
     {
@@ -252,7 +251,9 @@ export const getAvailableGenres = async (): Promise<Genre[]> => {
   )
 
   const responseBody = await res.json()
-  return responseBody.genres
+  return responseBody.genres.map(
+    (genre: { name: string; id: number }) => genre.name,
+  ) as string[]
 }
 
 export const getAllMoviesOfTheWeek = async () => {

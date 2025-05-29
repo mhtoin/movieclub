@@ -1,4 +1,3 @@
-import { Genre } from "@/types/tmdb.type"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +11,9 @@ export default function GenreFilter({
   selectedGenres,
   setSelectedGenres,
 }: {
-  genreOptions: Genre[]
-  selectedGenres: Genre[]
-  setSelectedGenres: React.Dispatch<React.SetStateAction<Genre[]>>
+  genreOptions: string[]
+  selectedGenres: string[]
+  setSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>
 }) {
   return (
     <DropdownMenu>
@@ -25,7 +24,7 @@ export default function GenreFilter({
         >
           <span className="text-ellipsis overflow-hidden whitespace-nowrap ">
             {selectedGenres.length > 0
-              ? selectedGenres.map((genre) => genre.name).join(", ")
+              ? selectedGenres.map((genre) => genre).join(", ")
               : "Select Genres"}
           </span>
           {selectedGenres.length > 0 && (
@@ -38,13 +37,13 @@ export default function GenreFilter({
       <DropdownMenuContent className="w-56 z-[99999]">
         {genreOptions.map((genre) => (
           <DropdownMenuItem
-            key={genre.id}
+            key={genre}
             className="flex items-center gap-2"
             onSelect={(event) => {
               event.preventDefault()
-              setSelectedGenres((prev: Genre[]) =>
-                prev.some((g) => g.id === genre.id)
-                  ? prev.filter((g) => g.id !== genre.id)
+              setSelectedGenres((prev: string[]) =>
+                prev.some((g) => g === genre)
+                  ? prev.filter((g) => g !== genre)
                   : [...prev, genre],
               )
             }}
@@ -52,7 +51,7 @@ export default function GenreFilter({
             <span className="w-3 h-3 flex items-center justify-center">
               <div
                 className="check"
-                data-checked={selectedGenres.some((g) => g.id === genre.id)}
+                data-checked={selectedGenres.some((g) => g === genre)}
                 data-variant="ghost"
               >
                 <svg
@@ -68,7 +67,7 @@ export default function GenreFilter({
                 </svg>
               </div>
             </span>
-            {genre.name}
+            {genre}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

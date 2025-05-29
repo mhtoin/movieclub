@@ -14,7 +14,6 @@ import DateRangePicker from "./TierlistDateRange"
 import type { DateRange } from "react-day-picker"
 import { useQuery } from "@tanstack/react-query"
 import { getAvailableGenres } from "@/lib/movies/queries"
-import { Genre } from "@/types/tmdb.type"
 import GenreFilter from "./GenreFilter"
 import {
   Tooltip,
@@ -22,14 +21,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip"
-import { createTierlist } from "@/lib/actions/tierlist/actions"
 import { useValidateSession } from "@/lib/hooks"
+import { SubmitButton } from "./SubmitButton"
 
 export function CreateDialog() {
   const { data: user } = useValidateSession()
   const [tiers, setTiers] = useState<{ value: number; label?: string }[]>([])
   const [date, setDate] = useState<DateRange | undefined>()
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>([])
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const { data: genreOptions } = useQuery({
     queryKey: ["genres"],
     queryFn: getAvailableGenres,
@@ -43,10 +42,15 @@ export function CreateDialog() {
       <DialogContent className="isolate max-w-[65dvw] max-h-[90svh] overflow-scroll no-scrollbar">
         <DialogHeader className="flex flex-col items-center w-full border-b pb-4">
           <DialogTitle className="text-lg font-semibold">
-            Create new tierlist
+            Create a new tierlist
           </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-4 items-center justify-center w-full">
+        <form className="flex flex-col gap-4 items-center justify-center w-full">
+          <p className="text-sm text-muted-foreground">
+            Create a new tierlist to rank movies based on your preferences.
+            Define tiers, select a date range, and filter by genres.
+          </p>
+
           <div className="flex flex-col gap-4 w-full justify-center items-center">
             <div className="relative">
               <h3 className="text-lg font-semibold">Filters</h3>
@@ -110,49 +114,13 @@ export function CreateDialog() {
               </div>
             ))}
           </div>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              // Handle tierlist creation logic here
-              console.log("Creating tierlist with tiers:", tiers)
-              console.log("Selected date range:", date)
-              console.log("Selected genres:", selectedGenres)
-
-              // Filter out tiers with empty labels
-              const validTiers = tiers.filter(
-                (tier): tier is { value: number; label: string } =>
-                  typeof tier.label === "string" && tier.label.trim() !== "",
-              )
-
-              // Check if we have any valid tiers
-              if (validTiers.length === 0) {
-                alert("Please define at least one tier with a label.")
-                return
-              }
-
-              // Only pass date if both from and to are defined
-              const validDateRange =
-                date && date.from && date.to
-                  ? {
-                      from: date.from,
-                      to: date.to,
-                    }
-                  : undefined
-              if (user) {
-                const createdTierlist = await createTierlist(
-                  user.id,
-                  validTiers,
-                  validDateRange,
-                  selectedGenres,
-                )
-
-                console.log("Created tierlist in dialog:", createdTierlist)
-              }
-            }}
-          >
-            Create Tierlist
-          </Button>
-        </div>
+          <SubmitButton
+            tiers={tiers}
+            date={date}
+            selectedGenres={selectedGenres}
+            user={user}
+          />
+        </form>
       </DialogContent>
     </Dialog>
   )
