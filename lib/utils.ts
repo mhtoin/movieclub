@@ -233,3 +233,8 @@ export function getNextDefaultWatchDate(dayOfTheWeek: string) {
 
   return format(nextDate, 'yyyy-MM-dd')
 }
+
+export const uniqWith = <T>(arr: Array<T>, fn: (a: T, b: T) => boolean) =>
+  arr.filter(
+    (element, index) => arr.findIndex((step) => fn(element, step)) === index,
+  )
