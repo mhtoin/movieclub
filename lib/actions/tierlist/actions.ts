@@ -2,6 +2,7 @@
 import { db } from "@/lib/db"
 import type { Prisma } from "@prisma/client"
 import { formatISO } from "date-fns"
+import { revalidatePath } from "next/cache"
 
 export async function createTierlist(
   userId: string,
@@ -87,6 +88,21 @@ export async function createTierlist(
       })),
     })
   }
+
+  return tierlist
+}
+
+export async function deleteTierlist(tierlistId: string) {
+  const tierlist = await db.tierlist.delete({
+    where: {
+      id: tierlistId,
+    },
+  })
+
+  console.log("Deleted tierlist", tierlist)
+
+  // Revalidate the specific user's tierlist page
+  revalidatePath(`/tierlists/${tierlist.userId}`)
 
   return tierlist
 }

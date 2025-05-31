@@ -1,6 +1,8 @@
 import { Tierlist } from "@prisma/client"
 import { startOfYear } from "date-fns"
-import { CornerDownRight } from "lucide-react"
+import { CornerDownRight, X } from "lucide-react"
+import Link from "next/link"
+import DeleteButton from "./DeleteButton"
 
 export default function TierlistCard({ tierlist }: { tierlist: Tierlist }) {
   const fromDate = tierlist.watchDate?.from
@@ -38,7 +40,10 @@ export default function TierlistCard({ tierlist }: { tierlist: Tierlist }) {
           )}
         </div>
       </div>
-      <CornerDownRight className="absolute bottom-2 right-2 h-3 w-3 text-muted-foreground group-hover:text-foreground group-hover:transition-all group-hover:duration-300 group-hover:ease-in-out transition-all duration-300 ease-in-out " />
+      <Link href={`/tierlists/${tierlist.userId}/${tierlist.id}`}>
+        <CornerDownRight className="absolute bottom-2 right-2 h-3 w-3 text-muted-foreground hover:text-foreground hover:transition-all hover:duration-300 hover:ease-in-out transition-all duration-300 ease-in-out hover:cursor-pointer " />
+      </Link>
+      <DeleteButton tierlistId={tierlist.id} />
     </div>
   )
 }

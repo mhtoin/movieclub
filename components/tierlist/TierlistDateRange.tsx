@@ -13,9 +13,11 @@ export default function DateRangePicker({
   className,
   date,
   setDate,
+  disabled,
 }: React.HTMLAttributes<HTMLDivElement> & {
   date: DateRange | undefined
   setDate: (date: DateRange | undefined) => void
+  disabled?: boolean
 }) {
   return (
     <div className={cn("grid gap-2", className)}>
@@ -28,6 +30,7 @@ export default function DateRangePicker({
               "justify-start text-left font-normal",
               !date && "text-muted-foreground",
             )}
+            disabled={disabled}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (

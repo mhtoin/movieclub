@@ -20,6 +20,7 @@ import Tier from "./Tier"
 import TierCreate from "./TierCreate"
 import DateRangePicker from "./TierlistDateRange"
 import { Button } from "../ui/Button"
+import TierlistMenu from "./TierlistMenu"
 
 type MoveItemObject = {
   [x: string]: TierMovieWithMovieData[]
@@ -76,7 +77,7 @@ export default function DnDTierContainer({
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
     tierlistData?.genres || [],
   )
-  //const [editState, setEditState] = useState<boolean>(false)
+  const [editState, setEditState] = useState<boolean>(false)
   const [date, setDate] = useState<DateRange | undefined>({
     from: tierlistData?.watchDate?.from
       ? new Date(tierlistData?.watchDate?.from)
@@ -324,16 +325,34 @@ export default function DnDTierContainer({
 
   return (
     <>
-      <div className="flex w-full max-w-[95dvw] min-w-[95dvw] flex-row items-start gap-5">
-        <DateRangePicker date={date} setDate={setDate} />
-        {genreOptions.length > 0 && (
-          <GenreFilter
-            genreOptions={genreOptions}
-            selectedGenres={selectedGenres}
-            setSelectedGenres={setSelectedGenres}
+      <div className="flex w-full max-w-[95dvw] min-w-[95dvw] flex-row gap-5">
+        <div className="flex items-start gap-2">
+          <DateRangePicker
+            date={date}
+            setDate={setDate}
+            disabled={!editState}
           />
-        )}
-        <Button variant={"outline"}>Save</Button>
+          {genreOptions.length > 0 && (
+            <GenreFilter
+              genreOptions={genreOptions}
+              selectedGenres={selectedGenres}
+              setSelectedGenres={setSelectedGenres}
+              disabled={!editState}
+            />
+          )}
+        </div>
+        {/*<div className="w-[1px] bg-border my-1" />
+        <div className="flex gap-2">
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              setEditState(!editState)
+            }}
+          >
+            {editState ? "Save" : "Edit"}
+          </Button>
+          <TierlistMenu />
+        </div>*/}
       </div>
 
       <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">

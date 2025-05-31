@@ -1,7 +1,6 @@
 import { CreateDialog } from "@/components/tierlist/CreateDialog"
 import TierlistCard from "@/components/tierlist/TierlistCard"
 import { getUserTierlists } from "@/lib/tierlists"
-import Link from "next/link"
 
 export default async function TierlistPage({
   params,
@@ -17,9 +16,7 @@ export default async function TierlistPage({
       <div className="flex flex-col items-center justify-center w-full max-w-2xl gap-5">
         {tierlists.map((tierlist) => (
           <div key={tierlist.id} className="mb-2">
-            <Link href={`/tierlists/${userId}/${tierlist.id}`}>
-              <TierlistCard tierlist={tierlist} />
-            </Link>
+            <TierlistCard tierlist={tierlist} />
           </div>
         ))}
       </div>

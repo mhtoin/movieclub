@@ -10,10 +10,12 @@ export default function GenreFilter({
   genreOptions,
   selectedGenres,
   setSelectedGenres,
+  disabled,
 }: {
   genreOptions: string[]
   selectedGenres: string[]
   setSelectedGenres: React.Dispatch<React.SetStateAction<string[]>>
+  disabled?: boolean
 }) {
   return (
     <DropdownMenu>
@@ -21,6 +23,7 @@ export default function GenreFilter({
         <Button
           variant="outline"
           className="w-full justify-start max-w-48 relative"
+          disabled={disabled}
         >
           <span className="text-ellipsis overflow-hidden whitespace-nowrap ">
             {selectedGenres.length > 0

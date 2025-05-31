@@ -81,6 +81,7 @@ export function CreateDialog() {
           <div className="flex flex-col gap-2 w-full justify-center items-center">
             <h3 className="text-lg font-semibold">Tiers</h3>
             <Button
+              type="button"
               variant="outline"
               size={"avatarSm"}
               onClick={() =>
@@ -102,6 +103,7 @@ export function CreateDialog() {
                   }}
                 />
                 <Button
+                  type="button"
                   variant="destructive"
                   size={"iconXs"}
                   className="absolute -right-1 -top-2 rounded-full w-4 h-4"
