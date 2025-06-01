@@ -3,18 +3,28 @@ import { db } from "@/lib/db"
 import type { Prisma } from "@prisma/client"
 import { formatISO } from "date-fns"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { DateRange } from "react-day-picker"
 
-export async function createTierlist(
-  userId: string,
-  tiers: { value: number; label: string }[],
-  dateRange?: { from: Date; to: Date } | undefined,
-  genres?: string[] | undefined,
-) {
+export async function createTierlistAction(formData: FormData) {
+  "use server"
+
+  const userId = formData.get("userId") as string
+  const tiers: { value: number; label: string }[] = JSON.parse(
+    formData.get("tiers") as string,
+  )
+  const dateRange: DateRange = formData.get("dateRange")
+    ? JSON.parse(formData.get("dateRange") as string)
+    : undefined
+  const genres: string[] | undefined = formData.get("genres")
+    ? JSON.parse(formData.get("genres") as string)
+    : undefined
+
   const fromDateFormatted = dateRange?.from
-    ? formatISO(dateRange.from, { representation: "date" })
+    ? formatISO(new Date(dateRange.from), { representation: "date" })
     : undefined
   const toDateFormatted = dateRange?.to
-    ? formatISO(dateRange.to, { representation: "date" })
+    ? formatISO(new Date(dateRange.to), { representation: "date" })
     : undefined
 
   const filters = {} as Prisma.MovieWhereInput
@@ -36,10 +46,6 @@ export async function createTierlist(
   const unkrankedMovies = await db.movie.findMany({
     where: filters,
   })
-
-  console.log("Unranked movies found:", unkrankedMovies)
-  console.log("length of unranked movies:", unkrankedMovies.length)
-
   const tiersToCreate = tiers.concat([{ value: 0, label: "Unranked" }])
 
   const tierlistData = {
@@ -57,10 +63,10 @@ export async function createTierlist(
     },
   } as Prisma.TierlistCreateInput
 
-  if (dateRange) {
+  if (fromDateFormatted && toDateFormatted) {
     tierlistData["watchDate"] = {
-      from: formatISO(dateRange.from, { representation: "date" }),
-      to: formatISO(dateRange.to, { representation: "date" }),
+      from: fromDateFormatted,
+      to: toDateFormatted,
     }
   }
 
@@ -79,17 +85,24 @@ export async function createTierlist(
   const unrankedTier = tierlist.tiers.find((tier) => tier.value === 0)
 
   if (unrankedTier && unkrankedMovies.length > 0) {
-    // Now create MoviesOnTiers records for each movie
     await db.moviesOnTiers.createMany({
       data: unkrankedMovies.map((movie, index) => ({
         movieId: movie.id,
         tierId: unrankedTier.id,
-        position: index, // Assign a position to each movie
+        position: index,
       })),
     })
   }
 
-  return tierlist
+  console.log("Creating tierlist with data:", {
+    userId,
+    tiers,
+    dateRange,
+    genres,
+  })
+
+  revalidatePath(`/tierlists/${userId}`)
+  redirect(`/tierlists/${userId}/${tierlist.id}`)
 }
 
 export async function deleteTierlist(tierlistId: string) {

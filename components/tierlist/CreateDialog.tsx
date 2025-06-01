@@ -23,6 +23,7 @@ import {
 } from "../ui/Tooltip"
 import { useValidateSession } from "@/lib/hooks"
 import { SubmitButton } from "./SubmitButton"
+import { createTierlistAction } from "@/lib/actions/tierlist/actions"
 
 export function CreateDialog() {
   const { data: user } = useValidateSession()
@@ -45,11 +46,28 @@ export function CreateDialog() {
             Create a new tierlist
           </DialogTitle>
         </DialogHeader>
-        <form className="flex flex-col gap-4 items-center justify-center w-full">
+        <form
+          className="flex flex-col gap-4 items-center justify-center w-full"
+          action={createTierlistAction}
+        >
           <p className="text-sm text-muted-foreground">
             Create a new tierlist to rank movies based on your preferences.
             Define tiers, select a date range, and filter by genres.
           </p>
+
+          {/* These are here to get the data to the form data */}
+          <input type="hidden" name="userId" value={user?.id || ""} />
+          <input type="hidden" name="tiers" value={JSON.stringify(tiers)} />
+          <input
+            type="hidden"
+            name="dateRange"
+            value={date ? JSON.stringify(date) : ""}
+          />
+          <input
+            type="hidden"
+            name="genres"
+            value={JSON.stringify(selectedGenres)}
+          />
 
           <div className="flex flex-col gap-4 w-full justify-center items-center">
             <div className="relative">
@@ -116,12 +134,7 @@ export function CreateDialog() {
               </div>
             ))}
           </div>
-          <SubmitButton
-            tiers={tiers}
-            date={date}
-            selectedGenres={selectedGenres}
-            user={user}
-          />
+          <SubmitButton />
         </form>
       </DialogContent>
     </Dialog>
