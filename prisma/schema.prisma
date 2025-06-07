@@ -14,27 +14,32 @@ datasource db {
 }
 
 model Tierlist {
-  id      String   @id @default(uuid())
-  tiers   Tier[]
-  tierIds String[]
-  userId  String   @unique
-  user    User?    @relation(fields: [userId], references: [id])
+  id        String   @id @default(uuid())
+  tiers     Tier[] 
+  tierIds   String[]
+  userId    String   
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  /// [WatchdateFilter]
+  watchDate Json?
+  genres    String[]
 }
 
 model Tier {
   id         String          @id @default(uuid())
   label      String
   value      Int
-  tierlist   Tierlist        @relation(fields: [tierlistId], references: [id])
+  tierlist   Tierlist        @relation(fields: [tierlistId], references: [id], onDelete: Cascade)
   tierlistId String
   movies     MoviesOnTiers[]
 }
 
 model MoviesOnTiers {
+  id       String @id @default(uuid())
   position Int
-  movie    Movie  @relation(fields: [movieId], references: [id])
+  movie    Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
   movieId  String
-  tier     Tier   @relation(fields: [tierId], references: [id])
+  tier     Tier   @relation(fields: [tierId], references: [id], onDelete: Cascade)
   tierId   String
 
   @@unique([movieId, tierId])
@@ -59,7 +64,7 @@ model Account {
 model Shortlist {
   id                String   @id @default(uuid())
   userId            String   @unique
-  user              User     @relation(fields: [userId], references: [id])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   movieIDs          String[]
   movies            Movie[]
   isReady           Boolean  @default(false)
@@ -95,8 +100,7 @@ model Movie {
   raffles               Raffle[]
   raffleIDs             String[]
   runtime               Int?
-  ///[GenresType]
-  genres                Json?
+  genres                String[]
   tagline               String?
   /// [WatchProvidersType]
   watchProviders        Json?
@@ -171,9 +175,9 @@ model Raffle {
 
 model RecommendedMovie {
   id            String @id @default(uuid())
-  movie         Movie  @relation("recommendedMovie", fields: [movieId], references: [id])
+  movie         Movie  @relation("recommendedMovie", fields: [movieId], references: [id], onDelete: SetDefault)
   movieId       String
-  user          User   @relation(fields: [userId], references: [id])
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   sourceMovie   Movie  @relation("sourceMovieRelation", fields: [sourceMovieId], references: [id])
   sourceMovieId String
