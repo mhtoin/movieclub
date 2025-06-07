@@ -1,9 +1,8 @@
 import { startOfYear } from "date-fns"
-import { CornerDownRight, X } from "lucide-react"
+import { CornerDownRight } from "lucide-react"
 import Link from "next/link"
 import DeleteButton from "./DeleteButton"
 import { TierlistWithTiers } from "@/types/tierlist.type"
-import Image from "next/image"
 
 export default function TierlistCard({
   tierlist,
@@ -16,8 +15,9 @@ export default function TierlistCard({
   const toDate = tierlist.watchDate?.to
     ? new Date(tierlist.watchDate.to)
     : startOfYear(new Date())
-  const topMovieImage = tierlist?.tiers?.find((tier) => tier.value === 1)
-    ?.movies[0]?.movie?.images?.backdrops?.[0]
+
+  /*const topMovieImage = tierlist?.tiers?.find((tier) => tier.value === 1)
+    ?.movies[0]?.movie?.images?.backdrops?.[0]*/
   return (
     <div className="flex flex-col items-center justify-center relative group hover:translate-y-[-2px] transition-all duration-300 ease-in-out">
       {/*<Image

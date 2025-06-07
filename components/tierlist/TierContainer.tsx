@@ -1,15 +1,12 @@
 "use client"
 import { uniqWith } from "@/lib/utils"
-import type {
-  TierlistWithTiers,
-  TierMovieWithMovieData,
-} from "@/types/tierlist.type"
+import type { TierMovieWithMovieData } from "@/types/tierlist.type"
 import {
   DragDropContext,
   type DraggableLocation,
   type DropResult,
 } from "@hello-pangea/dnd"
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { endOfYear, startOfYear } from "date-fns"
 import { getQueryClient } from "lib/getQueryClient"
 import { useEffect, useMemo, useState } from "react"
@@ -74,7 +71,6 @@ export default function DnDTierContainer({
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
     tierlist?.genres || [],
   )
-  const [editState, setEditState] = useState<boolean>(false)
   const [date, setDate] = useState<DateRange | undefined>({
     from: tierlist?.watchDate?.from
       ? new Date(tierlist?.watchDate?.from)
@@ -324,17 +320,13 @@ export default function DnDTierContainer({
     <>
       <div className="flex w-full max-w-[95dvw] min-w-[95dvw] flex-row gap-5">
         <div className="flex items-start gap-2">
-          <DateRangePicker
-            date={date}
-            setDate={setDate}
-            disabled={!editState}
-          />
+          <DateRangePicker date={date} setDate={setDate} disabled={true} />
           {genreOptions.length > 0 && (
             <GenreFilter
               genreOptions={genreOptions}
               selectedGenres={selectedGenres}
               setSelectedGenres={setSelectedGenres}
-              disabled={!editState}
+              disabled={true}
             />
           )}
         </div>
