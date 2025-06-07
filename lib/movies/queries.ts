@@ -2,26 +2,26 @@
  * Queries
  */
 
-import type { MovieWithReviews, MovieWithUser } from '@/types/movie.type'
-import { Provider } from '@/types/prisma.types'
-import type { ShortlistWithMovies } from '@/types/shortlist.type'
+import type { MovieWithReviews, MovieWithUser } from "@/types/movie.type"
+import { Provider } from "@/types/prisma.types"
+import type { ShortlistWithMovies } from "@/types/shortlist.type"
 import type {
   TMDBMovieResponse,
   TMDBSearchResponse,
   TMDBSearchResult,
-} from '@/types/tmdb.type'
-import type { SiteConfig, User } from '@prisma/client'
-import { formatISO, nextWednesday, previousWednesday, set } from 'date-fns'
-import { getBaseURL, keyBy } from 'lib/utils'
+} from "@/types/tmdb.type"
+import type { SiteConfig, User } from "@prisma/client"
+import { formatISO, nextWednesday, previousWednesday, set } from "date-fns"
+import { getBaseURL, keyBy } from "lib/utils"
 
 export const searchKeywords = async (value: string) => {
   const res = await fetch(
     `https://api.themoviedb.org/3/search/keyword?query=${value}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
+        accept: "application/json",
+        "content-type": "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
       },
     },
@@ -31,10 +31,10 @@ export const searchKeywords = async (value: string) => {
 
 export const getKeyWord = async (id: string) => {
   const res = await fetch(`https://api.themoviedb.org/3/keyword/${id}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
+      accept: "application/json",
+      "content-type": "application/json",
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
     },
   })
@@ -45,10 +45,10 @@ export const getMovie = async (id: number) => {
   const res = await fetch(
     `https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
+        accept: "application/json",
+        "content-type": "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
       },
     },
@@ -59,29 +59,29 @@ export const getMovie = async (id: number) => {
 
 export const searchMovies = async (
   page = 1,
-  searchValue = 'with_watch_providers=8',
-  type: 'discover' | 'search' = 'discover',
+  searchValue = "with_watch_providers=8",
+  type: "discover" | "search" = "discover",
   showOnlyAvailable = false,
 ) => {
   const searchQuery =
-    type === 'search'
+    type === "search"
       ? `search/movie?query=${searchValue}&page=${page}`
       : searchValue
         ? `discover/movie?${searchValue}&page=${page}&watch_region=FI`
-        : 'discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773'
+        : "discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&watch_region=FI&release_date.gte=1900&release_date.lte=2023&vote_average.gte=0&vote_average.lte=10&with_watch_providers=8|119|323|337|384|1773"
 
   const initialSearch = await fetch(
     `https://api.themoviedb.org/3/${searchQuery}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        accept: 'application/json',
+        accept: "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
       },
     },
   )
 
-  if (type === 'search' && showOnlyAvailable === true) {
+  if (type === "search" && showOnlyAvailable === true) {
     try {
       const siteConfig = await fetch(`${getBaseURL()}/api/siteConfig`)
       const siteConfigData: SiteConfig = await siteConfig.json()
@@ -92,8 +92,8 @@ export const searchMovies = async (
       await Promise.all(
         results.map(async (result) => {
           const movie = await getMovie(result.id)
-          const flatrate = movie['watch/providers']?.results.FI?.flatrate
-          const free = movie['watch/providers']?.results.FI?.free
+          const flatrate = movie["watch/providers"]?.results.FI?.flatrate
+          const free = movie["watch/providers"]?.results.FI?.free
 
           if (
             flatrate?.find((provider) =>
@@ -121,7 +121,7 @@ export const searchMovies = async (
         total_results: filteredResults.length,
       }
     } catch (error) {
-      console.error('Error filtering movies by availability:', error)
+      console.error("Error filtering movies by availability:", error)
       // Fallback to returning unfiltered results
       return initialSearch.json()
     }
@@ -132,7 +132,7 @@ export const searchMovies = async (
 
 export const getUserShortlist = async (id: string) => {
   const response = await fetch(`/api/shortlist/${id}`, {
-    cache: 'no-store',
+    cache: "no-store",
   })
   return await response.json()
   //const shortlist = await getShortList(id);
@@ -145,19 +145,19 @@ export const getWatchlist = async (user: User | null) => {
   const movies: TMDBMovieResponse[] = []
 
   if (!user) {
-    throw new Error('User not authenticated')
+    throw new Error("User not authenticated")
   }
 
   do {
     const watchlist = await fetch(
       `https://api.themoviedb.org/3/account/${user?.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user?.sessionId}&sort_by=created_at.asc`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          accept: 'application/json',
+          accept: "application/json",
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
         },
-        cache: 'no-store',
+        cache: "no-store",
       },
     )
 
@@ -165,7 +165,7 @@ export const getWatchlist = async (user: User | null) => {
     const results = data?.results ?? []
     movies.push(results)
 
-    const pages = data?.total_pages ?? ''
+    const pages = data?.total_pages ?? ""
 
     if (pages >= page) {
       page++
@@ -179,11 +179,11 @@ export const getWatchlist = async (user: User | null) => {
 
 export const getWatchProviders = async () => {
   const response = await fetch(
-    'https://api.themoviedb.org/3/watch/providers/movie?language=en-US&watch_region-FI',
+    "https://api.themoviedb.org/3/watch/providers/movie?language=en-US&watch_region-FI",
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        accept: 'application/json',
+        accept: "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
       },
     },
@@ -219,11 +219,11 @@ export const getWatchProviders = async () => {
 
 export const getFilters = async () => {
   const res = await fetch(
-    'https://api.themoviedb.org/3/genre/movie/list?language=en',
+    "https://api.themoviedb.org/3/genre/movie/list?language=en",
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        accept: 'application/json',
+        accept: "application/json",
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
       },
     },
@@ -238,9 +238,27 @@ export const getFilters = async () => {
   }
 }
 
+export const getAvailableGenres = async (): Promise<string[]> => {
+  const res = await fetch(
+    "https://api.themoviedb.org/3/genre/movie/list?language=en",
+    {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+      },
+    },
+  )
+
+  const responseBody = await res.json()
+  return responseBody.genres.map(
+    (genre: { name: string; id: number }) => genre.name,
+  ) as string[]
+}
+
 export const getAllMoviesOfTheWeek = async () => {
   const response = await fetch(`${getBaseURL()}/api/movies`, {
-    cache: 'no-store',
+    cache: "no-store",
   })
 
   const data: MovieWithUser[] = await response.json()
@@ -249,16 +267,16 @@ export const getAllMoviesOfTheWeek = async () => {
    * from the development. This is a temporary fix, stripping the time part of the date
    */
   for (const movie of data) {
-    if (movie.watchDate && typeof movie.watchDate === 'string') {
+    if (movie.watchDate && typeof movie.watchDate === "string") {
       movie.watchDate = formatISO(new Date(movie.watchDate), {
-        representation: 'date',
+        representation: "date",
       })
     }
   }
 
   const groupedData = keyBy(
     data,
-    (movie: MovieWithUser) => movie.watchDate?.toString() ?? '',
+    (movie: MovieWithUser) => movie.watchDate?.toString() ?? "",
   )
 
   return groupedData
@@ -273,14 +291,14 @@ export const getShortlist = async (id: string) => {
 export function findMovieDate(
   movies: Record<string, MovieWithUser>,
   startingDate: Date,
-  direction: 'previous' | 'next' = 'previous',
+  direction: "previous" | "next" = "previous",
   tryCount = 0,
 ): Date | null {
   if (tryCount > Object.keys(movies).length) {
     return null
   }
   const dateAttempt =
-    direction === 'previous'
+    direction === "previous"
       ? set(previousWednesday(startingDate), {
           hours: 18,
           minutes: 0,
@@ -314,7 +332,7 @@ export async function getAllShortlistsGroupedById(): Promise<
     const groupedData = keyBy(data, (shortlist) => shortlist.id)
     return groupedData
   } catch (error) {
-    console.error('Error fetching shortlists', error)
+    console.error("Error fetching shortlists", error)
     return {}
   }
 }

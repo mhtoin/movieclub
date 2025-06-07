@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -43,7 +43,7 @@
   --primary: oklch(0.39 0 0);
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.5 0 0);
-  --secondary-foreground: oklch(0.21 0.0059 285.88);
+  --secondary-foreground: oklch(0.97 0 none);
   --muted: oklch(0.97 0.0013 286.38);
   --muted-foreground: oklch(0.44 0.011 285.94);
   --accent: oklch(0.67 0.0952 196.72);
@@ -91,35 +91,35 @@
   --mobilenav: oklch(0.68 0.1252 169.79);
 }
 
-:root[data-accent='magenta'] {
+:root[data-accent="magenta"] {
   --accent: oklch(0.61 0.2286 9.74);
   --accent-foreground: oklch(0.17 0 0);
   --secondary: oklch(0.61 0.2286 9.74);
   --secondary-foreground: oklch(0.14 0.0044 285.82);
 }
 
-:root[data-accent='aqua'] {
+:root[data-accent="aqua"] {
   --accent: oklch(0.33 0.0431 207.02);
   --accent-foreground: oklch(0.17 0 0);
   --secondary: oklch(0.63 0.0224 207.84);
   --secondary-foreground: oklch(1 0 0);
 }
 
-:root[data-accent='orange'] {
+:root[data-accent="orange"] {
   --accent: oklch(0.71 0.1889 47.74);
   --accent-foreground: oklch(0.17 0 0);
   --secondary: oklch(0.71 0.1889 47.74);
   --secondary-foreground: oklch(0.17 0 0);
 }
 
-.dark[data-accent='Magenta'] {
+.dark[data-accent="Magenta"] {
   --accent: oklch(0.61 0.2286 9.74);
   --accent-foreground: oklch(1 0 0);
   --secondary: oklch(0.65 0.2035 10.19);
   --secondary-foreground: oklch(0.14 0.0044 285.82);
 }
 
-.dark[data-accent='Aqua'] {
+.dark[data-accent="Aqua"] {
   --accent: oklch(0.33 0.0431 207.02);
   --accent-foreground: oklch(1 0 0);
   --secondary: oklch(0.63 0.0224 207.84);
@@ -127,14 +127,14 @@
   --card: oklch(0.15 0 0);
 }
 
-.dark[data-accent='Purple'] {
+.dark[data-accent="Purple"] {
   --accent: oklch(0.44 0.184 321.05);
   --accent-foreground: oklch(1 0 0);
   --secondary: oklch(0.7 0.1097 302.82);
   --secondary-foreground: oklch(0.14 0.0044 285.82);
 }
 
-.dark[data-accent='Orange'] {
+.dark[data-accent="Orange"] {
   --accent: oklch(0.71 0.1889 47.74);
   --accent-foreground: oklch(1 0 0);
   --secondary: oklch(0.71 0.1889 47.74);
@@ -142,39 +142,39 @@
 }
 
 @theme {
-  --animate-accordion-down: 'accordion-down 0.2s ease-out';
-  --animate-accordion-up: 'accordion-up 0.2s ease-out';
-  --animate-slide-up: 'slide-up 0.5s ease-out';
-  --animate-slide-in: 'slide-in 0.5s ease-out';
-  --animate-slide-out: 'slide-out 0.5s ease-out';
-  --animate-button-press: 'button-press 0.2s ease-in';
-  --animate-star-wave: 'star-wave 0.8s ease-in-out infinite';
-  --animate-overlay-show: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)';
-  --animate-content-show: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)';
-  --animate-slide-up-and-fade: 'slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)';
-  --animate-slide-right-and-fade: 'slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)';
-  --animate-slide-down-and-fade: 'slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)';
-  --animate-slide-left-and-fade: 'slideLeftAndFade 1000ms cubic-bezier(0.16, 1, 0.3, 1)';
-  --animate-shimmer: 'shimmer 2s infinite linear';
-  --animate-loading-pulse: 'loading-pulse 3s ease-in-out infinite';
+  --animate-accordion-down: "accordion-down 0.2s ease-out";
+  --animate-accordion-up: "accordion-up 0.2s ease-out";
+  --animate-slide-up: "slide-up 0.5s ease-out";
+  --animate-slide-in: "slide-in 0.5s ease-out";
+  --animate-slide-out: "slide-out 0.5s ease-out";
+  --animate-button-press: "button-press 0.2s ease-in";
+  --animate-star-wave: "star-wave 0.8s ease-in-out infinite";
+  --animate-overlay-show: "overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)";
+  --animate-content-show: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)";
+  --animate-slide-up-and-fade: "slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+  --animate-slide-right-and-fade: "slideRightAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+  --animate-slide-down-and-fade: "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)";
+  --animate-slide-left-and-fade: "slideLeftAndFade 1000ms cubic-bezier(0.16, 1, 0.3, 1)";
+  --animate-shimmer: "shimmer 2s infinite linear";
+  --animate-loading-pulse: "loading-pulse 3s ease-in-out infinite";
 
   @keyframes accordion-down {
     from {
-      height: '0';
+      height: "0";
     }
 
     to {
-      height: 'var(--radix-accordion-content-height)';
+      height: "var(--radix-accordion-content-height)";
     }
   }
 
   @keyframes accordion-up {
     from {
-      height: 'var(--radix-accordion-content-height)';
+      height: "var(--radix-accordion-content-height)";
     }
 
     to {
-      height: '0';
+      height: "0";
     }
   }
 
@@ -359,13 +359,13 @@
   contain-intrinsic-size: auto 2000px;
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -391,7 +391,7 @@
     0 1px 3px 0 rgb(0 0 0 / 0.1),
     0 1px 2px -1px rgb(0 0 0 / 0.1);
 
-  &[data-checked='true'] {
+  &[data-checked="true"] {
     border-color: var(--accent);
   }
 
@@ -407,18 +407,18 @@
       0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
 
-  &:where(.dark, .dark *)[data-checked='true'] {
+  &:where(.dark, .dark *)[data-checked="true"] {
     border-color: var(--accent);
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -433,15 +433,11 @@
       0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
 
-  .checkbox:where(&, & *)[data-checked='true'] {
+  .checkbox:where(&, & *)[data-checked="true"] {
     border-color: var(--accent);
   }
 
-  .check:where(&, & *) {
-    background-color: var(--background);
-  }
-
-  .check:where(&, & *)[data-checked='true'] {
+  .check:where(&, & *)[data-checked="true"] {
     background-color: var(--accent);
   }
 
@@ -451,13 +447,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -466,7 +462,6 @@
 @utility check {
   display: block;
   border-radius: 9999px;
-  background-color: var(--background);
   padding: 0.125rem;
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -477,28 +472,34 @@
   stroke-dasharray: 15;
   stroke-dashoffset: 15;
 
-  &[data-checked='true'] {
+  &[data-checked="true"] {
     background-color: var(--accent);
     color: white;
     stroke-dashoffset: 0;
   }
 
-  &:where(.dark, .dark *) {
-    background-color: var(--background);
-  }
-
-  &:where(.dark, .dark *)[data-checked='true'] {
+  &:where(.dark, .dark *)[data-checked="true"] {
     background-color: var(--accent);
   }
 
+  &[data-checked="true"][data-variant="ghost"] {
+    background-color: transparent;
+    color: var(--foreground);
+  }
+
+  &:where(.dark, .dark *)[data-checked="true"][data-variant="ghost"] {
+    background-color: transparent;
+    color: var(--foreground);
+  }
+
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -540,13 +541,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -558,13 +559,13 @@
   animation: flip 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -599,13 +600,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -627,13 +628,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -648,13 +649,13 @@
   border-color: var(--border);
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -666,13 +667,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -697,13 +698,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -740,7 +741,7 @@
   }
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -822,13 +823,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -841,13 +842,13 @@
   position: relative;
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -908,13 +909,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -931,13 +932,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -954,13 +955,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -971,13 +972,13 @@
   text-orientation: upright;
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -1010,13 +1011,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -1033,7 +1034,7 @@
   cursor: pointer;
   transition: 0.5s;
 
-  &[data-expanded='true'] {
+  &[data-expanded="true"] {
     width: 98vw;
     /* Increased width on hover for better visibility at full viewport */
   }
@@ -1059,7 +1060,7 @@
     min-width: auto;
     clip-path: polygon(0 var(--s), 0 100%, 100% calc(100% - var(--s)), 100% 0);
 
-    &[data-expanded='true'] {
+    &[data-expanded="true"] {
       width: 100vw;
       height: 100vh;
     }
@@ -1078,13 +1079,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -1092,13 +1093,13 @@
 
 @utility siteTitle {
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -1288,7 +1289,7 @@
   ul::before,
   ul::after {
     --transition: 0.18s;
-    content: '';
+    content: "";
     position: fixed;
     pointer-events: none;
     top: calc(var(--item-active-y) * 1px);
@@ -1459,13 +1460,13 @@
   }
 
   @property --＠color-1 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(98 100% 62%);
   }
 
   @property --＠color-2 {
-    syntax: '<color>';
+    syntax: "<color>";
     inherits: false;
     initial-value: hsl(204 100% 59%);
   }
@@ -1475,5 +1476,29 @@
       --＠color-1: hsl(210 100% 59%);
       --＠color-2: hsl(310 100% 59%);
     }
+  }
+
+  @keyframes path-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .animate-path-draw-line {
+    stroke-dasharray: 25;
+    stroke-dashoffset: 25;
+  }
+
+  .animate-path-draw-arrow {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+  }
+
+  .group:hover .animate-path-draw-line {
+    animation: path-draw 0.6s ease-out forwards;
+  }
+
+  .group:hover .animate-path-draw-arrow {
+    animation: path-draw 0.6s ease-out 0.3s forwards;
   }
 }
