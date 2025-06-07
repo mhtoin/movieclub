@@ -24,12 +24,14 @@ import {
 import { useValidateSession } from "@/lib/hooks"
 import { SubmitButton } from "./SubmitButton"
 import { createTierlistAction } from "@/lib/actions/tierlist/actions"
+import FilterLogic from "./FilterLogic"
 
 export function CreateDialog() {
   const { data: user } = useValidateSession()
   const [tiers, setTiers] = useState<{ value: number; label?: string }[]>([])
   const [date, setDate] = useState<DateRange | undefined>()
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
+  const [logic, setLogic] = useState<"or" | "and">("or")
   const { data: genreOptions } = useQuery({
     queryKey: ["genres"],
     queryFn: getAvailableGenres,
@@ -68,6 +70,7 @@ export function CreateDialog() {
             name="genres"
             value={JSON.stringify(selectedGenres)}
           />
+          <input type="hidden" name="logic" value={logic} />
 
           <div className="flex flex-col gap-4 w-full justify-center items-center">
             <div className="relative">
@@ -87,13 +90,19 @@ export function CreateDialog() {
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <div className="flex items-center justify-center gap-2 w-full">
-              <DateRangePicker date={date} setDate={setDate} />
-              <GenreFilter
-                genreOptions={genreOptions ?? []}
-                selectedGenres={selectedGenres}
-                setSelectedGenres={setSelectedGenres}
-              />
+            <div className="flex flex-col items-center justify-center gap-4 w-full">
+              <div className="flex items-center justify-center gap-4 w-full">
+                <DateRangePicker date={date} setDate={setDate} />
+                <GenreFilter
+                  genreOptions={genreOptions ?? []}
+                  selectedGenres={selectedGenres}
+                  setSelectedGenres={setSelectedGenres}
+                />
+              </div>
+              <div className="flex flex-col items-center justify-center gap-4 w-full">
+                <h3 className="text-lg font-semibold">Genre filter logic</h3>
+                <FilterLogic logic={logic} setLogic={setLogic} />
+              </div>
             </div>
           </div>
           <div className="flex flex-col gap-2 w-full justify-center items-center">

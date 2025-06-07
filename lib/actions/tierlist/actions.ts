@@ -26,6 +26,7 @@ export async function createTierlistAction(formData: FormData) {
   const toDateFormatted = dateRange?.to
     ? formatISO(new Date(dateRange.to), { representation: "date" })
     : undefined
+  const logic = formData.get("logic") as "or" | "and"
 
   const filters = {} as Prisma.MovieWhereInput
   if (fromDateFormatted && toDateFormatted) {
@@ -39,8 +40,16 @@ export async function createTierlistAction(formData: FormData) {
     }
   }
   if (genres && genres.length > 0) {
-    filters.genres = {
-      hasEvery: genres,
+    if (logic === "or") {
+      filters.genres = {
+        hasSome: genres,
+      }
+    }
+
+    if (logic === "and") {
+      filters.genres = {
+        hasEvery: genres,
+      }
     }
   }
   const unkrankedMovies = await db.movie.findMany({
