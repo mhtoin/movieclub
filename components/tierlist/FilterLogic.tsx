@@ -1,4 +1,3 @@
-import { Ampersands, Slash } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "../ui/RadioGroup"
 
 export default function FilterLogic({
