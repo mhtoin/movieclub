@@ -1,14 +1,7 @@
 import { getUsers } from "@/lib/user"
-import { Button } from "components/ui/Button"
 import { getCurrentSession } from "lib/authentication/session"
-import { getTierlists } from "lib/tierlists"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-
-async function createNew() {
-  "use server"
-  redirect("/tierlists/create")
-}
 
 export default async function Tierlists() {
   const { user } = await getCurrentSession()
