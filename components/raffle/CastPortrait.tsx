@@ -1,4 +1,4 @@
-import type { CastMember, CrewMember } from '@prisma/client'
+import { CastMember, CrewMember } from '@/types/tmdb.type'
 import {
   Tooltip,
   TooltipContent,

@@ -1,3 +1,4 @@
+/*
 'use client'
 
 import { MenuBar } from '@/components/editor/MenuBar'
@@ -31,3 +32,4 @@ const ReviewEditor = ({ movieData }: { movieData: TierMovieWithMovieData }) => {
 }
 
 export default ReviewEditor
+*/

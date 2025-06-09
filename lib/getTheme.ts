@@ -18,7 +18,7 @@ const code = () => {
     window.__theme = newTheme
     preferredTheme = newTheme
 
-    document.documentElement.classList.remove('light', 'dark')
+    document.documentElement.classList.remove("light", "dark")
     document.documentElement.classList.add(newTheme)
 
     window.__onThemeChange(newTheme)
@@ -27,23 +27,27 @@ const code = () => {
   let preferredTheme: string | null = null
 
   try {
-    preferredTheme = localStorage.getItem('theme')
-  } catch (_err) {}
+    preferredTheme = localStorage.getItem("theme")
+  } catch (_err) {
+    console.error(_err)
+  }
 
   window.__setPreferredTheme = (newTheme) => {
     setTheme(newTheme)
     try {
-      localStorage.setItem('theme', newTheme)
-    } catch (_err) {}
+      localStorage.setItem("theme", newTheme)
+    } catch (_err) {
+      console.error(_err)
+    }
   }
 
-  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)")
 
-  darkQuery.addEventListener('change', (e) => {
-    window.__setPreferredTheme(e.matches ? 'dark' : 'light')
+  darkQuery.addEventListener("change", (e) => {
+    window.__setPreferredTheme(e.matches ? "dark" : "light")
   })
 
-  setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'))
+  setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"))
 }
 
 const codeAccent = () => {
@@ -59,7 +63,7 @@ const codeAccent = () => {
   let preferredAccent: string | null = null
 
   try {
-    preferredAccent = localStorage.getItem('accent')
+    preferredAccent = localStorage.getItem("accent")
   } catch (err) {
     console.error(err)
   }
@@ -67,13 +71,13 @@ const codeAccent = () => {
   window.__setPreferredAccent = (newAccent) => {
     setAccent(newAccent)
     try {
-      localStorage.setItem('accent', newAccent)
+      localStorage.setItem("accent", newAccent)
     } catch (err) {
       console.error(err)
     }
   }
 
-  setAccent(preferredAccent || '')
+  setAccent(preferredAccent || "")
 }
 
 export const getTheme = `(${code})();`

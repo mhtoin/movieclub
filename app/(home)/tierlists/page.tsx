@@ -1,27 +1,28 @@
-import { Button } from 'components/ui/Button'
-import { getCurrentSession } from 'lib/authentication/session'
-import { getTierlists } from 'lib/tierlists'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { Button } from "components/ui/Button"
+import { getCurrentSession } from "lib/authentication/session"
+import { getTierlists } from "lib/tierlists"
+import Link from "next/link"
+import { redirect } from "next/navigation"
 
 async function createNew() {
-  'use server'
-  redirect('/tierlists/create')
+  "use server"
+  redirect("/tierlists/create")
 }
 
 export default async function Tierlists() {
   const { user } = await getCurrentSession()
   if (!user) {
-    redirect('/')
+    redirect("/")
   }
   const allTierlists = await getTierlists()
+  console.log(allTierlists)
   const usersWithTierlist = allTierlists.map((tierlist) => tierlist.userId)
 
   return (
     <div className="flex flex-col items-center gap-10 pt-20">
       <h1 className="text-2xl font-bold">Tierlists</h1>
       <div>
-        {!usersWithTierlist.includes(user?.id || '') && (
+        {!usersWithTierlist.includes(user?.id || "") && (
           <form action={createNew}>
             <Button variant="outline" type="submit">
               Create new

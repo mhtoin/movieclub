@@ -2,6 +2,7 @@ import { Toaster } from '@/components/ui/Toaster'
 import Providers from '@/utils/provider'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Inter } from 'next/font/google'
+
 import './globals.css'
 export const metadata = {
   title: 'movieclub',

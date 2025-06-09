@@ -5,7 +5,7 @@ import {
   updateTierMove,
   updateTierlist,
 } from '@/lib/tierlists'
-import type { TierMovie } from '@prisma/client'
+import { TierMovieWithMovieData } from '@/types/tierlist.type'
 import { waitUntil } from '@vercel/functions'
 import { type NextRequest, NextResponse } from 'next/server'
 
@@ -15,6 +15,7 @@ export async function GET(
 ) {
   const params = await props.params
   const tierlist = await getTierlist(params.id)
+
   return NextResponse.json(tierlist)
 }
 
@@ -27,12 +28,12 @@ export async function PUT(
     data,
   }: {
     data: {
-      sourceData: TierMovie
-      destinationData: TierMovie
-      updatedSourceData: TierMovie
+      sourceData: TierMovieWithMovieData
+      destinationData: TierMovieWithMovieData
+      updatedSourceData: TierMovieWithMovieData
       sourceTierId: string
       destinationTierId: string
-      items: TierMovie[]
+      items: TierMovieWithMovieData[]
     }
   } = await request.json()
   const {

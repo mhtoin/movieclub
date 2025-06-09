@@ -1,11 +1,11 @@
-import type { MovieWithReviews } from '@/types/movie.type'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Calendar, Star, TrendingUp, Users } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { useEffect, useRef, useState } from 'react'
-import { FaImdb } from 'react-icons/fa'
-import { SiThemoviedatabase } from 'react-icons/si'
+import type { MovieWithReviews } from "@/types/movie.type"
+import { AnimatePresence, motion } from "framer-motion"
+import { Calendar, Star, TrendingUp, Users } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import React, { useEffect, useRef, useState } from "react"
+import { FaImdb } from "react-icons/fa"
+import { SiThemoviedatabase } from "react-icons/si"
 
 export default React.memo(
   function DetailsView({
@@ -49,15 +49,15 @@ export default React.memo(
     useEffect(() => {
       if (containerWidth > 0) {
         // Calculate text width using canvas (pre-render measurement)
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
+        const canvas = document.createElement("canvas")
+        const context = canvas.getContext("2d")
 
         if (context) {
-          context.font = 'bold clamp(0.5rem,calc(0.05*100vw),3rem) monospace'
+          context.font = "bold clamp(0.5rem,calc(0.05*100vw),3rem) monospace"
 
-          const words = movie.title.split(' ')
-          let firstHalf = ''
-          let secondHalf = ''
+          const words = movie.title.split(" ")
+          let firstHalf = ""
+          let secondHalf = ""
 
           if (words.length <= 1) {
             const midpoint = Math.ceil(movie.title.length / 2)
@@ -65,8 +65,8 @@ export default React.memo(
             secondHalf = movie.title.substring(midpoint)
           } else {
             const midWordIndex = Math.floor(words.length / 2)
-            firstHalf = words.slice(0, midWordIndex).join(' ')
-            secondHalf = words.slice(midWordIndex).join(' ')
+            firstHalf = words.slice(0, midWordIndex).join(" ")
+            secondHalf = words.slice(midWordIndex).join(" ")
           }
 
           // Get text metrics
@@ -77,7 +77,7 @@ export default React.memo(
             secondHalf.toLocaleUpperCase(),
           ).width
           const spaceWidth =
-            words.length > 1 ? context.measureText(' ').width : 0
+            words.length > 1 ? context.measureText(" ").width : 0
 
           // Account for padding (p-10 = 2.5rem = 40px on each side)
           const availableWidth = containerWidth - 80
@@ -118,12 +118,12 @@ export default React.memo(
                 </div>
               )}
               <div className="flex h-10 flex-row gap-2">
-                {movie.genres.map((genre) => (
+                {movie?.genres?.map((genre) => (
                   <div
-                    key={genre.id}
+                    key={genre}
                     className="text-md text-accent-foreground bg-accent/50 flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md"
                   >
-                    {genre.name}
+                    {genre}
                   </div>
                 ))}
               </div>
@@ -131,8 +131,8 @@ export default React.memo(
                 <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4 md:h-6 md:w-6" />
                   {movie.watchDate
-                    ? new Date(movie?.watchDate).toLocaleDateString('fi-FI')
-                    : ''}
+                    ? new Date(movie?.watchDate).toLocaleDateString("fi-FI")
+                    : ""}
                 </span>
                 <span className="text-primary-foreground/60">|</span>
                 <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
@@ -155,7 +155,7 @@ export default React.memo(
                   {movie?.watchProviders?.providers?.map((provider) => {
                     return (
                       <Link
-                        href={movie?.watchProviders?.link || ''}
+                        href={movie?.watchProviders?.link || ""}
                         target="_blank"
                         key={provider.provider_id}
                         className="hover:bg-accent/50 border-accent/50 rounded-md border transition-all duration-300"
@@ -191,9 +191,9 @@ export default React.memo(
           </AnimatePresence>
           {(() => {
             const title = movie.title
-            const words = title.split(' ')
-            let firstHalf = ''
-            let secondHalf = ''
+            const words = title.split(" ")
+            let firstHalf = ""
+            let secondHalf = ""
 
             if (words.length <= 1) {
               const midpoint = Math.ceil(title.length / 2)
@@ -201,17 +201,17 @@ export default React.memo(
               secondHalf = title.substring(midpoint)
             } else {
               const midWordIndex = Math.floor(words.length / 2)
-              firstHalf = words.slice(0, midWordIndex).join(' ')
-              secondHalf = words.slice(midWordIndex).join(' ')
+              firstHalf = words.slice(0, midWordIndex).join(" ")
+              secondHalf = words.slice(midWordIndex).join(" ")
             }
 
-            const titleFontSize = 'text-[clamp(0.5rem,calc(0.05*100vw),3rem)]'
+            const titleFontSize = "text-[clamp(0.5rem,calc(0.05*100vw),3rem)]"
             return (
               <div className="flex w-full max-w-full flex-col flex-wrap">
                 <AnimatePresence mode="wait" propagate>
                   <div className="flex flex-wrap px-10">
                     <motion.span
-                      key={`first-${isWrapped ? 'wrapped' : 'unwrapped'}`}
+                      key={`first-${isWrapped ? "wrapped" : "unwrapped"}`}
                       className={`${titleFontSize} text-primary-foreground font-mono font-bold whitespace-nowrap`}
                       initial={
                         isWrapped
@@ -238,7 +238,7 @@ export default React.memo(
                       </span>
                     )}
                     <motion.span
-                      key={`second-${isWrapped ? 'wrapped' : 'unwrapped'}`}
+                      key={`second-${isWrapped ? "wrapped" : "unwrapped"}`}
                       className={`${titleFontSize} font-mono font-bold whitespace-nowrap`}
                       initial={
                         isWrapped
@@ -259,10 +259,10 @@ export default React.memo(
                           : { duration: 0.3 }
                       }
                       style={{
-                        font: 'Arial',
-                        WebkitTextStroke: '1px',
-                        WebkitTextStrokeColor: 'white',
-                        WebkitTextFillColor: 'transparent',
+                        font: "Arial",
+                        WebkitTextStroke: "1px",
+                        WebkitTextStrokeColor: "white",
+                        WebkitTextFillColor: "transparent",
                       }}
                     >
                       {secondHalf.toLocaleUpperCase()}
@@ -314,9 +314,7 @@ export default React.memo(
     // Only re-render if the movie ID changes or if it's the same movie with different reviews
     return (
       prevProps.movie.id === nextProps.movie.id &&
-      prevProps.isExpanded === nextProps.isExpanded &&
-      JSON.stringify(prevProps.movie.tierMovies) ===
-        JSON.stringify(nextProps.movie.tierMovies)
+      prevProps.isExpanded === nextProps.isExpanded
     )
   },
 )

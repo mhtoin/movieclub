@@ -419,8 +419,6 @@ export const useUpdateShortlistMutation = () => {
 
 export const useRemoveFromShortlistMutation = () => {
   const queryClient = useQueryClient()
-  const isOpen = useDialogStore.use.isOpen()
-  const setIsOpen = useDialogStore.use.setIsOpen()
   return useMutation({
     mutationFn: async ({
       movieId,
@@ -453,10 +451,14 @@ export const useRemoveFromShortlistMutation = () => {
       sendShortlistUpdate(variables.userId)
     },
     onError: (_error, _variables) => {
+      toast.error('Something went wrong', {
+        description: _error.message,
+      })
+      /*
       if (!isOpen) {
         setIsOpen(true)
         //setMovie(variables.movie);
-      }
+      }*/
     },
   })
 }

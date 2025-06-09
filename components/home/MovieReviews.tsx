@@ -1,4 +1,4 @@
-import type { MovieReview } from '@/types/movie.type'
+import { ReviewWithUser } from '@/types/movie.type'
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { type JSONContent, generateHTML } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 export default function MovieReviews({
   movieReviews,
 }: {
-  movieReviews: MovieReview[]
+  movieReviews: ReviewWithUser[]
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -39,9 +39,7 @@ export default function MovieReviews({
   }, [updateScrollButtonsState])
   // Filter out reviews with null tier fields
   const validReviews = movieReviews.filter(
-    (review) =>
-      review?.tier?.tierlist?.user &&
-      (review?.review || review?.rating !== '0'),
+    (review) => review?.userId && (review?.content || review?.rating !== 0),
   )
 
   const reviews = validReviews
@@ -100,26 +98,28 @@ export default function MovieReviews({
         >
           <div className="flex w-full flex-row">
             {reviews?.map((review, index) => {
-              const reviewText = review.review
-                ? generateHTML(review?.review as JSONContent, [StarterKit])
+              const reviewText = review.content
+                ? generateHTML(review?.content as unknown as JSONContent, [
+                    StarterKit,
+                  ])
                 : ''
               return (
                 <div
-                  key={`${review?.tier?.tierlist?.user?.id || index}`}
+                  key={`${review?.userId || index}`}
                   className="border-border/30 bg-opaqueCard/50 flex w-full shrink-0 snap-center flex-col gap-5 rounded-md border p-6 backdrop-blur-xs"
                 >
                   <h2 className="text-primary-foreground text-lg font-bold">
-                    {review.tier?.tierlist?.user?.name}
+                    {review?.user?.name}
                   </h2>
                   <div className="flex flex-row items-center gap-5 border-b pb-5">
                     <img
-                      src={review.tier?.tierlist?.user?.image}
-                      alt={review.tier?.tierlist?.user?.name ?? ''}
+                      src={review.user?.image}
+                      alt={review.user?.name ?? ''}
                       className="h-10 w-10 rounded-full"
                     />
                     <StarRadio
-                      value={Number.parseFloat(review.rating)}
-                      id={review.tier?.tierlist?.user?.id ?? ''}
+                      value={review.rating}
+                      id={review.user?.id ?? ''}
                       disabled={true}
                     />
                   </div>
