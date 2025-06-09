@@ -77,3 +77,10 @@ data/journal/WiredTigerPreplog.0000000002
 
 dump/
 log.txt
+
+# prisma migrations
+prisma/migrations/
+/data
+
+scripts/
+generated/

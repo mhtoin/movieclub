@@ -62,7 +62,7 @@ export default function CurrentMoviePoster({
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <MovieReviews movieReviews={mostRecentMovie?.tierMovies} />
+            <MovieReviews movieReviews={mostRecentMovie?.reviews} />
           </motion.div>
         )}
       </AnimatePresence>

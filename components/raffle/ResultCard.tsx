@@ -1,13 +1,13 @@
-import type { MovieWithUser } from '@/types/movie.type'
-import { Calendar, Clock, Star, TrendingUp, Users } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { FaImdb } from 'react-icons/fa'
-import { SiThemoviedatabase } from 'react-icons/si'
-import CastPopover from './CastPopover'
-import CastPortrait from './CastPortrait'
-import TrailerLink from './TrailerLink'
-import UserPortrait from './UserPortrait'
+import type { MovieWithUser } from "@/types/movie.type"
+import { Calendar, Clock, Star, TrendingUp, Users } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { FaImdb } from "react-icons/fa"
+import { SiThemoviedatabase } from "react-icons/si"
+import CastPopover from "./CastPopover"
+import CastPortrait from "./CastPortrait"
+import TrailerLink from "./TrailerLink"
+import UserPortrait from "./UserPortrait"
 
 export default function ResultCard({ movie }: { movie: MovieWithUser }) {
   const watchproviders = movie?.watchProviders?.providers
@@ -112,9 +112,9 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
                 return (
                   <div
                     className="text-foreground/50 bg-foreground/10 rounded-md px-2 py-1 text-sm"
-                    key={genre.id}
+                    key={genre}
                   >
-                    {genre.name}
+                    {genre}
                   </div>
                 )
               })}
@@ -136,7 +136,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
                 <CastPortrait
                   cast={{
                     ...cast,
-                    profile_path: cast.profile_path || null,
+                    profile_path: cast?.profile_path || undefined,
                   }}
                   key={cast.id}
                 />
@@ -146,7 +146,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
               <CastPopover
                 cast={movie.cast.map((cast) => ({
                   ...cast,
-                  profile_path: cast.profile_path || null,
+                  profile_path: cast?.profile_path || undefined,
                 }))}
               />
             )}

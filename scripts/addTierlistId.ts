@@ -1,7 +1,8 @@
+/*
 import prisma from '../lib/prisma'
 
 async function main() {
-  const tierlists = await prisma.tierlists.findMany()
+  const tierlists = await prisma.tierlist.findMany()
 
   for (const tierlist of tierlists) {
     await prisma.user.update({
@@ -16,3 +17,4 @@ async function main() {
 }
 
 main()
+*/

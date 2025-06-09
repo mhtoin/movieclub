@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'No id provided' }, { status: 400 })
   }
 
-  await prisma?.tierMovie.update({
+  await prisma?.review.update({
     where: { id },
     data: { rating: rating.toString() },
   })

@@ -1,8 +1,6 @@
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import type { Image } from '@/types/tmdb.type'
-import type { Prisma } from '@prisma/client'
-import type { SingleImage as MovieImage } from '@prisma/client'
-import { getBlurDataUrl } from 'lib/utils'
+import type { Image, TMDBMovieResponse } from "@/types/tmdb.type"
+import type { Prisma } from "@prisma/client"
+import { getBlurDataUrl } from "lib/utils"
 
 type RankObject = {
   [key: string]: {
@@ -15,7 +13,7 @@ function rankImages(images: Array<Image>, originalLanguage: string) {
   const rankObject: RankObject = images.reduce((acc, image) => {
     let points = 0
     if (
-      image.iso_639_1 === 'en' ||
+      image.iso_639_1 === "en" ||
       image.iso_639_1 === originalLanguage ||
       !image.iso_639_1
     ) {
@@ -52,26 +50,26 @@ export const createDbMovie = async (
   movieData: TMDBMovieResponse,
 ): Promise<Prisma.MovieCreateInput> => {
   const finnishProvider = [
-    ...(movieData['watch/providers']?.results?.FI?.flatrate ?? []),
-    ...(movieData['watch/providers']?.results?.FI?.free ?? []),
+    ...(movieData["watch/providers"]?.results?.FI?.flatrate ?? []),
+    ...(movieData["watch/providers"]?.results?.FI?.free ?? []),
   ]
-  const providerLink = movieData['watch/providers']?.results?.FI?.link
+  const providerLink = movieData["watch/providers"]?.results?.FI?.link
   const cast = movieData.credits?.cast
   const crew = movieData.credits?.crew.filter(
     (crew) =>
-      crew.job === 'Director' ||
-      crew.job === 'Screenplay' ||
-      crew.job === 'Original Music Composer',
+      crew.job === "Director" ||
+      crew.job === "Screenplay" ||
+      crew.job === "Original Music Composer",
   )
 
   const trailers = movieData.videos?.results.filter(
-    (video) => video.type === 'Trailer',
+    (video) => video.type === "Trailer",
   )
 
   const backdrops = movieData.images?.backdrops
     ? rankImages(movieData.images.backdrops, movieData.original_language)
     : []
-  const backdropsWithBlurDataUrl: Array<MovieImage> = []
+  const backdropsWithBlurDataUrl: Array<Image> = []
 
   for (const backdrop of backdrops.slice(0, 3)) {
     const blurDataUrl = await getBlurDataUrl(
@@ -88,7 +86,7 @@ export const createDbMovie = async (
   const posters = movieData.images?.posters
     ? rankImages(movieData.images.posters, movieData.original_language)
     : []
-  const postersWithBlurDataUrl: Array<MovieImage> = []
+  const postersWithBlurDataUrl: Array<Image> = []
 
   for (const poster of posters.slice(0, 3)) {
     const blurDataUrl = await getBlurDataUrl(
@@ -101,7 +99,7 @@ export const createDbMovie = async (
     postersWithBlurDataUrl.push(posterWithBlurDataUrl)
   }
   const logos = movieData.images?.logos.filter(
-    (image) => image.iso_639_1 === 'en' || image.vote_average > 0,
+    (image) => image.iso_639_1 === "en" || image.vote_average > 0,
   )
 
   return {
@@ -122,19 +120,15 @@ export const createDbMovie = async (
     vote_count: movieData.vote_count,
     runtime: movieData.runtime,
     tagline: movieData.tagline,
-    genres: movieData.genres,
+    genres: movieData.genres.map((genre) => genre.name),
     watchProviders: {
-      set: {
-        link: providerLink ?? '',
-        providers: finnishProvider ?? [],
-      },
+      link: providerLink ?? "",
+      providers: finnishProvider ?? [],
     },
     images: {
-      set: {
-        backdrops: backdropsWithBlurDataUrl,
-        posters: postersWithBlurDataUrl,
-        logos,
-      },
+      backdrops: backdropsWithBlurDataUrl,
+      posters: postersWithBlurDataUrl,
+      logos,
     },
     videos: trailers,
     cast: cast,
