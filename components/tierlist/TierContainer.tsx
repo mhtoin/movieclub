@@ -142,7 +142,13 @@ export default function DnDTierContainer({
   }*/
 
   function onDragEnd(result: DropResult) {
-    if (!isAuthorized || !containerState || !tierlist) {
+    if (!isAuthorized) {
+      toast.error("You are not authorized to edit this tierlist.")
+      return
+    }
+
+    if (!containerState || !tierlist) {
+      toast.error("Tierlist or container state is not available.")
       return
     }
 
