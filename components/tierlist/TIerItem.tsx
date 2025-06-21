@@ -1,4 +1,3 @@
-import ReviewDialog from '@/components/tierlist/ReviewDialog'
 import type { TierMovieWithMovieData } from '@/types/tierlist.type'
 import type { DraggableProvided } from '@hello-pangea/dnd'
 import Image from 'next/image'
@@ -17,20 +16,18 @@ export default function TierItem({
       {...provided.dragHandleProps}
     >
       <Image
-        src={`https://image.tmdb.org/t/p/original/${
-          'poster_path' in item ? item.poster_path : item.movie.poster_path
-        }`}
+        src={`https://image.tmdb.org/t/p/original/${item?.movie?.images?.posters[0]?.file_path}`}
         width={200}
         height={300}
         alt=""
         className="h-full w-full rounded-md object-cover transition-all duration-300 hover:brightness-75"
       />
 
-      {item.id && (
+      {/*item.id && (
         <div className="absolute top-0 right-0 rounded-md p-2">
           <ReviewDialog movie={item} />
         </div>
-      )}
+      )*/}
     </div>
   )
 }
