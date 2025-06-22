@@ -297,18 +297,17 @@ export default function DnDTierContainer({
       throw new Error("Updating tierlist failed", { cause: body })
     },
     onSuccess: (_data, _variables, _context) => {
-      toast.success("Tierlist updated!")
-      queryClient.invalidateQueries({
-        queryKey: ["tierlists", tierlistId],
-      })
-
       /*if (_variables.operation === 'rank' && _data.data) {
         setSelectedMovie(_data.data)
       }*/
+      toast.success("Tierlist updated!")
     },
     onError: (error) => {
       toast.error("Updating tierlist failed!", {
         description: error.message,
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["tierlists", tierlistId],
       })
     },
   })
