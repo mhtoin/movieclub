@@ -1,7 +1,7 @@
-import type { MovieWithUser } from '@/types/movie.type'
-import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
-import type { JSX, RefObject } from 'react'
+import type { MovieWithUser } from "@/types/movie.type"
+import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
+import type { JSX, RefObject } from "react"
 
 export default function RaffleItems({
   shuffledMovies,
@@ -36,7 +36,7 @@ export default function RaffleItems({
                   opacity: 1,
                   scale: index === currentIndex && started ? 1.1 : 1,
                   transition: {
-                    type: 'spring',
+                    type: "spring",
                     stiffness: 300,
                     damping: 20,
                   },
@@ -45,24 +45,24 @@ export default function RaffleItems({
                 transition={{
                   duration: 0.5,
                   layout: {
-                    type: 'spring',
+                    type: "spring",
                     stiffness: 200,
                     damping: 25,
                   },
                 }}
               >
                 <Image
-                  src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                  src={`https://image.tmdb.org/t/p/original/${movie?.images?.posters[0]?.file_path}`}
                   alt=""
-                  width={'150'}
-                  height={'200'}
+                  width={"150"}
+                  height={"200"}
                   priority={false}
                   loading="lazy"
                   sizes="(max-width: 768px) 20vw, (max-width: 1200px) 20vw, 33vw"
                   className={`h-auto w-[150px] rounded-md transition-all duration-300 ease-in-out 2xl:w-[150px] ${
                     index === currentIndex && started
-                      ? 'saturate-100'
-                      : 'saturate-0'
+                      ? "saturate-100"
+                      : "saturate-0"
                   }`}
                 />
               </motion.div>

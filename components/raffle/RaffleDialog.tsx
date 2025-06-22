@@ -1,16 +1,16 @@
-'use client'
-import { useRaffle, useShortlistsQuery } from '@/lib/hooks'
-import type { MovieWithUser } from '@/types/movie.type'
-import * as Ariakit from '@ariakit/react'
-import type { SiteConfig } from '@prisma/client'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronRight, Dices } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Button } from '../ui/Button'
-import ActionButtons from './ActionButtons'
-import Participants from './Participants'
-import RaffleItems from './RaffleItems'
-import ResultCard from './ResultCard'
+"use client"
+import { useRaffle, useShortlistsQuery } from "@/lib/hooks"
+import type { MovieWithUser } from "@/types/movie.type"
+import * as Ariakit from "@ariakit/react"
+import type { SiteConfig } from "@prisma/client"
+import { AnimatePresence, motion } from "framer-motion"
+import { ChevronRight, Dices } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Button } from "../ui/Button"
+import ActionButtons from "./ActionButtons"
+import Participants from "./Participants"
+import RaffleItems from "./RaffleItems"
+import ResultCard from "./ResultCard"
 
 export default function RaffleDialog({
   siteConfig,
@@ -84,7 +84,7 @@ export default function RaffleDialog({
         nextMovieRect.bottom <= containerRect.bottom
 
       if (!isVisible) {
-        nextMovie.scrollIntoView({ behavior: 'smooth' })
+        nextMovie.scrollIntoView({ behavior: "smooth" })
       }
     }
   }, [currentIndex, movies, shuffledMovies])
@@ -163,8 +163,8 @@ export default function RaffleDialog({
     <>
       <Button
         onClick={dialog.show}
-        variant={'outline'}
-        size={'iconLg'}
+        variant={"outline"}
+        size={"iconLg"}
         className="rounded-full"
       >
         <Dices className="h-6 w-6" />
@@ -202,29 +202,29 @@ export default function RaffleDialog({
             >
               <div
                 className={`border-border relative flex h-full flex-col justify-start gap-5 border-r pt-5 transition-all duration-300 ${
-                  sidebarExpanded ? 'w-[250px]' : 'w-[0px]'
+                  sidebarExpanded ? "w-[250px]" : "w-[0px]"
                 }`}
               >
                 <div
                   className={`absolute top-1/2 -translate-y-1/2 ${
-                    sidebarExpanded ? '-right-3' : '-right-5'
+                    sidebarExpanded ? "-right-3" : "-right-5"
                   }`}
                 >
                   <Button
-                    variant={'outline'}
-                    size={'iconSm'}
+                    variant={"outline"}
+                    size={"iconSm"}
                     onClick={() => setSidebarExpanded(!sidebarExpanded)}
                   >
                     <ChevronRight
                       className={`h-4 w-4 transition-transform duration-300 ${
-                        sidebarExpanded ? 'rotate-180' : ''
+                        sidebarExpanded ? "rotate-180" : ""
                       }`}
                     />
                   </Button>
                 </div>
                 <div
                   className={`overflow-hidden ${
-                    sidebarExpanded ? 'opacity-100' : 'opacity-100'
+                    sidebarExpanded ? "opacity-100" : "opacity-100"
                   }`}
                 >
                   <Participants
