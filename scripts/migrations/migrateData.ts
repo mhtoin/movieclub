@@ -1,45 +1,136 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PrismaNeon } from "@prisma/adapter-neon"
 import { PrismaClient } from "@prisma/client"
-import { readFile } from "node:fs/promises"
+import { readFile, readdir } from "node:fs/promises"
+import { join, extname, basename } from "node:path"
+
+/**
+ * Finds the latest version of a file based on timestamp in filename
+ * @param directory - The directory to search in
+ * @param filePattern - The base name pattern (e.g., "users" for files like "users-2025-06-22.json")
+ * @param extension - The file extension (defaults to ".json")
+ * @returns The full path to the latest file, or null if no matching files found
+ */
+async function findLatestFile(
+  directory: string,
+  filePattern: string,
+  extension: string = ".json",
+): Promise<string | null> {
+  try {
+    const files = await readdir(directory)
+    console.log("files in directory:", files)
+
+    // Filter files that match the pattern and extension
+    const matchingFiles = files.filter((file) => {
+      const fileExt = extname(file)
+      const fileName = basename(file, fileExt)
+
+      // Check if file has correct extension and starts with the pattern
+      return fileExt === extension && fileName.startsWith(filePattern + "-")
+    })
+
+    if (matchingFiles.length === 0) {
+      return null
+    }
+
+    // Sort files by timestamp (assuming YYYY-MM-DD format after the pattern)
+    const sortedFiles = matchingFiles.sort((a, b) => {
+      const getTimestamp = (filename: string) => {
+        const nameWithoutExt = basename(filename, extname(filename))
+        const timestampPart = nameWithoutExt.replace(filePattern + "-", "")
+        return timestampPart
+      }
+
+      const timestampA = getTimestamp(a)
+      const timestampB = getTimestamp(b)
+
+      // Sort in descending order (latest first)
+      return timestampB.localeCompare(timestampA)
+    })
+
+    return join(directory, sortedFiles[0])
+  } catch (error) {
+    console.error(`Error searching for files in ${directory}:`, error)
+    return null
+  }
+}
 
 async function migrateData() {
   const connectionString = `${process.env.DATABASE_URL}`
-  console.log("Connection String:", connectionString)
   const adapter = new PrismaNeon({ connectionString })
-  console.log("Adapter:", adapter)
   const db = new PrismaClient({ adapter })
 
-  const userData = await readFile("./data//MovieClub/users-*.json", "utf-8")
-  const accountData = await readFile("./data/accounts-*.json", "utf-8")
+  // Find latest versions of each data file
+  const usersFile = await findLatestFile("./data/MovieClub", "users")
+  const accountsFile = await findLatestFile("./data/MovieClub", "accounts")
+  const moviesFile = await findLatestFile("./data/MovieClub", "movies")
+  const shortlistFile = await findLatestFile("./data/MovieClub", "shortlist")
+  const tierlistFile = await findLatestFile("./data/MovieClub", "Tierlists")
+  const tierFile = await findLatestFile("./data/MovieClub", "Tier")
+  const tierMovieFile = await findLatestFile("./data/MovieClub", "tier_movies")
+  const raffleFile = await findLatestFile("./data/MovieClub", "Raffle")
+  const siteconfigFile = await findLatestFile("./data/MovieClub", "SiteConfig")
+  const recommendedFile = await findLatestFile(
+    "./data/MovieClub",
+    "RecommendedMovie",
+  )
+
+  // Check if all required files were found
+  if (
+    !usersFile ||
+    !accountsFile ||
+    !moviesFile ||
+    !shortlistFile ||
+    !tierlistFile ||
+    !tierFile ||
+    !tierMovieFile ||
+    !raffleFile ||
+    !siteconfigFile ||
+    !recommendedFile
+  ) {
+    throw new Error("Could not find all required data files")
+  }
+
+  console.log("Found data files:")
+  console.log("Users:", usersFile)
+  console.log("Accounts:", accountsFile)
+  console.log("Movies:", moviesFile)
+  console.log("Shortlist:", shortlistFile)
+  console.log("Tierlists:", tierlistFile)
+  console.log("Tiers:", tierFile)
+  console.log("TierMovies:", tierMovieFile)
+  console.log("Raffles:", raffleFile)
+  console.log("SiteConfig:", siteconfigFile)
+  console.log("Recommended:", recommendedFile)
+
+  // Read the files
+  const userData = await readFile(usersFile, "utf-8")
+  const accountData = await readFile(accountsFile, "utf-8")
   const users = JSON.parse(userData)
   const accounts = JSON.parse(accountData)
 
-  const movieData = await readFile("./data/movies-*.json", "utf-8")
-  const shortlistData = await readFile("./data/shortlist-*.json", "utf-8")
+  const movieData = await readFile(moviesFile, "utf-8")
+  const shortlistData = await readFile(shortlistFile, "utf-8")
 
   const movies = JSON.parse(movieData)
   const shortlists = JSON.parse(shortlistData)
 
-  const tierlistData = await readFile("./data/Tierlists-*.json", "utf-8")
+  const tierlistData = await readFile(tierlistFile, "utf-8")
   const tierlists = JSON.parse(tierlistData)
 
-  const tierData = await readFile("./data/Tier-*.json", "utf-8")
+  const tierData = await readFile(tierFile, "utf-8")
   const tiers = JSON.parse(tierData)
 
-  const tierMovieData = await readFile("./data/tier_movies-*.json", "utf-8")
+  const tierMovieData = await readFile(tierMovieFile, "utf-8")
   const tierMovies = JSON.parse(tierMovieData)
 
-  const raffleData = await readFile("./data/Raffle-*.json", "utf-8")
+  const raffleData = await readFile(raffleFile, "utf-8")
   const raffles = JSON.parse(raffleData)
 
-  const siteconfigData = await readFile("./data/SiteConfig-*.json", "utf-8")
+  const siteconfigData = await readFile(siteconfigFile, "utf-8")
   const siteConfig = JSON.parse(siteconfigData)
 
-  const recommendedData = await readFile(
-    "./data/RecommendedMovie-*.json",
-    "utf-8",
-  )
+  const recommendedData = await readFile(recommendedFile, "utf-8")
   const recommendedMovies = JSON.parse(recommendedData)
 
   console.log("Users:", users)
@@ -94,22 +185,26 @@ async function migrateData() {
   }
 
   for (const [accountId, account] of createdAccountsMap) {
-    const createdAccount = await db.account.create({
-      data: {
-        provider: account.provider,
-        providerAccountId: account.providerAccountId,
-        type: account.type,
-        user: {
-          connect: {
-            id: createdUsersMap.get(account.userId["$oid"]).neonId,
+    try {
+      const createdAccount = await db.account.create({
+        data: {
+          provider: account.provider,
+          providerAccountId: account.providerAccountId,
+          type: account.type,
+          user: {
+            connect: {
+              id: createdUsersMap.get(account.userId["$oid"]).neonId,
+            },
           },
         },
-      },
-    })
-    createdAccountsMap.set(accountId, {
-      ...account,
-      neonId: createdAccount.id,
-    })
+      })
+      createdAccountsMap.set(accountId, {
+        ...account,
+        neonId: createdAccount.id,
+      })
+    } catch (error) {
+      console.error("Error creating account:", account, error)
+    }
   }
 
   for (const [movieId, movie] of createdMoviesMap) {
