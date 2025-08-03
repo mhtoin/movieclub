@@ -8,7 +8,7 @@ export default async function HomePage() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek()
   const colorClasses = Array.from(
     { length: mostRecentMovie.genres.length + 1 },
-    (_, _i) => colors[Math.floor(Math.random() * colors.length)],
+    () => colors[Math.floor(Math.random() * colors.length)],
   )
 
   return (
