@@ -1,13 +1,13 @@
-import UserAvatar from '@/components/shortlist/UserAvatar'
+import UserAvatar from "@/components/shortlist/UserAvatar"
 import {
   useShortlistsQuery,
   useUpdateParticipationMutation,
   useUpdateReadyStateMutation,
   useValidateSession,
-} from '@/lib/hooks'
-import { Lock, LockOpen } from 'lucide-react'
-import { Button } from '../ui/Button'
-import { ParticipationButton } from './ParticipationButton'
+} from "@/lib/hooks"
+import { Lock, LockOpen } from "lucide-react"
+import { Button } from "../ui/Button"
+import { ParticipationButton } from "./ParticipationButton"
 
 export default function Participants({
   isEditing,
@@ -21,16 +21,16 @@ export default function Participants({
   const { data: allShortlists } = useShortlistsQuery()
   const { data: currentUser } = useValidateSession()
   return (
-    <div className="flex h-full w-full flex-col items-center gap-10 overflow-y-auto py-5">
+    <div className="flex h-full w-full flex-col items-center gap-10 overflow-y-auto py-5 no-scrollbar">
       <div className="flex flex-col items-center justify-center gap-5">
         <h3 className="text-lg font-bold">Participants</h3>
         <Button
-          variant={'outline'}
-          size={'default'}
+          variant={"outline"}
+          size={"default"}
           onClick={() => setIsEditing(!isEditing)}
           className="flex flex-row items-center justify-center gap-2 py-5"
         >
-          <span className="text-md">{!isEditing ? 'Edit' : 'Done'}</span>
+          <span className="text-md">{!isEditing ? "Edit" : "Done"}</span>
           {isEditing ? (
             <Lock className="h-4 w-4" />
           ) : (
@@ -56,7 +56,7 @@ export default function Participants({
                     <LockOpen className="h-5 w-5" />
                   )}
                 </div>
-                <span className={'text-center text-xs font-semibold'}>
+                <span className={"text-center text-xs font-semibold"}>
                   {user?.name}
                 </span>
                 <UserAvatar
@@ -69,7 +69,7 @@ export default function Participants({
                   disabled={!isEditing}
                   onChange={(e) => {
                     updateParticipation({
-                      userId: currentUser?.id || '',
+                      userId: currentUser?.id || "",
                       shortlistId: shortlistId,
                       participating: e.target.checked,
                     })

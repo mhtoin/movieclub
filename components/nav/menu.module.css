@@ -7,7 +7,7 @@
   overscroll-behavior: contain;
   border-radius: 0.25rem;
   min-width: 180px;
-  background-color: var(--color-popover);
+  background-color: var(--color-mantle);
   z-index: 50;
   border-width: 1px;
   padding: 1.25rem;

@@ -117,7 +117,7 @@ export default React.memo(
                     alt={movie.user.name}
                     className="h-10 w-10 rounded-full"
                   />
-                  <span className="text-accent-foreground/60 text-sm">
+                  <span className="text-accent/60 text-sm">
                     {movie.user.name}
                   </span>
                 </div>
@@ -128,7 +128,7 @@ export default React.memo(
                     <div
                       key={genre}
                       className={cn(
-                        "text-md text-crust bg-[length:150%_100%] bg-top-left flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md",
+                        "text-md text-accent-foreground bg-[length:150%_100%] bg-top-left flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md",
                         colors?.[i] || "",
                       )}
                     >

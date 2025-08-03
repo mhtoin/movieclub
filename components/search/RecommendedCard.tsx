@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
 import {
   useAddToWatchlistMutation,
   useRemoveFromShortlistMutation,
   useUpdateShortlistMutation,
   useValidateSession,
-} from '@/lib/hooks'
-import type { Movie } from '@prisma/client'
+} from "@/lib/hooks"
+import type { Movie } from "@prisma/client"
 import {
   BookmarkMinus,
   BookmarkPlus,
@@ -15,12 +15,12 @@ import {
   Star,
   TrendingUp,
   Users,
-} from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
-import { FaImdb } from 'react-icons/fa'
-import { SiThemoviedatabase } from 'react-icons/si'
-import { Button } from '../ui/Button'
+} from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { FaImdb } from "react-icons/fa"
+import { SiThemoviedatabase } from "react-icons/si"
+import { Button } from "../ui/Button"
 export default function RecommendedCard({
   movie,
   added,
@@ -40,7 +40,7 @@ export default function RecommendedCard({
 
   return (
     <div
-      className={'moviecard group'}
+      className={"moviecard group"}
       onMouseEnter={() => {
         setIsHovering(true)
       }}
@@ -52,12 +52,12 @@ export default function RecommendedCard({
         <div className="border-border/50 fill-accent stroke-foreground bg-card absolute top-0 right-0 z-10 flex flex-col items-center justify-center gap-2 rounded-tr-lg rounded-bl-lg border p-2 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-80">
           {added ? (
             <Button
-              variant={'ghost'}
-              size={'iconXs'}
+              variant={"ghost"}
+              size={"iconXs"}
               onClick={() => {
                 removeMutation.mutate({
-                  userId: user?.id ?? '',
-                  shortlistId: user?.shortlistId ?? '',
+                  userId: user?.id ?? "",
+                  shortlistId: user?.shortlistId ?? "",
                   movieId: movie.id,
                 })
               }}
@@ -67,13 +67,13 @@ export default function RecommendedCard({
             </Button>
           ) : (
             <Button
-              variant={'ghost'}
-              size={'iconXs'}
+              variant={"ghost"}
+              size={"iconXs"}
               isLoading={addMutation.isPending}
               onClick={() => {
                 addMutation.mutate({
                   movie: movie,
-                  shortlistId: user?.shortlistId ?? '',
+                  shortlistId: user?.shortlistId ?? "",
                 })
               }}
             >
@@ -96,7 +96,7 @@ export default function RecommendedCard({
       )}
 
       <img
-        src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+        src={`https://image.tmdb.org/t/p/original/${movie?.images?.posters[0]?.file_path || movie?.poster_path}`}
         alt=""
         width={250}
         height={375}

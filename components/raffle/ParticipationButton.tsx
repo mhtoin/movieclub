@@ -1,8 +1,8 @@
-'use client'
-import { Checkbox, VisuallyHidden } from '@ariakit/react'
-import { type ComponentPropsWithoutRef, type ReactNode, useState } from 'react'
+"use client"
+import { Checkbox, VisuallyHidden } from "@ariakit/react"
+import { type ComponentPropsWithoutRef, type ReactNode, useState } from "react"
 
-interface CheckboxProps extends ComponentPropsWithoutRef<'input'> {
+interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
   children?: ReactNode
   label?: string
 }
@@ -13,7 +13,7 @@ export const ParticipationButton: React.FC<CheckboxProps> = ({ ...props }) => {
   return (
     <label
       className={`hover:bg-accent/20 flex items-center gap-2 rounded-md border p-3 transition-all duration-500 select-none ${
-        props.checked ? 'border-accent' : 'border-border'
+        props.checked ? "border-accent" : "border-border"
       }`}
       data-checked={props.checked}
       data-focus-visible={focusVisible || undefined}
@@ -34,7 +34,6 @@ export const ParticipationButton: React.FC<CheckboxProps> = ({ ...props }) => {
           }}
         />
       </VisuallyHidden>
-
       <div className="check" data-checked={props.checked}>
         <svg
           fill="none"

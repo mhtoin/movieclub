@@ -16,7 +16,7 @@ export default function RaffleItems({
 }): JSX.Element {
   return (
     <div
-      className="flex flex-col items-center gap-5 overflow-scroll"
+      className="flex flex-col items-center gap-5 overflow-scroll no-scrollbar"
       ref={containerRef}
     >
       <motion.div

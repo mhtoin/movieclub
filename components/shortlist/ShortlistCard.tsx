@@ -1,12 +1,12 @@
-import ItemSkeleton from '@/components/shortlist/ItemSkeleton'
-import ShortListItem from '@/components/shortlist/ShortlistItem'
-import UserAvatar from '@/components/shortlist/UserAvatar'
+import ItemSkeleton from "@/components/shortlist/ItemSkeleton"
+import ShortListItem from "@/components/shortlist/ShortlistItem"
+import UserAvatar from "@/components/shortlist/UserAvatar"
 import {
   useGetWatchlistQuery,
   useUpdateReadyStateMutation,
   useValidateSession,
-} from '@/lib/hooks'
-import type { ShortlistWithMovies } from '@/types/shortlist.type'
+} from "@/lib/hooks"
+import type { ShortlistWithMovies } from "@/types/shortlist.type"
 
 export default function ShortlistCard({
   shortlist,
@@ -29,7 +29,7 @@ export default function ShortlistCard({
   return (
     <div
       key={`fragment-${shortlist?.id}`}
-      className="border-border/50 bg-card/20 flex h-full flex-col justify-between overflow-clip rounded-xl shadow-lg backdrop-blur-lg md:gap-2 md:p-2 dark:border"
+      className="border-border/50 bg-crust flex h-full flex-col justify-between overflow-clip rounded-xl shadow-lg backdrop-blur-lg md:gap-2 md:p-2 dark:border"
     >
       <div
         key={`${shortlist?.id}-container`}

@@ -165,9 +165,9 @@ export default function RaffleDialog({
         onClick={dialog.show}
         variant={"outline"}
         size={"iconLg"}
-        className="rounded-full"
+        className="rounded-full bg-accent"
       >
-        <Dices className="h-6 w-6" />
+        <Dices className="h-6 w-6 text-accent-foreground" />
       </Button>
       <Ariakit.Dialog
         store={dialog}
@@ -201,7 +201,7 @@ export default function RaffleDialog({
               transition={{ duration: 0.5 }}
             >
               <div
-                className={`border-border relative flex h-full flex-col justify-start gap-5 border-r pt-5 transition-all duration-300 ${
+                className={`border-border no-scrollbar relative flex h-full flex-col justify-start gap-5 border-r pt-5 transition-all duration-300 ${
                   sidebarExpanded ? "w-[250px]" : "w-[0px]"
                 }`}
               >
