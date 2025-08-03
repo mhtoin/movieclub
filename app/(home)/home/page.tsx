@@ -8,10 +8,8 @@ export default async function HomePage() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek()
   const colorClasses = Array.from(
     { length: mostRecentMovie.genres.length + 1 },
-    (_, i) => colors[Math.floor(Math.random() * colors.length)],
+    (_, _i) => colors[Math.floor(Math.random() * colors.length)],
   )
-
-  console.log("colorClasses", colorClasses)
 
   return (
     <div className="bg-main-background relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">

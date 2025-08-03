@@ -1,7 +1,6 @@
 "use client"
 import DetailsView from "@/components/home/DetailsView"
 import MovieReviews from "@/components/home/MovieReviews"
-import ViewModeButtons from "@/components/home/ViewModeButtons"
 import { useIsMobile } from "@/lib/hooks"
 import type { MovieWithReviews } from "@/types/movie.type"
 import { AnimatePresence, motion } from "framer-motion"

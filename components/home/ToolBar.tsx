@@ -5,7 +5,6 @@ import RaffleDialog from "@/components/raffle/RaffleDialog"
 import type { SiteConfig } from "@prisma/client"
 import { AnimatePresence, motion } from "framer-motion"
 import { WrenchIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
 import { useState } from "react"
 
 export default function ToolBar({
@@ -15,7 +14,6 @@ export default function ToolBar({
   months: { month: string; label: string }[]
   siteConfig: SiteConfig
 }) {
-  const pathname = usePathname()
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
