@@ -57,7 +57,7 @@ export default function NavBar() {
   return (
     <div
       className={`fixed top-0 z-100 flex h-[70px] min-h-[70px] w-screen min-w-screen items-center justify-center p-2 transition-all duration-300 ${
-        isTransparent ? "bg-transparent" : "bg-mantle backdrop-blur-md"
+        isTransparent ? "bg-transparent" : "bg-base backdrop-blur-md"
       }`}
     >
       <div className="hidden h-[70px] min-h-[70px] w-[90%] items-center justify-between rounded p-5 sm:flex">
