@@ -53,8 +53,6 @@ export default function MovieCard({
     })
   }
 
-  console.log("MovieCard rendered", movie)
-
   return (
     <div
       className={"moviecard group"}

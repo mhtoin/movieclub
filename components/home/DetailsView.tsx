@@ -6,9 +6,7 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FaImdb } from "react-icons/fa"
 import { SiThemoviedatabase } from "react-icons/si"
-import { colors } from "./ColorMap"
 import { cn } from "@/lib/utils"
-import { c } from "framer-motion/dist/types.d-6pKw1mTI"
 
 export default React.memo(
   function DetailsView({

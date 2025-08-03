@@ -23,7 +23,6 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useMemo } from "react"
 import { FaImdb } from "react-icons/fa"
 import { SiThemoviedatabase } from "react-icons/si"
 
