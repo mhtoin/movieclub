@@ -6,14 +6,19 @@ import Link from "next/link"
 import React, { useEffect, useRef, useState } from "react"
 import { FaImdb } from "react-icons/fa"
 import { SiThemoviedatabase } from "react-icons/si"
+import { colors } from "./ColorMap"
+import { cn } from "@/lib/utils"
+import { c } from "framer-motion/dist/types.d-6pKw1mTI"
 
 export default React.memo(
   function DetailsView({
     movie,
     isExpanded = true,
+    colors,
   }: {
     movie: MovieWithReviews
     isExpanded?: boolean
+    colors?: string[]
   }) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [isWrapped, setIsWrapped] = useState(false)
@@ -92,9 +97,9 @@ export default React.memo(
     }, [movie.title, containerWidth])
 
     return (
-      <div className="relative mt-20 grid h-full w-full grid-cols-8">
+      <div className="relative h-full w-full flex container mx-auto">
         <div
-          className="relative col-span-6 flex flex-col justify-center overflow-hidden"
+          className="relative flex-1 flex flex-col justify-center overflow-hidden"
           ref={containerRef}
         >
           <AnimatePresence mode="wait" propagate>
@@ -118,14 +123,19 @@ export default React.memo(
                 </div>
               )}
               <div className="flex h-10 flex-row gap-2">
-                {movie?.genres?.map((genre) => (
-                  <div
-                    key={genre}
-                    className="text-md text-accent-foreground bg-accent/50 flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md"
-                  >
-                    {genre}
-                  </div>
-                ))}
+                {movie?.genres?.map((genre, i) => {
+                  return (
+                    <div
+                      key={genre}
+                      className={cn(
+                        "text-md text-crust bg-[length:150%_100%] bg-top-left flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md",
+                        colors?.[i] || "",
+                      )}
+                    >
+                      {genre}
+                    </div>
+                  )
+                })}
               </div>
               <div className="4xl:gap-4 flex flex-row flex-wrap items-center gap-2 px-1">
                 <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
@@ -239,7 +249,7 @@ export default React.memo(
                     )}
                     <motion.span
                       key={`second-${isWrapped ? "wrapped" : "unwrapped"}`}
-                      className={`${titleFontSize} font-mono font-bold whitespace-nowrap`}
+                      className={`${titleFontSize} font-mono font-bold whitespace-nowrap bg-gradient-to-r from-peach via-flamingo to-rosewater bg-clip-text text-transparent`}
                       initial={
                         isWrapped
                           ? { opacity: 0, x: 100 }
@@ -258,12 +268,6 @@ export default React.memo(
                           ? { duration: 0.3, delay: 0 }
                           : { duration: 0.3 }
                       }
-                      style={{
-                        font: "Arial",
-                        WebkitTextStroke: "1px",
-                        WebkitTextStrokeColor: "white",
-                        WebkitTextFillColor: "transparent",
-                      }}
                     >
                       {secondHalf.toLocaleUpperCase()}
                     </motion.span>
@@ -277,7 +281,7 @@ export default React.memo(
         <AnimatePresence mode="wait" propagate>
           {isExpanded && (
             <motion.div
-              className="col-span-2 gap-2"
+              className="hidden md:flex h-full flex-none w-[280px] lg:w-[420px] xl:w-[450px] 2xl:w-[500px] flex-col gap-4 items-center justify-center pl-4"
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{
@@ -287,22 +291,32 @@ export default React.memo(
               }}
               transition={{ duration: 0.3, delay: 0 }}
             >
-              <div className="flex h-full w-full flex-col gap-4 p-10">
-                <div className="bg-accent/60 flex max-h-[250px] flex-col gap-1 overflow-y-auto rounded-md p-2 drop-shadow-md backdrop-blur-md">
-                  <h2 className="text-accent-foreground/60 text-2xl font-bold">
-                    Overview
-                  </h2>
-                  <p className="text-accent-foreground/60 text-xs">
-                    {movie.overview}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500/${movie?.images?.posters[0]?.file_path}`}
-                    alt={movie.title}
-                    className="h-full w-full rounded-md object-cover"
-                  />
-                </div>
+              <div className="relative rounded-lg overflow-hidden w-full aspect-[2/3]">
+                <Image
+                  src={
+                    movie.images?.posters[0]?.file_path
+                      ? `https://image.tmdb.org/t/p/original/${movie.images.posters[0].file_path}`
+                      : `https://image.tmdb.org/t/p/original/${movie.poster_path}`
+                  }
+                  alt={movie.title}
+                  fill
+                  sizes="(max-width: 768px) 0px, (max-width: 1024px) 280px, (max-width: 1280px) 320px, (max-width: 1536px) 360px, 400px"
+                  className="object-cover"
+                  placeholder={
+                    movie.images?.posters[0]?.blurDataUrl ? "blur" : "empty"
+                  }
+                  blurDataURL={movie.images?.posters[0]?.blurDataUrl || ""}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-rosewater/40 to-transparent" />
+                {movie.overview && (
+                  <div className="absolute inset-0 flex items-end">
+                    <div className="w-full bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4">
+                      <p className="text-white text-sm leading-relaxed line-clamp-4">
+                        {movie.overview}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}

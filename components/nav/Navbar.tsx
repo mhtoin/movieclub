@@ -1,14 +1,14 @@
-'use client'
-import { useIsMobile } from '@/lib/hooks'
-import dynamic from 'next/dynamic'
-import { usePathname } from 'next/navigation'
-import { Suspense, useEffect } from 'react'
-import { useState } from 'react'
-import SearchButton from '../search/SearchButton'
-import Menubar from './Menubar'
-import ProfileMenu from './ProfileMenu'
+"use client"
+import { useIsMobile } from "@/lib/hooks"
+import dynamic from "next/dynamic"
+import { usePathname } from "next/navigation"
+import { Suspense, useEffect } from "react"
+import { useState } from "react"
+import SearchButton from "../search/SearchButton"
+import Menubar from "./Menubar"
+import ProfileMenu from "./ProfileMenu"
 
-const ThemeSwitcher = dynamic(() => import('../theme/ThemeSwitcher'), {
+const ThemeSwitcher = dynamic(() => import("../theme/ThemeSwitcher"), {
   ssr: false,
 })
 
@@ -18,29 +18,29 @@ export default function NavBar() {
   const [isTransparent, setIsTransparent] = useState(false)
 
   useEffect(() => {
-    if (pathname === '/home') {
+    if (pathname === "/home") {
       setIsTransparent(true)
     } else {
       setIsTransparent(false)
     }
   }, [pathname])
 
-  const isHome = pathname === '/home'
+  const isHome = pathname === "/home"
 
   if (isMobile) {
     return (
       <div
         className={`fixed top-0 z-100 flex h-[70px] min-h-[70px] w-screen min-w-screen items-center justify-center p-2 transition-all duration-300 ${
           isTransparent
-            ? 'bg-transparent'
-            : 'bg-background/80 border-b backdrop-blur-md'
+            ? "bg-transparent"
+            : "bg-background/80 border-b backdrop-blur-md"
         }`}
       >
         <div className="flex w-full items-center justify-between rounded px-1 py-5">
           <div className="flex items-center justify-center gap-2">
             <ProfileMenu />
             <span
-              className={`font-bold ${isHome ? 'text-primary-foreground' : 'text-foreground'}`}
+              className={`font-bold ${isHome ? "text-primary-foreground" : "text-foreground"}`}
             >
               leffaseura
             </span>
@@ -57,9 +57,7 @@ export default function NavBar() {
   return (
     <div
       className={`fixed top-0 z-100 flex h-[70px] min-h-[70px] w-screen min-w-screen items-center justify-center p-2 transition-all duration-300 ${
-        isTransparent
-          ? 'bg-transparent'
-          : 'bg-background/80 border-border/10 dark:border-border/40 border-b backdrop-blur-md'
+        isTransparent ? "bg-transparent" : "bg-surface-0 backdrop-blur-md"
       }`}
     >
       <div className="hidden h-[70px] min-h-[70px] w-[90%] items-center justify-between rounded p-5 sm:flex">
@@ -67,7 +65,7 @@ export default function NavBar() {
         <div className="flex items-center justify-center gap-5 lg:gap-10">
           {<Menubar />}
           <span
-            className={`siteTitle text-xl font-bold lg:text-2xl ${isHome ? 'text-primary-foreground' : 'text-foreground'}`}
+            className={`siteTitle text-xl font-bold lg:text-2xl ${isHome ? "text-primary-foreground" : "text-foreground"}`}
           >
             leffaseura
           </span>
