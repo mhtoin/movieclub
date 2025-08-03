@@ -1,19 +1,19 @@
-'use client'
+"use client"
 
-import RecommendedTab from '@/components/search/RecommendedTab'
-import ResultTab from '@/components/search/ResultTab'
-import SkeletonRecommendedTab from '@/components/search/SkeletonRecommendedTab'
-import { Input } from '@/components/ui/Input'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
-import { getQueryClient } from '@/lib/getQueryClient'
-import { SEARCH_ROUTE } from '@/lib/globals'
-import { useDebounce, useIsMobile, useValidateSession } from '@/lib/hooks'
-import { userKeys } from '@/lib/users/userKeys'
-import { useDialogStore } from '@/stores/useDialogStore'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Button } from 'components/ui/Button'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import RecommendedTab from "@/components/search/RecommendedTab"
+import ResultTab from "@/components/search/ResultTab"
+import SkeletonRecommendedTab from "@/components/search/SkeletonRecommendedTab"
+import { Input } from "@/components/ui/Input"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs"
+import { getQueryClient } from "@/lib/getQueryClient"
+import { SEARCH_ROUTE } from "@/lib/globals"
+import { useDebounce, useIsMobile, useValidateSession } from "@/lib/hooks"
+import { userKeys } from "@/lib/users/userKeys"
+import { useDialogStore } from "@/stores/useDialogStore"
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { Button } from "components/ui/Button"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useEffect, useRef, useState } from "react"
 
 export default function SearchButton() {
   const router = useRouter()
@@ -24,20 +24,20 @@ export default function SearchButton() {
   const { setInitialRoute } = useDialogStore()
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [inputValue, setInputValue] = useState(searchParams.get('query') || '')
-  const showOnlyAvailable = searchParams.get('showOnlyAvailable') === 'true'
-  const [activeTab, setActiveTab] = useState<'results' | 'recommended'>(
-    (searchParams.get('query')?.length ?? 0) > 0 ? 'results' : 'recommended',
+  const [inputValue, setInputValue] = useState(searchParams.get("query") || "")
+  const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true"
+  const [activeTab, setActiveTab] = useState<"results" | "recommended">(
+    (searchParams.get("query")?.length ?? 0) > 0 ? "results" : "recommended",
   )
   const modalRef = useRef<HTMLDivElement>(null)
   const queryClient = getQueryClient()
 
   useEffect(() => {
-    const currentQuery = searchParams.get('query') || ''
+    const currentQuery = searchParams.get("query") || ""
     setInputValue(currentQuery)
 
     // Maintain focus after URL parameter updates
-    if (inputRef.current?.matches(':focus')) {
+    if (inputRef.current?.matches(":focus")) {
       inputRef.current.focus()
     }
   }, [searchParams])
@@ -47,17 +47,17 @@ export default function SearchButton() {
     if (inputValue.length > 0) {
       // Invalidate and refetch the search query
       queryClient.invalidateQueries({
-        queryKey: ['search', inputValue, showOnlyAvailable.toString()],
+        queryKey: ["search", inputValue, showOnlyAvailable.toString()],
       })
     }
   }, [showOnlyAvailable, inputValue, queryClient])
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         const params = new URLSearchParams(searchParams.toString())
-        params.set('showOnlyAvailable', 'true')
+        params.set("showOnlyAvailable", "true")
         setOpen(true)
 
         inputRef.current?.focus()
@@ -65,20 +65,20 @@ export default function SearchButton() {
       }
     }
     const up = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         setOpen(false)
       }
     }
-    document.addEventListener('keydown', down)
-    document.addEventListener('keyup', up)
-    return () => document.removeEventListener('keydown', down)
+    document.addEventListener("keydown", down)
+    document.addEventListener("keyup", up)
+    return () => document.removeEventListener("keydown", down)
   }, [pathname, router, searchParams])
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.addEventListener('focus', () => {
+      inputRef.current.addEventListener("focus", () => {
         const params = new URLSearchParams(searchParams.toString())
-        params.set('showOnlyAvailable', 'true')
+        params.set("showOnlyAvailable", "true")
         setOpen(true)
 
         router.push(`${pathname}?${params.toString()}`, { scroll: false })
@@ -88,20 +88,20 @@ export default function SearchButton() {
 
   const handleSearch = (value: string) => {
     const params = new URLSearchParams(searchParams.toString())
-    params.set('query', value)
+    params.set("query", value)
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
   const handleClose = () => {
     setOpen(false)
     const params = new URLSearchParams(searchParams.toString())
-    params.delete('query')
+    params.delete("query")
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
   const handleShowOnlyAvailable = (value: boolean) => {
     const params = new URLSearchParams(searchParams.toString())
-    params.set('showOnlyAvailable', value.toString())
+    params.set("showOnlyAvailable", value.toString())
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
@@ -114,8 +114,8 @@ export default function SearchButton() {
           setInitialRoute(pathname)
           router.push(`/${SEARCH_ROUTE}`)
         }}
-        variant={'ghost'}
-        size={'icon'}
+        variant={"ghost"}
+        size={"icon"}
         className="rounded-full p-0"
       >
         <MagnifyingGlassIcon className="h-5 w-5" />
@@ -127,15 +127,15 @@ export default function SearchButton() {
     <>
       <div
         ref={modalRef}
-        className={`bg-input hover:bg-input/80 fixed top-4 left-1/2 z-20 flex h-10 w-[300px] -translate-x-1/2 flex-col gap-5 rounded-md border px-4 transition-all duration-300 ${
-          open ? 'h-[90vh] max-h-[90vh] w-[600px] py-2' : ''
+        className={`bg-mantle hover:bg-input/80 fixed top-4 left-1/2 z-20 flex h-10 w-[300px] -translate-x-1/2 flex-col gap-5 rounded-md border px-4 transition-all duration-300 ${
+          open ? "h-[90vh] max-h-[90vh] w-[600px] py-2" : ""
         }`}
       >
         <div className="relative flex h-full flex-col gap-2">
           <div
             className={`flex h-[38px] items-center justify-center bg-transparent px-2 ${
-              open ? 'rounded-md border' : ''
-            } ${inputRef.current?.matches(':focus') ? 'border-2' : ''}`}
+              open ? "rounded-md border" : ""
+            } ${inputRef.current?.matches(":focus") ? "border-2" : ""}`}
           >
             <Input
               placeholder="Search movies..."
@@ -146,18 +146,18 @@ export default function SearchButton() {
 
                 setInputValue(nextValue)
                 debouncedSearch(nextValue)
-                if (activeTab !== 'results' && nextValue.length > 0) {
-                  setActiveTab('results')
+                if (activeTab !== "results" && nextValue.length > 0) {
+                  setActiveTab("results")
                 }
 
-                if (activeTab === 'results' && nextValue.length === 0) {
-                  setActiveTab('recommended')
+                if (activeTab === "results" && nextValue.length === 0) {
+                  setActiveTab("recommended")
                 }
               }}
               onFocus={() => setOpen(true)}
               onMouseEnter={() => {
                 // prefetch recommended movies
-                queryClient.prefetchQuery(userKeys.recommended(user?.id ?? ''))
+                queryClient.prefetchQuery(userKeys.recommended(user?.id ?? ""))
               }}
               className="z-20 w-full flex-1 border-none bg-transparent outline-hidden focus:outline-hidden focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
@@ -169,7 +169,7 @@ export default function SearchButton() {
             <Tabs
               value={activeTab}
               onValueChange={(value) => {
-                setActiveTab(value as 'results' | 'recommended')
+                setActiveTab(value as "results" | "recommended")
               }}
               activationMode="automatic"
               className="overflow-hidden"
