@@ -1,15 +1,15 @@
-'use client'
+"use client"
 
-import type { MovieWithUser } from '@/types/movie.type'
-import type { Movie } from '@prisma/client'
-import { Button } from 'components/ui/Button'
+import type { MovieWithUser } from "@/types/movie.type"
+import type { Movie } from "@prisma/client"
+import { Button } from "components/ui/Button"
 import {
   useAddToWatchlistMutation,
   useRemoveFromShortlistMutation,
   useUpdateSelectionMutation,
   useUpdateShortlistMutation,
   useValidateSession,
-} from 'lib/hooks'
+} from "lib/hooks"
 import {
   BookmarkMinus,
   BookmarkPlus,
@@ -20,12 +20,12 @@ import {
   TrendingUp,
   Users,
   X,
-} from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useMemo } from 'react'
-import { FaImdb } from 'react-icons/fa'
-import { SiThemoviedatabase } from 'react-icons/si'
+} from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { useMemo } from "react"
+import { FaImdb } from "react-icons/fa"
+import { SiThemoviedatabase } from "react-icons/si"
 
 interface SearchResultCardProps {
   movie: MovieWithUser | Movie
@@ -54,18 +54,12 @@ export default function ShortListItem({
   const addMutation = useUpdateShortlistMutation()
   const { data: user } = useValidateSession()
 
-  const posterIndex = useMemo(
-    () =>
-      Math.floor(
-        Math.random() * Math.min(3, movie?.images?.posters?.length || 1),
-      ),
-    [movie?.images?.posters?.length], // Only recalculate if the array length changes
-  )
+  const posterIndex = 0
 
   return (
     <div
       className={`moviecard group rounded-none md:rounded-md ${
-        highlight ? 'highlight' : ''
+        highlight ? "highlight" : ""
       }`}
     >
       {showActions &&
@@ -73,13 +67,13 @@ export default function ShortListItem({
         shortlistId === user?.shortlistId && (
           <div className="fill-accent stroke-foreground bg-card absolute top-0 left-0 z-10 flex -translate-x-20 flex-col items-center justify-center gap-2 rounded-tl-md rounded-br-lg p-2 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-80">
             <Button
-              variant={'ghost'}
-              size={'iconSm'}
-              tooltip={highlight ? 'Selected' : 'Select'}
+              variant={"ghost"}
+              size={"iconSm"}
+              tooltip={highlight ? "Selected" : "Select"}
               onClick={() => {
                 selectionMutation.mutate({
-                  userId: user?.id || '',
-                  shortlistId: user?.shortlistId || '',
+                  userId: user?.id || "",
+                  shortlistId: user?.shortlistId || "",
                   selectedIndex: index || 0,
                 })
               }}
@@ -97,14 +91,14 @@ export default function ShortListItem({
         <div className="border-border/50 fill-accent stroke-foreground bg-card absolute top-0 right-0 z-10 flex translate-x-20 flex-col items-center justify-center gap-2 rounded-tr-none rounded-bl-lg border p-2 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-80 md:rounded-tr-md">
           {removeFromShortList ? (
             <Button
-              variant={'ghost'}
-              size={'iconXs'}
+              variant={"ghost"}
+              size={"iconXs"}
               tooltip="Remove"
               onClick={() => {
                 removeMutation.mutate({
-                  userId: user?.id || '',
-                  shortlistId: user?.shortlistId || '',
-                  movieId: movie.id || '',
+                  userId: user?.id || "",
+                  shortlistId: user?.shortlistId || "",
+                  movieId: movie.id || "",
                 })
               }}
               isLoading={removeMutation.isPending}
@@ -113,13 +107,13 @@ export default function ShortListItem({
             </Button>
           ) : (
             <Button
-              variant={'ghost'}
-              size={'iconXs'}
+              variant={"ghost"}
+              size={"iconXs"}
               tooltip="Add"
               onClick={() => {
                 addMutation.mutate({
                   movie: movie,
-                  shortlistId: user?.shortlistId || '',
+                  shortlistId: user?.shortlistId || "",
                 })
               }}
               isLoading={addMutation.isPending}
@@ -137,7 +131,7 @@ export default function ShortListItem({
             }}
             isLoading={watchlistMutation.isPending}
             tooltip={
-              isInWatchlist ? 'Remove from watchlist' : 'Add to watchlist'
+              isInWatchlist ? "Remove from watchlist" : "Add to watchlist"
             }
           >
             {isInWatchlist ? (
@@ -151,13 +145,13 @@ export default function ShortListItem({
       <Image
         src={`https://image.tmdb.org/t/p/original/${movie?.images?.posters[posterIndex]?.file_path}`}
         alt=""
-        width={'150'}
-        height={'150'}
+        width={"150"}
+        height={"150"}
         className={
-          'primary-img h-auto w-[150px] rounded-none! md:rounded-md 2xl:w-[150px]'
+          "primary-img h-auto w-[150px] rounded-none! md:rounded-md 2xl:w-[150px]"
         }
         priority={removeFromShortList}
-        loading={removeFromShortList ? 'eager' : 'lazy'}
+        loading={removeFromShortList ? "eager" : "lazy"}
       />
       {(selectionMutation.isPending || removeMutation.isPending) && (
         <span className="loading loading-spinner loading-lg absolute top-0 right-0 bottom-0 left-0 z-40 m-auto" />

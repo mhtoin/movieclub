@@ -1,24 +1,24 @@
-'use client'
+"use client"
 
-import GenreFilters from '@/components/search/GenreFilters'
-import Providers from '@/components/search/Providers'
-import SearchInput from '@/components/search/SearchInput'
-import VoteRange from '@/components/search/VoteRange'
-import ShortlistSidebarContent from '@/components/shortlist/ShortlistSidebarContent'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import GenreFilters from "@/components/search/GenreFilters"
+import Providers from "@/components/search/Providers"
+import SearchInput from "@/components/search/SearchInput"
+import VoteRange from "@/components/search/VoteRange"
+import ShortlistSidebarContent from "@/components/shortlist/ShortlistSidebarContent"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 export default function SearchSidebarContent() {
   return (
     <Tabs defaultValue="discover" className="flex h-full w-full flex-col gap-4">
       <TabsList className="grid w-full grid-cols-2 gap-1 bg-transparent px-2">
         <TabsTrigger
           value="discover"
-          className="bg-card data-[state=active]:bg-accent/50 text-accent-foreground rounded-tl-none rounded-tr-none border border-t-0 border-r-0 border-l-0"
+          className="bg-accent/50 data-[state=active]:bg-accent hover:bg-accent/20 text-accent-foreground rounded-tl-none rounded-tr-none border border-t-0 border-r-0 border-l-0"
         >
           Discover
         </TabsTrigger>
         <TabsTrigger
           value="shortlist"
-          className="bg-card data-[state=active]:bg-accent/50 text-accent-foreground rounded-tl-none rounded-tr-none border border-t-0 border-r-0 border-l-0"
+          className="bg-accent/50 data-[state=active]:bg-accent hover:bg-accent/20 text-accent-foreground rounded-tl-none rounded-tr-none border border-t-0 border-r-0 border-l-0"
         >
           Shortlist
         </TabsTrigger>

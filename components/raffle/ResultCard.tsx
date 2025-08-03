@@ -21,12 +21,12 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
           <div className="grid h-full w-full grid-cols-12 items-center justify-center">
             <div className="col-span-6 flex flex-col items-center justify-center" />
             <div className="col-span-6 flex flex-col justify-center gap-2">
-              <h1 className="bg-accent/50 w-fit rounded-md px-1 text-[24px] font-bold text-white">
+              <h1 className="bg-accent w-fit rounded-md px-1 text-[24px] font-bold ">
                 {movie.title}
               </h1>
 
               <div className="flex flex-col gap-2">
-                <div className="bg-accent/50 flex w-fit flex-row gap-2 rounded-md p-2">
+                <div className="bg-accent flex w-fit flex-row gap-2 rounded-md p-2">
                   <span className="flex flex-row items-center gap-1 text-sm">
                     <Star className="h-6 w-6" />
                     {movie.vote_average.toFixed(1)}
@@ -40,7 +40,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
                     {movie.popularity.toFixed(1)}
                   </span>
                 </div>
-                <div className="bg-accent/50 flex w-fit flex-row gap-2 rounded-md p-2">
+                <div className="bg-accent flex w-fit flex-row gap-2 rounded-md p-2">
                   <span className="flex flex-row items-center gap-1 text-sm">
                     <Clock className="h-6 w-6" />
                     {`${
@@ -56,14 +56,14 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
                   <Link
                     href={`https://www.themoviedb.org/movie/${movie.tmdbId}`}
                     target="_blank"
-                    className="bg-accent/50 rounded-md p-2"
+                    className="bg-accent rounded-md p-2"
                   >
                     <SiThemoviedatabase className="h-6 w-6" />
                   </Link>
                   <Link
                     href={`https://www.imdb.com/title/${movie?.imdbId}`}
                     target="_blank"
-                    className="bg-accent/50 rounded-md p-2"
+                    className="bg-accent rounded-md p-2"
                   >
                     <FaImdb className="h-6 w-6" />
                   </Link>
@@ -111,7 +111,7 @@ export default function ResultCard({ movie }: { movie: MovieWithUser }) {
               {movie?.genres?.map((genre) => {
                 return (
                   <div
-                    className="text-foreground/50 bg-foreground/10 rounded-md px-2 py-1 text-sm"
+                    className=" bg-accent rounded-md px-2 py-1 text-sm"
                     key={genre}
                   >
                     {genre}

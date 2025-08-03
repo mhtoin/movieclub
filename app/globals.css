@@ -63,8 +63,8 @@
   --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.5 0 0);
   --secondary-foreground: oklch(0.97 0 none);
-  --accent: oklch(0.67 0.0952 196.72);
-  --accent-foreground: oklch(0 0 none);
+  --accent: var(--color-peach);
+  --accent-foreground: oklch(0.14 0.0044 285.82);
 
   /* === UI Components === */
   --card: oklch(0.909 0.0115 264.51);
@@ -102,20 +102,20 @@
   --surface1: oklch(0.8091 0.0179 271.19);
   --overlay0: oklch(0.7072 0.0232 274.61);
   --overlay1: oklch(0.6538 0.0266 277.7);
-  --lavender: oklch(0.6641 0.1747 273.21);
-  --blue: oklch(0.5586 0.2245 262.14);
-  --sapphire: oklch(0.6496 0.1072 213.21);
-  --sky: oklch(0.6868 0.14581 235.3248);
-  --teal: oklch(0.6101 0.0995 200.65);
-  --green: oklch(0.6283 0.1784 140.39);
-  --yellow: oklch(0.7099 0.1485 67.89);
-  --peach: oklch(0.692 0.2036 42.52);
-  --maroon: oklch(0.6272 0.1947 20.27);
-  --red: oklch(0.55 0.2155 19.8);
-  --mauve: oklch(0.5542 0.2504 296.96);
-  --pink: oklch(0.7254 0.1732 338.39);
-  --flamingo: oklch(0.6867 0.1259 20.86);
-  --rosewater: oklch(0.7174 0.103366 33.356);
+  --lavender: oklch(0.8132 0.0743 283.86);
+  --blue: oklch(0.7398 0.1053 266.09);
+  --sapphire: oklch(0.7766 0.0727 228.62);
+  --sky: oklch(0.8262 0.0593 209.6);
+  --teal: oklch(0.7857 0.0715 185.28);
+  --green: oklch(0.8133 0.1069 133.48);
+  --yellow: oklch(0.8448 0.0803 84.23);
+  --peach: oklch(0.7715 0.1108 47.17);
+  --maroon: oklch(0.7656 0.0973 17.4);
+  --red: oklch(0.7188 0.1238 19.55);
+  --mauve: oklch(0.7644 0.1113 311.98);
+  --pink: oklch(0.8511 0.0886 336.25);
+  --flamingo: oklch(0.8445 0.0555 18.31);
+  --rosewater: oklch(0.8949 0.0336 31.16);
 }
 
 .dark {
@@ -129,7 +129,7 @@
   --primary: oklch(0.98 0 0);
   --secondary: oklch(0.37 0 0);
   --muted: oklch(0.27 0.0055 286.03);
-  --accent: oklch(0.46 0.0089 234.79);
+  --accent: var(--color-teal);
   --destructive: oklch(0.4 0.1331 25.72);
   --border: oklch(0.37 0 0);
   --input: oklch(0.27 0.0055 286.03);
@@ -140,7 +140,7 @@
   --secondary-foreground: oklch(1 0 0);
   --popover-foreground: oklch(1 0 0);
   --muted-foreground: oklch(0.71 0.0129 286.07);
-  --accent-foreground: oklch(0.98 0 0);
+  --accent-foreground: var(--color-crust);
   --destructive-foreground: oklch(0.98 0 0);
   --ring: oklch(0.28 0.0369 258.3);
   --success: oklch(0.73 0.247167 142.0543);
@@ -553,7 +553,7 @@
 
   &[data-checked="true"] {
     background-color: var(--accent);
-    color: white;
+    color: var(--crust);
     stroke-dashoffset: 0;
   }
 
@@ -1174,13 +1174,13 @@
   @property --＠color-1 {
     syntax: "<color>";
     inherits: false;
-    initial-value: hsl(98 100% 62%);
+    initial-value: var(--peach);
   }
 
   @property --＠color-2 {
     syntax: "<color>";
     inherits: false;
-    initial-value: hsl(204 100% 59%);
+    initial-value: var(--mauve);
   }
 
   /*
@@ -1195,8 +1195,8 @@
       learn more https://developer.chrome.com/docs/css-ui/access-colors-spaces#color_interpolation
     */
       to right in oklch,
-    /* use the variables in a gradient (or wherever!) */ var(--＠color-1),
-    var(--＠color-2)
+    /* use the variables in a gradient (or wherever!) */ var(--pink),
+    var(--blue)
   );
 
   /* old browser support */
@@ -1541,19 +1541,19 @@
   @property --＠color-1 {
     syntax: "<color>";
     inherits: false;
-    initial-value: hsl(98 100% 62%);
+    initial-value: var(--blue);
   }
 
   @property --＠color-2 {
     syntax: "<color>";
     inherits: false;
-    initial-value: hsl(204 100% 59%);
+    initial-value: var(--pink);
   }
 
   @keyframes gradient-change {
     to {
-      --＠color-1: hsl(210 100% 59%);
-      --＠color-2: hsl(310 100% 59%);
+      --＠color-1: var(--blue);
+      --＠color-2: var(--pink);
     }
   }
 

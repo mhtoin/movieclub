@@ -127,14 +127,16 @@ export default function SearchButton() {
     <>
       <div
         ref={modalRef}
-        className={`bg-mantle hover:bg-input/80 fixed top-4 left-1/2 z-20 flex h-10 w-[300px] -translate-x-1/2 flex-col gap-5 rounded-md border px-4 transition-all duration-300 ${
-          open ? "h-[90vh] max-h-[90vh] w-[600px] py-2" : ""
+        className={`fixed top-4 left-1/2 z-20 flex h-10 w-[300px] -translate-x-1/2 flex-col gap-5 rounded-md border px-4 transition-all duration-300 ${
+          open
+            ? "h-[90vh] max-h-[90vh] w-[600px] py-2 bg-mantle"
+            : "bg-mantle hover:bg-crust"
         }`}
       >
         <div className="relative flex h-full flex-col gap-2">
           <div
-            className={`flex h-[38px] items-center justify-center bg-transparent px-2 ${
-              open ? "rounded-md border" : ""
+            className={`flex h-[38px] items-center justify-center px-2 ${
+              open ? "rounded-md bg-crust" : "bg-transparent"
             } ${inputRef.current?.matches(":focus") ? "border-2" : ""}`}
           >
             <Input
@@ -180,13 +182,13 @@ export default function SearchButton() {
                     <div className="flex flex-row gap-2 bg-transparent">
                       <TabsTrigger
                         value="recommended"
-                        className="bg-background/40 data-[state=active]:bg-accent border-border data-[state=active]:text-accent-foreground border-b"
+                        className="bg-accent/20 data-[state=active]:bg-accent hover:bg-accent/60 hover:text-accent-foreground border-border data-[state=active]:text-accent-foreground border-b"
                       >
                         Recommended
                       </TabsTrigger>
                       <TabsTrigger
                         value="results"
-                        className="bg-background/40 data-[state=active]:bg-accent border-border data-[state=active]:text-accent-foreground border-b"
+                        className="bg-accent/20 data-[state=active]:bg-accent hover:bg-accent/60 hover:text-accent-foreground border-border data-[state=active]:text-accent-foreground border-b"
                       >
                         Results
                       </TabsTrigger>
@@ -218,10 +220,9 @@ export default function SearchButton() {
           )}
         </div>
       </div>
-
       {open && (
         <div
-          className="bg-background/50 fixed top-0 left-0 z-10 h-screen w-screen backdrop-blur-xs"
+          className="bg-overlay1/20 fixed top-0 left-0 z-10 h-screen w-screen backdrop-blur-xs"
           onClick={handleClose}
           onKeyDown={handleClose}
         />
