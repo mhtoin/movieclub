@@ -109,17 +109,20 @@ export default React.memo(
               transition={{ duration: 0.3 }}
             >
               {movie.user && (
-                <div className="flex flex-col gap-2">
+                <div
+                  className={`flex flex-row gap-4 items-center py-1 px-2 rounded-md w-fit`}
+                >
                   <img
                     src={movie.user.image}
-                    alt={movie.user.name}
-                    className="h-10 w-10 rounded-full"
+                    alt={movie.user.name ? movie.user.name.split("")[0] : ""}
+                    className="h-10 w-10 rounded-full border border-white flex items-center justify-center text-white"
                   />
-                  <span className="text-accent/60 text-sm">
-                    {movie.user.name}
-                  </span>
+                  <span className="text-white text-sm">{movie.user.name}</span>
                 </div>
               )}
+              <div
+                className={`flex flex-col gap-2 h-0.25 w-full ${colors?.[colors.length - 2]}`}
+              />
               <div className="flex min-h-10 flex-row flex-wrap gap-2">
                 {movie?.genres?.map((genre, i) => {
                   return (

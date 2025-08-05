@@ -7,7 +7,7 @@ import { Suspense } from "react"
 export default async function HomePage() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek()
   const colorClasses = Array.from(
-    { length: mostRecentMovie.genres.length + 1 },
+    { length: mostRecentMovie.genres.length + 2 },
     () => colors[Math.floor(Math.random() * colors.length)],
   )
 
