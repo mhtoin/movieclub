@@ -54,7 +54,7 @@
 
 :root {
   /* === Base Colors === */
-  --background: oklch(0.98 0.003 220);
+  --background: oklch(0.94 0.003 220);
   --main-background: oklch(0.12 0 0);
   --foreground: oklch(0.25 0.012 210);
 
@@ -67,20 +67,20 @@
   --accent-foreground: oklch(0.14 0.0044 285.82);
 
   /* === UI Components === */
-  --card: oklch(0.96 0.004 215);
+  --card: oklch(0.92 0.004 215);
   --card-foreground: oklch(0.2 0.01 210);
   --opaque-card: oklch(0.27 0 0);
-  --popover: oklch(0.97 0.003 215);
+  --popover: oklch(0.93 0.003 215);
   --popover-foreground: oklch(0.2 0.01 210);
-  --popoverBackground: oklch(0.94 0.005 200);
+  --popoverBackground: oklch(0.9 0.005 200);
 
   /* === Form Elements === */
-  --input: oklch(0.95 0.004 215);
+  --input: oklch(0.91 0.004 215);
   --border: oklch(0.8 0.006 200);
   --ring: oklch(0.6 0.01 190);
 
   /* === Text & Content === */
-  --muted: oklch(0.95 0.004 210);
+  --muted: oklch(0.91 0.004 210);
   --muted-foreground: oklch(0.5 0.01 200);
 
   /* === Status Colors === */
@@ -96,10 +96,10 @@
   --radius: 0.5rem;
 
   /* Colors */
-  --crust: oklch(0.96 0.004 215);
-  --mantle: oklch(0.97 0.003 215);
-  --surface0: oklch(0.92 0.006 210);
-  --surface1: oklch(0.88 0.007 205);
+  --crust: oklch(0.92 0.004 215);
+  --mantle: oklch(0.93 0.003 215);
+  --surface0: oklch(0.88 0.006 210);
+  --surface1: oklch(0.84 0.007 205);
   --overlay0: oklch(0.7072 0.0232 274.61);
   --overlay1: oklch(0.6538 0.0266 277.7);
   --lavender: oklch(0.8132 0.0743 283.86);
