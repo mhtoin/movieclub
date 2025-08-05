@@ -95,9 +95,9 @@ export default React.memo(
     }, [movie.title, containerWidth])
 
     return (
-      <div className="relative h-full w-full flex container mx-auto">
+      <div className="relative h-full w-full flex flex-row items-center justify-center gap-10 container mx-auto">
         <div
-          className="relative flex-1 flex flex-col justify-center overflow-hidden"
+          className="relative flex flex-col justify-center overflow-hidden"
           ref={containerRef}
         >
           <AnimatePresence mode="wait" propagate>
@@ -120,13 +120,13 @@ export default React.memo(
                   </span>
                 </div>
               )}
-              <div className="flex h-10 flex-row gap-2">
+              <div className="flex min-h-10 flex-row flex-wrap gap-2">
                 {movie?.genres?.map((genre, i) => {
                   return (
                     <div
                       key={genre}
                       className={cn(
-                        "text-md text-accent-foreground bg-[length:150%_100%] bg-top-left flex h-full items-center justify-center rounded-md px-4 py-4 backdrop-blur-md",
+                        "text-md text-accent-foreground bg-[length:150%_100%] bg-top-left flex h-10 items-center justify-center rounded-md px-4 py-4 backdrop-blur-md",
                         colors?.[i] || "",
                       )}
                     >
@@ -213,11 +213,11 @@ export default React.memo(
               secondHalf = words.slice(midWordIndex).join(" ")
             }
 
-            const titleFontSize = "text-[clamp(0.5rem,calc(0.05*100vw),3rem)]"
+            const titleFontSize = "text-[clamp(2.5rem,calc(0.05*100vw),3rem)]"
             return (
               <div className="flex w-full max-w-full flex-col flex-wrap">
                 <AnimatePresence mode="wait" propagate>
-                  <div className="flex flex-wrap px-10">
+                  <div className="flex flex-wrap px-8">
                     <motion.span
                       key={`first-${isWrapped ? "wrapped" : "unwrapped"}`}
                       className={`${titleFontSize} text-primary-foreground font-mono font-bold whitespace-nowrap`}
