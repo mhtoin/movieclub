@@ -1,13 +1,13 @@
-import { removeRecommended, updateRecommended } from '@/lib/recommended'
+import { removeRecommended, updateRecommended } from "@/lib/recommended"
 import {
   getTierlist,
   rankMovie,
   updateTierMove,
   updateTierlist,
-} from '@/lib/tierlists'
-import { TierMovieWithMovieData } from '@/types/tierlist.type'
-import { waitUntil } from '@vercel/functions'
-import { type NextRequest, NextResponse } from 'next/server'
+} from "@/lib/tierlists"
+import { TierMovieWithMovieData } from "@/types/tierlist.type"
+import { waitUntil } from "@vercel/functions"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(
   _request: Request,
@@ -43,9 +43,9 @@ export async function PUT(
     destinationTierId,
     items,
   } = data
-  const operation = request.nextUrl.searchParams.get('operation')
+  const operation = request.nextUrl.searchParams.get("operation")
 
-  if (operation === 'reorder') {
+  if (operation === "reorder") {
     try {
       if (items) {
         const res = await updateTierlist(params.id, items)
@@ -53,12 +53,12 @@ export async function PUT(
       }
     } catch (e) {
       const error = e as Error
-      console.error('error updating tierlist', error)
+      console.error("error updating tierlist", error)
       return NextResponse.json({ ok: false, message: error }, { status: 500 })
     }
   }
 
-  if (operation === 'move') {
+  if (operation === "move") {
     try {
       if (
         sourceData &&
@@ -66,6 +66,14 @@ export async function PUT(
         sourceTierId &&
         destinationTierId
       ) {
+        console.log("Moving movie:", {
+          movieId: sourceData.movieId,
+          fromTier: sourceTierId,
+          toTier: destinationTierId,
+          fromPosition: sourceData.position,
+          toPosition: updatedSourceData.position,
+        })
+
         const res = await updateTierMove({
           sourceData,
           updatedSourceData,
@@ -88,17 +96,35 @@ export async function PUT(
         }
 
         return NextResponse.json({ ok: true, data: res })
+      } else {
+        console.error("Missing required data for move operation:", {
+          sourceData: !!sourceData,
+          updatedSourceData: !!updatedSourceData,
+          sourceTierId: !!sourceTierId,
+          destinationTierId: !!destinationTierId,
+        })
+        return NextResponse.json(
+          { ok: false, message: "Missing required data for move operation" },
+          { status: 400 },
+        )
       }
     } catch (e) {
       const error = e as Error
-      console.error('error updating tierlist', error)
+      console.error("error moving movie", error)
       return NextResponse.json({ ok: false, message: error }, { status: 500 })
     }
   }
 
-  if (operation === 'rank') {
+  if (operation === "rank") {
     try {
       if (sourceData && destinationTierId) {
+        console.log("Ranking movie:", {
+          movieId: sourceData.movieId,
+          sourceTierId,
+          destinationTierId,
+          position: sourceData.position,
+        })
+
         const res = await rankMovie({
           sourceData,
           sourceTierId,
@@ -113,10 +139,19 @@ export async function PUT(
           waitUntil(updateRecommended(res.movie, res.tier.tierlist.user))
         }
         return NextResponse.json({ ok: true, data: res })
+      } else {
+        console.error("Missing required data for rank operation:", {
+          sourceData: !!sourceData,
+          destinationTierId: !!destinationTierId,
+        })
+        return NextResponse.json(
+          { ok: false, message: "Missing required data for rank operation" },
+          { status: 400 },
+        )
       }
     } catch (e) {
       const error = e as Error
-      console.error('error updating tierlist', error)
+      console.error("error ranking movie", error)
       return NextResponse.json({ ok: false, message: error }, { status: 500 })
     }
   }
