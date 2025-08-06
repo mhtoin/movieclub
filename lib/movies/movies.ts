@@ -1,15 +1,15 @@
-'use server'
-import type { UserChartData } from '@/types/common.type'
-import type { MovieWithUser } from '@/types/movie.type'
-import type { Movie, User } from '@prisma/client'
-import { format, formatISO, isWednesday, nextWednesday, set } from 'date-fns'
-import prisma from 'lib/prisma'
+"use server"
+import type { UserChartData } from "@/types/common.type"
+import type { MovieWithUser } from "@/types/movie.type"
+import type { Movie, User } from "@prisma/client"
+import { format, formatISO, isWednesday, nextWednesday, set } from "date-fns"
+import prisma from "lib/prisma"
 import {
   getAllShortLists,
   removeMovieFromShortlist,
   updateShortlistSelectionStatus,
   updateShortlistState,
-} from '../shortlist'
+} from "../shortlist"
 import {
   countByKey,
   getNextMonth,
@@ -18,7 +18,7 @@ import {
   sendNotification,
   shuffle,
   sortByISODate,
-} from '../utils'
+} from "../utils"
 
 type ChosenMovie = {
   user: User
@@ -34,7 +34,7 @@ export async function getMostRecentMovieOfTheWeek() {
       },
     },
     orderBy: {
-      watchDate: 'desc',
+      watchDate: "desc",
     },
     include: {
       user: true,
@@ -64,7 +64,7 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
       },
     },
     orderBy: {
-      watchDate: 'desc',
+      watchDate: "desc",
     },
     include: {
       user: true,
@@ -73,7 +73,7 @@ export async function getMoviesOfOfTheWeekByMonthGrouped() {
   })
 
   const grouped = groupBy(movies.slice(1), (movie) =>
-    movie.watchDate?.split('-').splice(0, 2).join('-'),
+    movie.watchDate?.split("-").splice(0, 2).join("-"),
   )
 
   return grouped
@@ -87,7 +87,7 @@ export async function getLastMonth() {
       },
     },
     orderBy: {
-      watchDate: 'asc',
+      watchDate: "asc",
     },
     select: {
       watchDate: true,
@@ -98,11 +98,11 @@ export async function getLastMonth() {
     return null
   }
 
-  return lastMovie.watchDate.split('-').splice(0, 2).join('-')
+  return lastMovie.watchDate.split("-").splice(0, 2).join("-")
 }
 
 export async function getMoviesOfTheWeekByMonth(month: string) {
-  const currentMonth = format(new Date(), 'yyyy-MM')
+  const currentMonth = format(new Date(), "yyyy-MM")
   const targetMonth = month || currentMonth
 
   const lastMonth = await getLastMonth()
@@ -114,7 +114,7 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
       },
     },
     orderBy: {
-      watchDate: 'desc',
+      watchDate: "desc",
     },
     include: {
       user: true,
@@ -151,7 +151,7 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
         },
       },
       orderBy: {
-        watchDate: 'desc',
+        watchDate: "desc",
       },
       include: {
         user: true,
@@ -184,7 +184,7 @@ export async function getMoviesOfTheWeekByMonth(month: string) {
       },
     },
     orderBy: {
-      watchDate: 'desc',
+      watchDate: "desc",
     },
   })
 
@@ -227,12 +227,12 @@ export async function getMoviesUntil(date: string) {
   })
 
   const sorted = movies.sort((a, b) =>
-    sortByISODate(a.watchDate ?? '', b.watchDate ?? '', 'desc'),
+    sortByISODate(a.watchDate ?? "", b.watchDate ?? "", "desc"),
   )
 
   const grouped = groupBy(
     sorted,
-    (movie) => movie?.watchDate?.split('-').splice(0, 2).join('-') ?? '',
+    (movie) => movie?.watchDate?.split("-").splice(0, 2).join("-") ?? "",
   )
 
   return grouped
@@ -320,7 +320,7 @@ export async function createReview(
       content: review,
       userId: userId,
       movieId: movieId,
-      timestamp: format(new Date(), 'dd/MM/yyyy H:m'),
+      timestamp: format(new Date(), "dd/MM/yyyy H:m"),
       rating: 0,
     },
   })
@@ -383,11 +383,11 @@ export async function simulateRaffle(repetitions: number) {
   }
 
   const moviesByUser = countByKey(resultArr, (movie) => {
-    return movie?.user?.name ?? ''
+    return movie?.user?.name ?? ""
   })
 
   const dataObj = {
-    label: 'Movies by user',
+    label: "Movies by user",
     data: [],
   } as UserChartData
 
@@ -418,7 +418,7 @@ export async function postRaffleWork({
   // await the timeout
   await new Promise((resolve) => setTimeout(resolve, runtime))
 
-  const participants = [...new Set(movies.map((movie) => movie.user?.id ?? ''))]
+  const participants = [...new Set(movies.map((movie) => movie.user?.id ?? ""))]
 
   // create a raffle record
   await prisma.raffle.create({
@@ -429,15 +429,15 @@ export async function postRaffleWork({
       movies: {
         connect: movies.map((movie) => ({ id: movie.id })),
       },
-      winningMovieID: winner.id ?? '',
+      winningMovieID: winner.id ?? "",
       date: formatISO(new Date(), {
-        representation: 'date',
+        representation: "date",
       }),
     },
   })
 
   // update the winner with the watch date
-  await updateChosenMovie(winner, winner.user?.id ?? '', watchDate)
+  await updateChosenMovie(winner, winner.user?.id ?? "", watchDate)
 
   // reset the selection status of everyone
   await prisma.shortlist.updateMany({
@@ -461,17 +461,17 @@ export async function postRaffleWork({
       (movie) => movie.id === winner.id,
     )
 
-    await updateShortlistState(false, shortlist?.id ?? '')
+    await updateShortlistState(false, shortlist?.id ?? "")
     await updateShortlistSelectionStatus(
       participant === winner?.user?.id,
-      shortlist?.id ?? '',
+      shortlist?.id ?? "",
     )
     if (movieInShortlist) {
-      await removeMovieFromShortlist(movieInShortlist.id, shortlist?.id ?? '')
+      await removeMovieFromShortlist(movieInShortlist.id, shortlist?.id ?? "")
     }
 
     // need to update each user's unranked tier to add the winning movie
-    const tierlist = await prisma.tierlist.findFirst({
+    const tierlists = await prisma.tierlist.findMany({
       where: {
         userId: participant,
       },
@@ -485,7 +485,8 @@ export async function postRaffleWork({
         },
       },
     })
-    if (tierlist) {
+
+    for (const tierlist of tierlists) {
       for (const tier of tierlist.tiers) {
         if (tier.value === 0) {
           await prisma.moviesOnTiers.create({
@@ -532,10 +533,10 @@ export async function updateChosenMovie(
 
 export async function connectChosenMovies(movies: ChosenMovie[]) {
   const users: Record<string, string> = {
-    Juhani: '64aec109b56d6dd5a8489cb4',
-    Jussi: '64b825e750ebc52d19bc72e7',
-    Miika: '648875d9b274755f19862cbf',
-    Niko: '64b7c8d13be96d82bde4a930',
+    Juhani: "64aec109b56d6dd5a8489cb4",
+    Jussi: "64b825e750ebc52d19bc72e7",
+    Miika: "648875d9b274755f19862cbf",
+    Niko: "64b7c8d13be96d82bde4a930",
   }
   for (const movie of movies) {
     const username = movie.user
@@ -581,12 +582,12 @@ export async function getStatistics() {
   })
 
   const moviesByUser = countByKey(movies, (movie) => {
-    return movie.user?.name ?? ''
+    return movie.user?.name ?? ""
   })
 
   const dataArr = []
   const dataObj = {
-    label: 'Movies by user',
+    label: "Movies by user",
     data: [],
   } as UserChartData
 
@@ -608,7 +609,7 @@ export async function getAllMonths() {
       },
     },
     orderBy: {
-      watchDate: 'desc',
+      watchDate: "desc",
     },
     select: {
       watchDate: true,
@@ -626,7 +627,7 @@ export async function getAllMonths() {
   return Array.from(monthsSet).map((month) => {
     return {
       month: month,
-      label: format(new Date(month), 'MMMM yyyy'),
+      label: format(new Date(month), "MMMM yyyy"),
     }
   })
 }
