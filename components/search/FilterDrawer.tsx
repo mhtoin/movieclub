@@ -1,16 +1,16 @@
-import { Button } from 'components/ui/Button'
+import { Button } from "components/ui/Button"
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from 'components/ui/Drawer'
-import { Filter } from 'lucide-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import { Checkbox } from '../ui/Checkbox'
-import RangeSlider from '../ui/RangeSlider'
+} from "components/ui/Drawer"
+import { Filter } from "lucide-react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+import { Checkbox } from "../ui/Checkbox"
+import RangeSlider from "../ui/RangeSlider"
 
 export default function FilterDrawer({
   genres,
@@ -21,19 +21,19 @@ export default function FilterDrawer({
 }) {
   const [value, setValue] = useState([0, 10])
   const searchParams = useSearchParams()
-  const selectedGenres = searchParams.get('with_genres')?.split(',') ?? []
+  const selectedGenres = searchParams.get("with_genres")?.split(",") ?? []
   const pathname = usePathname()
   const router = useRouter()
 
   const handleGenreSelect = (value: string) => {
     const params = new URLSearchParams(searchParams.toString())
-    let genreParams = params.get('with_genres')?.split(',') ?? []
+    let genreParams = params.get("with_genres")?.split(",") ?? []
     if (genreParams.includes(value)) {
       genreParams = genreParams.filter((genre) => genre !== value)
     } else {
       genreParams.push(value)
     }
-    params.set('with_genres', genreParams.join(','))
+    params.set("with_genres", genreParams.join(","))
     router.push(`${pathname}?${params.toString()}`)
   }
   return (
@@ -53,12 +53,12 @@ export default function FilterDrawer({
             <div className="grid h-[400px] w-full grid-cols-2 gap-2 overflow-y-auto">
               {genres?.map((genre) => (
                 <Checkbox
-                  key={genre.value}
+                  key={genre?.value}
                   defaultChecked={selectedGenres.includes(
-                    genre.value.toString(),
+                    genre?.value?.toString(),
                   )}
                   onChange={(_event) => {
-                    handleGenreSelect(genre.value.toString())
+                    handleGenreSelect(genre?.value?.toString())
                   }}
                 >
                   {genre.label}
@@ -76,7 +76,7 @@ export default function FilterDrawer({
                 step={0.1}
                 minValue={0}
                 maxValue={10}
-                thumbLabels={['from', 'to']}
+                thumbLabels={["from", "to"]}
                 onChangeEnd={handleRangeSelect}
               />
             </div>

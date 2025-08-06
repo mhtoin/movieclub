@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils"
 import {
   Select,
   SelectArrow,
@@ -9,9 +9,9 @@ import {
   SelectProvider,
   useSelectStore,
   useStoreState,
-} from '@ariakit/react'
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+} from "@ariakit/react"
+import { useSearchParams } from "next/navigation"
+import { useState } from "react"
 
 interface SelectProps {
   label: string
@@ -26,7 +26,7 @@ export default function FilterSelect({
 }: SelectProps) {
   const store = useSelectStore()
   const searchParams = useSearchParams()
-  const selectedGenres = searchParams.get('with_genres')?.split(',') ?? []
+  const selectedGenres = searchParams.get("with_genres")?.split(",") ?? []
   const [value, setValue] = useState<string[]>(selectedGenres)
   const isOpen = useStoreState(store).open
 
@@ -44,8 +44,8 @@ export default function FilterSelect({
         <Select
           store={store}
           className={cn(
-            'bg-input flex h-10 flex-none items-center justify-between gap-1 rounded-lg border pr-4 pl-4 text-[1rem] leading-6 whitespace-nowrap [text-decoration-line:none] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] outline-[2px] outline-offset-[2px] select-none',
-            'border-border/80 text-foreground',
+            "bg-input flex h-10 flex-none items-center justify-between gap-1 rounded-lg border pr-4 pl-4 text-[1rem] leading-6 whitespace-nowrap [text-decoration-line:none] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] outline-[2px] outline-offset-[2px] select-none",
+            "border-border/80 text-foreground",
           )}
         >
           <div className="relative overflow-visible">
@@ -54,9 +54,9 @@ export default function FilterSelect({
                 <div className="max-w-[160px] truncate pl-2 transition-all duration-300 group-hover:max-w-[270px]">
                   <span className="whitespace-nowrap">
                     {options
-                      ?.filter((opt) => value.includes(opt.value.toString()))
-                      .map((opt) => opt.label)
-                      .join(', ')}
+                      ?.filter((opt) => value.includes(opt?.value?.toString()))
+                      .map((opt) => opt?.label)
+                      .join(", ")}
                   </span>
                 </div>
                 {value.length > 3 && (
@@ -76,7 +76,7 @@ export default function FilterSelect({
           </div>
           <SelectArrow
             store={store}
-            className={`transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+            className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`}
           />
         </Select>
         <SelectPopover
@@ -90,7 +90,7 @@ export default function FilterSelect({
             {options?.map((option) => (
               <SelectItem
                 key={option.value}
-                value={option?.value.toString()}
+                value={option?.value?.toString()}
                 store={store}
                 className="text-foreground hover:bg-accent/80 hover:text-accent-foreground flex cursor-pointer items-center gap-2 rounded p-2 outline-[none]!"
               >
