@@ -89,6 +89,7 @@ export default function DnDTierContainer({
   const [containerState, setContainerState] = useState<
     TierMovieWithMovieData[][] | undefined
   >(undefined)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   const tiers = tierlist?.tiers.map((tier) => tier.label)
   const isAuthorized = tierlist?.userId === userId || false
@@ -144,6 +145,11 @@ export default function DnDTierContainer({
   function onDragEnd(result: DropResult) {
     if (!isAuthorized) {
       toast.error("You are not authorized to edit this tierlist.")
+      return
+    }
+
+    if (isUpdating) {
+      toast.error("Please wait for the current update to complete.")
       return
     }
 
@@ -219,16 +225,26 @@ export default function DnDTierContainer({
         // handle case where no sourceData yet
         const sourceData = sourceTier.movies[source.index]
 
+        // Get the actual position in the destination tier considering all movies (not just filtered ones)
+        const destinationTierAllMovies = tierlist.tiers[dInd].movies
+        const actualDestinationPosition = Math.min(
+          destination.index,
+          destinationTierAllMovies.length,
+        )
+
         // construct a tierMovie object
         const newSourceData = {
           id: "",
           tierId: destinationTier.id,
-          position: destination.index,
+          position: actualDestinationPosition,
           movieId: sourceData.movie.id,
           rating: "",
           review: null,
           movie: sourceData.movie, // Add the movie object to match TierMovieWithMovieData
         }
+
+        // Don't update local state optimistically - wait for server response
+        // setContainerState(newState)
 
         // update the tierlist
         saveMutation.mutate({
@@ -242,11 +258,21 @@ export default function DnDTierContainer({
       } else {
         const sourceData = sourceTier.movies[source.index]
 
+        // Get the actual position in the destination tier considering all movies (not just filtered ones)
+        const destinationTierAllMovies = tierlist.tiers[dInd].movies
+        const actualDestinationPosition = Math.min(
+          destination.index,
+          destinationTierAllMovies.length,
+        )
+
         const newSourceData = {
           ...sourceData,
           tierId: destinationTier.id,
-          position: destination.index,
+          position: actualDestinationPosition,
         }
+
+        // Don't update local state optimistically - wait for server response
+        // setContainerState(newState)
 
         saveMutation.mutate({
           data: {
@@ -259,7 +285,7 @@ export default function DnDTierContainer({
         })
       }
 
-      setContainerState(newState)
+      // setContainerState(newState) - Remove this optimistic update
     }
   }
 
@@ -278,6 +304,7 @@ export default function DnDTierContainer({
       }
       operation: "reorder" | "move" | "rank"
     }) => {
+      setIsUpdating(true)
       const res = await fetch(
         `/api/tierlists/${tierlistId}?operation=${operation}`,
         {
@@ -301,6 +328,11 @@ export default function DnDTierContainer({
         setSelectedMovie(_data.data)
       }*/
       toast.success("Tierlist updated!")
+      // Refresh the tierlist data to ensure consistency
+      queryClient.invalidateQueries({
+        queryKey: ["tierlists", tierlistId],
+      })
+      setIsUpdating(false)
     },
     onError: (error) => {
       toast.error("Updating tierlist failed!", {
@@ -309,6 +341,7 @@ export default function DnDTierContainer({
       queryClient.invalidateQueries({
         queryKey: ["tierlists", tierlistId],
       })
+      setIsUpdating(false)
     },
   })
   const genreOptions = useMemo(() => {

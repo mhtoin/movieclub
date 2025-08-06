@@ -1,5 +1,5 @@
-import { TierMovieWithMovieData } from '@/types/tierlist.type'
-import prisma from './prisma'
+import { TierMovieWithMovieData } from "@/types/tierlist.type"
+import prisma from "./prisma"
 
 export async function getTierlists() {
   return await prisma.tierlist.findMany({
@@ -43,12 +43,12 @@ export async function getUserTierlists(userId: string) {
               },
             },
             orderBy: {
-              position: 'asc',
+              position: "asc",
             },
           },
         },
         orderBy: {
-          value: 'asc',
+          value: "asc",
         },
       },
     },
@@ -84,12 +84,12 @@ export async function getTierlist(id: string) {
               },
             },
             orderBy: {
-              position: 'asc',
+              position: "asc",
             },
           },
         },
         orderBy: {
-          value: 'asc',
+          value: "asc",
         },
       },
     },
@@ -113,7 +113,37 @@ export async function updateTierMove({
 }) {
   const result = await prisma
     .$transaction(async (tx) => {
-      // move the source item to the destination tier
+      // Get the current max position in the destination tier
+      const maxPositionResult = await tx.moviesOnTiers.aggregate({
+        where: { tierId: destinationTierId },
+        _max: { position: true },
+      })
+
+      const maxPosition = maxPositionResult._max.position ?? -1
+      const targetPosition = Math.min(
+        updatedSourceData.position,
+        maxPosition + 1,
+      )
+
+      // Update positions of items in the source tier (shift positions down after removal)
+      await tx.moviesOnTiers.updateMany({
+        where: { tierId: sourceTierId, position: { gt: sourceData.position } },
+        data: { position: { decrement: 1 } },
+      })
+
+      // Update positions in destination tier (shift positions up to make room)
+      await tx.moviesOnTiers.updateMany({
+        where: {
+          tierId: destinationTierId,
+          position: { gte: targetPosition },
+          movieId: { not: sourceData.movieId }, // Don't update the moved item
+        },
+        data: {
+          position: { increment: 1 },
+        },
+      })
+
+      // Move the source item to the destination tier
       const destinationTierValue = await tx.moviesOnTiers.update({
         where: {
           movieId_tierId: {
@@ -123,7 +153,7 @@ export async function updateTierMove({
         },
         data: {
           tierId: destinationTierId,
-          position: updatedSourceData.position,
+          position: targetPosition,
         },
         include: {
           movie: true,
@@ -147,23 +177,6 @@ export async function updateTierMove({
         },
       })
 
-      // update the positions of the items in the source tier
-      await tx.moviesOnTiers.updateMany({
-        where: { tierId: sourceTierId, position: { gt: sourceData.position } },
-        data: { position: { decrement: 1 } },
-      })
-
-      await tx.moviesOnTiers.updateMany({
-        where: {
-          tierId: destinationTierId,
-          position: { gte: updatedSourceData.position },
-          movieId: { not: sourceData.movieId }, // Don't update the moved item
-        },
-        data: {
-          position: { increment: 1 },
-        },
-      })
-
       return {
         tierMovieId: sourceData.movieId,
         destination: destinationTierValue?.tier?.value,
@@ -173,8 +186,8 @@ export async function updateTierMove({
       }
     })
     .catch((e) => {
-      console.error('error updating tierlist', e)
-      throw new Error('error updating tierlist')
+      console.error("error updating tierlist", e)
+      throw new Error("error updating tierlist")
     })
   return result
 }
@@ -190,11 +203,30 @@ export async function rankMovie({
 }) {
   const newTierMovie = await prisma
     .$transaction(async (tx) => {
+      // First, get the current max position in the destination tier
+      const maxPositionResult = await tx.moviesOnTiers.aggregate({
+        where: { tierId: destinationTierId },
+        _max: { position: true },
+      })
+
+      const maxPosition = maxPositionResult._max.position ?? -1
+      const targetPosition = Math.min(sourceData.position, maxPosition + 1)
+
+      // Increment positions of existing movies at or after the target position
+      await tx.moviesOnTiers.updateMany({
+        where: {
+          tierId: destinationTierId,
+          position: { gte: targetPosition },
+        },
+        data: { position: { increment: 1 } },
+      })
+
+      // Create the new movie entry
       const newTierMovie = await tx.moviesOnTiers.create({
         data: {
           movieId: sourceData.movieId,
           tierId: destinationTierId,
-          position: sourceData.position,
+          position: targetPosition,
         },
         include: {
           movie: true,
@@ -211,16 +243,7 @@ export async function rankMovie({
         },
       })
 
-      await tx.moviesOnTiers.updateMany({
-        where: {
-          tierId: destinationTierId,
-          position: { gte: sourceData.position },
-          movieId: { not: newTierMovie.movieId },
-        },
-        data: { position: { increment: 1 } },
-      })
-
-      // finally, remove the source movie from the unranked source tier
+      // Remove the source movie from the unranked source tier
       await tx.moviesOnTiers.delete({
         where: {
           movieId_tierId: {
@@ -233,8 +256,8 @@ export async function rankMovie({
       return newTierMovie
     })
     .catch((e) => {
-      console.error('error updating tierlist', e)
-      throw new Error('error updating tierlist')
+      console.error("error updating tierlist", e)
+      throw new Error("error updating tierlist")
     })
   // would make sense to return the updated item here
   return newTierMovie
