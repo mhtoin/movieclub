@@ -90,6 +90,9 @@ export default function DnDTierContainer({
     TierMovieWithMovieData[][] | undefined
   >(undefined)
   const [isUpdating, setIsUpdating] = useState(false)
+  const [previousState, setPreviousState] = useState<
+    TierMovieWithMovieData[][] | undefined
+  >(undefined)
 
   const tiers = tierlist?.tiers.map((tier) => tier.label)
   const isAuthorized = tierlist?.userId === userId || false
@@ -198,8 +201,10 @@ export default function DnDTierContainer({
       const endIdx = Math.max(source.index, destination.index)
       const affectedItems = items.slice(startIdx, endIdx + 1)
 
+      // Store previous state for potential rollback
+      setPreviousState(containerState)
+      // Apply optimistic update
       setContainerState(newState)
-      //queryClient.setQueryData(["tierlists", tierlistId], saveState);
 
       saveMutation.mutate({
         data: {
@@ -243,8 +248,10 @@ export default function DnDTierContainer({
           movie: sourceData.movie, // Add the movie object to match TierMovieWithMovieData
         }
 
-        // Don't update local state optimistically - wait for server response
-        // setContainerState(newState)
+        // Store previous state for potential rollback
+        setPreviousState(containerState)
+        // Apply optimistic update
+        setContainerState(newState)
 
         // update the tierlist
         saveMutation.mutate({
@@ -271,8 +278,10 @@ export default function DnDTierContainer({
           position: actualDestinationPosition,
         }
 
-        // Don't update local state optimistically - wait for server response
-        // setContainerState(newState)
+        // Store previous state for potential rollback
+        setPreviousState(containerState)
+        // Apply optimistic update
+        setContainerState(newState)
 
         saveMutation.mutate({
           data: {
@@ -284,8 +293,6 @@ export default function DnDTierContainer({
           operation: "move",
         })
       }
-
-      // setContainerState(newState) - Remove this optimistic update
     }
   }
 
@@ -328,6 +335,8 @@ export default function DnDTierContainer({
         setSelectedMovie(_data.data)
       }*/
       toast.success("Tierlist updated!")
+      // Clear the previous state since the update was successful
+      setPreviousState(undefined)
       // Refresh the tierlist data to ensure consistency
       queryClient.invalidateQueries({
         queryKey: ["tierlists", tierlistId],
@@ -338,6 +347,11 @@ export default function DnDTierContainer({
       toast.error("Updating tierlist failed!", {
         description: error.message,
       })
+      // Rollback to previous state on error
+      if (previousState) {
+        setContainerState(previousState)
+        setPreviousState(undefined)
+      }
       queryClient.invalidateQueries({
         queryKey: ["tierlists", tierlistId],
       })
