@@ -3,6 +3,7 @@ import {
   getShortList,
   removeMovieFromShortlist,
 } from '@/lib/shortlist'
+import { notifyAll } from '@/lib/sse-utils'
 import type { ShortlistWithMovies } from '@/types/shortlist.type'
 import type { TMDBMovieResponse } from '@/types/tmdb.type'
 import { revalidatePath } from 'next/cache'
@@ -49,6 +50,12 @@ export async function POST(
     const { movie }: { movie: TMDBMovieResponse } = await request.json()
     const updatedShortlist = await addMovieToShortlist(movie, id)
 
+    // Notify all connected clients to refetch shortlists
+    notifyAll({
+      type: 'query_invalidation',
+      queryKey: ['shortlists']
+    })
+
     revalidatePath('/home/shortlist')
     return NextResponse.json(updatedShortlist)
   } catch (e) {
@@ -74,6 +81,12 @@ export async function PUT(
   const body = await request.json()
   const movieId = body.movieId
   const res = await removeMovieFromShortlist(movieId, params.id)
+
+  // Notify all connected clients to refetch shortlists
+  notifyAll({
+    type: 'query_invalidation',
+    queryKey: ['shortlists']
+  })
 
   return NextResponse.json(res)
 }
