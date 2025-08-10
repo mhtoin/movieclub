@@ -24,7 +24,6 @@ export default React.memo(
 
     // Calculate if text will wrap BEFORE rendering animation
     useEffect(() => {
-      // Get container width on mount and when it changes
       const updateContainerWidth = () => {
         if (containerRef.current) {
           const width = containerRef.current.clientWidth
@@ -48,39 +47,46 @@ export default React.memo(
       }
     }, [])
 
-    // Calculate wrapping whenever title or container width changes
+    const titleParts = React.useMemo(() => {
+      const title = movie.title
+      const words = title.split(" ")
+      let firstHalf = ""
+      let secondHalf = ""
+
+      if (words.length <= 1) {
+        const midpoint = Math.ceil(title.length / 2)
+        firstHalf = title.substring(0, midpoint)
+        secondHalf = title.substring(midpoint)
+      } else {
+        const midWordIndex = Math.floor(words.length / 2)
+        firstHalf = words.slice(0, midWordIndex).join(" ")
+        secondHalf = words.slice(midWordIndex).join(" ")
+      }
+
+      return {
+        firstHalf,
+        secondHalf,
+        hasMultipleWords: words.length > 1,
+      }
+    }, [movie.title])
+
     useEffect(() => {
       if (containerWidth > 0) {
-        // Calculate text width using canvas (pre-render measurement)
         const canvas = document.createElement("canvas")
         const context = canvas.getContext("2d")
 
         if (context) {
           context.font = "bold clamp(0.5rem,calc(0.05*100vw),3rem) monospace"
 
-          const words = movie.title.split(" ")
-          let firstHalf = ""
-          let secondHalf = ""
-
-          if (words.length <= 1) {
-            const midpoint = Math.ceil(movie.title.length / 2)
-            firstHalf = movie.title.substring(0, midpoint)
-            secondHalf = movie.title.substring(midpoint)
-          } else {
-            const midWordIndex = Math.floor(words.length / 2)
-            firstHalf = words.slice(0, midWordIndex).join(" ")
-            secondHalf = words.slice(midWordIndex).join(" ")
-          }
-
-          // Get text metrics
           const firstHalfWidth = context.measureText(
-            firstHalf.toLocaleUpperCase(),
+            titleParts.firstHalf.toLocaleUpperCase(),
           ).width
           const secondHalfWidth = context.measureText(
-            secondHalf.toLocaleUpperCase(),
+            titleParts.secondHalf.toLocaleUpperCase(),
           ).width
-          const spaceWidth =
-            words.length > 1 ? context.measureText(" ").width : 0
+          const spaceWidth = titleParts.hasMultipleWords
+            ? context.measureText(" ").width
+            : 0
 
           // Account for padding (p-10 = 2.5rem = 40px on each side)
           const availableWidth = containerWidth - 80
@@ -92,38 +98,78 @@ export default React.memo(
           setIsWrapped(willWrap)
         }
       }
-    }, [movie.title, containerWidth])
+    }, [titleParts, containerWidth])
+
+    const titleFontSize = "text-[clamp(2.5rem,calc(0.05*100vw),3rem)]"
+    const animationVariants = React.useMemo(
+      () => ({
+        firstHalf: {
+          initial: isWrapped
+            ? { opacity: 0, x: -100 }
+            : { opacity: 0, y: -100 },
+          animate: isWrapped ? { opacity: 1, x: 0 } : { opacity: 1, y: 0 },
+          exit: isWrapped ? { opacity: 0, x: 100 } : { opacity: 0, y: 100 },
+        },
+        secondHalf: {
+          initial: isWrapped ? { opacity: 0, x: 100 } : { opacity: 0, y: 100 },
+          animate: isWrapped ? { opacity: 1, x: 0 } : { opacity: 1, y: 0 },
+          exit: isWrapped ? { opacity: 0, x: -100 } : { opacity: 0, y: -100 },
+        },
+      }),
+      [isWrapped],
+    )
 
     return (
       <div className="relative h-full w-full flex flex-row items-center justify-center gap-10 container mx-auto">
         <div
-          className="relative flex flex-col justify-center overflow-hidden"
+          className="relative flex flex-col justify-center overflow-hidden gap-6"
           ref={containerRef}
         >
           <AnimatePresence mode="wait" propagate>
             <motion.div
-              className="flex w-full flex-col gap-4 p-8"
+              className="flex w-full flex-col gap-6 px-8"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 100 }}
               transition={{ duration: 0.3 }}
             >
-              {movie.user && (
-                <div
-                  className={`flex flex-row gap-4 items-center py-1 px-2 rounded-md w-fit`}
-                >
-                  <img
-                    src={movie.user.image}
-                    alt={movie.user.name ? movie.user.name.split("")[0] : ""}
-                    className="h-10 w-10 rounded-full border border-white flex items-center justify-center text-white"
-                  />
-                  <span className="text-white text-sm">{movie.user.name}</span>
+              <div className="flex w-full flex-col gap-2">
+                <div className="flex w-full max-w-full flex-col flex-wrap">
+                  <AnimatePresence mode="wait" propagate>
+                    <div
+                      className={`flex flex-wrap ${titleFontSize} font-mono font-bold bg-gradient-to-r from-peach via-flamingo to-rosewater bg-clip-text text-transparent`}
+                    >
+                      <motion.span
+                        key={`first-${isWrapped ? "wrapped" : "unwrapped"}`}
+                        className="whitespace-nowrap"
+                        {...animationVariants.firstHalf}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {titleParts.firstHalf.toLocaleUpperCase()}
+                      </motion.span>
+                      {titleParts.hasMultipleWords && (
+                        <span className="whitespace-nowrap">&nbsp;</span>
+                      )}
+                      <motion.span
+                        key={`second-${isWrapped ? "wrapped" : "unwrapped"}`}
+                        className="whitespace-nowrap"
+                        {...animationVariants.secondHalf}
+                        transition={
+                          isWrapped
+                            ? { duration: 0.3, delay: 0 }
+                            : { duration: 0.3 }
+                        }
+                      >
+                        {titleParts.secondHalf.toLocaleUpperCase()}
+                      </motion.span>
+                    </div>
+                  </AnimatePresence>
                 </div>
-              )}
-              <div
-                className={`flex flex-col gap-2 h-0.25 w-full ${colors?.[colors.length - 2]}`}
-              />
-              <div className="flex min-h-10 flex-row flex-wrap gap-2">
+                <div
+                  className={`flex flex-col gap-2 h-0.25 w-full ${colors?.[colors.length - 2]}`}
+                />
+              </div>
+              <div className="flex min-h-10 flex-row flex-wrap gap-4">
                 {movie?.genres?.map((genre, i) => {
                   return (
                     <div
@@ -138,7 +184,7 @@ export default React.memo(
                   )
                 })}
               </div>
-              <div className="4xl:gap-4 flex flex-row flex-wrap items-center gap-2 px-1">
+              <div className="4xl:gap-4 flex flex-row flex-wrap items-center gap-4 px-1">
                 <span className="md:text-md 4xl:text-lg text-primary-foreground/60 flex max-w-[500px] flex-row items-center gap-2 text-sm">
                   <Calendar className="h-4 w-4 md:h-6 md:w-6" />
                   {movie.watchDate
@@ -162,7 +208,7 @@ export default React.memo(
                 </span>
               </div>
               <div className="flex flex-row flex-wrap items-center gap-6">
-                <div className="flex flex-row flex-wrap items-center gap-2">
+                <div className="flex flex-row flex-wrap items-center gap-4">
                   {movie?.watchProviders?.providers?.map((provider) => {
                     return (
                       <Link
@@ -183,7 +229,7 @@ export default React.memo(
                   })}
                 </div>
                 <div className="bg-primary-foreground/60 h-4/5 w-[1px]" />
-                <div className="flex flex-row flex-wrap items-center gap-2">
+                <div className="flex flex-row flex-wrap items-center gap-4">
                   <Link
                     href={`https://www.themoviedb.org/movie/${movie?.tmdbId}`}
                     target="_blank"
@@ -200,83 +246,18 @@ export default React.memo(
               </div>
             </motion.div>
           </AnimatePresence>
-          {(() => {
-            const title = movie.title
-            const words = title.split(" ")
-            let firstHalf = ""
-            let secondHalf = ""
-
-            if (words.length <= 1) {
-              const midpoint = Math.ceil(title.length / 2)
-              firstHalf = title.substring(0, midpoint)
-              secondHalf = title.substring(midpoint)
-            } else {
-              const midWordIndex = Math.floor(words.length / 2)
-              firstHalf = words.slice(0, midWordIndex).join(" ")
-              secondHalf = words.slice(midWordIndex).join(" ")
-            }
-
-            const titleFontSize = "text-[clamp(2.5rem,calc(0.05*100vw),3rem)]"
-            return (
-              <div className="flex w-full max-w-full flex-col flex-wrap">
-                <AnimatePresence mode="wait" propagate>
-                  <div className="flex flex-wrap px-8">
-                    <motion.span
-                      key={`first-${isWrapped ? "wrapped" : "unwrapped"}`}
-                      className={`${titleFontSize} text-primary-foreground font-mono font-bold whitespace-nowrap`}
-                      initial={
-                        isWrapped
-                          ? { opacity: 0, x: -100 }
-                          : { opacity: 0, y: -100 }
-                      }
-                      animate={
-                        isWrapped ? { opacity: 1, x: 0 } : { opacity: 1, y: 0 }
-                      }
-                      exit={
-                        isWrapped
-                          ? { opacity: 0, x: 100 }
-                          : { opacity: 0, y: 100 }
-                      }
-                      transition={{ duration: 0.3 }}
-                    >
-                      {firstHalf.toLocaleUpperCase()}
-                    </motion.span>
-                    {words.length > 1 && (
-                      <span
-                        className={`${titleFontSize} font-mono font-bold whitespace-nowrap`}
-                      >
-                        &nbsp;
-                      </span>
-                    )}
-                    <motion.span
-                      key={`second-${isWrapped ? "wrapped" : "unwrapped"}`}
-                      className={`${titleFontSize} font-mono font-bold whitespace-nowrap bg-gradient-to-r from-peach via-flamingo to-rosewater bg-clip-text text-transparent`}
-                      initial={
-                        isWrapped
-                          ? { opacity: 0, x: 100 }
-                          : { opacity: 0, y: 100 }
-                      }
-                      animate={
-                        isWrapped ? { opacity: 1, x: 0 } : { opacity: 1, y: 0 }
-                      }
-                      exit={
-                        isWrapped
-                          ? { opacity: 0, x: -100 }
-                          : { opacity: 0, y: -100 }
-                      }
-                      transition={
-                        isWrapped
-                          ? { duration: 0.3, delay: 0 }
-                          : { duration: 0.3 }
-                      }
-                    >
-                      {secondHalf.toLocaleUpperCase()}
-                    </motion.span>
-                  </div>
-                </AnimatePresence>
-              </div>
-            )
-          })()}
+          {movie.user && (
+            <div
+              className={`flex flex-row gap-4 items-center py-1 px-8 rounded-md w-fit`}
+            >
+              <img
+                src={movie.user.image}
+                alt={movie.user.name ? movie.user.name.split("")[0] : ""}
+                className="h-10 w-10 rounded-full border border-white flex items-center justify-center text-white"
+              />
+              <span className="text-white text-sm">{movie.user.name}</span>
+            </div>
+          )}
         </div>
 
         <AnimatePresence mode="wait" propagate>
