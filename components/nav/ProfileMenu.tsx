@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import { useSocket, useValidateSession } from '@/lib/hooks'
-import * as Ariakit from '@ariakit/react'
-import { Loader2 } from 'lucide-react'
-import Image from 'next/image'
-import { useState } from 'react'
-import { Link } from 'react-aria-components'
-import styles from './menu.module.css'
-import MenuItem from './MenuItem'
+import { useSocket, useValidateSession } from "@/lib/hooks"
+import * as Ariakit from "@ariakit/react"
+import { Loader2 } from "lucide-react"
+import Image from "next/image"
+import { useState } from "react"
+import { Link } from "react-aria-components"
+import styles from "./menu.module.css"
+import MenuItem from "./MenuItem"
 
 export default function ProfileMenu() {
   const { data: user, status } = useValidateSession()
@@ -23,9 +23,9 @@ export default function ProfileMenu() {
         onMouseEnter={() => menu.show()}
         onMouseLeave={() => menu.hide()}
       >
-        {user && status === 'success' ? (
+        {user && status === "success" ? (
           <Image
-            src={user?.image || ''}
+            src={user?.image || ""}
             alt="P"
             fill
             className="rounded-full object-cover"
@@ -35,8 +35,8 @@ export default function ProfileMenu() {
         )}
         <div
           className={`absolute right-0 bottom-0 h-3 w-3 rounded-full ${
-            isConnected ? 'bg-success' : 'bg-error'
-          } ${isConnecting ? 'animate-loading-pulse' : ''}`}
+            isConnected ? "bg-success" : "bg-error"
+          } ${isConnecting ? "animate-loading-pulse" : ""}`}
         />
       </Ariakit.MenuButton>
       <Ariakit.Menu
@@ -49,12 +49,12 @@ export default function ProfileMenu() {
         <nav data-magnetic className="z-9999">
           <ul>
             <MenuItem store={menu}>
-              <Link href={'/dashboard'} className="text-foreground text-lg">
+              <Link href={"/profile"} className="text-foreground text-lg">
                 Profile
               </Link>
             </MenuItem>
             <MenuItem store={menu}>
-              <Link href={'/logout'} className="text-foreground text-lg">
+              <Link href={"/logout"} className="text-foreground text-lg">
                 Logout
               </Link>
             </MenuItem>

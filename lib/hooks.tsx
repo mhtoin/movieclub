@@ -1,14 +1,13 @@
-import { getQueryClient } from '@/lib/getQueryClient'
-import { useDialogStore } from '@/stores/useDialogStore'
-import { useNotificationStore } from '@/stores/useNotificationStore'
-import { useRaffleStore } from '@/stores/useRaffleStore'
-import type { MovieWithUser } from '@/types/movie.type'
+import { getQueryClient } from "@/lib/getQueryClient"
+import { useDialogStore } from "@/stores/useDialogStore"
+import { useRaffleStore } from "@/stores/useRaffleStore"
+import type { MovieWithUser } from "@/types/movie.type"
 import type {
   ShortlistWithMovies,
   ShortlistWithMoviesById,
-} from '@/types/shortlist.type'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import type { User as DatabaseUser, Movie, Shortlist } from '@prisma/client'
+} from "@/types/shortlist.type"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import type { User as DatabaseUser, Movie, Shortlist } from "@prisma/client"
 import {
   useInfiniteQuery,
   useMutation,
@@ -17,12 +16,12 @@ import {
   useQueryClient,
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
-} from '@tanstack/react-query'
-import { produce } from 'immer'
-import { useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
-import { replaceShortlistItem } from './actions/replaceShortlistItem'
+} from "@tanstack/react-query"
+import { produce } from "immer"
+import { useSearchParams } from "next/navigation"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { toast } from "sonner"
+import { replaceShortlistItem } from "./actions/replaceShortlistItem"
 import {
   getAllShortlistsGroupedById,
   getMovie,
@@ -30,8 +29,8 @@ import {
   getWatchProviders,
   getWatchlist,
   searchMovies,
-} from './movies/queries'
-import { sendShortlistUpdate } from './utils'
+} from "./movies/queries"
+import { sendShortlistUpdate } from "./utils"
 
 interface ShortlistErrorResponse {
   ok: false
@@ -42,9 +41,9 @@ interface ShortlistErrorResponse {
 
 export const useValidateSession = () => {
   return useQuery({
-    queryKey: ['me'],
+    queryKey: ["me"],
     queryFn: async () => {
-      const response = await fetch('/api/auth/user')
+      const response = await fetch("/api/auth/user")
       const data: DatabaseUser = await response.json()
       return data
     },
@@ -53,21 +52,21 @@ export const useValidateSession = () => {
 
 export const useShortlistsQuery = () => {
   return useQuery({
-    queryKey: ['shortlists'],
+    queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
   })
 }
 
 export const useSuspenseShortlistsQuery = () => {
   return useSuspenseQuery({
-    queryKey: ['shortlists'],
+    queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
   })
 }
 
 export const useShortlistQuery = (id: string) => {
   return useQuery({
-    queryKey: ['shortlist', id],
+    queryKey: ["shortlist", id],
     queryFn: (): Promise<ShortlistWithMovies> => getShortlist(id),
     enabled: !!id,
   })
@@ -75,7 +74,7 @@ export const useShortlistQuery = (id: string) => {
 
 export const useMovieQuery = (id: number, enabled: boolean) => {
   return useQuery({
-    queryKey: ['movie', id],
+    queryKey: ["movie", id],
     queryFn: async () => getMovie(id),
     enabled: !!id && enabled,
   })
@@ -86,10 +85,10 @@ export const useDiscoverSuspenseInfiniteQuery = () => {
   const searchParamsString = searchParams.toString()
 
   return useSuspenseInfiniteQuery({
-    queryKey: ['discover', searchParamsString],
+    queryKey: ["discover", searchParamsString],
 
     queryFn: async ({ pageParam }) =>
-      searchMovies(pageParam, searchParamsString, 'discover'),
+      searchMovies(pageParam, searchParamsString, "discover"),
     getNextPageParam: (lastPage) => {
       const { page, total_pages: totalPages } = lastPage
 
@@ -101,16 +100,16 @@ export const useDiscoverSuspenseInfiniteQuery = () => {
 
 export const useSearchQuery = () => {
   const searchParams = useSearchParams()
-  const titleSearch = searchParams.get('query')
-  const showOnlyAvailable = searchParams.get('showOnlyAvailable') === 'true'
+  const titleSearch = searchParams.get("query")
+  const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true"
 
   return useInfiniteQuery({
-    queryKey: ['search', titleSearch ?? '', showOnlyAvailable],
+    queryKey: ["search", titleSearch ?? "", showOnlyAvailable],
     queryFn: async ({ pageParam }) => {
       return searchMovies(
         pageParam,
-        titleSearch ?? '',
-        'search',
+        titleSearch ?? "",
+        "search",
         showOnlyAvailable,
       )
     },
@@ -129,8 +128,8 @@ export const useSearchInfiniteQuery = () => {
 
   return useInfiniteQuery({
     queryKey: [
-      'search',
-      searchParams ? searchParams : 'with_watch_providers=8',
+      "search",
+      searchParams ? searchParams : "with_watch_providers=8",
     ],
     queryFn: async ({ pageParam }) => searchMovies(pageParam, searchParams),
     getNextPageParam: (lastPage) => {
@@ -155,8 +154,8 @@ export const useRaffle = () => {
       startingUserId: string
       watchDate: string
     }) => {
-      const res = await fetch('/api/weeklyRaffle', {
-        method: 'POST',
+      const res = await fetch("/api/weeklyRaffle", {
+        method: "POST",
         body: JSON.stringify({
           userId: session?.id,
           movies,
@@ -169,9 +168,9 @@ export const useRaffle = () => {
       return data
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['raffle'], data)
+      queryClient.setQueryData(["raffle"], data)
       queryClient.prefetchQuery({
-        queryKey: ['movie', data.movie.tmdbId],
+        queryKey: ["movie", data.movie.tmdbId],
         queryFn: () => getMovie(data.movie.tmdbId),
       })
     },
@@ -185,10 +184,10 @@ export const useRaffleMutation = () => {
   const setResult = useRaffleStore.use.setResult()
   const isOpen = useRaffleStore.use.isOpen()
   return useMutation({
-    mutationKey: ['raffle'],
+    mutationKey: ["raffle"],
     mutationFn: async () => {
-      const res = await fetch('/api/raffle', {
-        method: 'POST',
+      const res = await fetch("/api/raffle", {
+        method: "POST",
         body: JSON.stringify({ userId: session?.id }),
       })
       const data = await res.json()
@@ -236,7 +235,7 @@ export const useUpdateReadyStateMutation = () => {
       userId: string
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}/ready`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify({ isReady }),
       })
       const data: Shortlist = await response.json()
@@ -244,7 +243,7 @@ export const useUpdateReadyStateMutation = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].isReady = data.isReady
@@ -271,7 +270,7 @@ export const useUpdateParticipationMutation = () => {
       const response = await fetch(
         `/api/shortlist/${shortlistId}/participation`,
         {
-          method: 'PUT',
+          method: "PUT",
           body: JSON.stringify({ participating }),
         },
       )
@@ -281,7 +280,7 @@ export const useUpdateParticipationMutation = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].participating = data.participating
@@ -305,7 +304,7 @@ export const useUpdateSelectionMutation = () => {
       selectedIndex: number
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}/selection`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify({ selectedIndex }),
       })
 
@@ -313,7 +312,7 @@ export const useUpdateSelectionMutation = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].selectedIndex = data.selectedIndex
@@ -331,18 +330,18 @@ export const useAddToWatchlistMutation = () => {
   return useMutation({
     mutationFn: async ({ movieId }: { movieId: number }) => {
       const requestBody = JSON.stringify({
-        media_type: 'movie',
+        media_type: "movie",
         media_id: movieId,
         watchlist: true,
       })
 
       const response = await fetch(
-        `https://api.themoviedb.org/3/account/${session?.accountId}/watchlist?session_id=${session?.sessionId}`,
+        `https://api.themoviedb.org/3/account/${session?.tmdbAccountId}/watchlist?session_id=${session?.tmdbSessionId}`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            accept: 'application/json',
-            'content-type': 'application/json',
+            accept: "application/json",
+            "content-type": "application/json",
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
           },
           body: requestBody,
@@ -355,10 +354,10 @@ export const useAddToWatchlistMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['watchlist'],
-        refetchType: 'all',
+        queryKey: ["watchlist"],
+        refetchType: "all",
       })
-      toast.success('Watchlist updated')
+      toast.success("Watchlist updated")
     },
   })
 }
@@ -380,7 +379,7 @@ export const useUpdateShortlistMutation = () => {
       shortlistId: string
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}/update`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify({ movie }),
       })
 
@@ -394,20 +393,20 @@ export const useUpdateShortlistMutation = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].movies = data.movies
           })
         },
       )
-      toast.success('Movie added to shortlist')
+      toast.success("Movie added to shortlist")
       queryClient.invalidateQueries({
-        queryKey: ['shortlist', variables.shortlistId],
+        queryKey: ["shortlist", variables.shortlistId],
       })
     },
     onError: (error: ShortlistErrorResponse, variables) => {
-      if (!isOpen && error?.code === 'SHORTLIST_LIMIT_REACHED') {
+      if (!isOpen && error?.code === "SHORTLIST_LIMIT_REACHED") {
         setIsOpen(true)
         setMovie(variables.movie)
       } else {
@@ -429,16 +428,16 @@ export const useRemoveFromShortlistMutation = () => {
       shortlistId: string
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify({ movieId }),
       })
 
       return await response.json()
     },
     onSuccess: (data, variables) => {
-      toast.success('Movie removed from shortlist')
+      toast.success("Movie removed from shortlist")
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].movies = data.movies
@@ -446,12 +445,12 @@ export const useRemoveFromShortlistMutation = () => {
         },
       )
       queryClient.invalidateQueries({
-        queryKey: ['shortlist', variables.shortlistId],
+        queryKey: ["shortlist", variables.shortlistId],
       })
       sendShortlistUpdate(variables.userId)
     },
     onError: (_error, _variables) => {
-      toast.error('Something went wrong', {
+      toast.error("Something went wrong", {
         description: _error.message,
       })
       /*
@@ -478,7 +477,7 @@ export const useAddToShortlistMutation = () => {
       userId: string
     }) => {
       const response = await fetch(`/api/shortlist/${shortlistId}`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ movie }),
       })
 
@@ -489,9 +488,9 @@ export const useAddToShortlistMutation = () => {
       throw new Error(error.message)
     },
     onSuccess: (data, variables) => {
-      toast.success('Movie added to shortlist')
+      toast.success("Movie added to shortlist")
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].movies = data.movies
@@ -531,7 +530,7 @@ export const useReplaceShortlistMutation = () => {
     },
     onSuccess: (data, variables) => {
       queryClient.setQueryData(
-        ['shortlists'],
+        ["shortlists"],
         (oldData: ShortlistWithMoviesById) => {
           return produce(oldData, (draft) => {
             draft[variables.shortlistId].movies = data.movies.map((movie) => ({
@@ -543,7 +542,7 @@ export const useReplaceShortlistMutation = () => {
           })
         },
       )
-      toast.success('Movie replaced in shortlist')
+      toast.success("Movie replaced in shortlist")
       setIsOpen(false)
       setMovie(null)
     },
@@ -552,7 +551,7 @@ export const useReplaceShortlistMutation = () => {
 
 export const useGetWatchlistQuery = (user: DatabaseUser | null) => {
   return useQuery({
-    queryKey: ['watchlist'],
+    queryKey: ["watchlist"],
     queryFn: async () => {
       if (user) {
         return getWatchlist(user)
@@ -566,14 +565,14 @@ export const useGetWatchlistQuery = (user: DatabaseUser | null) => {
 
 export const useSuspenseGetWatchlistQuery = (user: DatabaseUser) => {
   return useSuspenseQuery({
-    queryKey: ['watchlist'],
+    queryKey: ["watchlist"],
     queryFn: async () => getWatchlist(user),
   })
 }
 
 export const useGetWatchProvidersQuery = () => {
   return useQuery({
-    queryKey: ['watchProviders'],
+    queryKey: ["watchProviders"],
     queryFn: async () => getWatchProviders(),
     staleTime: Number.POSITIVE_INFINITY,
     gcTime: Number.POSITIVE_INFINITY,
@@ -582,64 +581,100 @@ export const useGetWatchProvidersQuery = () => {
   })
 }
 
-export const useGetTMDBSession = (
-  _userId: string,
-  setSessionId: (value: string) => void,
-  setAccountId: (value: string) => void,
-) => {
-  const setNotification = useNotificationStore((state) => state.setNotification)
-  const { data: session } = useValidateSession()
-  useEffect(() => {
-    const loc = window.location.search
+export const useLinkTMDBAccount = () => {
+  return useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        "https://api.themoviedb.org/3/authentication/token/new",
+        {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+          },
+        },
+      )
 
-    if (loc && session?.id) {
-      const locParts = loc ? loc.split('&') : ''
+      const { success, request_token } = await response.json()
 
-      if (locParts && locParts.length > 1) {
-        const token = locParts[0].split('=')[1]
-
-        const approved = locParts[1] === 'approved=true'
-
-        if (approved) {
-          const authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${token}`
-
-          const getSessionId = async () => {
-            const res = await fetch(authenticationCallback)
-
-            if (res.ok) {
-              const id = await res.json()
-              setSessionId(id.session_id)
-
-              // finally, fetch the account id
-              const accountRes = await fetch(
-                `https://api.themoviedb.org/3/account?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&session_id=${id.session_id}`,
-              )
-
-              const accountBody = await accountRes.json()
-
-              setAccountId(accountBody.id)
-
-              if (id.session_id && accountBody.id) {
-                await fetch(`/api/users/${session?.id}`, {
-                  method: 'PUT',
-                  body: JSON.stringify({
-                    sessionId: id.session_id,
-                    accountId: accountBody.id,
-                  }),
-                })
-              }
-              setNotification(
-                'You need to log out and log back in for the changes to take effect',
-                'success',
-              )
-            }
-          }
-
-          getSessionId()
-        }
+      if (!success || !request_token) {
+        throw new Error("Failed to get TMDB request token")
       }
-    }
-  }, [session, setAccountId, setNotification, setSessionId])
+
+      const redirectUrl =
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://movieclub-seven.vercel.app"
+
+      window.location.href = `https://www.themoviedb.org/authenticate/${request_token}?redirect_to=${redirectUrl}/profile`
+    },
+    onError: () => {
+      toast.error("Failed to connect to TMDB. Please try again.")
+    },
+  })
+}
+
+export const useProcessTMDBCallback = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      requestToken,
+      userId,
+    }: {
+      requestToken: string
+      userId: string
+    }) => {
+      // Create session
+      const authenticationCallback = `https://api.themoviedb.org/3/authentication/session/new?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&request_token=${requestToken}`
+
+      const sessionResponse = await fetch(authenticationCallback)
+      if (!sessionResponse.ok) {
+        throw new Error("Failed to create TMDB session")
+      }
+
+      const { session_id } = await sessionResponse.json()
+
+      // Get account ID
+      const accountResponse = await fetch(
+        `https://api.themoviedb.org/3/account?api_key=${process.env.NEXT_PUBLIC_MOVIEDB_KEY}&session_id=${session_id}`,
+      )
+
+      if (!accountResponse.ok) {
+        throw new Error("Failed to get TMDB account")
+      }
+
+      const { id: accountId } = await accountResponse.json()
+
+      // Update user in database
+      const updateResponse = await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tmdbSessionId: session_id,
+          tmdbAccountId: accountId,
+        }),
+      })
+
+      if (!updateResponse.ok) {
+        throw new Error("Failed to save TMDB credentials")
+      }
+
+      return { sessionId: session_id, accountId }
+    },
+    onSuccess: () => {
+      // Invalidate user query to refresh the data
+      queryClient.invalidateQueries({ queryKey: ["me"] })
+      toast.success(
+        "TMDB account linked successfully! Please refresh the page.",
+      )
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to link TMDB account")
+    },
+  })
 }
 
 export const useDebounce = <T extends unknown[]>(
@@ -672,7 +707,7 @@ export const useDebounce = <T extends unknown[]>(
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = useState<boolean>(
-    typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false,
   )
 
   useEffect(() => {
@@ -680,11 +715,11 @@ export function useIsMobile() {
       setIsMobile(window.innerWidth <= 768)
     }
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize)
     handleResize()
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener("resize", handleResize)
     }
   }, [])
 
@@ -709,10 +744,10 @@ export function useCreateQueryString(searchParams: URLSearchParams) {
           params.delete(name)
           return params.toString()
         }
-        params.set(name, value.join(','))
+        params.set(name, value.join(","))
         return params.toString()
       }
-      if (value === '') {
+      if (value === "") {
         params.delete(name)
         return params.toString()
       }
@@ -745,21 +780,21 @@ export function useSocket() {
     try {
       const res = await fetch(
         `${
-          process.env.NODE_ENV === 'development'
-            ? 'http://localhost:8080'
+          process.env.NODE_ENV === "development"
+            ? "http://localhost:8080"
             : process.env.NEXT_PUBLIC_RELAY_URL
         }/register`,
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             user_id: user.id,
-            topic: 'shortlist',
+            topic: "shortlist",
           }),
         },
       )
 
-      if (!res.ok) throw new Error('Registration failed')
+      if (!res.ok) throw new Error("Registration failed")
 
       const data = await res.json()
       const ws = new WebSocket(data.url)
@@ -775,13 +810,13 @@ export function useSocket() {
       ws.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data)
-          if ('queryKey' in message) {
+          if ("queryKey" in message) {
             queryClient.invalidateQueries({ queryKey: message.queryKey })
-          } else if ('message' in message) {
+          } else if ("message" in message) {
             toast.success(message.message)
           }
         } catch (error) {
-          console.error('Failed to parse WebSocket message:', error)
+          console.error("Failed to parse WebSocket message:", error)
         }
       }
 
@@ -799,11 +834,11 @@ export function useSocket() {
       }
 
       ws.onerror = (error) => {
-        console.error('WebSocket error:', error)
+        console.error("WebSocket error:", error)
         ws.close()
       }
     } catch (error) {
-      console.error('Failed to establish WebSocket connection:', error)
+      console.error("Failed to establish WebSocket connection:", error)
       setIsRegistered(false)
       setIsConnecting(false)
     }
@@ -838,16 +873,16 @@ export function useMagneticHover() {
     const nav = navRef.current
     if (!nav) return
 
-    const supportsAnchorPos = 'anchorName' in document.documentElement.style
+    const supportsAnchorPos = "anchorName" in document.documentElement.style
 
     // Create or get style sheet
     if (!sheetRef.current) {
-      sheetRef.current = document.createElement('style')
+      sheetRef.current = document.createElement("style")
       nav.appendChild(sheetRef.current)
     }
     const sheet = sheetRef.current
 
-    const anchors = Array.from(nav.querySelectorAll('a')) as HTMLElement[]
+    const anchors = Array.from(nav.querySelectorAll("a")) as HTMLElement[]
 
     const sync = () => {
       const styles = anchors
@@ -870,24 +905,24 @@ export function useMagneticHover() {
           }
         `
         })
-        .join('\n')
+        .join("\n")
 
       sheet.textContent = styles // Use textContent instead of innerHTML
     }
 
     const falloff = (index: number) => () => {
       if (supportsAnchorPos) {
-        nav.style.setProperty('--item-active', `--item-${index + 1}`)
+        nav.style.setProperty("--item-active", `--item-${index + 1}`)
       } else {
-        nav.style.setProperty('--item-active-x', `var(--item-${index + 1}-x)`)
+        nav.style.setProperty("--item-active-x", `var(--item-${index + 1}-x)`)
 
-        nav.style.setProperty('--item-active-y', `var(--item-${index + 1}-y)`)
+        nav.style.setProperty("--item-active-y", `var(--item-${index + 1}-y)`)
         nav.style.setProperty(
-          '--item-active-width',
+          "--item-active-width",
           `var(--item-${index + 1}-width)`,
         )
         nav.style.setProperty(
-          '--item-active-height',
+          "--item-active-height",
           `var(--item-${index + 1}-height)`,
         )
       }
@@ -900,18 +935,18 @@ export function useMagneticHover() {
           const effect = t?.effect as unknown as { target: Element }
           return (
             effect?.target === nav.firstElementChild &&
-            (effect as KeyframeEffect)?.getKeyframes()[0].property === 'opacity'
+            (effect as KeyframeEffect)?.getKeyframes()[0].property === "opacity"
           )
         })
         if (fade) {
           await Promise.allSettled([fade.finished])
           if (supportsAnchorPos) {
-            nav.style.removeProperty('--item-active')
+            nav.style.removeProperty("--item-active")
           } else {
-            nav.style.removeProperty('--item-active-x')
-            nav.style.removeProperty('--item-active-y')
-            nav.style.removeProperty('--item-active-width')
-            nav.style.removeProperty('--item-active-height')
+            nav.style.removeProperty("--item-active-x")
+            nav.style.removeProperty("--item-active-y")
+            nav.style.removeProperty("--item-active-width")
+            nav.style.removeProperty("--item-active-height")
           }
         }
       }
@@ -919,28 +954,28 @@ export function useMagneticHover() {
 
     // Initial setup
     if (!supportsAnchorPos) {
-      document.documentElement.dataset.noAnchor = 'true'
+      document.documentElement.dataset.noAnchor = "true"
       sync()
-      window.addEventListener('resize', sync)
+      window.addEventListener("resize", sync)
     }
 
     // Add event listeners
     anchors.forEach((anchor, i) => {
-      anchor.addEventListener('pointerenter', falloff(i))
+      anchor.addEventListener("pointerenter", falloff(i))
     })
-    nav.addEventListener('pointerleave', deactivate)
-    nav.addEventListener('blur', deactivate)
+    nav.addEventListener("pointerleave", deactivate)
+    nav.addEventListener("blur", deactivate)
 
     // Cleanup
     return () => {
       if (!supportsAnchorPos) {
-        window.removeEventListener('resize', sync)
+        window.removeEventListener("resize", sync)
       }
       anchors.forEach((anchor, i) => {
-        anchor.removeEventListener('pointerenter', falloff(i))
+        anchor.removeEventListener("pointerenter", falloff(i))
       })
-      nav.removeEventListener('pointerleave', deactivate)
-      nav.removeEventListener('blur', deactivate)
+      nav.removeEventListener("pointerleave", deactivate)
+      nav.removeEventListener("blur", deactivate)
       sheet.remove()
     }
   }, []) // Empty dependency array since we only want this to run once

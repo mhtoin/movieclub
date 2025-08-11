@@ -144,6 +144,8 @@ model User {
   name            String
   sessionId       String?
   accountId       Int?
+  tmdbSessionId   String?
+  tmdbAccountId   Int?
   shortlist       Shortlist?
   shortlistId     String?
   accounts        Account[]
