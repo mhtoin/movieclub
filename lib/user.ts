@@ -1,5 +1,5 @@
-import type { User } from '@prisma/client'
-import prisma from './prisma'
+import type { User } from "@prisma/client"
+import prisma from "./prisma"
 
 export async function updateUser(user: User, id: string) {
   const res = await prisma.user.update({
@@ -7,8 +7,8 @@ export async function updateUser(user: User, id: string) {
       id: id,
     },
     data: {
-      sessionId: user.sessionId,
-      accountId: user.accountId,
+      tmdbSessionId: user.tmdbSessionId,
+      tmdbAccountId: user.tmdbAccountId,
     },
   })
 

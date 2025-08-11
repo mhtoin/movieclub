@@ -1,15 +1,15 @@
-'use client'
-import MovieCard from 'components/search/MovieCard'
+"use client"
+import MovieCard from "components/search/MovieCard"
 import {
   useGetWatchlistQuery,
   useShortlistQuery,
   useValidateSession,
-} from 'lib/hooks'
+} from "lib/hooks"
 
 export default function WatchlistContainer() {
   const { data: session } = useValidateSession()
   const { data: watchlist } = useGetWatchlistQuery(session || null)
-  const { data: shortlistData } = useShortlistQuery(session?.shortlistId || '')
+  const { data: shortlistData } = useShortlistQuery(session?.shortlistId || "")
 
   const shortlistMovieIds = shortlistData
     ? shortlistData?.movies?.map((movie) => movie.tmdbId)
@@ -18,7 +18,7 @@ export default function WatchlistContainer() {
   const watchlistMovieIds = watchlist ? watchlist?.map((movie) => movie.id) : []
   return (
     <div className="no-scrollbar relative m-5 flex h-full w-full flex-col gap-5 overflow-y-auto p-10 py-20">
-      {session && !session.accountId && (
+      {session && !session.tmdbAccountId && (
         <div className="alert alert-error w-1/3">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,15 +1,15 @@
-import type { Video } from '@/types/tmdb.type'
-import { getCurrentSession } from './authentication/session'
+import type { Video } from "@/types/tmdb.type"
+import { getCurrentSession } from "./authentication/session"
 
 export const revalidate = 10
 
 export async function getAdditionalInfo(tmdbId: number) {
   const tmdbDetailsRes = await fetch(
-    `https://api.themoviedb.org/3/movie/${tmdbId}?language=${'en-US'}&append_to_response=videos,watch/providers`,
+    `https://api.themoviedb.org/3/movie/${tmdbId}?language=${"en-US"}&append_to_response=videos,watch/providers`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        accept: 'application/json',
+        accept: "application/json",
         Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
       },
     },
@@ -20,7 +20,7 @@ export async function getAdditionalInfo(tmdbId: number) {
   const trailers = tmdbDetails.videos?.results
     .filter(
       (video: Video) =>
-        video.type === 'Trailer' && video.official && video.site === 'YouTube',
+        video.type === "Trailer" && video.official && video.site === "YouTube",
     )
     .map((trailer: Video) => {
       return {
@@ -30,7 +30,7 @@ export async function getAdditionalInfo(tmdbId: number) {
       }
     })
 
-  const watchProviders = tmdbDetails['watch/providers']?.results?.FI
+  const watchProviders = tmdbDetails["watch/providers"]?.results?.FI
 
   return {
     trailers: trailers,
@@ -43,7 +43,7 @@ export async function getWatchlist() {
   const { user } = await getCurrentSession()
 
   if (!user) {
-    throw new Error('User not authenticated')
+    throw new Error("User not authenticated")
   }
 
   let pagesLeft = true
@@ -52,14 +52,14 @@ export async function getWatchlist() {
 
   do {
     const watchlist = await fetch(
-      `https://api.themoviedb.org/3/account/${user.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.sessionId}&sort_by=created_at.asc`,
+      `https://api.themoviedb.org/3/account/${user.tmdbAccountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user.tmdbSessionId}&sort_by=created_at.asc`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          accept: 'application/json',
+          accept: "application/json",
           Authorization: `Bearer ${process.env.MOVIEDB_TOKEN}`,
         },
-        cache: 'no-store',
+        cache: "no-store",
       },
     )
 
@@ -67,7 +67,7 @@ export async function getWatchlist() {
     const results = data?.results ? data.results : []
     movies.push(results)
 
-    const pages = data?.total_pages ? data.total_pages : ''
+    const pages = data?.total_pages ? data.total_pages : ""
 
     if (pages && pages >= page) {
       page++

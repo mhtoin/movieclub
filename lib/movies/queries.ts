@@ -150,7 +150,7 @@ export const getWatchlist = async (user: User | null) => {
 
   do {
     const watchlist = await fetch(
-      `https://api.themoviedb.org/3/account/${user?.accountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user?.sessionId}&sort_by=created_at.asc`,
+      `https://api.themoviedb.org/3/account/${user?.tmdbAccountId}/watchlist/movies?language=en-US&page=${page}&session_id=${user?.tmdbSessionId}&sort_by=created_at.asc`,
       {
         method: "GET",
         headers: {
