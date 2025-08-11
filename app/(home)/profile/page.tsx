@@ -72,9 +72,7 @@ export default function Profile() {
             </div>
           </div>
         )}
-
         <div className="bg-card rounded-lg shadow-sm border">
-          {/* Header */}
           <div className="border-b px-6 py-6">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
@@ -90,7 +88,6 @@ export default function Profile() {
               </div>
             </div>
           </div>
-
           <div className="p-6">
             <Tabs defaultValue="general" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
