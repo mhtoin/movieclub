@@ -9,14 +9,10 @@ import {
   useProcessTMDBCallback,
 } from "@/lib/hooks"
 import { ExternalLink, Settings, User, Calendar, Link } from "lucide-react"
-import { useEffect, useState } from "react"
-import { useTransition } from "react"
-import { saveProfile } from "./actions/action"
+import { useEffect } from "react"
 
 export default function Profile() {
-  const [_isPending, startTransition] = useTransition()
   const { data: session, status, isLoading } = useValidateSession()
-  const [notification, setNotification] = useState("")
 
   const linkTMDBMutation = useLinkTMDBAccount()
   const processTMDBCallbackMutation = useProcessTMDBCallback()
@@ -63,43 +59,11 @@ export default function Profile() {
     linkTMDBMutation.mutate()
   }
 
-  const handleSaveProfile = () => {
-    startTransition(async () => {
-      try {
-        await saveProfile(session)
-        setNotification("Profile saved successfully!")
-        setTimeout(() => setNotification(""), 3000)
-      } catch (error) {
-        setNotification("Failed to save profile. Please try again.")
-        setTimeout(() => setNotification(""), 3000)
-      }
-    })
-  }
-
   const isConnected = session.tmdbSessionId && session.tmdbAccountId
 
   return (
     <div className="min-h-screen bg-background pt-20 ">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {notification && (
-          <div className="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800">
-            <div className="flex items-center">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {notification}
-            </div>
-          </div>
-        )}
-
         {processTMDBCallbackMutation.isPending && (
           <div className="mb-6 p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-800">
             <div className="flex items-center">
