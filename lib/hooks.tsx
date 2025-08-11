@@ -646,7 +646,6 @@ export const useProcessTMDBCallback = () => {
 
       const { id: accountId } = await accountResponse.json()
 
-      // Update user in database
       const updateResponse = await fetch(`/api/users/${userId}`, {
         method: "PUT",
         headers: {
@@ -665,7 +664,6 @@ export const useProcessTMDBCallback = () => {
       return { sessionId: session_id, accountId }
     },
     onSuccess: () => {
-      // Invalidate user query to refresh the data
       queryClient.invalidateQueries({ queryKey: ["me"] })
       toast.success(
         "TMDB account linked successfully! Please refresh the page.",
