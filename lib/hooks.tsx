@@ -980,3 +980,76 @@ export function useMagneticHover() {
 
   return navRef
 }
+
+// Radarr hooks
+interface RadarrSettings {
+  radarrUrl: string
+  radarrApiKey: string
+  radarrRootFolder?: string
+  radarrQualityProfileId?: number
+  radarrMonitored: boolean
+  radarrEnabled: boolean
+}
+
+export function useRadarrSettings() {
+  return useQuery({
+    queryKey: ["radarrSettings"],
+    queryFn: async () => {
+      const response = await fetch("/api/users/radarr-settings")
+      if (!response.ok) {
+        throw new Error("Failed to fetch Radarr settings")
+      }
+      return response.json()
+    },
+  })
+}
+
+export function useUpdateRadarrSettings() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (settings: RadarrSettings) => {
+      const response = await fetch("/api/users/radarr-settings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settings),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || "Failed to update Radarr settings")
+      }
+
+      return response.json()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["radarrSettings"] })
+    },
+  })
+}
+
+export function useTestRadarrConnection() {
+  return useMutation({
+    mutationFn: async (settings: {
+      radarrUrl: string
+      radarrApiKey: string
+    }) => {
+      const response = await fetch("/api/users/radarr-test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settings),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || "Failed to test Radarr connection")
+      }
+
+      return response.json()
+    },
+  })
+}

@@ -1,17 +1,41 @@
-import * as Ariakit from '@ariakit/react'
-import { useState } from 'react'
-import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+import * as Ariakit from "@ariakit/react"
+import { useState } from "react"
+import type { ComponentPropsWithoutRef, ReactNode } from "react"
+import { cn } from "@/lib/utils"
 
-interface CheckboxProps extends ComponentPropsWithoutRef<'input'> {
+interface CheckboxProps
+  extends Omit<ComponentPropsWithoutRef<"input">, "size"> {
   children?: ReactNode
+  size?: "sm" | "md" | "lg"
+  variant?: "default" | "ghost"
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ children, ...props }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({
+  children,
+  size = "md",
+  variant = "default",
+  className,
+  ...props
+}) => {
   const [checked, setChecked] = useState(props.defaultChecked ?? false)
   const [focusVisible, setFocusVisible] = useState(false)
+
+  // Size-based styling
+  const sizeClasses = {
+    sm: "p-2 gap-2 text-sm",
+    md: "p-3 gap-3",
+    lg: "p-4 gap-4 text-lg",
+  }
+
+  const checkSizeClasses = {
+    sm: "p-0.5 text-sm",
+    md: "p-1 text-base",
+    lg: "p-1.5 text-lg",
+  }
+
   return (
     <label
-      className={`checkbox ${props.className}`}
+      className={cn("checkbox", sizeClasses[size], className)}
       data-checked={checked}
       data-focus-visible={focusVisible || undefined}
       htmlFor={props.id}
@@ -28,7 +52,11 @@ export const Checkbox: React.FC<CheckboxProps> = ({ children, ...props }) => {
           }}
         />
       </Ariakit.VisuallyHidden>
-      <div className="check" data-checked={checked}>
+      <div
+        className={cn("check", checkSizeClasses[size])}
+        data-checked={checked}
+        data-variant={variant}
+      >
         <svg
           fill="none"
           stroke="currentColor"

@@ -1,21 +1,57 @@
 "use client"
 
-import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
 import {
   useValidateSession,
   useLinkTMDBAccount,
   useProcessTMDBCallback,
+  useRadarrSettings,
+  useUpdateRadarrSettings,
+  useTestRadarrConnection,
 } from "@/lib/hooks"
-import { ExternalLink, Settings, User, Calendar, Link } from "lucide-react"
-import { useEffect } from "react"
+import { Settings, Link } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import {
+  LoadingState,
+  ProfileHeader,
+  GeneralTab,
+  TMDBIntegration,
+  RadarrIntegration,
+} from "@/components/profile"
 
 export default function Profile() {
   const { data: session, status, isLoading } = useValidateSession()
+  const { data: radarrSettings } = useRadarrSettings()
+  const updateRadarrMutation = useUpdateRadarrSettings()
+  const testRadarrMutation = useTestRadarrConnection()
 
   const linkTMDBMutation = useLinkTMDBAccount()
   const processTMDBCallbackMutation = useProcessTMDBCallback()
+
+  // Radarr form state
+  const [radarrForm, setRadarrForm] = useState({
+    radarrUrl: "",
+    radarrApiKey: "",
+    radarrRootFolder: "",
+    radarrQualityProfileId: 1,
+    radarrMonitored: true,
+    radarrEnabled: false,
+  })
+
+  // Update form when settings are loaded
+  useEffect(() => {
+    if (radarrSettings) {
+      setRadarrForm({
+        radarrUrl: radarrSettings.radarrUrl || "",
+        radarrApiKey: radarrSettings.radarrApiKey || "",
+        radarrRootFolder: radarrSettings.radarrRootFolder || "",
+        radarrQualityProfileId: radarrSettings.radarrQualityProfileId || 1,
+        radarrMonitored: radarrSettings.radarrMonitored ?? true,
+        radarrEnabled: radarrSettings.radarrEnabled ?? false,
+      })
+    }
+  }, [radarrSettings])
 
   // Handle TMDB callback on page load
   useEffect(() => {
@@ -40,26 +76,60 @@ export default function Profile() {
   }, [session?.id, processTMDBCallbackMutation])
 
   if (isLoading || status === "pending") {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    )
+    return <LoadingState isLoading={true} />
   }
 
   if (status === "error" || !session) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-red-500">Access Denied</p>
-      </div>
-    )
+    return <LoadingState hasError={true} />
   }
 
   const handleTMDBLink = () => {
     linkTMDBMutation.mutate()
   }
 
-  const isConnected = session.tmdbSessionId && session.tmdbAccountId
+  const handleRadarrSave = async () => {
+    try {
+      await updateRadarrMutation.mutateAsync(radarrForm)
+      toast.success("Radarr settings saved successfully!")
+    } catch (error) {
+      toast.error("Failed to save Radarr settings")
+    }
+  }
+
+  const handleRadarrTest = async () => {
+    if (!radarrForm.radarrUrl || !radarrForm.radarrApiKey) {
+      toast.error("Please enter both URL and API key")
+      return
+    }
+
+    try {
+      const result = await testRadarrMutation.mutateAsync({
+        radarrUrl: radarrForm.radarrUrl,
+        radarrApiKey: radarrForm.radarrApiKey,
+      })
+      if (result.success) {
+        toast.success("Radarr connection successful!")
+      } else {
+        toast.error(result.error || "Connection failed")
+      }
+    } catch (error) {
+      toast.error("Connection test failed")
+    }
+  }
+
+  const handleRadarrFormChange = (
+    field: string,
+    value: string | number | boolean,
+  ) => {
+    setRadarrForm((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const isConnected = !!(session.tmdbSessionId && session.tmdbAccountId)
+  const isRadarrConfigured = !!(
+    radarrForm.radarrEnabled &&
+    radarrForm.radarrUrl &&
+    radarrForm.radarrApiKey
+  )
 
   return (
     <div className="min-h-screen bg-background pt-20 ">
@@ -73,21 +143,7 @@ export default function Profile() {
           </div>
         )}
         <div className="bg-card rounded-lg shadow-sm border">
-          <div className="border-b px-6 py-6">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
-                  Profile Settings
-                </h1>
-                <p className="text-muted-foreground">
-                  Welcome back, {session.name}
-                </p>
-              </div>
-            </div>
-          </div>
+          <ProfileHeader userName={session.name || "User"} />
           <div className="p-6">
             <Tabs defaultValue="general" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
@@ -108,146 +164,27 @@ export default function Profile() {
               </TabsList>
 
               <TabsContent value="general" className="space-y-6">
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-3 block">
-                        Name
-                      </label>
-                      <Input
-                        value={session.name || ""}
-                        readOnly
-                        className="bg-muted/50"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-foreground mb-3 block">
-                        Email
-                      </label>
-                      <Input
-                        value={session.email || ""}
-                        readOnly
-                        className="bg-muted/50"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-foreground mb-3 block">
-                      User ID
-                    </label>
-                    <Input
-                      value={session.id || ""}
-                      readOnly
-                      className="bg-muted/50 font-mono text-xs"
-                    />
-                  </div>
-
-                  <div className="flex items-center space-x-2 pt-4">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      Member since {new Date().getFullYear()}
-                    </span>
-                  </div>
-                </div>
+                <GeneralTab session={session} />
               </TabsContent>
 
               <TabsContent value="integrations" className="space-y-6">
                 <div className="space-y-6">
-                  <div className="border rounded-lg p-6">
-                    <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between mb-4">
-                      <div className="flex flex-col gap-4 md:flex-row items-center space-x-3">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <ExternalLink className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-foreground">
-                            The Movie Database (TMDB)
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
-                            Connect your TMDB account for enhanced movie data
-                            and recommendations
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div
-                          className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-gray-300"}`}
-                        ></div>
-                        <span className="text-sm text-muted-foreground">
-                          {isConnected ? "Connected" : "Not Connected"}
-                        </span>
-                      </div>
-                    </div>
+                  <TMDBIntegration
+                    session={session}
+                    isConnected={isConnected}
+                    onConnect={handleTMDBLink}
+                    isConnecting={linkTMDBMutation.isPending}
+                  />
 
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-foreground mb-3 block">
-                            Account ID
-                          </label>
-                          <Input
-                            value={
-                              session.tmdbAccountId
-                                ? session.tmdbAccountId.toString()
-                                : "Not connected"
-                            }
-                            readOnly
-                            className="bg-muted/50"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-foreground mb-3 block">
-                            Session ID
-                          </label>
-                          <Input
-                            value={
-                              session.tmdbSessionId
-                                ? "••••••••"
-                                : "Not connected"
-                            }
-                            readOnly
-                            className="bg-muted/50 font-mono"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Button
-                          onClick={handleTMDBLink}
-                          className="flex items-center space-x-2"
-                          variant={"outline"}
-                          disabled={linkTMDBMutation.isPending}
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          <span>
-                            {linkTMDBMutation.isPending
-                              ? "Connecting..."
-                              : isConnected
-                                ? "Reconnect"
-                                : "Connect"}{" "}
-                            TMDB Account
-                          </span>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border rounded-lg p-6 opacity-50">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <Settings className="w-5 h-5 text-gray-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-muted-foreground">
-                          More Integrations
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          Additional integrations coming soon...
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <RadarrIntegration
+                    radarrForm={radarrForm}
+                    onFormChange={handleRadarrFormChange}
+                    onSave={handleRadarrSave}
+                    onTest={handleRadarrTest}
+                    testMutation={testRadarrMutation}
+                    updateMutation={updateRadarrMutation}
+                    isConfigured={isRadarrConfigured}
+                  />
                 </div>
               </TabsContent>
             </Tabs>
