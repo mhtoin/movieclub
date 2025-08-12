@@ -14,9 +14,10 @@ export async function testUserRadarrConnection(
     }
 
     // Test the connection with a simple system status call
-    const response = await fetch(`${radarrUrl}/api/v3/system/status`, {
+    const apiUrl = `${radarrUrl.trim().replace(/\/$/, "")}/api/v3/system/status?apikey=${radarrApiKey}`
+
+    const response = await fetch(apiUrl, {
       headers: {
-        "X-Api-Key": radarrApiKey,
         "Content-Type": "application/json",
       },
     })

@@ -1032,16 +1032,12 @@ export function useUpdateRadarrSettings() {
 
 export function useTestRadarrConnection() {
   return useMutation({
-    mutationFn: async (settings: {
-      radarrUrl: string
-      radarrApiKey: string
-    }) => {
+    mutationFn: async () => {
       const response = await fetch("/api/users/radarr-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(settings),
       })
 
       if (!response.ok) {

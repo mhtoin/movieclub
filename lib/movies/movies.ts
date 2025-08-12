@@ -4,7 +4,7 @@ import type { MovieWithUser } from "@/types/movie.type"
 import type { Movie, User } from "@prisma/client"
 import { format, formatISO, isWednesday, nextWednesday, set } from "date-fns"
 import prisma from "lib/prisma"
-import { addMovieToRadarr, isRadarrConfigured } from "../radarr"
+import { addMovieToUserRadarr } from "../radarr"
 import {
   getAllShortLists,
   removeMovieFromShortlist,
@@ -404,12 +404,10 @@ export async function simulateRaffle(repetitions: number) {
 export async function postRaffleWork({
   movies,
   winner,
-  startingUserId,
   watchDate,
 }: {
   movies: MovieWithUser[]
   winner: MovieWithUser
-  startingUserId: string
   watchDate: string
 }) {
   // estimate the time it takes to run the raffle
@@ -437,33 +435,38 @@ export async function postRaffleWork({
     },
   })
 
-  // Add the winning movie to Radarr for automatic downloading
-  let radarrStatus = ""
-  if (isRadarrConfigured()) {
-    try {
-      const radarrResult = await addMovieToRadarr(
+  // Get all participants with their Radarr settings
+  const participantsWithRadarr = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      radarrUrl: true,
+      radarrApiKey: true,
+      radarrRootFolder: true,
+      radarrQualityProfileId: true,
+      radarrMonitored: true,
+      radarrEnabled: true,
+    },
+  })
+
+  for (const user of participantsWithRadarr) {
+    if (user.radarrEnabled && user.radarrUrl && user.radarrApiKey) {
+      await addMovieToUserRadarr(
         winner.tmdbId,
         winner.title,
         winner.release_date,
+        {
+          radarrUrl: user.radarrUrl,
+          radarrApiKey: user.radarrApiKey,
+          radarrRootFolder: user.radarrRootFolder,
+          radarrQualityProfileId: user.radarrQualityProfileId,
+          radarrMonitored: user.radarrMonitored,
+          radarrEnabled: user.radarrEnabled,
+        },
       )
-      if (radarrResult) {
-        console.log(
-          `Added winning movie "${winner.title}" to Radarr for download`,
-        )
-        radarrStatus = " 📥 Movie added to Radarr for download!"
-      } else {
-        radarrStatus = " ⚠️ Movie could not be added to Radarr."
-      }
-    } catch (error) {
-      console.error(
-        `Failed to add winning movie "${winner.title}" to Radarr:`,
-        error,
-      )
-      radarrStatus = " ⚠️ Failed to add movie to Radarr."
-      // Continue execution even if Radarr fails
+    } else {
+      console.log(`${user.name} does not have Radarr configured. Skipping.`)
     }
-  } else {
-    console.log("Radarr is not configured. Skipping automatic movie download.")
   }
 
   // update the winner with the watch date
@@ -531,10 +534,51 @@ export async function postRaffleWork({
       }
     }
   }
-  sendNotification(
-    { message: `${winner.user?.name} won the raffle!${radarrStatus}` },
-    startingUserId,
-  )
+}
+
+export async function addChosenForUser(chosen: MovieWithUser, user: User) {
+  try {
+    const radarrResult = await addMovieToUserRadarr(
+      chosen.tmdbId,
+      chosen.title,
+      chosen.release_date,
+      {
+        radarrUrl: user.radarrUrl,
+        radarrApiKey: user.radarrApiKey,
+        radarrRootFolder: user.radarrRootFolder,
+        radarrQualityProfileId: user.radarrQualityProfileId,
+        radarrMonitored: user.radarrMonitored,
+        radarrEnabled: user.radarrEnabled,
+      },
+    )
+    if (radarrResult) {
+      console.log(
+        `Added winning movie "${chosen.title}" to ${user.name}'s Radarr for download`,
+      )
+      sendNotification(
+        `Added winning movie "${chosen.title}" to your Radarr for download.`,
+        user.id,
+      )
+    } else {
+      console.log(
+        `Could not add winning movie "${chosen.title}" to ${user.name}'s Radarr`,
+      )
+      sendNotification(
+        `Could not add winning movie "${chosen.title}" to your Radarr.`,
+        user.id,
+      )
+    }
+  } catch (error) {
+    console.error(
+      `Failed to add winning movie "${chosen.title}" to ${user.name}'s Radarr:`,
+      error,
+    )
+    sendNotification(
+      `Failed to add winning movie "${chosen.title}" to your Radarr.`,
+      user.id,
+    )
+    // Continue execution even if Radarr fails for this user
+  }
 }
 
 export async function updateChosenMovie(
