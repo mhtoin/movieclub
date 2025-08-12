@@ -4,6 +4,7 @@ import type { MovieWithUser } from "@/types/movie.type"
 import type { Movie, User } from "@prisma/client"
 import { format, formatISO, isWednesday, nextWednesday, set } from "date-fns"
 import prisma from "lib/prisma"
+import { addMovieToRadarr, isRadarrConfigured } from "../radarr"
 import {
   getAllShortLists,
   removeMovieFromShortlist,
@@ -436,6 +437,35 @@ export async function postRaffleWork({
     },
   })
 
+  // Add the winning movie to Radarr for automatic downloading
+  let radarrStatus = ""
+  if (isRadarrConfigured()) {
+    try {
+      const radarrResult = await addMovieToRadarr(
+        winner.tmdbId,
+        winner.title,
+        winner.release_date,
+      )
+      if (radarrResult) {
+        console.log(
+          `Added winning movie "${winner.title}" to Radarr for download`,
+        )
+        radarrStatus = " 📥 Movie added to Radarr for download!"
+      } else {
+        radarrStatus = " ⚠️ Movie could not be added to Radarr."
+      }
+    } catch (error) {
+      console.error(
+        `Failed to add winning movie "${winner.title}" to Radarr:`,
+        error,
+      )
+      radarrStatus = " ⚠️ Failed to add movie to Radarr."
+      // Continue execution even if Radarr fails
+    }
+  } else {
+    console.log("Radarr is not configured. Skipping automatic movie download.")
+  }
+
   // update the winner with the watch date
   await updateChosenMovie(winner, winner.user?.id ?? "", watchDate)
 
@@ -502,7 +532,7 @@ export async function postRaffleWork({
     }
   }
   sendNotification(
-    { message: `${winner.user?.name} won the raffle!` },
+    { message: `${winner.user?.name} won the raffle!${radarrStatus}` },
     startingUserId,
   )
 }

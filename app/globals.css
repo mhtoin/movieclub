@@ -457,13 +457,10 @@
   display: flex;
   user-select: none;
   align-items: center;
-  gap: 0.5rem;
   border-radius: 0.5rem;
   border-width: 2px;
   border-color: var(--border);
   background-color: var(--background);
-  padding: 1rem;
-  padding-right: 1.5rem;
   outline-width: 4px;
   outline-color: var(--accent);
   box-shadow:

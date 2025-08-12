@@ -146,6 +146,13 @@ model User {
   accountId       Int?
   tmdbSessionId   String?
   tmdbAccountId   Int?
+  // Radarr Configuration
+  radarrUrl       String?
+  radarrApiKey    String?
+  radarrRootFolder String?
+  radarrQualityProfileId Int?
+  radarrMonitored Boolean            @default(true)
+  radarrEnabled   Boolean            @default(false)
   shortlist       Shortlist?
   shortlistId     String?
   accounts        Account[]
