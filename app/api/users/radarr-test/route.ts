@@ -1,8 +1,9 @@
 import { getCurrentSession } from "@/lib/authentication/session"
 import { testUserRadarrConnection } from "@/lib/actions/radarr"
 import { NextResponse } from "next/server"
+import prisma from "@/lib/prisma"
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const { user } = await getCurrentSession()
 
@@ -10,17 +11,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { radarrUrl, radarrApiKey } = body
+    // Get user's stored Radarr settings from database
+    const userSettings = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: {
+        radarrUrl: true,
+        radarrApiKey: true,
+        radarrEnabled: true,
+      },
+    })
 
-    if (!radarrUrl || !radarrApiKey) {
+    if (!userSettings?.radarrUrl || !userSettings?.radarrApiKey) {
       return NextResponse.json(
-        { error: "Radarr URL and API key are required" },
+        {
+          error:
+            "Radarr configuration not found. Please save your settings first.",
+        },
         { status: 400 },
       )
     }
 
-    const result = await testUserRadarrConnection(radarrUrl, radarrApiKey)
+    if (!userSettings.radarrEnabled) {
+      return NextResponse.json(
+        { error: "Radarr is not enabled in your settings" },
+        { status: 400 },
+      )
+    }
+
+    const result = await testUserRadarrConnection(
+      userSettings.radarrUrl,
+      userSettings.radarrApiKey,
+    )
 
     if (result.success) {
       return NextResponse.json({

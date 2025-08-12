@@ -97,16 +97,8 @@ export default function Profile() {
   }
 
   const handleRadarrTest = async () => {
-    if (!radarrForm.radarrUrl || !radarrForm.radarrApiKey) {
-      toast.error("Please enter both URL and API key")
-      return
-    }
-
     try {
-      const result = await testRadarrMutation.mutateAsync({
-        radarrUrl: radarrForm.radarrUrl,
-        radarrApiKey: radarrForm.radarrApiKey,
-      })
+      const result = await testRadarrMutation.mutateAsync()
       if (result.success) {
         toast.success("Radarr connection successful!")
       } else {
@@ -126,9 +118,9 @@ export default function Profile() {
 
   const isConnected = !!(session.tmdbSessionId && session.tmdbAccountId)
   const isRadarrConfigured = !!(
-    radarrForm.radarrEnabled &&
-    radarrForm.radarrUrl &&
-    radarrForm.radarrApiKey
+    radarrSettings?.radarrEnabled &&
+    radarrSettings?.radarrUrl &&
+    radarrSettings?.radarrApiKey
   )
 
   return (

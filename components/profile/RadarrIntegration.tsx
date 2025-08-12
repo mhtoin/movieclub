@@ -79,7 +79,6 @@ export function RadarrIntegration({
       </div>
 
       <div className="space-y-4">
-        {/* Enable Radarr Toggle */}
         <div className="flex items-center space-x-3">
           <Checkbox
             size="sm"
@@ -92,8 +91,6 @@ export function RadarrIntegration({
             Enable Radarr Integration
           </label>
         </div>
-
-        {/* Radarr Configuration Form */}
         {radarrForm.radarrEnabled && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -206,54 +203,15 @@ export function RadarrIntegration({
               )}
             </div>
 
-            {/* Test Results */}
-            {testMutation.isSuccess && (
-              <div className="p-3 rounded-lg bg-green-50 border border-green-200">
-                <div className="flex items-center space-x-2 text-green-800">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">
-                    Connection Successful
-                  </span>
+            {!isConfigured && radarrForm.radarrEnabled && (
+              <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+                <div className="flex items-center space-x-2 text-blue-800">
+                  <Settings className="w-4 h-4" />
+                  <span className="text-sm font-medium">Save Required</span>
                 </div>
-                <p className="text-sm text-green-700 mt-1">
-                  {testMutation.data?.message}
-                </p>
-              </div>
-            )}
-
-            {testMutation.isError && (
-              <div className="p-3 rounded-lg bg-red-50 border border-red-200">
-                <div className="flex items-center space-x-2 text-red-800">
-                  <XCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">Connection Failed</span>
-                </div>
-                <p className="text-sm text-red-700 mt-1">
-                  {testMutation.error?.message}
-                </p>
-              </div>
-            )}
-
-            {/* Save Results */}
-            {updateMutation.isSuccess && (
-              <div className="p-3 rounded-lg bg-green-50 border border-green-200">
-                <div className="flex items-center space-x-2 text-green-800">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">Settings Saved</span>
-                </div>
-                <p className="text-sm text-green-700 mt-1">
-                  Radarr configuration updated successfully
-                </p>
-              </div>
-            )}
-
-            {updateMutation.isError && (
-              <div className="p-3 rounded-lg bg-red-50 border border-red-200">
-                <div className="flex items-center space-x-2 text-red-800">
-                  <XCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">Save Failed</span>
-                </div>
-                <p className="text-sm text-red-700 mt-1">
-                  {updateMutation.error?.message}
+                <p className="text-sm text-blue-700 mt-1">
+                  Please save your configuration first before testing the
+                  connection.
                 </p>
               </div>
             )}
