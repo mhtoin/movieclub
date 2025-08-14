@@ -1,6 +1,6 @@
 "use client"
 
-import { useSocket, useValidateSession } from "@/lib/hooks"
+import { useSSE, useValidateSession } from "@/lib/hooks"
 import * as Ariakit from "@ariakit/react"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"
@@ -13,7 +13,7 @@ export default function ProfileMenu() {
   const { data: user, status } = useValidateSession()
   const [open, setOpen] = useState(false)
   const menu = Ariakit.useMenuStore({ open, setOpen })
-  const { isConnected, isConnecting } = useSocket()
+  const { isConnected } = useSSE()
 
   return (
     <Ariakit.MenuProvider>
@@ -36,7 +36,7 @@ export default function ProfileMenu() {
         <div
           className={`absolute right-0 bottom-0 h-3 w-3 rounded-full ${
             isConnected ? "bg-success" : "bg-error"
-          } ${isConnecting ? "animate-loading-pulse" : ""}`}
+          }`}
         />
       </Ariakit.MenuButton>
       <Ariakit.Menu

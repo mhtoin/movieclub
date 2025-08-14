@@ -1,16 +1,21 @@
-'use client'
-import { ParticipationButton } from 'components/raffle/ParticipationButton'
-import { useGetWatchlistQuery, useValidateSession } from 'lib/hooks'
+"use client"
+import { ParticipationButton } from "components/raffle/ParticipationButton"
+import {
+  useCreateShortlistMutation,
+  useGetWatchlistQuery,
+  useValidateSession,
+} from "lib/hooks"
 
 import {
   useSuspenseShortlistsQuery,
   useUpdateReadyStateMutation,
-} from '@/lib/hooks'
+} from "@/lib/hooks"
 
-import ShortListItem from '@/components/shortlist/ShortlistItem'
-import UserAvatar from '@/components/shortlist/UserAvatar'
-import { useUpdateParticipationMutation } from '@/lib/hooks'
-import { InfoIcon } from 'lucide-react'
+import ShortListItem from "@/components/shortlist/ShortlistItem"
+import UserAvatar from "@/components/shortlist/UserAvatar"
+import { useUpdateParticipationMutation } from "@/lib/hooks"
+import { InfoIcon } from "lucide-react"
+import { Button } from "../ui/Button"
 
 export default function ShortlistSidebarContent() {
   const { data: user } = useValidateSession()
@@ -21,6 +26,7 @@ export default function ShortlistSidebarContent() {
     : null
   const readyStateMutation = useUpdateReadyStateMutation()
   const participationMutation = useUpdateParticipationMutation()
+  const createShortlistMutation = useCreateShortlistMutation()
   const { data: watchlist } = useGetWatchlistQuery(user || null)
   return (
     <div className="flex flex-col items-center justify-center gap-5">
@@ -42,8 +48,8 @@ export default function ShortlistSidebarContent() {
                 checked={userShortlist?.participating}
                 onChange={(e) => {
                   participationMutation.mutate({
-                    userId: user?.id || '',
-                    shortlistId: userShortlist?.id || '',
+                    userId: user?.id || "",
+                    shortlistId: userShortlist?.id || "",
                     participating: e.target.checked,
                   })
                 }}
@@ -55,8 +61,8 @@ export default function ShortlistSidebarContent() {
                 checked={userShortlist?.isReady}
                 onChange={(e) => {
                   readyStateMutation.mutate({
-                    userId: user?.id || '',
-                    shortlistId: userShortlist?.id || '',
+                    userId: user?.id || "",
+                    shortlistId: userShortlist?.id || "",
                     isReady: e.target.checked,
                   })
                 }}
@@ -78,27 +84,36 @@ export default function ShortlistSidebarContent() {
               <span>You can only have 1 candidate</span>
             </div>
           )}
-        {userShortlist
-          ? userShortlist.movies.map((movie, index) => (
-              <ShortListItem
-                key={`${userShortlist.id}-${movie.id}`}
-                movie={movie}
-                shortlistId={userShortlist.id}
-                highlight={
-                  (userShortlist.requiresSelection &&
-                    userShortlist.selectedIndex === index) ||
-                  false
-                }
-                requiresSelection={userShortlist.requiresSelection || false}
-                removeFromShortList={user?.id === userShortlist.userId}
-                index={index}
-                showActions={true}
-                isInWatchlist={watchlist?.some(
-                  (watchlistItem) => watchlistItem.id === movie.tmdbId,
-                )}
-              />
-            ))
-          : null}
+        {userShortlist ? (
+          userShortlist.movies.map((movie, index) => (
+            <ShortListItem
+              key={`${userShortlist.id}-${movie.id}`}
+              movie={movie}
+              shortlistId={userShortlist.id}
+              highlight={
+                (userShortlist.requiresSelection &&
+                  userShortlist.selectedIndex === index) ||
+                false
+              }
+              requiresSelection={userShortlist.requiresSelection || false}
+              removeFromShortList={user?.id === userShortlist.userId}
+              index={index}
+              showActions={true}
+              isInWatchlist={watchlist?.some(
+                (watchlistItem) => watchlistItem.id === movie.tmdbId,
+              )}
+            />
+          ))
+        ) : (
+          <Button
+            variant="outline"
+            onClick={() => {
+              createShortlistMutation.mutate()
+            }}
+          >
+            Create Shortlist
+          </Button>
+        )}
       </div>
     </div>
   )
