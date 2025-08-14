@@ -1,7 +1,6 @@
 import { getQueryClient } from "@/lib/getQueryClient"
 import { useDialogStore } from "@/stores/useDialogStore"
 import { useRaffleStore } from "@/stores/useRaffleStore"
-import { ReadyStatusUpdateEvent } from "@/lib/sse-events"
 import type { MovieWithUser } from "@/types/movie.type"
 import type {
   ShortlistWithMovies,
@@ -326,7 +325,6 @@ export const useUpdateSelectionMutation = () => {
 }
 
 export const useCreateShortlistMutation = () => {
-  const queryClient = getQueryClient()
   return useMutation({
     mutationFn: async () => {
       const response = await fetch("/api/shortlist", {

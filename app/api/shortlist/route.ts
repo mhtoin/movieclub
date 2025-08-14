@@ -22,7 +22,7 @@ export async function GET(_request: NextRequest) {
   )
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const { user } = await getCurrentSession()
 

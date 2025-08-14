@@ -1,6 +1,6 @@
 "use client"
 
-import { useSocket, useSSE, useValidateSession } from "@/lib/hooks"
+import { useSSE, useValidateSession } from "@/lib/hooks"
 import * as Ariakit from "@ariakit/react"
 import { Loader2 } from "lucide-react"
 import Image from "next/image"

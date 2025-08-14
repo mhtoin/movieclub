@@ -1,5 +1,5 @@
 "use client"
-import { useSocket, useSSE } from "lib/hooks"
+import { useSSE } from "lib/hooks"
 
 export function SocketClient() {
   useSSE()
