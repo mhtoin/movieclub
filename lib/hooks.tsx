@@ -1,6 +1,7 @@
 import { getQueryClient } from "@/lib/getQueryClient"
 import { useDialogStore } from "@/stores/useDialogStore"
 import { useRaffleStore } from "@/stores/useRaffleStore"
+import { ReadyStatusUpdateEvent } from "@/lib/sse-events"
 import type { MovieWithUser } from "@/types/movie.type"
 import type {
   ShortlistWithMovies,
@@ -324,6 +325,26 @@ export const useUpdateSelectionMutation = () => {
   })
 }
 
+export const useCreateShortlistMutation = () => {
+  const queryClient = getQueryClient()
+  return useMutation({
+    mutationFn: async () => {
+      const response = await fetch("/api/shortlist", {
+        method: "POST",
+        body: JSON.stringify({ name }),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+
+      const data: ShortlistWithMovies = await response.json()
+      return data
+    },
+  })
+}
+
 export const useAddToWatchlistMutation = () => {
   const { data: session } = useValidateSession()
   const queryClient = getQueryClient()
@@ -476,6 +497,11 @@ export const useAddToShortlistMutation = () => {
       shortlistId: string
       userId: string
     }) => {
+      if (!shortlistId) {
+        throw new Error("Shortlist ID is required", {
+          cause: new Error("Shortlist ID is required"),
+        })
+      }
       const response = await fetch(`/api/shortlist/${shortlistId}`, {
         method: "POST",
         body: JSON.stringify({ movie }),
@@ -500,7 +526,10 @@ export const useAddToShortlistMutation = () => {
       sendShortlistUpdate(variables.userId)
     },
     onError: (_error, variables) => {
-      if (!isOpen) {
+      toast.error("Something went wrong", {
+        description: _error.message,
+      })
+      if (!isOpen && _error.message != "Shortlist ID is required") {
         setIsOpen(true)
         setMovie(variables.movie)
       }
@@ -754,6 +783,138 @@ export function useCreateQueryString(searchParams: URLSearchParams) {
     },
     [searchParams],
   )
+}
+
+// SSE Event types
+type SSEEventData = Record<string, unknown> | { message: string }
+type SSEEventHandler = (data: SSEEventData) => void
+
+export function useSSE() {
+  const [isConnected, setIsConnected] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [lastEvent, setLastEvent] = useState<SSEEventData | null>(null)
+  const reconnectAttemptsRef = useRef(0)
+  const eventSourceRef = useRef<EventSource | null>(null)
+  const eventHandlersRef = useRef<Map<string, SSEEventHandler[]>>(new Map())
+
+  // Function to register event handlers for specific event types
+  const addEventListener = useCallback(
+    (eventType: string, handler: SSEEventHandler) => {
+      const handlers = eventHandlersRef.current.get(eventType) || []
+      handlers.push(handler)
+      eventHandlersRef.current.set(eventType, handlers)
+
+      // Return cleanup function
+      return () => {
+        const currentHandlers = eventHandlersRef.current.get(eventType) || []
+        const index = currentHandlers.indexOf(handler)
+        if (index > -1) {
+          currentHandlers.splice(index, 1)
+          if (currentHandlers.length === 0) {
+            eventHandlersRef.current.delete(eventType)
+          } else {
+            eventHandlersRef.current.set(eventType, currentHandlers)
+          }
+        }
+      }
+    },
+    [],
+  )
+
+  const connect = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+    }
+
+    const eventSource = new EventSource("/api/events")
+    eventSourceRef.current = eventSource
+
+    eventSource.onopen = () => {
+      console.log("SSE connection established")
+      setIsConnected(true)
+      setError(null)
+      reconnectAttemptsRef.current = 0
+    }
+
+    eventSource.onmessage = (event) => {
+      console.log("received an event")
+      try {
+        const eventData = JSON.parse(event.data)
+        console.log("SSE message:", eventData)
+        setLastEvent(eventData)
+      } catch (error) {
+        console.log("SSE raw message:", event.data)
+        setLastEvent({ message: event.data })
+      }
+    }
+
+    // Handle custom events
+    eventSource.addEventListener("ready-status-update", (event) => {
+      try {
+        const eventData = JSON.parse(event.data)
+        console.log("Ready status update:", eventData)
+        setLastEvent(eventData)
+
+        // Invalidate queries when ready status updates
+        const queryClient = getQueryClient()
+        queryClient.invalidateQueries({
+          queryKey: ["shortlists"],
+        })
+
+        // Optionally invalidate specific shortlist if shortlistId is available
+        if (eventData.data?.shortlistId) {
+          queryClient.invalidateQueries({
+            queryKey: ["shortlist", eventData.data.shortlistId],
+          })
+        }
+
+        // Call registered handlers for this event type
+        const handlers =
+          eventHandlersRef.current.get("ready-status-update") || []
+        handlers.forEach((handler) => {
+          try {
+            handler(eventData.data)
+          } catch (error) {
+            console.error("Error in ready-status-update handler:", error)
+          }
+        })
+      } catch (error) {
+        console.error("Error parsing ready-status-update event:", error)
+      }
+    })
+
+    eventSource.onerror = (error) => {
+      console.error("SSE error:", error)
+      setIsConnected(false)
+      setError("Connection error")
+      eventSource.close()
+
+      // Attempt to reconnect with exponential backoff
+      if (reconnectAttemptsRef.current < 5) {
+        const delay = Math.pow(2, reconnectAttemptsRef.current) * 1000
+        setTimeout(() => {
+          reconnectAttemptsRef.current += 1
+          connect()
+        }, delay)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    connect()
+
+    return () => {
+      eventSourceRef.current?.close() // Clean up connection on unmount
+    }
+  }, [connect])
+
+  return {
+    isConnected,
+    error,
+    lastEvent,
+    addEventListener,
+    reconnect: connect,
+  }
 }
 
 export function useSocket() {

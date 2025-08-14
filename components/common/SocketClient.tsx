@@ -1,7 +1,7 @@
-'use client'
-import { useSocket } from 'lib/hooks'
+"use client"
+import { useSocket, useSSE } from "lib/hooks"
 
 export function SocketClient() {
-  useSocket()
+  useSSE()
   return <></>
 }
