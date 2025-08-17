@@ -92,6 +92,23 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
       ctx.fillStyle = settings.backgroundColor
       ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
+      // Find the most recently watched movie
+      let mostRecentMovie: TierlistWithTiers["tiers"][0]["movies"][0] | null =
+        null
+      let mostRecentDate: Date | null = null
+
+      for (const tier of tierlist.tiers) {
+        for (const movie of tier.movies) {
+          if (movie.movie.watchDate) {
+            const watchDate = new Date(movie.movie.watchDate)
+            if (!mostRecentDate || watchDate > mostRecentDate) {
+              mostRecentDate = watchDate
+              mostRecentMovie = movie
+            }
+          }
+        }
+      }
+
       let currentY = 40
 
       // Draw title
@@ -167,6 +184,7 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
           currentY,
           canvasWidth,
           settings,
+          mostRecentMovie,
         )
         currentY += tierHeight + 20 // Add spacing between tiers
       }
@@ -178,6 +196,7 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
       y: number,
       canvasWidth: number,
       settings: ShareSettings,
+      mostRecentMovie: TierlistWithTiers["tiers"][0]["movies"][0] | null,
     ): Promise<number> => {
       const tierLabelWidth = 150
       const movieWidth = 120
@@ -249,6 +268,7 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
           movieWidth,
           movieHeight,
           settings,
+          mostRecentMovie,
         )
       }
 
@@ -263,7 +283,11 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
       width: number,
       height: number,
       settings: ShareSettings,
+      mostRecentMovie: TierlistWithTiers["tiers"][0]["movies"][0] | null,
     ) => {
+      // Check if this is the most recently watched movie
+      const isRecent = mostRecentMovie && mostRecentMovie.id === movie.id
+
       // Calculate proper poster dimensions maintaining aspect ratio
       const posterHeight = height - 20 // Leave space for title
       const posterWidth = width
@@ -271,6 +295,33 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
       // Draw movie poster background
       ctx.fillStyle = "#2a2a3e"
       ctx.fillRect(x, y, posterWidth, posterHeight)
+
+      // Draw highlight border for most recent movie
+      if (isRecent) {
+        const borderWidth = 4
+        const glowColor = "oklch(0.7188 0.1238 19.55)"
+
+        // Draw outer glow effect
+        ctx.save()
+        ctx.shadowColor = glowColor
+        ctx.shadowBlur = 15
+        ctx.shadowOffsetX = 0
+        ctx.shadowOffsetY = 0
+        ctx.strokeStyle = glowColor
+        ctx.lineWidth = borderWidth
+        ctx.strokeRect(
+          x - borderWidth / 2,
+          y - borderWidth / 2,
+          posterWidth + borderWidth,
+          posterHeight + borderWidth,
+        )
+        ctx.restore()
+
+        // Draw inner border
+        ctx.strokeStyle = glowColor
+        ctx.lineWidth = borderWidth
+        ctx.strokeRect(x, y, posterWidth, posterHeight)
+      }
 
       // Try to load and draw movie poster
       if (movie.movie.images?.posters?.[0]?.file_path) {
@@ -358,6 +409,30 @@ const TierlistCanvas = forwardRef<HTMLCanvasElement, TierlistCanvasProps>(
       const truncatedTitle = truncateText(ctx, title, maxWidth)
 
       ctx.fillText(truncatedTitle, x + width / 2, y + height - 5)
+
+      // Add "LATEST" badge for most recent movie
+
+      if (isRecent) {
+        const badgeY = y + height - 50
+        const badgeWidth = 50
+        const badgeHeight = 16
+        const badgeX = x + width - badgeWidth - 5
+
+        // Draw badge background
+        ctx.fillStyle = "oklch(0.7188 0.1238 19.55)"
+        ctx.fillRect(badgeX, badgeY, badgeWidth, badgeHeight)
+
+        // Draw badge text
+        ctx.fillStyle = "#000000"
+        ctx.font =
+          'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+        ctx.textAlign = "center"
+        ctx.fillText(
+          "LATEST",
+          badgeX + badgeWidth / 2,
+          badgeY + badgeHeight / 2 + 3,
+        )
+      }
     }
 
     const drawMoviePlaceholder = (
