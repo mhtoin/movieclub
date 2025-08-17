@@ -5,6 +5,7 @@ import { formatISO } from "date-fns"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { DateRange } from "react-day-picker"
+import { getCurrentSession } from "@/lib/authentication/session"
 
 export async function createTierlistAction(formData: FormData) {
   "use server"
@@ -115,16 +116,37 @@ export async function createTierlistAction(formData: FormData) {
 }
 
 export async function deleteTierlist(tierlistId: string) {
-  const tierlist = await db.tierlist.delete({
+  const { user } = await getCurrentSession()
+
+  if (!user) {
+    throw new Error("User not authenticated")
+  }
+
+  // First, get the tierlist to check ownership
+  const tierlist = await db.tierlist.findUnique({
     where: {
       id: tierlistId,
     },
   })
 
-  console.log("Deleted tierlist", tierlist)
+  if (!tierlist) {
+    throw new Error("Tierlist not found")
+  }
+
+  if (tierlist.userId !== user.id) {
+    throw new Error("User not authorized to delete this tierlist")
+  }
+
+  const deletedTierlist = await db.tierlist.delete({
+    where: {
+      id: tierlistId,
+    },
+  })
+
+  console.log("Deleted tierlist", deletedTierlist)
 
   // Revalidate the specific user's tierlist page
-  revalidatePath(`/tierlists/${tierlist.userId}`)
+  revalidatePath(`/tierlists/${deletedTierlist.userId}`)
 
-  return tierlist
+  return deletedTierlist
 }

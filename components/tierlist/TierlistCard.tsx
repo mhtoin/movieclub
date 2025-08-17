@@ -3,12 +3,14 @@ import { CornerDownRight } from "lucide-react"
 import Link from "next/link"
 import DeleteButton from "./DeleteButton"
 import { TierlistWithTiers } from "@/types/tierlist.type"
+import { getCurrentSession } from "@/lib/authentication/session"
 
-export default function TierlistCard({
+export default async function TierlistCard({
   tierlist,
 }: {
   tierlist: TierlistWithTiers
 }) {
+  const { user } = await getCurrentSession()
   const fromDate = tierlist.watchDate?.from
     ? new Date(tierlist.watchDate.from)
     : new Date(2022, 0, 1)
@@ -59,7 +61,9 @@ export default function TierlistCard({
       <Link href={`/tierlists/${tierlist.userId}/${tierlist.id}`}>
         <CornerDownRight className="absolute bottom-2 right-2 h-3 w-3 text-muted-foreground hover:text-foreground hover:transition-all hover:duration-300 hover:ease-in-out transition-all duration-300 ease-in-out hover:cursor-pointer " />
       </Link>
-      <DeleteButton tierlistId={tierlist.id} />
+      {user && user.id === tierlist.userId && (
+        <DeleteButton tierlistId={tierlist.id} />
+      )}
     </div>
   )
 }

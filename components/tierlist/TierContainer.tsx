@@ -17,6 +17,7 @@ import Tier from "./Tier"
 import DateRangePicker from "./TierlistDateRange"
 import { tierlistKeys } from "@/lib/tierlist/tierlistKeys"
 import TierlistShareDialog from "./TierlistShareDialog"
+import { useValidateSession } from "@/lib/hooks"
 
 type MoveItemObject = {
   [x: string]: TierMovieWithMovieData[]
@@ -62,6 +63,7 @@ export default function DnDTierContainer({
 }) {
   const queryClient = getQueryClient()
   const { data: tierlist } = useSuspenseQuery(tierlistKeys.byId(tierlistId))
+  const { data: user } = useValidateSession()
   const movieWatchdates = useMemo(() => {
     return tierlist?.tiers
       ?.flatMap((tier) => tier.movies.map((movie) => movie.movie.watchDate))
@@ -97,7 +99,7 @@ export default function DnDTierContainer({
   const [shareDialogOpen, setShareDialogOpen] = useState(false)
 
   const tiers = tierlist?.tiers.map((tier) => tier.label)
-  const isAuthorized = tierlist?.userId === userId || false
+  const isAuthorized = tierlist?.userId === user?.id || false
   useEffect(() => {
     const movieMatrix = tierlist?.tiers.map((tier) => {
       return tier.movies
@@ -384,12 +386,15 @@ export default function DnDTierContainer({
             />
           )}
         </div>
-        <TierlistShareDialog
-          open={shareDialogOpen}
-          onOpenChange={setShareDialogOpen}
-          tierlist={tierlist}
-          userId={userId}
-        />
+
+        {isAuthorized && (
+          <TierlistShareDialog
+            open={shareDialogOpen}
+            onOpenChange={setShareDialogOpen}
+            tierlist={tierlist}
+            userId={userId}
+          />
+        )}
       </div>
 
       <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
