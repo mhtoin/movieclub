@@ -3,7 +3,7 @@ import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
 } from "@oslojs/encoding"
-import type { Session, User } from "@prisma/client"
+import type { Session, User, Account } from "@prisma/client"
 import { cookies } from "next/headers"
 
 import { db } from "@/lib/db"
@@ -36,7 +36,13 @@ export async function validateSessionToken(
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
   const result = await db?.session?.findUnique({
     where: { id: sessionId },
-    include: { user: true },
+    include: {
+      user: {
+        include: {
+          accounts: true,
+        },
+      },
+    },
   })
 
   if (result == null || result.expiresAt < new Date()) {
@@ -46,7 +52,7 @@ export async function validateSessionToken(
   const { user, ...session } = result
 
   if (Date.now() >= session.expiresAt.getTime()) {
-    await prisma?.session.delete({ where: { id: sessionId } })
+    await db?.session.delete({ where: { id: sessionId } })
     return { session: null, user: null }
   }
 
@@ -104,5 +110,13 @@ export async function deleteSessionTokenCookie(): Promise<void> {
 }
 
 export type SessionValidationResult =
-  | { session: Session; user: User }
+  | { session: Session; user: User & { accounts: Account[] } }
   | { session: null; user: null }
+
+export function getProviderAccountId(
+  user: User & { accounts: Account[] },
+  provider: string,
+): string | null {
+  const account = user.accounts.find((acc) => acc.provider === provider)
+  return account?.providerAccountId || null
+}
