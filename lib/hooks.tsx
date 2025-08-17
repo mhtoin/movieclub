@@ -7,7 +7,12 @@ import type {
   ShortlistWithMoviesById,
 } from "@/types/shortlist.type"
 import type { TMDBMovieResponse } from "@/types/tmdb.type"
-import type { User as DatabaseUser, Movie, Shortlist } from "@prisma/client"
+import type {
+  Account,
+  User as DatabaseUser,
+  Movie,
+  Shortlist,
+} from "@prisma/client"
 import {
   useInfiniteQuery,
   useMutation,
@@ -44,7 +49,7 @@ export const useValidateSession = () => {
     queryKey: ["me"],
     queryFn: async () => {
       const response = await fetch("/api/auth/user")
-      const data: DatabaseUser = await response.json()
+      const data: DatabaseUser & { accounts: Account[] } = await response.json()
       return data
     },
   })

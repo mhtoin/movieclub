@@ -8,7 +8,6 @@ import {
 } from "../ui/Dialog"
 import { Button } from "../ui/Button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs"
-import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
 import {
   Download,
@@ -22,6 +21,7 @@ import { useState, useRef, useCallback } from "react"
 import { toast } from "sonner"
 import TierlistCanvas from "./TierlistCanvas"
 import type { TierlistWithTiers } from "@/types/tierlist.type"
+import { useValidateSession } from "@/lib/hooks"
 
 interface TierlistShareDialogProps {
   open: boolean
@@ -45,8 +45,8 @@ export default function TierlistShareDialog({
   onOpenChange,
   tierlist,
 }: TierlistShareDialogProps) {
+  const { data: user } = useValidateSession()
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [discordWebhook, setDiscordWebhook] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [isPosting, setIsPosting] = useState(false)
 
@@ -134,11 +134,6 @@ export default function TierlistShareDialog({
   }
 
   const handlePostToDiscord = async () => {
-    if (!discordWebhook.trim()) {
-      toast.error("Please enter a Discord webhook URL")
-      return
-    }
-
     setIsPosting(true)
     try {
       const blob = await generateImage()
@@ -147,21 +142,19 @@ export default function TierlistShareDialog({
       const formData = new FormData()
       formData.append("file", blob, `tierlist-${tierlist.id}.png`)
 
-      const userInfo = ` by User` // Simplified since user info is not in tierlist type
+      const userInfo = user?.name
+        ? ` by <@${user?.accounts[0]?.providerAccountId}>`
+        : "" // Simplified since user info is not in tierlist type
       const dateInfo = tierlist.watchDate
         ? ` (${new Date(tierlist.watchDate.from as string).toLocaleDateString()} - ${new Date(tierlist.watchDate.to as string).toLocaleDateString()})`
         : ""
 
-      formData.append(
-        "content",
-        `Check out this tierlist${userInfo}${dateInfo}!`,
-      )
+      formData.append("content", `Tierlist ${userInfo}${dateInfo}!`)
 
       const response = await fetch("/api/tierlists/share/discord", {
         method: "POST",
         body: JSON.stringify({
-          webhookUrl: discordWebhook,
-          content: `Check out this tierlist${userInfo}${dateInfo}!`,
+          content: `Tierlist${userInfo}${dateInfo}!`,
           imageBlob: await blobToBase64(blob),
         }),
         headers: {
@@ -173,7 +166,11 @@ export default function TierlistShareDialog({
         toast.success("Tierlist posted to Discord!")
         onOpenChange(false)
       } else {
-        toast.error("Failed to post to Discord")
+        // Get the error message from the response
+        const errorData = await response
+          .json()
+          .catch(() => ({ error: "Unknown error" }))
+        toast.error(errorData.error || "Failed to post to Discord")
       }
     } catch (error) {
       toast.error("Failed to post to Discord")
@@ -344,6 +341,10 @@ export default function TierlistShareDialog({
                       <option value="medium">Medium</option>
                       <option value="low">Low</option>
                     </select>
+                    <p className="text-xs text-muted-foreground">
+                      💡 For Discord sharing, use &apos;Medium&apos; or
+                      &apos;Low&apos; quality to avoid file size limits
+                    </p>
                   </div>
                 </div>
               </TabsContent>
@@ -375,25 +376,11 @@ export default function TierlistShareDialog({
 
                 <div className="space-y-3">
                   <h4 className="font-medium">Discord Integration</h4>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="discordWebhook">Webhook URL</Label>
-                    <Input
-                      id="discordWebhook"
-                      type="url"
-                      placeholder="https://discord.com/api/webhooks/..."
-                      value={discordWebhook}
-                      onChange={(e) => setDiscordWebhook(e.target.value)}
-                    />
-                  </div>
-
                   <Button
                     onClick={handlePostToDiscord}
                     className="w-full"
                     variant="outline"
-                    disabled={
-                      isPosting || isGenerating || !discordWebhook.trim()
-                    }
+                    disabled={isPosting || isGenerating}
                   >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     {isPosting ? "Posting..." : "Post to Discord"}
