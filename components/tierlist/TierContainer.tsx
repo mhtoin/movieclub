@@ -16,6 +16,7 @@ import GenreFilter from "./GenreFilter"
 import Tier from "./Tier"
 import DateRangePicker from "./TierlistDateRange"
 import { tierlistKeys } from "@/lib/tierlist/tierlistKeys"
+import TierlistShareDialog from "./TierlistShareDialog"
 
 type MoveItemObject = {
   [x: string]: TierMovieWithMovieData[]
@@ -93,6 +94,7 @@ export default function DnDTierContainer({
   const [previousState, setPreviousState] = useState<
     TierMovieWithMovieData[][] | undefined
   >(undefined)
+  const [shareDialogOpen, setShareDialogOpen] = useState(false)
 
   const tiers = tierlist?.tiers.map((tier) => tier.label)
   const isAuthorized = tierlist?.userId === userId || false
@@ -382,30 +384,26 @@ export default function DnDTierContainer({
             />
           )}
         </div>
-        {/*<div className="w-[1px] bg-border my-1" />
-        <div className="flex gap-2">
-          <Button
-            variant={"outline"}
-            onClick={() => {
-              setEditState(!editState)
-            }}
-          >
-            {editState ? "Save" : "Edit"}
-          </Button>
-          <TierlistMenu />
-        </div>*/}
+        <TierlistShareDialog
+          open={shareDialogOpen}
+          onOpenChange={setShareDialogOpen}
+          tierlist={tierlist}
+          userId={userId}
+        />
       </div>
 
       <div className="flex flex-col items-start gap-10 md:gap-2 md:overflow-hidden">
         <DragDropContext onDragEnd={onDragEnd}>
-          {containerState?.map((tier, tierIndex) => (
-            <Tier
-              key={tierIndex}
-              tierIndex={tierIndex}
-              tier={tier}
-              label={tiers?.[tierIndex] || ""}
-            />
-          ))}
+          <div>
+            {containerState?.map((tier, tierIndex) => (
+              <Tier
+                key={tierIndex}
+                tierIndex={tierIndex}
+                tier={tier}
+                label={tiers?.[tierIndex] || ""}
+              />
+            ))}
+          </div>
         </DragDropContext>
       </div>
     </>
