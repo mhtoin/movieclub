@@ -4,6 +4,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { format } from "date-fns"
 
+interface Review {
+  rating: number
+}
+
 export default function WatchHistoryItem({ movie }: { movie: MovieWithReviews }) {
   const posterUrl = movie?.images?.posters?.[0]?.file_path
     ? `https://image.tmdb.org/t/p/w342${movie.images.posters[0].file_path}`
@@ -13,7 +17,7 @@ export default function WatchHistoryItem({ movie }: { movie: MovieWithReviews })
 
   const watchDate = movie.watchDate ? new Date(movie.watchDate) : null
   const averageRating = movie.reviews.length > 0 
-    ? movie.reviews.reduce((sum, review) => sum + review.rating, 0) / movie.reviews.length 
+    ? movie.reviews.reduce((sum: number, review: Review) => sum + review.rating, 0) / movie.reviews.length 
     : null
 
   return (

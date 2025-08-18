@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme")
+import { fontFamily } from "tailwindcss/defaultTheme"
 
 const mix = (name) =>
   `color-mix(in hsl, var(${name}), transparent calc(100% - 100% * <alpha-value>))`
