@@ -2,7 +2,7 @@ import {
   deleteSessionTokenCookie,
   getCurrentSession,
   invalidateSession,
-} from '@/lib/authentication/session'
+} from "@/lib/authentication/session"
 
 export async function GET(): Promise<Response> {
   const { session } = await getCurrentSession()
@@ -14,6 +14,6 @@ export async function GET(): Promise<Response> {
   await deleteSessionTokenCookie()
   return new Response(null, {
     status: 302,
-    headers: { Location: '/' },
+    headers: { Location: "/" },
   })
 }

@@ -1,5 +1,5 @@
-'use client'
-import * as Ariakit from '@ariakit/react'
+"use client"
+import * as Ariakit from "@ariakit/react"
 
 export interface AriaDialogProps {
   children?: React.ReactNode

@@ -1,7 +1,7 @@
-import { searchKeywords } from '@/lib/movies/queries'
-import * as Ariakit from '@ariakit/react'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { searchKeywords } from "@/lib/movies/queries"
+import * as Ariakit from "@ariakit/react"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { useState } from "react"
 
 export default function KeywordCombobox({
   handleSelect,
@@ -9,9 +9,9 @@ export default function KeywordCombobox({
   handleSelect: (value: string) => void
 }) {
   const combobox = Ariakit.useComboboxStore()
-  const searchValue = Ariakit.useStoreState(combobox, 'value')
+  const searchValue = Ariakit.useStoreState(combobox, "value")
   const { data: keywords } = useInfiniteQuery({
-    queryKey: ['keywords', searchValue],
+    queryKey: ["keywords", searchValue],
     enabled: searchValue.length > 2,
     queryFn: () => searchKeywords(searchValue),
     getNextPageParam: (lastPage) => {
@@ -22,11 +22,11 @@ export default function KeywordCombobox({
     initialPageParam: 1,
   })
 
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState("")
 
   const handleSelectionComplete = (value: string) => {
     handleSelect(value)
-    setInputValue('')
+    setInputValue("")
   }
 
   return (
@@ -63,7 +63,7 @@ export default function KeywordCombobox({
               {keyword.name}
             </Ariakit.ComboboxItem>
           )),
-        ) ?? 'No results'}
+        ) ?? "No results"}
       </Ariakit.ComboboxPopover>
     </Ariakit.ComboboxProvider>
   )

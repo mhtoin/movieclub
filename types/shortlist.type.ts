@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from "@prisma/client"
 
 export type ShortlistWithMovies = Prisma.ShortlistGetPayload<{
   include: { movies: { include: { user: true } }; user: true }

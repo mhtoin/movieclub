@@ -1,4 +1,4 @@
-import prisma from './prisma'
+import prisma from "./prisma"
 
 export async function getSiteConfig() {
   const siteConfig = await prisma.siteConfig.findUnique({

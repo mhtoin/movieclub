@@ -1,14 +1,14 @@
-import { useMutation } from '@tanstack/react-query'
-import { getQueryClient } from 'lib/getQueryClient'
-import { Loader2, Star } from 'lucide-react'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
+import { useMutation } from "@tanstack/react-query"
+import { getQueryClient } from "lib/getQueryClient"
+import { Loader2, Star } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
 interface StarRadioProps {
   value?: number
   onChange?: (value: number) => void
-  size?: 'sm' | 'md' | 'lg'
+  size?: "sm" | "md" | "lg"
   disabled?: boolean
   name?: string
   id: string
@@ -17,40 +17,40 @@ interface StarRadioProps {
 export default function StarRadio({
   value = 0,
   onChange,
-  size = 'md',
+  size = "md",
   disabled = false,
-  name = 'star-rating',
+  name = "star-rating",
   id,
 }: StarRadioProps) {
   const [hoverValue, setHoverValue] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const pathname = usePathname()
-  const tierlistId = pathname.split('/').pop()
+  const tierlistId = pathname.split("/").pop()
   const queryClient = getQueryClient()
   const saveRatingMutation = useMutation({
     mutationFn: async (rating: number) => {
       const res = await fetch(`/api/ratings?id=${id}`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ rating }),
       })
       return res.json()
     },
     onSuccess: () => {
-      toast.success('Rating saved')
+      toast.success("Rating saved")
       queryClient.invalidateQueries({
-        queryKey: ['tierlists', tierlistId],
+        queryKey: ["tierlists", tierlistId],
       })
     },
     onError: () => {
-      toast.error('Failed to save rating')
+      toast.error("Failed to save rating")
     },
   })
 
   // Size classes for the stars
   const sizeClasses = {
-    sm: 'w-5 h-5',
-    md: 'w-8 h-8',
-    lg: 'w-10 h-10',
+    sm: "w-5 h-5",
+    md: "w-8 h-8",
+    lg: "w-10 h-10",
   }
 
   // Stroke width based on size
@@ -62,15 +62,15 @@ export default function StarRadio({
 
   // Animation classes for wave effect
   const getAnimationClasses = (index: number): string => {
-    if (!saveRatingMutation.isPending) return ''
+    if (!saveRatingMutation.isPending) return ""
 
     // Use different animation delay classes based on index
     const delayClasses = [
-      'delay-0',
-      'delay-100',
-      'delay-200',
-      'delay-300',
-      'delay-400',
+      "delay-0",
+      "delay-100",
+      "delay-200",
+      "delay-300",
+      "delay-400",
     ]
 
     return `animate-star-wave ${delayClasses[index]}`
@@ -117,7 +117,7 @@ export default function StarRadio({
   ) => {
     if (disabled || saveRatingMutation.isPending) return
 
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
       onChange?.(starIndex + 1)
     }
@@ -166,7 +166,7 @@ export default function StarRadio({
         {/* Base star (outline) */}
         <Star
           className={`${sizeClasses[size]} stroke-yellow-400 transition-all duration-200 ${
-            saveRatingMutation.isPending ? 'opacity-70' : ''
+            saveRatingMutation.isPending ? "opacity-70" : ""
           }`}
           fill="transparent"
           strokeWidth={strokeWidth[size]}
@@ -179,7 +179,7 @@ export default function StarRadio({
         >
           <Star
             className={`${sizeClasses[size]} stroke-yellow-400 ${
-              saveRatingMutation.isPending ? 'opacity-70' : ''
+              saveRatingMutation.isPending ? "opacity-70" : ""
             }`}
             fill="rgb(250 204 21)" // text-yellow-400 equivalent
             strokeWidth={strokeWidth[size]}
@@ -192,7 +192,7 @@ export default function StarRadio({
             <div className="flex h-1/2 w-1/2 items-center justify-center rounded-full bg-yellow-400/20">
               {fillPercentage > 0 && (
                 <span
-                  className={`text-[8px] font-bold ${fillPercentage > 25 ? 'text-background' : 'text-white'}`}
+                  className={`text-[8px] font-bold ${fillPercentage > 25 ? "text-background" : "text-white"}`}
                 >
                   {Math.round(fillPercentage)}%
                 </span>
@@ -230,8 +230,8 @@ export default function StarRadio({
             htmlFor={`${name}-${starIndex + 1}`}
             className={`cursor-pointer transition-transform duration-200 hover:scale-110 ${
               disabled || saveRatingMutation.isPending
-                ? 'cursor-not-allowed opacity-60 hover:scale-100'
-                : ''
+                ? "cursor-not-allowed opacity-60 hover:scale-100"
+                : ""
             }`}
             onMouseMove={(e) => handleMouseMove(e, starIndex)}
             onClick={(e) => handleClick(e)}

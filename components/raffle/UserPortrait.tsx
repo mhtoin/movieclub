@@ -1,12 +1,12 @@
-import { cn } from '@/lib/utils'
-import type { User } from '@prisma/client'
-import Image from 'next/image'
+import { cn } from "@/lib/utils"
+import type { User } from "@prisma/client"
+import Image from "next/image"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../ui/Tooltip'
+} from "../ui/Tooltip"
 
 export default function UserPortrait({
   user,
@@ -26,7 +26,7 @@ export default function UserPortrait({
             height={40}
             quality={75}
             priority={false}
-            className={cn('rounded-full object-cover', className)}
+            className={cn("rounded-full object-cover", className)}
           />
         </TooltipTrigger>
         <TooltipContent className="bg-card">

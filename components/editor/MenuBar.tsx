@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
-import type { Editor } from '@tiptap/react'
-import { Button } from 'components/ui/Button'
+import { useMutation } from "@tanstack/react-query"
+import type { Editor } from "@tiptap/react"
+import { Button } from "components/ui/Button"
 import {
   BoldIcon,
   Code,
@@ -24,8 +24,8 @@ import {
   Undo,
   Workflow,
   WrapText,
-} from 'lucide-react'
-import { toast } from 'sonner'
+} from "lucide-react"
+import { toast } from "sonner"
 
 export const MenuBar = ({
   editor,
@@ -39,16 +39,16 @@ export const MenuBar = ({
       const content = editor?.getJSON()
 
       const res = await fetch(`/api/reviews?id=${id}`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({ content }),
       })
       return res.json()
     },
     onSuccess: () => {
-      toast.success('Review saved')
+      toast.success("Review saved")
     },
     onError: () => {
-      toast.error('Failed to save review')
+      toast.error("Failed to save review")
     },
   })
 
@@ -56,15 +56,15 @@ export const MenuBar = ({
     return null
   }
 
-  const iconVariant = 'outline'
-  const iconSize = 'iconSm'
+  const iconVariant = "outline"
+  const iconSize = "iconSm"
 
   return (
     <div className="flex flex-row gap-2">
       <div className="flex flex-row flex-wrap gap-2">
         <Button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive('bold') ? 'bg-accent' : ''}
+          className={editor.isActive("bold") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -72,7 +72,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive('italic') ? 'bg-accent' : ''}
+          className={editor.isActive("italic") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -80,7 +80,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={editor.isActive('strike') ? 'bg-accent' : ''}
+          className={editor.isActive("strike") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -88,7 +88,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleCode().run()}
-          className={editor.isActive('code') ? 'bg-accent' : ''}
+          className={editor.isActive("code") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -110,7 +110,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().setParagraph().run()}
-          className={editor.isActive('paragraph') ? 'bg-accent' : ''}
+          className={editor.isActive("paragraph") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -121,7 +121,7 @@ export const MenuBar = ({
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
           className={
-            editor.isActive('heading', { level: 1 }) ? 'bg-accent' : ''
+            editor.isActive("heading", { level: 1 }) ? "bg-accent" : ""
           }
           variant={iconVariant}
           size={iconSize}
@@ -133,7 +133,7 @@ export const MenuBar = ({
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
           className={
-            editor.isActive('heading', { level: 2 }) ? 'bg-accent' : ''
+            editor.isActive("heading", { level: 2 }) ? "bg-accent" : ""
           }
           variant={iconVariant}
           size={iconSize}
@@ -145,7 +145,7 @@ export const MenuBar = ({
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
           className={
-            editor.isActive('heading', { level: 3 }) ? 'bg-accent' : ''
+            editor.isActive("heading", { level: 3 }) ? "bg-accent" : ""
           }
           variant={iconVariant}
           size={iconSize}
@@ -157,7 +157,7 @@ export const MenuBar = ({
             editor.chain().focus().toggleHeading({ level: 4 }).run()
           }
           className={
-            editor.isActive('heading', { level: 4 }) ? 'bg-accent' : ''
+            editor.isActive("heading", { level: 4 }) ? "bg-accent" : ""
           }
           variant={iconVariant}
           size={iconSize}
@@ -169,7 +169,7 @@ export const MenuBar = ({
             editor.chain().focus().toggleHeading({ level: 5 }).run()
           }
           className={
-            editor.isActive('heading', { level: 5 }) ? 'bg-accent' : ''
+            editor.isActive("heading", { level: 5 }) ? "bg-accent" : ""
           }
           variant={iconVariant}
           size={iconSize}
@@ -181,7 +181,7 @@ export const MenuBar = ({
             editor.chain().focus().toggleHeading({ level: 6 }).run()
           }
           className={
-            editor.isActive('heading', { level: 6 }) ? 'bg-accent' : ''
+            editor.isActive("heading", { level: 6 }) ? "bg-accent" : ""
           }
           variant={iconVariant}
           size={iconSize}
@@ -190,7 +190,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive('bulletList') ? 'bg-accent' : ''}
+          className={editor.isActive("bulletList") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -198,7 +198,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive('orderedList') ? 'bg-accent' : ''}
+          className={editor.isActive("orderedList") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -206,7 +206,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive('codeBlock') ? 'bg-accent' : ''}
+          className={editor.isActive("codeBlock") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >
@@ -214,7 +214,7 @@ export const MenuBar = ({
         </Button>
         <Button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive('blockquote') ? 'bg-accent' : ''}
+          className={editor.isActive("blockquote") ? "bg-accent" : ""}
           variant={iconVariant}
           size={iconSize}
         >

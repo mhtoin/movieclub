@@ -1,14 +1,14 @@
-'server only'
-import { createDbMovie } from '@/lib/createDbMovie'
-import type { MovieWithUser } from '@/types/movie.type'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import type { Movie } from '@prisma/client'
-import { isWednesday, nextWednesday, set } from 'date-fns'
-import { NextResponse } from 'next/server'
-import { db } from './db'
-import prisma from './prisma'
-import { getAdditionalInfo } from './tmdb'
-import { keyBy } from './utils'
+"server only"
+import { createDbMovie } from "@/lib/createDbMovie"
+import type { MovieWithUser } from "@/types/movie.type"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import type { Movie } from "@prisma/client"
+import { isWednesday, nextWednesday, set } from "date-fns"
+import { NextResponse } from "next/server"
+import { db } from "./db"
+import prisma from "./prisma"
+import { getAdditionalInfo } from "./tmdb"
+import { keyBy } from "./utils"
 
 export const revalidate = 10
 
@@ -18,8 +18,8 @@ export class ShortlistLimitError extends Error {
 
   constructor(limit: number) {
     super(`Only ${limit} movies allowed, remove to make room`)
-    this.name = 'ShortlistLimitError'
-    this.code = 'SHORTLIST_LIMIT_REACHED'
+    this.name = "ShortlistLimitError"
+    this.code = "SHORTLIST_LIMIT_REACHED"
     this.limit = limit
   }
 }
@@ -164,7 +164,7 @@ export async function addMovieToShortlist(
   })
 
   if (shortlist && shortlist.movies.length === 3) {
-    throw new Error('Only 3 movies allowed, remove to make room')
+    throw new Error("Only 3 movies allowed, remove to make room")
   }
 
   const movieObject = await createDbMovie(movie)
@@ -218,7 +218,7 @@ export async function removeMovieFromShortlist(
     //return NextResponse.json({ message: "Deleted succesfully" });
   } catch (_e) {
     return NextResponse.json(
-      { message: 'Something went wrong' },
+      { message: "Something went wrong" },
       { status: 500 },
     )
   }
@@ -318,7 +318,7 @@ export async function replaceShortlistMovie(
   // try to fetch the movie from the db to check if it exists
   // if tmdbId is present, it means replacingWithMovie is of type Movie
   // so we can just insert it directly
-  if ('tmdbId' in replacingWithMovie) {
+  if ("tmdbId" in replacingWithMovie) {
     const updated = await prisma.shortlist.update({
       where: {
         id: shortlistId,

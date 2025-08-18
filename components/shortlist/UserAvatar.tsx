@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/Button'
-import type { UserShortlist } from '@/types/shortlist.type'
-import type { UseMutationResult } from '@tanstack/react-query'
+import { Button } from "@/components/ui/Button"
+import type { UserShortlist } from "@/types/shortlist.type"
+import type { UseMutationResult } from "@tanstack/react-query"
 
 export default function UserAvatar({
   userShortlist,
@@ -18,11 +18,11 @@ export default function UserAvatar({
 }) {
   return (
     <Button
-      variant={'outline'}
-      size={'avatar'}
+      variant={"outline"}
+      size={"avatar"}
       className={`flex h-14 w-14 justify-center transition-colors ${
-        disabled ? '' : 'hover:opacity-70'
-      } ${readyStateMutation.isPending ? 'animate-pulse' : ''} relative`}
+        disabled ? "" : "hover:opacity-70"
+      } ${readyStateMutation.isPending ? "animate-pulse" : ""} relative`}
       key={`avatar-${userShortlist?.userId}`}
       onClick={() => {
         if (userShortlist && !disabled) {
@@ -35,7 +35,7 @@ export default function UserAvatar({
       }}
     >
       <svg
-        className={'text-success absolute inset-0 z-50 h-full w-full'}
+        className={"text-success absolute inset-0 z-50 h-full w-full"}
         viewBox="0 0 100 100"
       >
         <title>Ready</title>
@@ -48,14 +48,14 @@ export default function UserAvatar({
           strokeWidth="8"
           pathLength="1"
           strokeDasharray="1"
-          strokeDashoffset={userShortlist?.isReady ? '0' : '1'}
+          strokeDashoffset={userShortlist?.isReady ? "0" : "1"}
           style={{
-            transition: 'stroke-dashoffset 0.6s ease, stroke 0.6s ease',
+            transition: "stroke-dashoffset 0.6s ease, stroke 0.6s ease",
           }}
         />
       </svg>
       <svg
-        className={'text-error absolute inset-0 z-40 h-full w-full'}
+        className={"text-error absolute inset-0 z-40 h-full w-full"}
         viewBox="0 0 100 100"
       >
         <title>Ready</title>

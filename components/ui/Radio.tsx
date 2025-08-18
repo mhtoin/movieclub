@@ -1,5 +1,5 @@
-import * as Ariakit from '@ariakit/react'
-import { useState } from 'react'
+import * as Ariakit from "@ariakit/react"
+import { useState } from "react"
 export default function Radio({
   values,
   className,
@@ -17,8 +17,8 @@ export default function Radio({
   return (
     <>
       {values.map((value) => {
-        const valueString = typeof value === 'string' ? value : value.value
-        const label = typeof value === 'string' ? value : value.label
+        const valueString = typeof value === "string" ? value : value.value
+        const label = typeof value === "string" ? value : value.label
         return (
           <label
             className={`checkbox ${className}`}

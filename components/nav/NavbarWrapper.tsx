@@ -1,8 +1,8 @@
-'use client'
+"use client"
 
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic"
 
-const NavBar = dynamic(() => import('./Navbar'), {
+const NavBar = dynamic(() => import("./Navbar"), {
   ssr: false,
 })
 

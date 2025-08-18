@@ -1,7 +1,7 @@
-import { Button } from 'components/ui/Button'
-import Link from 'next/link'
+import { Button } from "components/ui/Button"
+import Link from "next/link"
 
-import { SiDiscord } from 'react-icons/si'
+import { SiDiscord } from "react-icons/si"
 
 export default function LoginPage() {
   return (

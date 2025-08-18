@@ -1,12 +1,12 @@
-import { createDbMovie } from '@/lib/createDbMovie'
-import { getQueryClient } from '@/lib/getQueryClient'
-import prisma from '@/lib/prisma'
+import { createDbMovie } from "@/lib/createDbMovie"
+import { getQueryClient } from "@/lib/getQueryClient"
+import prisma from "@/lib/prisma"
 import type {
   TMDBMovieResponse,
   TMDBRecommendationResponse,
-} from '@/types/tmdb.type'
-import type { Movie, User } from '@prisma/client'
-import { QueryClient } from '@tanstack/react-query'
+} from "@/types/tmdb.type"
+import type { Movie, User } from "@prisma/client"
+import { QueryClient } from "@tanstack/react-query"
 export async function updateRecommended(sourceMovie: Movie, user: User) {
   const queryClient = getQueryClient()
 
@@ -22,10 +22,10 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
     const response = await fetch(
       `https://api.themoviedb.org/3/movie/${sourceMovie.tmdbId}/recommendations?page=${page}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
+          accept: "application/json",
+          "content-type": "application/json",
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
         },
       },
@@ -77,10 +77,10 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
         const detailsRes = await fetch(
           `https://api.themoviedb.org/3/movie/${movie.id}?append_to_response=credits,external_ids,images,similar,videos,watch/providers`,
           {
-            method: 'GET',
+            method: "GET",
             headers: {
-              accept: 'application/json',
-              'content-type': 'application/json',
+              accept: "application/json",
+              "content-type": "application/json",
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
             },
           },
@@ -88,7 +88,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
         const movieDetails: TMDBMovieResponse = await detailsRes.json()
 
         // check that the movie is available on the currently used streaming services
-        const streamingServices = movieDetails['watch/providers']?.results.FI
+        const streamingServices = movieDetails["watch/providers"]?.results.FI
         if (streamingServices) {
           let hasStreamingService = false
           if (streamingServices.flatrate) {
@@ -143,7 +143,7 @@ export async function updateRecommended(sourceMovie: Movie, user: User) {
     page++
   }
   queryClient.invalidateQueries({
-    queryKey: ['users', user.id, 'recommendedMovies'],
+    queryKey: ["users", user.id, "recommendedMovies"],
   })
 }
 
@@ -158,7 +158,7 @@ export async function removeRecommended(sourceMovieId: string, user: User) {
   })
 
   queryClient.invalidateQueries({
-    queryKey: ['users', user.id, 'recommendedMovies'],
+    queryKey: ["users", user.id, "recommendedMovies"],
   })
 
   return recommendedMovies

@@ -1,8 +1,8 @@
-import * as Ariakit from '@ariakit/react'
-import { useEffect, useState } from 'react'
-import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+import * as Ariakit from "@ariakit/react"
+import { useEffect, useState } from "react"
+import type { ComponentPropsWithoutRef, ReactNode } from "react"
 
-interface CheckboxProps extends ComponentPropsWithoutRef<'input'> {
+interface CheckboxProps extends ComponentPropsWithoutRef<"input"> {
   children?: ReactNode
   isLoading?: boolean
   provider: {
@@ -52,9 +52,9 @@ export const ProviderCheckbox: React.FC<CheckboxProps> = ({
         src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
         className={`aspect-square rounded object-fill object-center transition-all duration-200 ease-in-out ${
           checked
-            ? 'border-border border opacity-100 grayscale-0'
-            : 'opacity-20 grayscale'
-        } ${isLoading ? 'animate-pulse' : ''}`}
+            ? "border-border border opacity-100 grayscale-0"
+            : "opacity-20 grayscale"
+        } ${isLoading ? "animate-pulse" : ""}`}
         alt={provider.provider_name}
       />
     </label>

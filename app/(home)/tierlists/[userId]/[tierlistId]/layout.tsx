@@ -1,6 +1,6 @@
-'use client'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+"use client"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 
 export default function TierlistLayout({
   children, // will be a page or nested layout

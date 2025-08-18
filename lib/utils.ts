@@ -1,7 +1,7 @@
-import { isServer } from '@tanstack/react-query'
-import { type ClassValue, clsx } from 'clsx'
-import { type Day, format, nextDay } from 'date-fns'
-import { twMerge } from 'tailwind-merge'
+import { isServer } from "@tanstack/react-query"
+import { type ClassValue, clsx } from "clsx"
+import { type Day, format, nextDay } from "date-fns"
+import { twMerge } from "tailwind-merge"
 
 export function omit<T extends object, K extends keyof T>(
   obj: T,
@@ -71,7 +71,7 @@ export const groupBy = <T, K extends string | number | undefined | null>(
 ) => {
   return arr.reduce(
     (r: Record<string, T[]>, a) => {
-      const key = cb(a)?.toString() ?? ''
+      const key = cb(a)?.toString() ?? ""
       r[key] = [...(r[key] || []), a]
       return r
     },
@@ -108,25 +108,25 @@ export const countByKey = <T>(arr: T[], cb: (arg0: T) => string) => {
 
 export function getBaseURL() {
   if (!isServer) {
-    return ''
+    return ""
   }
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`
   }
-  return 'http://localhost:3000'
+  return "http://localhost:3000"
 }
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function sortByISODate(a: string, b: string, direction: 'asc' | 'desc') {
-  return direction === 'asc' ? a.localeCompare(b) : -a.localeCompare(b)
+export function sortByISODate(a: string, b: string, direction: "asc" | "desc") {
+  return direction === "asc" ? a.localeCompare(b) : -a.localeCompare(b)
 }
 
 export function sendShortlistUpdate(userId: string) {
-  'use client'
-  publishMessage({ queryKey: ['shortlists'] }, 'shortlist', userId)
+  "use client"
+  publishMessage({ queryKey: ["shortlists"] }, "shortlist", userId)
 }
 
 export async function publishMessage(
@@ -136,14 +136,14 @@ export async function publishMessage(
 ) {
   await fetch(
     `${
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:8080'
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:8080"
         : process.env.NEXT_PUBLIC_RELAY_URL
     }/publish`,
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         message: message,
@@ -160,18 +160,18 @@ export async function sendNotification(
 ) {
   await fetch(
     `${
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:8080'
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:8080"
         : process.env.NEXT_PUBLIC_RELAY_URL
     }/publish`,
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         message: message,
-        topic: 'shortlist',
+        topic: "shortlist",
         user_id: user_id,
       }),
     },
@@ -182,16 +182,16 @@ export async function getBlurDataUrl(imageUrl: string): Promise<string> {
   try {
     const response = await fetch(imageUrl)
     const buffer = await response.arrayBuffer()
-    const base64 = Buffer.from(buffer).toString('base64')
+    const base64 = Buffer.from(buffer).toString("base64")
     return `data:image/jpeg;base64,${base64}`
   } catch (error) {
-    console.error('Error generating blur data URL:', error)
-    return '' // Return empty string as fallback
+    console.error("Error generating blur data URL:", error)
+    return "" // Return empty string as fallback
   }
 }
 
 export function getNextMonth(month: string) {
-  const dateParts = month.split('-')
+  const dateParts = month.split("-")
   const monthNumber = Number.parseInt(dateParts[1])
   const yearNumber = Number.parseInt(dateParts[0])
   const nextMonthNumber =
@@ -231,7 +231,7 @@ export function getNextDefaultWatchDate(dayOfTheWeek: string) {
 
   const nextDate = nextDay(new Date(), dayNumber)
 
-  return format(nextDate, 'yyyy-MM-dd')
+  return format(nextDate, "yyyy-MM-dd")
 }
 
 export const uniqWith = <T>(arr: Array<T>, fn: (a: T, b: T) => boolean) =>

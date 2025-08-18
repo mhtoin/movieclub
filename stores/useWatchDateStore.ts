@@ -1,5 +1,5 @@
-import { createSelectors } from '@/lib/createSelectors'
-import { create } from 'zustand'
+import { createSelectors } from "@/lib/createSelectors"
+import { create } from "zustand"
 
 interface WatchDateState {
   day: string
@@ -9,9 +9,9 @@ interface WatchDateState {
 }
 
 const useWatchDateStoreBase = create<WatchDateState>()((set) => ({
-  day: '',
+  day: "",
   setDay: (day: string) => set(() => ({ day: day })),
-  month: '',
+  month: "",
   setMonth: (month: string) => set((_state) => ({ month: month })),
 }))
 

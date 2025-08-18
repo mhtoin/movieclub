@@ -1,9 +1,9 @@
 import {
   getMoviesOfTheWeek,
   getMoviesOfTheWeekByMonth,
-} from '@/lib/movies/movies'
-import type { MovieWithReviews } from '@/types/movie.type'
-import { type NextRequest, NextResponse } from 'next/server'
+} from "@/lib/movies/movies"
+import type { MovieWithReviews } from "@/types/movie.type"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(
   request: NextRequest,
@@ -14,7 +14,7 @@ export async function GET(
     | { ok: boolean; message: string }
   >
 > {
-  const month = request.nextUrl.searchParams.get('month')
+  const month = request.nextUrl.searchParams.get("month")
   if (month) {
     const moviesResponse = await getMoviesOfTheWeekByMonth(month)
 
@@ -37,7 +37,7 @@ export async function GET(
       )
     }
     return NextResponse.json(
-      { ok: false, message: 'An unknown error occurred' },
+      { ok: false, message: "An unknown error occurred" },
       { status: 500 },
     )
   }

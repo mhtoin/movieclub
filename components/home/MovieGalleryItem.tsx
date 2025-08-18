@@ -1,17 +1,17 @@
-'use client'
-import CollapsedView from '@/components/home/CollapsedView'
-import DetailsView from '@/components/home/DetailsView'
-import MovieReviews from '@/components/home/MovieReviews'
-import ViewModeButtons from '@/components/home/ViewModeButtons'
-import { useWatchDateStore } from '@/stores/useWatchDateStore'
-import type { MovieWithReviews } from '@/types/movie.type'
-import { Button } from 'components/ui/Button'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronsLeftRight, X } from 'lucide-react'
-import Image from 'next/image'
-import { usePathname, useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
+"use client"
+import CollapsedView from "@/components/home/CollapsedView"
+import DetailsView from "@/components/home/DetailsView"
+import MovieReviews from "@/components/home/MovieReviews"
+import ViewModeButtons from "@/components/home/ViewModeButtons"
+import { useWatchDateStore } from "@/stores/useWatchDateStore"
+import type { MovieWithReviews } from "@/types/movie.type"
+import { Button } from "components/ui/Button"
+import { AnimatePresence, motion } from "framer-motion"
+import { ChevronsLeftRight, X } from "lucide-react"
+import Image from "next/image"
+import { usePathname, useSearchParams } from "next/navigation"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { createPortal } from "react-dom"
 
 export default React.memo(
   function MovieGalleryItem({
@@ -25,7 +25,7 @@ export default React.memo(
     const [isAnimating, setIsAnimating] = useState(false)
     const pathname = usePathname()
     const params = useSearchParams()
-    const viewMode = params.get('viewMode')
+    const viewMode = params.get("viewMode")
 
     const setDay = useWatchDateStore.use.setDay()
 
@@ -38,26 +38,26 @@ export default React.memo(
 
     // Memoize handlers
     const handleMouseEnter = useCallback(() => {
-      setDay(movie?.watchDate?.split('-')[2] ?? '')
+      setDay(movie?.watchDate?.split("-")[2] ?? "")
     }, [movie?.watchDate, setDay])
 
     const handleMouseLeave = useCallback(() => {
-      setDay('')
+      setDay("")
     }, [setDay])
 
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
+        if (e.key === "Escape") {
           setIsExpanded(false)
         }
       }
 
       if (isExpanded) {
-        document.body.addEventListener('keydown', handleKeyDown)
+        document.body.addEventListener("keydown", handleKeyDown)
       }
 
       return () => {
-        document.body.removeEventListener('keydown', handleKeyDown)
+        document.body.removeEventListener("keydown", handleKeyDown)
       }
     }, [isExpanded])
 
@@ -71,10 +71,10 @@ export default React.memo(
         if (!isExpanded) {
           // Only update URL when expanding
           const params = new URLSearchParams(window.location.search)
-          const dateParts = movie?.watchDate?.split('-')
+          const dateParts = movie?.watchDate?.split("-")
           const day = dateParts?.[2]
-          params.set('date', day ?? '')
-          window.history.replaceState({}, '', `${pathname}?${params}`)
+          params.set("date", day ?? "")
+          window.history.replaceState({}, "", `${pathname}?${params}`)
         }
         setIsAnimating(false)
       }, 350) // Slightly longer than animation duration
@@ -92,7 +92,7 @@ export default React.memo(
 			data-[expanded=true]:grayscale-0 data-[expanded=true]:brightness-100 
 			[mask-image:radial-gradient(100%_100%_at_95%_0,#fff,transparent)] 
 			data-[expanded=true]:transition-all data-[expanded=true]:duration-1000
-			${isAnimating ? 'will-change-transform will-change-filter' : ''}`
+			${isAnimating ? "will-change-transform will-change-filter" : ""}`
     }, [isAnimating])
 
     return (
@@ -113,9 +113,9 @@ export default React.memo(
             quality={isExpanded ? 80 : 50}
             fill
             placeholder="blur"
-            blurDataURL={movie?.images?.backdrops[0]?.blurDataUrl ?? ''}
+            blurDataURL={movie?.images?.backdrops[0]?.blurDataUrl ?? ""}
             priority={isExpanded}
-            sizes={isExpanded ? '100vw' : '(max-width: 768px) 100vw, 33vw'}
+            sizes={isExpanded ? "100vw" : "(max-width: 768px) 100vw, 33vw"}
           />
           {/* Gradient Overlay */}
           {/*<div className="absolute inset-0 bg-[linear-gradient(to_top_right,rgba(0,0,0,0.5)_0%,rgba(0,0,0,0.8)_20%,rgba(0,0,0,0.7)_100%)]" />*/}
@@ -162,7 +162,7 @@ export default React.memo(
                 <CollapsedView movie={movie} />
               </motion.div>
             )}
-            {(viewMode === 'details' || !viewMode) && isExpanded && (
+            {(viewMode === "details" || !viewMode) && isExpanded && (
               <motion.div
                 key="details"
                 className="absolute inset-0 overflow-hidden"
@@ -174,7 +174,7 @@ export default React.memo(
                 <DetailsView movie={movie} isExpanded={isExpanded} />
               </motion.div>
             )}
-            {viewMode === 'reviews' && isExpanded && (
+            {viewMode === "reviews" && isExpanded && (
               <motion.div
                 key="reviews"
                 className="absolute inset-0 overflow-hidden"

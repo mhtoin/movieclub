@@ -1,10 +1,10 @@
-import ExpandableSidebar from '@/components/common/ExpandableSidebar'
-import ShortlistSidebarContent from '@/components/shortlist/ShortlistSidebarContent'
-import { getQueryClient } from '@/lib/getQueryClient'
-import { getAllShortlistsGroupedById } from '@/lib/shortlist'
-import { HydrationBoundary } from '@tanstack/react-query'
-import { dehydrate } from '@tanstack/react-query'
-import { Suspense } from 'react'
+import ExpandableSidebar from "@/components/common/ExpandableSidebar"
+import ShortlistSidebarContent from "@/components/shortlist/ShortlistSidebarContent"
+import { getQueryClient } from "@/lib/getQueryClient"
+import { getAllShortlistsGroupedById } from "@/lib/shortlist"
+import { HydrationBoundary } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/react-query"
+import { Suspense } from "react"
 
 export default function ShortlistLayout({
   children, // will be a page or nested layout
@@ -14,7 +14,7 @@ export default function ShortlistLayout({
   const queryClient = getQueryClient()
 
   queryClient.prefetchQuery({
-    queryKey: ['shortlists'],
+    queryKey: ["shortlists"],
     queryFn: getAllShortlistsGroupedById,
   })
   return (

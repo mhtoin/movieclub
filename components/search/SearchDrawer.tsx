@@ -1,8 +1,8 @@
-import { Drawer, DrawerContent } from 'components/ui/Drawer'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useDialogStore } from 'stores/useDialogStore'
-import Search from './Search'
+import { Drawer, DrawerContent } from "components/ui/Drawer"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useDialogStore } from "stores/useDialogStore"
+import Search from "./Search"
 
 export default function SearchDrawer() {
   const router = useRouter()
@@ -11,7 +11,7 @@ export default function SearchDrawer() {
   const [open, setOpen] = useState(true)
 
   useEffect(() => {
-    if (pathname === '/search') {
+    if (pathname === "/search") {
       setOpen(true)
     }
   }, [pathname])

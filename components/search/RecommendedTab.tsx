@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/Button'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import RecommendedCard from 'components/search/RecommendedCard'
-import { TabsContent } from 'components/ui/Tabs'
-import { useValidateSession } from 'lib/hooks'
-import { userKeys } from 'lib/users/userKeys'
-import { ChevronUp } from 'lucide-react'
-import { useRef } from 'react'
+import { Button } from "@/components/ui/Button"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import RecommendedCard from "components/search/RecommendedCard"
+import { TabsContent } from "components/ui/Tabs"
+import { useValidateSession } from "lib/hooks"
+import { userKeys } from "lib/users/userKeys"
+import { ChevronUp } from "lucide-react"
+import { useRef } from "react"
 
 export default function RecommendedTab() {
   const { data: user } = useValidateSession()
   // Use the queryOptions directly - the enabled check is already included in userKeys.recommended
   const { data: recommended } = useSuspenseQuery(
-    userKeys.recommended(user?.id ?? ''),
+    userKeys.recommended(user?.id ?? ""),
   )
   const recommendedRef = useRef<HTMLDivElement>(null)
 
@@ -19,7 +19,7 @@ export default function RecommendedTab() {
     <TabsContent
       value="recommended"
       className="overflow-y-auto"
-      style={{ maxHeight: 'calc(90vh - 150px)' }}
+      style={{ maxHeight: "calc(90vh - 150px)" }}
       ref={recommendedRef}
     >
       <Button
@@ -27,7 +27,7 @@ export default function RecommendedTab() {
         size="icon"
         className="absolute right-0 bottom-0 z-30"
         onClick={() => {
-          recommendedRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+          recommendedRef.current?.scrollTo({ top: 0, behavior: "smooth" })
         }}
       >
         <ChevronUp className="h-4 w-4" />

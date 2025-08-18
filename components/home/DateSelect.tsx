@@ -1,20 +1,20 @@
-import { getMoviesOfTheMonth } from '@/lib/movies/queries'
-import { getNextMonth } from '@/lib/utils'
-import type { MovieWithReviews } from '@/types/movie.type'
-import { useQueryClient } from '@tanstack/react-query'
-import { Button } from 'components/ui/Button'
-import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/Popover'
+import { getMoviesOfTheMonth } from "@/lib/movies/queries"
+import { getNextMonth } from "@/lib/utils"
+import type { MovieWithReviews } from "@/types/movie.type"
+import { useQueryClient } from "@tanstack/react-query"
+import { Button } from "components/ui/Button"
+import { Popover, PopoverContent, PopoverTrigger } from "components/ui/Popover"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from 'components/ui/Select'
-import { CalendarRange } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+} from "components/ui/Select"
+import { CalendarRange } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
+import { useState } from "react"
 
 interface DateSelectProps {
   months: { month: string; label: string }[]
@@ -32,8 +32,8 @@ export default function DateSelect({ months }: DateSelectProps) {
   const [isLoadingMonths, setIsLoadingMonths] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const monthAndYear = searchParams.get('month')?.split('-')
-  const date = searchParams.get('date')
+  const monthAndYear = searchParams.get("month")?.split("-")
+  const date = searchParams.get("date")
   const queryClient = useQueryClient()
 
   const scrollToMonth = async (targetMonth: string) => {
@@ -46,16 +46,16 @@ export default function DateSelect({ months }: DateSelectProps) {
 
       if (targetSection) {
         // The section already exists, just scroll to it
-        targetSection.scrollIntoView({ behavior: 'smooth' })
+        targetSection.scrollIntoView({ behavior: "smooth" })
         const params = new URLSearchParams(searchParams)
-        params.set('month', targetMonth)
+        params.set("month", targetMonth)
         router.push(`/home?${params.toString()}`)
         setIsLoadingMonths(false)
         return
       }
 
       // The target month is not yet loaded, so we need to fetch all months in between
-      const currentData = queryClient.getQueryData(['pastMovies']) as
+      const currentData = queryClient.getQueryData(["pastMovies"]) as
         | InfiniteQueryData
         | undefined
       if (!currentData) {
@@ -80,7 +80,7 @@ export default function DateSelect({ months }: DateSelectProps) {
 
         // Manually update the query client with the new data
         queryClient.setQueryData(
-          ['pastMovies'],
+          ["pastMovies"],
           (oldData: InfiniteQueryData) => {
             return {
               ...oldData,
@@ -102,15 +102,15 @@ export default function DateSelect({ months }: DateSelectProps) {
           `[data-month="${targetMonth}"]`,
         )
         if (targetSectionAfterLoad) {
-          targetSectionAfterLoad.scrollIntoView({ behavior: 'smooth' })
+          targetSectionAfterLoad.scrollIntoView({ behavior: "smooth" })
           const params = new URLSearchParams(searchParams)
-          params.set('month', targetMonth)
+          params.set("month", targetMonth)
           router.push(`/home?${params.toString()}`)
         }
         setIsLoadingMonths(false)
       }, 100)
     } catch (error) {
-      console.error('Error scrolling to month:', error)
+      console.error("Error scrolling to month:", error)
       setIsLoadingMonths(false)
     }
   }
@@ -121,16 +121,16 @@ export default function DateSelect({ months }: DateSelectProps) {
           {monthAndYear && date
             ? `${new Date(
                 `${monthAndYear[0]}-${monthAndYear[1]}`,
-              ).toLocaleDateString('en-US', {
-                month: 'long',
-                year: 'numeric',
+              ).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
               })}`
-            : 'Select Date'}
+            : "Select Date"}
         </span>
       </div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant={'outline'} size={'icon'} disabled={isLoadingMonths}>
+          <Button variant={"outline"} size={"icon"} disabled={isLoadingMonths}>
             {isLoadingMonths ? (
               <div className="border-foreground h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
             ) : (
@@ -145,7 +145,7 @@ export default function DateSelect({ months }: DateSelectProps) {
         >
           <Select
             onValueChange={(value) => scrollToMonth(value)}
-            value={monthAndYear ? `${monthAndYear[0]}-${monthAndYear[1]}` : ''}
+            value={monthAndYear ? `${monthAndYear[0]}-${monthAndYear[1]}` : ""}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select month" />

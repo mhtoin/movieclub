@@ -1,5 +1,5 @@
-import CurrentMoviePoster from '@/components/home/CurrentMoviePoster'
-import { getMostRecentMovieOfTheWeek } from '@/lib/movies/movies'
+import CurrentMoviePoster from "@/components/home/CurrentMoviePoster"
+import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies"
 
 export async function CurrentMovieWrapper() {
   const mostRecentMovie = await getMostRecentMovieOfTheWeek()

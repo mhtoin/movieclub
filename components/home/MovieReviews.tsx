@@ -1,10 +1,10 @@
-import { ReviewWithUser } from '@/types/movie.type'
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
-import { type JSONContent, generateHTML } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import StarRadio from 'components/tierlist/StarRadio'
-import { Button } from 'components/ui/Button'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { ReviewWithUser } from "@/types/movie.type"
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
+import { type JSONContent, generateHTML } from "@tiptap/react"
+import StarterKit from "@tiptap/starter-kit"
+import StarRadio from "components/tierlist/StarRadio"
+import { Button } from "components/ui/Button"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 export default function MovieReviews({
   movieReviews,
@@ -28,12 +28,12 @@ export default function MovieReviews({
   useEffect(() => {
     const container = scrollContainerRef.current
     if (container) {
-      container.addEventListener('scroll', updateScrollButtonsState)
+      container.addEventListener("scroll", updateScrollButtonsState)
       // Initial check
       updateScrollButtonsState()
 
       return () => {
-        container.removeEventListener('scroll', updateScrollButtonsState)
+        container.removeEventListener("scroll", updateScrollButtonsState)
       }
     }
   }, [updateScrollButtonsState])
@@ -56,14 +56,14 @@ export default function MovieReviews({
     )
   }
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: "left" | "right") => {
     if (!scrollContainerRef.current) return
 
     const container = scrollContainerRef.current
     const scrollAmount =
-      direction === 'left' ? -container.offsetWidth : container.offsetWidth
+      direction === "left" ? -container.offsetWidth : container.offsetWidth
 
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+    container.scrollBy({ left: scrollAmount, behavior: "smooth" })
   }
 
   return (
@@ -71,7 +71,7 @@ export default function MovieReviews({
       <div className="relative w-full max-w-3xl">
         {/* Scroll buttons */}
         <Button
-          onClick={() => scroll('left')}
+          onClick={() => scroll("left")}
           variant="outline"
           disabled={!canScrollLeft}
           className="bg-opaque-card/80 border-border absolute top-1/2 left-0 z-10 -translate-x-12 -translate-y-1/2 rounded-full border p-2 backdrop-blur-xs disabled:cursor-not-allowed disabled:opacity-30"
@@ -81,7 +81,7 @@ export default function MovieReviews({
         </Button>
 
         <Button
-          onClick={() => scroll('right')}
+          onClick={() => scroll("right")}
           disabled={!canScrollRight}
           className="bg-opaque-card/80 border-border absolute top-1/2 right-0 z-10 translate-x-12 -translate-y-1/2 rounded-full border p-2 backdrop-blur-xs disabled:cursor-not-allowed disabled:opacity-30"
           aria-label="Next review"
@@ -94,7 +94,7 @@ export default function MovieReviews({
         <div
           ref={scrollContainerRef}
           className="no-scrollbar w-full snap-x snap-mandatory overflow-x-auto"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <div className="flex w-full flex-row">
             {reviews?.map((review, index) => {
@@ -102,7 +102,7 @@ export default function MovieReviews({
                 ? generateHTML(review?.content as unknown as JSONContent, [
                     StarterKit,
                   ])
-                : ''
+                : ""
               return (
                 <div
                   key={`${review?.userId || index}`}
@@ -114,12 +114,12 @@ export default function MovieReviews({
                   <div className="flex flex-row items-center gap-5 border-b pb-5">
                     <img
                       src={review.user?.image}
-                      alt={review.user?.name ?? ''}
+                      alt={review.user?.name ?? ""}
                       className="h-10 w-10 rounded-full"
                     />
                     <StarRadio
                       value={review.rating}
-                      id={review.user?.id ?? ''}
+                      id={review.user?.id ?? ""}
                       disabled={true}
                     />
                   </div>
@@ -148,7 +148,7 @@ export default function MovieReviews({
                 const itemWidth = container.offsetWidth
                 container.scrollTo({
                   left: itemWidth * index,
-                  behavior: 'smooth',
+                  behavior: "smooth",
                 })
               }}
               className={`bg-border hover:bg-primary/70 h-4 w-4 rounded-full p-0 transition-colors ${
@@ -157,10 +157,10 @@ export default function MovieReviews({
                   scrollContainerRef.current.scrollLeft /
                     scrollContainerRef.current.offsetWidth,
                 ) === index
-                  ? 'bg-primary/70'
+                  ? "bg-primary/70"
                   : !scrollContainerRef.current && index === 0
-                    ? 'bg-primary/70'
-                    : ''
+                    ? "bg-primary/70"
+                    : ""
               }`}
               aria-label={`Go to review ${index + 1}`}
             />

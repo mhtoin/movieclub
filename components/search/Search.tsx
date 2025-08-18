@@ -1,6 +1,6 @@
-import { Suspense } from 'react'
-import FilterBar from './FilterBar'
-import Results from './Results'
+import { Suspense } from "react"
+import FilterBar from "./FilterBar"
+import Results from "./Results"
 
 export default function Search() {
   return (

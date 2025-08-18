@@ -1,10 +1,10 @@
-import 'server-only'
+import "server-only"
 
-import { neonConfig } from '@neondatabase/serverless'
-import { PrismaNeon } from '@prisma/adapter-neon'
-import { PrismaClient } from '@prisma/client'
+import { neonConfig } from "@neondatabase/serverless"
+import { PrismaNeon } from "@prisma/adapter-neon"
+import { PrismaClient } from "@prisma/client"
 
-import ws from 'ws'
+import ws from "ws"
 neonConfig.webSocketConstructor = ws
 neonConfig.poolQueryViaFetch = true
 const connectionString = `${process.env.DATABASE_URL}`
@@ -16,7 +16,7 @@ declare global {
 
 let prisma: PrismaClient
 const adapter = new PrismaNeon({ connectionString })
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   prisma = new PrismaClient({ adapter })
 } else {
   if (!global.cachedPrisma) {

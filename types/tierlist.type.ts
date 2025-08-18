@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma } from "@prisma/client"
 
 export type TierlistWithTiers = Prisma.TierlistGetPayload<{
   include: {
@@ -25,12 +25,12 @@ export type TierlistWithTiers = Prisma.TierlistGetPayload<{
             }
           }
           orderBy: {
-            position: 'asc'
+            position: "asc"
           }
         }
       }
       orderBy: {
-        value: 'asc'
+        value: "asc"
       }
     }
   }

@@ -1,11 +1,11 @@
-import { useRouter } from 'next/navigation'
-import AriaDialog from '../ui/AriaDialog'
-import FilterBar from './FilterBar'
-import Results from './Results'
+import { useRouter } from "next/navigation"
+import AriaDialog from "../ui/AriaDialog"
+import FilterBar from "./FilterBar"
+import Results from "./Results"
 
-import { useDialogStore } from '@/stores/useDialogStore'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useDialogStore } from "@/stores/useDialogStore"
+import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function SearchDialog() {
   const router = useRouter()
@@ -13,7 +13,7 @@ export default function SearchDialog() {
   const { initialRoute } = useDialogStore()
   const [open, setOpen] = useState(true)
   useEffect(() => {
-    if (pathname === '/search') {
+    if (pathname === "/search") {
       setOpen(true)
     }
   }, [pathname])

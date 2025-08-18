@@ -1,16 +1,16 @@
-'use client'
+"use client"
 
-import { getKeyWord } from '@/lib/movies/queries'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { useQueryClient } from '@tanstack/react-query'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
-import { Button } from '../ui/Button'
-import { Input } from '../ui/Input'
-import KeywordCombobox from './KeywordCombobox'
-import KeywordTag from './KeywordTag'
+import { getKeyWord } from "@/lib/movies/queries"
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { useQueryClient } from "@tanstack/react-query"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+import { Button } from "../ui/Button"
+import { Input } from "../ui/Input"
+import KeywordCombobox from "./KeywordCombobox"
+import KeywordTag from "./KeywordTag"
 
-export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
+export default function SearchInput({ type }: { type: "discover" | "search" }) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -19,10 +19,10 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
    */
   const searchParams = useSearchParams()
   const keywordArr = useMemo(
-    () => searchParams.get('with_keywords')?.split(',') ?? [],
+    () => searchParams.get("with_keywords")?.split(",") ?? [],
     [searchParams],
   )
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("")
 
   /**
    * Will contain the ids for keywords
@@ -46,7 +46,7 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
         if (keyword) {
           // Skip empty strings
           const data = await queryClient.ensureQueryData({
-            queryKey: ['keywordSearch', keyword],
+            queryKey: ["keywordSearch", keyword],
             queryFn: () => getKeyWord(keyword),
           })
 
@@ -69,18 +69,18 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
      * Since searching by title uses a different endpoint, we need to wipe the search params clean and just provide the query
      */
     const params = new URLSearchParams()
-    if (type === 'search') {
-      params.set('query', value)
+    if (type === "search") {
+      params.set("query", value)
     }
     router.push(`${pathname}?${params.toString()}`)
   }
 
   const handleKeywordSelect = async (value: string) => {
     const params = new URLSearchParams(searchParams.toString())
-    const currentKeywords = searchParams.get('with_keywords')?.split(',') ?? []
-    params.set('with_keywords', [...currentKeywords, value].join(','))
+    const currentKeywords = searchParams.get("with_keywords")?.split(",") ?? []
+    params.set("with_keywords", [...currentKeywords, value].join(","))
     const data = await queryClient.ensureQueryData({
-      queryKey: ['keywordSearch', value],
+      queryKey: ["keywordSearch", value],
       queryFn: () => getKeyWord(value),
     })
 
@@ -94,7 +94,7 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
 
   const handleKeywordRemove = (keyword: { id: number; name: string }) => {
     const params = new URLSearchParams(searchParams.toString())
-    const currentKeywords = searchParams.get('with_keywords')?.split(',') ?? []
+    const currentKeywords = searchParams.get("with_keywords")?.split(",") ?? []
 
     // Convert string IDs to numbers for comparison
     const updatedKeywords = currentKeywords.filter(
@@ -102,9 +102,9 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
     )
 
     if (updatedKeywords.length === 0) {
-      params.delete('with_keywords')
+      params.delete("with_keywords")
     } else {
-      params.set('with_keywords', updatedKeywords.join(','))
+      params.set("with_keywords", updatedKeywords.join(","))
     }
     const updatedState = keywords.filter((kw) => kw.id !== keyword.id)
 
@@ -113,7 +113,7 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
     router.push(`${pathname}?${params.toString()}`)
   }
 
-  if (type === 'discover') {
+  if (type === "discover") {
     return (
       <form
         onSubmit={handleSubmit}
@@ -124,7 +124,7 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
             <KeywordCombobox handleSelect={handleKeywordSelect} />
           </div>
           {keywords.length > 0 && (
-            <Button variant={'ghost'} type="submit" className="ml-2">
+            <Button variant={"ghost"} type="submit" className="ml-2">
               <MagnifyingGlassIcon />
             </Button>
           )}
@@ -158,7 +158,7 @@ export default function SearchInput({ type }: { type: 'discover' | 'search' }) {
         onChange={(e) => setValue(e.target.value)}
       />
 
-      <Button variant={'ghost'} type="submit">
+      <Button variant={"ghost"} type="submit">
         <MagnifyingGlassIcon />
       </Button>
     </form>

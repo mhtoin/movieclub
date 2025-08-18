@@ -1,6 +1,6 @@
-import { updateShortlistParticipationState } from '@/lib/shortlist'
-import type { Shortlist } from '@prisma/client'
-import { NextResponse } from 'next/server'
+import { updateShortlistParticipationState } from "@/lib/shortlist"
+import type { Shortlist } from "@prisma/client"
+import { NextResponse } from "next/server"
 
 export async function PUT(
   request: Request,

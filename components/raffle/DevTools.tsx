@@ -1,6 +1,6 @@
-import { createDevCookie } from '@/lib/actions/setDevCookie'
-import { Input } from '../ui/Input'
-import { useTransition } from 'react'
+import { createDevCookie } from "@/lib/actions/setDevCookie"
+import { Input } from "../ui/Input"
+import { useTransition } from "react"
 
 interface DevToolsProps {
   noSave: boolean
@@ -32,7 +32,7 @@ export default function DevTools({
             startTransition(() => {
               const newNoSave = !noSave
               setNoSave(newNoSave)
-              createDevCookie('noSave', newNoSave.toString())
+              createDevCookie("noSave", newNoSave.toString())
             })
           }}
         />
@@ -50,7 +50,7 @@ export default function DevTools({
             startTransition(() => {
               const newResultScreen = !resultScreen
               setResultScreen(newResultScreen)
-              createDevCookie('resultScreen', newResultScreen.toString())
+              createDevCookie("resultScreen", newResultScreen.toString())
             })
           }}
         />

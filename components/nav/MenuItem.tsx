@@ -1,4 +1,4 @@
-import { MenuItem as AriaMenuItem, type MenuStore } from '@ariakit/react'
+import { MenuItem as AriaMenuItem, type MenuStore } from "@ariakit/react"
 
 export default function MenuItem({
   children,

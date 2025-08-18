@@ -1,17 +1,17 @@
-import { Toaster } from '@/components/ui/Toaster'
-import Providers from '@/utils/provider'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { Inter } from 'next/font/google'
+import { Toaster } from "@/components/ui/Toaster"
+import Providers from "@/utils/provider"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Inter } from "next/font/google"
 
-import './globals.css'
+import "./globals.css"
 export const metadata = {
-  title: 'movieclub',
-  description: 'The app for your long-distance movie club',
+  title: "movieclub",
+  description: "The app for your long-distance movie club",
 }
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
+  subsets: ["latin"],
+  display: "swap",
 })
 
 export default async function RootLayout({
