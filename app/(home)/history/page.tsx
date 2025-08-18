@@ -16,16 +16,30 @@ export default async function HistoryPage() {
   const queryClient = getQueryClient()
 
   // Prefetch watched movies for better performance
-  queryClient.prefetchQuery({
+  queryClient.prefetchInfiniteQuery({
     queryKey: ['watchedMovies', undefined],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = 1 }) => {
       const movies = await getWatchedMovies()
-      return movies.sort((a, b) => {
+      const sortedMovies = movies.sort((a, b) => {
         if (!a.watchDate) return 1
         if (!b.watchDate) return -1
         return b.watchDate.localeCompare(a.watchDate)
       })
+      
+      const limit = 20
+      const total = sortedMovies.length
+      const totalPages = Math.ceil(total / limit)
+      const offset = (pageParam - 1) * limit
+      const paginatedMovies = sortedMovies.slice(offset, offset + limit)
+      
+      return {
+        movies: paginatedMovies,
+        total,
+        page: pageParam,
+        totalPages
+      }
     },
+    initialPageParam: 1,
   })
 
   const dehydratedState = dehydrate(queryClient)

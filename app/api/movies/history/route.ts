@@ -4,10 +4,12 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
   request: NextRequest,
-): Promise<NextResponse<MovieWithUser[] | { ok: boolean; message: string }>> {
+): Promise<NextResponse<{ movies: MovieWithUser[]; total: number; page: number; totalPages: number } | { ok: boolean; message: string }>> {
   try {
     const searchParams = request.nextUrl.searchParams
     const search = searchParams.get('search')
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '20')
 
     const movies = await getWatchedMovies()
     
@@ -28,7 +30,18 @@ export async function GET(
       return b.watchDate.localeCompare(a.watchDate)
     })
 
-    return NextResponse.json(sortedMovies, { status: 200 })
+    // Pagination
+    const total = sortedMovies.length
+    const totalPages = Math.ceil(total / limit)
+    const offset = (page - 1) * limit
+    const paginatedMovies = sortedMovies.slice(offset, offset + limit)
+
+    return NextResponse.json({
+      movies: paginatedMovies,
+      total,
+      page,
+      totalPages
+    }, { status: 200 })
   } catch (error) {
     console.error('Error fetching watched movies:', error)
     if (error instanceof Error) {

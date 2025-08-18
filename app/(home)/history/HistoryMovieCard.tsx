@@ -2,6 +2,7 @@
 
 import type { MovieWithUser } from '@/types/movie.type'
 import Image from 'next/image'
+import Link from 'next/link'
 import { format } from 'date-fns'
 import { Calendar, Star } from 'lucide-react'
 
@@ -23,7 +24,8 @@ export default function HistoryMovieCard({ movie }: HistoryMovieCardProps) {
   const watchDate = movie.watchDate ? new Date(movie.watchDate) : null
 
   return (
-    <div className="group space-y-3 cursor-pointer transition-transform hover:scale-[1.02]">
+    <Link href={`/movie/${movie.id}`} className="block">
+      <div className="group space-y-3 cursor-pointer transition-transform hover:scale-[1.02]">
       {/* Movie Poster */}
       <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-muted">
         <Image
@@ -77,6 +79,6 @@ export default function HistoryMovieCard({ movie }: HistoryMovieCardProps) {
           <span>{movie.runtime ? `${movie.runtime}m` : ''}</span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

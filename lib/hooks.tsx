@@ -86,10 +86,12 @@ export const useMovieQuery = (id: number, enabled: boolean) => {
 }
 
 export const useWatchedMoviesQuery = (search?: string) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ["watchedMovies", search],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = 1 }) => {
       const searchParams = new URLSearchParams()
+      searchParams.set('page', pageParam.toString())
+      searchParams.set('limit', '20')
       if (search) {
         searchParams.set('search', search)
       }
@@ -97,8 +99,17 @@ export const useWatchedMoviesQuery = (search?: string) => {
       if (!response.ok) {
         throw new Error('Failed to fetch watched movies')
       }
-      return response.json() as Promise<MovieWithUser[]>
+      return response.json() as Promise<{
+        movies: MovieWithUser[]
+        total: number
+        page: number
+        totalPages: number
+      }>
     },
+    getNextPageParam: (lastPage) => {
+      return lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined
+    },
+    initialPageParam: 1,
   })
 }
 
