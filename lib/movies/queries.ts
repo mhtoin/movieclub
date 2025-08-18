@@ -346,3 +346,18 @@ export const getMoviesOfTheMonth = async (month: string) => {
   } = await response.json()
   return data
 }
+
+export const getWatchHistory = async (month: string | null, search: string = "") => {
+  const params = new URLSearchParams()
+  if (month) params.set("month", month)
+  if (search) params.set("search", search)
+  
+  const response = await fetch(`${getBaseURL()}/api/history?${params}`)
+  const data: {
+    month: string
+    movies: MovieWithReviews[]
+    nextMonth: string | null
+    hasMore: boolean
+  } = await response.json()
+  return data
+}
