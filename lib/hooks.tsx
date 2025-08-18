@@ -85,6 +85,23 @@ export const useMovieQuery = (id: number, enabled: boolean) => {
   })
 }
 
+export const useWatchedMoviesQuery = (search?: string) => {
+  return useQuery({
+    queryKey: ["watchedMovies", search],
+    queryFn: async () => {
+      const searchParams = new URLSearchParams()
+      if (search) {
+        searchParams.set('search', search)
+      }
+      const response = await fetch(`/api/movies/history?${searchParams.toString()}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch watched movies')
+      }
+      return response.json() as Promise<MovieWithUser[]>
+    },
+  })
+}
+
 export const useDiscoverSuspenseInfiniteQuery = () => {
   const searchParams = useSearchParams()
   const searchParamsString = searchParams.toString()
