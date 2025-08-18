@@ -3,7 +3,7 @@ import { getWatchHistory } from "@/lib/movies/queries"
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { Loader2Icon, Search } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { Button } from "components/ui/Button"
+
 import { Input } from "components/ui/Input"
 import WatchHistoryItem from "./WatchHistoryItem"
 import { useDebouncedValue } from "@/lib/hooks"
