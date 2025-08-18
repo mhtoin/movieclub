@@ -79,6 +79,7 @@ export default function HistoryMovieCard({ movie }: HistoryMovieCardProps) {
           <span>{movie.runtime ? `${movie.runtime}m` : ''}</span>
         </div>
       </div>
+      </div>
     </Link>
   )
 }
