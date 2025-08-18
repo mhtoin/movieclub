@@ -1,9 +1,9 @@
-'use server'
+"use server"
 
-import type { MovieWithUser } from '@/types/movie.type'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import type { Movie } from '@prisma/client'
-import { replaceShortlistMovie } from 'lib/shortlist'
+import type { MovieWithUser } from "@/types/movie.type"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import type { Movie } from "@prisma/client"
+import { replaceShortlistMovie } from "lib/shortlist"
 
 export async function replaceShortlistItem(
   replacedMovie: MovieWithUser | Movie,

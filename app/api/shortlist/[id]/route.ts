@@ -2,12 +2,12 @@ import {
   addMovieToShortlist,
   getShortList,
   removeMovieFromShortlist,
-} from '@/lib/shortlist'
-import type { ShortlistWithMovies } from '@/types/shortlist.type'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import { revalidatePath } from 'next/cache'
-import { type NextRequest, NextResponse } from 'next/server'
-export const dynamic = 'force-dynamic'
+} from "@/lib/shortlist"
+import type { ShortlistWithMovies } from "@/types/shortlist.type"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import { revalidatePath } from "next/cache"
+import { type NextRequest, NextResponse } from "next/server"
+export const dynamic = "force-dynamic"
 
 export async function GET(
   _request: NextRequest,
@@ -19,7 +19,7 @@ export async function GET(
     const shortlist = await getShortList(id)
     if (!shortlist) {
       return NextResponse.json(
-        { ok: false, message: 'Shortlist not found' },
+        { ok: false, message: "Shortlist not found" },
         { status: 404 },
       )
     }
@@ -34,7 +34,7 @@ export async function GET(
   }
 
   return NextResponse.json(
-    { ok: false, message: 'Something went wrong!' },
+    { ok: false, message: "Something went wrong!" },
     { status: 500 },
   )
 }
@@ -49,7 +49,7 @@ export async function POST(
     const { movie }: { movie: TMDBMovieResponse } = await request.json()
     const updatedShortlist = await addMovieToShortlist(movie, id)
 
-    revalidatePath('/home/shortlist')
+    revalidatePath("/home/shortlist")
     return NextResponse.json(updatedShortlist)
   } catch (e) {
     if (e instanceof Error) {
@@ -61,7 +61,7 @@ export async function POST(
   }
 
   return NextResponse.json(
-    { ok: false, message: 'Something went wrong!' },
+    { ok: false, message: "Something went wrong!" },
     { status: 500 },
   )
 }

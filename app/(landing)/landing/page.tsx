@@ -1,11 +1,11 @@
-import { getCurrentSession } from '@/lib/authentication/session'
-import { redirect } from 'next/navigation'
+import { getCurrentSession } from "@/lib/authentication/session"
+import { redirect } from "next/navigation"
 
 export default async function Home() {
   const { user } = await getCurrentSession()
 
   if (!user) {
-    redirect('/login')
+    redirect("/login")
   }
 
   return (

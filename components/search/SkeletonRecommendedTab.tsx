@@ -1,5 +1,5 @@
-import { TabsContent } from '@/components/ui/Tabs'
-import { useRef } from 'react'
+import { TabsContent } from "@/components/ui/Tabs"
+import { useRef } from "react"
 
 export default function SkeletonRecommendedTab() {
   const skeletonRef = useRef<HTMLDivElement>(null)
@@ -11,7 +11,7 @@ export default function SkeletonRecommendedTab() {
     <TabsContent
       value="recommended"
       className="overflow-y-auto"
-      style={{ maxHeight: 'calc(90vh - 150px)' }}
+      style={{ maxHeight: "calc(90vh - 150px)" }}
       ref={skeletonRef}
     >
       <div className="flex w-full flex-wrap items-center justify-center gap-2 py-2">

@@ -1,6 +1,6 @@
-import { createSelectors } from '@/lib/createSelectors'
-import type { MovieWithUser } from '@/types/movie.type'
-import { create } from 'zustand'
+import { createSelectors } from "@/lib/createSelectors"
+import type { MovieWithUser } from "@/types/movie.type"
+import { create } from "zustand"
 
 interface RaffleState {
   isOpen: boolean

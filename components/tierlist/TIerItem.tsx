@@ -1,6 +1,6 @@
-import type { TierMovieWithMovieData } from '@/types/tierlist.type'
-import type { DraggableProvided } from '@hello-pangea/dnd'
-import Image from 'next/image'
+import type { TierMovieWithMovieData } from "@/types/tierlist.type"
+import type { DraggableProvided } from "@hello-pangea/dnd"
+import Image from "next/image"
 export default function TierItem({
   item,
   provided,

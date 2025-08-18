@@ -1,8 +1,8 @@
-import TierItem from '@/components/tierlist/TIerItem'
-import type { TierMovieWithMovieData } from '@/types/tierlist.type'
-import { Draggable, Droppable } from '@hello-pangea/dnd'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import TierItem from "@/components/tierlist/TIerItem"
+import type { TierMovieWithMovieData } from "@/types/tierlist.type"
+import { Draggable, Droppable } from "@hello-pangea/dnd"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function Tier({
   tierIndex,
@@ -25,12 +25,12 @@ export default function Tier({
       if (newScrollLeft + tier.clientWidth < tier.scrollWidth) {
         tier.scrollTo({
           left: newScrollLeft,
-          behavior: 'smooth',
+          behavior: "smooth",
         })
       } else {
         tier.scrollTo({
           left: tier.scrollWidth - tier.clientWidth,
-          behavior: 'smooth',
+          behavior: "smooth",
         })
       }
       setCanScrollRight(newScrollLeft + tier.clientWidth < tier.scrollWidth)
@@ -46,9 +46,9 @@ export default function Tier({
       const newScrollLeft = currentScrollLeft - 500
 
       if (newScrollLeft > 0) {
-        tier.scrollTo({ left: newScrollLeft, behavior: 'smooth' })
+        tier.scrollTo({ left: newScrollLeft, behavior: "smooth" })
       } else {
-        tier.scrollTo({ left: 0, behavior: 'smooth' })
+        tier.scrollTo({ left: 0, behavior: "smooth" })
       }
 
       setCanScrollLeft(newScrollLeft > 0)
@@ -76,7 +76,7 @@ export default function Tier({
       </div>
       <button
         className={`to-background hover:bg-accent/10 absolute top-0 left-44 z-9990 hidden h-full w-20 items-center justify-center bg-linear-to-b from-transparent opacity-0 transition-all duration-300 group-hover:opacity-100 md:flex ${
-          canScrollLeft ? 'visible' : 'invisible'
+          canScrollLeft ? "visible" : "invisible"
         }`}
         type="button"
         onClick={() => handleScrollLeft(tierIndex)}
@@ -86,7 +86,7 @@ export default function Tier({
       <button
         type="button"
         className={`to-background hover:bg-accent/10 absolute top-0 right-0 z-9990 hidden h-full w-20 items-center justify-center bg-linear-to-b from-transparent opacity-0 transition-all duration-300 group-hover:opacity-100 md:flex ${
-          canScrollRight ? 'visible' : 'invisible'
+          canScrollRight ? "visible" : "invisible"
         }`}
         onClick={() => handleScrollRight(tierIndex)}
       >
@@ -97,7 +97,7 @@ export default function Tier({
       ) : (
         <div
           className={
-            'bg-accent hidden w-full max-w-44 items-center justify-center rounded-tl-md rounded-bl-md border p-2 md:flex'
+            "bg-accent hidden w-full max-w-44 items-center justify-center rounded-tl-md rounded-bl-md border p-2 md:flex"
           }
         >
           <span className="w-full text-center text-lg font-bold whitespace-normal">

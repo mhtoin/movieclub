@@ -1,6 +1,6 @@
 module.exports = {
   plugins: {
-    '@tailwindcss/postcss': {},
-    'postcss-easing-gradients': {},
+    "@tailwindcss/postcss": {},
+    "postcss-easing-gradients": {},
   },
 }

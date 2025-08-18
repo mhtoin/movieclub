@@ -1,10 +1,10 @@
-import type { SliderProps } from 'react-aria-components'
+import type { SliderProps } from "react-aria-components"
 import {
   Slider,
   SliderOutput,
   SliderThumb,
   SliderTrack,
-} from 'react-aria-components'
+} from "react-aria-components"
 
 interface MySliderProps<T> extends SliderProps<T> {
   label?: string

@@ -1,23 +1,23 @@
-'use client'
-import FilterSelect from '@/components/search/FilterSelect'
-import { getFilters } from '@/lib/movies/queries'
-import { useQuery } from '@tanstack/react-query'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+"use client"
+import FilterSelect from "@/components/search/FilterSelect"
+import { getFilters } from "@/lib/movies/queries"
+import { useQuery } from "@tanstack/react-query"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useCallback } from "react"
 
 export default function GenreFilters() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
   const { data: genreOptions } = useQuery({
-    queryKey: ['genres'],
+    queryKey: ["genres"],
     queryFn: getFilters,
   })
 
   const createQueryString = useCallback(
     (name: string, value: string[] | string | number[], isRange = false) => {
       const params = new URLSearchParams(searchParams.toString())
-      params.delete('query')
+      params.delete("query")
       if (isRange) {
         const min = `${name}.gte`
         const max = `${name}.lte`
@@ -31,10 +31,10 @@ export default function GenreFilters() {
           params.delete(name)
           return params.toString()
         }
-        params.set(name, value.join(','))
+        params.set(name, value.join(","))
         return params.toString()
       }
-      if (value === '') {
+      if (value === "") {
         params.delete(name)
         return params.toString()
       }
@@ -45,7 +45,7 @@ export default function GenreFilters() {
   )
 
   const handleGenreSelect = (value: string[]) => {
-    const query = createQueryString('with_genres', value)
+    const query = createQueryString("with_genres", value)
     router.push(`${pathname}?${query}`, {
       scroll: false,
     })

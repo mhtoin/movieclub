@@ -1,5 +1,5 @@
-import { updateUser } from '@/lib/user'
-import { NextResponse } from 'next/server'
+import { updateUser } from "@/lib/user"
+import { NextResponse } from "next/server"
 
 export async function PUT(
   request: Request,

@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { SORT_OPTIONS } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { SORT_OPTIONS } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import {
   Select,
   SelectArrow,
@@ -12,22 +12,22 @@ import {
   SelectProvider,
   useSelectStore,
   useStoreState,
-} from '@ariakit/react'
-import { ArrowDown, ArrowUp } from 'lucide-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import { Button } from '../ui/Button'
+} from "@ariakit/react"
+import { ArrowDown, ArrowUp } from "lucide-react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useState } from "react"
+import { Button } from "../ui/Button"
 
 export default function SortMenu() {
   const store = useSelectStore()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const sort = searchParams.get('sort_by')
-  const sortBy = sort ? sort.split('.')[0] : 'popularity'
+  const sort = searchParams.get("sort_by")
+  const sortBy = sort ? sort.split(".")[0] : "popularity"
   const [selectedValue, setSelectedValue] = useState(sortBy)
   const [selectedDirection, setSelectedDirection] = useState(
-    sort ? sort.split('.')[1] : 'desc',
+    sort ? sort.split(".")[1] : "desc",
   )
   const isOpen = useStoreState(store).open
 
@@ -39,7 +39,7 @@ export default function SortMenu() {
       setSelectedDirection(direction)
     }
     const params = new URLSearchParams(searchParams)
-    params.set('sort_by', `${value}.${direction}`)
+    params.set("sort_by", `${value}.${direction}`)
     router.push(`${pathname}?${params.toString()}`, {
       scroll: false,
     })
@@ -58,15 +58,15 @@ export default function SortMenu() {
         <Select
           store={store}
           className={cn(
-            'flex h-10 flex-none items-center justify-between gap-1 rounded-lg border pr-4 pl-4 text-[1rem] leading-6 whitespace-nowrap [text-decoration-line:none] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] outline-[2px] outline-offset-[2px] select-none',
-            'border-accent/80 text-secondary-foreground',
+            "flex h-10 flex-none items-center justify-between gap-1 rounded-lg border pr-4 pl-4 text-[1rem] leading-6 whitespace-nowrap [text-decoration-line:none] [box-shadow:inset_0_0_0_1px_var(--border),_inset_0_2px_0_var(--highlight),_inset_0_-1px_0_var(--shadow),_0_1px_1px_var(--shadow)] outline-[2px] outline-offset-[2px] select-none",
+            "border-accent/80 text-secondary-foreground",
           )}
         >
           <div className="flex flex-row items-center gap-2">
             <p className="text-foreground text-sm font-medium">
               {SORT_OPTIONS[selectedValue as keyof typeof SORT_OPTIONS]?.label}
             </p>
-            {selectedDirection === 'desc' ? (
+            {selectedDirection === "desc" ? (
               <ArrowDown className="text-foreground h-4 w-4" />
             ) : (
               <ArrowUp className="text-foreground h-4 w-4" />
@@ -74,7 +74,7 @@ export default function SortMenu() {
           </div>
           <SelectArrow
             store={store}
-            className={`transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+            className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`}
           />
         </Select>
         <SelectPopover
@@ -86,16 +86,16 @@ export default function SortMenu() {
         >
           <div className="flex flex-row gap-2">
             <Button
-              variant={selectedDirection === 'desc' ? 'secondary' : 'ghost'}
-              size={'icon'}
-              onClick={() => handleSortChange(selectedValue, 'desc')}
+              variant={selectedDirection === "desc" ? "secondary" : "ghost"}
+              size={"icon"}
+              onClick={() => handleSortChange(selectedValue, "desc")}
             >
               <ArrowDown className="text-foreground h-4 w-4" />
             </Button>
             <Button
-              variant={selectedDirection === 'asc' ? 'secondary' : 'ghost'}
-              size={'icon'}
-              onClick={() => handleSortChange(selectedValue, 'asc')}
+              variant={selectedDirection === "asc" ? "secondary" : "ghost"}
+              size={"icon"}
+              onClick={() => handleSortChange(selectedValue, "asc")}
             >
               <ArrowUp className="text-foreground h-4 w-4" />
             </Button>

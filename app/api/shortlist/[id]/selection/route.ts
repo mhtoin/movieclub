@@ -1,5 +1,5 @@
-import { updateShortlistSelection } from '@/lib/shortlist'
-import { NextResponse } from 'next/server'
+import { updateShortlistSelection } from "@/lib/shortlist"
+import { NextResponse } from "next/server"
 
 export async function PUT(
   request: Request,

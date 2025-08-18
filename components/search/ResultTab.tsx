@@ -1,17 +1,17 @@
-import MovieCard from '@/components/search/MovieCard'
-import { TabsContent } from '@/components/ui/Tabs'
-import { useSearchQuery } from '@/lib/hooks'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import { Button } from 'components/ui/Button'
-import { ChevronUp, Loader2 } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
-import { Fragment, useEffect, useRef } from 'react'
+import MovieCard from "@/components/search/MovieCard"
+import { TabsContent } from "@/components/ui/Tabs"
+import { useSearchQuery } from "@/lib/hooks"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import { Button } from "components/ui/Button"
+import { ChevronUp, Loader2 } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { Fragment, useEffect, useRef } from "react"
 
 export default function ResultTab() {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isFetching } =
     useSearchQuery()
   const searchParams = useSearchParams()
-  const showOnlyAvailable = searchParams.get('showOnlyAvailable') === 'true'
+  const showOnlyAvailable = searchParams.get("showOnlyAvailable") === "true"
   const modalRef = useRef<HTMLDivElement>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
   const resultsContainerRef = useRef<HTMLDivElement>(null)
@@ -28,7 +28,7 @@ export default function ResultTab() {
       },
       {
         root: modalRef.current,
-        rootMargin: '1000px',
+        rootMargin: "1000px",
         threshold: 0.1,
       },
     )
@@ -50,7 +50,7 @@ export default function ResultTab() {
           onClick={() => {
             resultsContainerRef.current?.scrollTo({
               top: 0,
-              behavior: 'smooth',
+              behavior: "smooth",
             })
           }}
         >
@@ -82,7 +82,7 @@ export default function ResultTab() {
           <span className="text-muted-foreground text-center text-sm">
             {showOnlyAvailable
               ? "No available movies found. Try unchecking 'Show only available'."
-              : 'No results found'}
+              : "No results found"}
           </span>
         )}
 

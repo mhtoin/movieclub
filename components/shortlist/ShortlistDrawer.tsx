@@ -1,15 +1,15 @@
-'use client'
+"use client"
 
-import UserAvatar from '@/components/shortlist/UserAvatar'
+import UserAvatar from "@/components/shortlist/UserAvatar"
 import {
   useUpdateParticipationMutation,
   useUpdateReadyStateMutation,
   useValidateSession,
-} from '@/lib/hooks'
-import { useSuspenseShortlistsQuery } from '@/lib/hooks'
-import { ParticipationButton } from 'components/raffle/ParticipationButton'
-import ShortListItem from 'components/shortlist/ShortlistItem'
-import { Button } from 'components/ui/Button'
+} from "@/lib/hooks"
+import { useSuspenseShortlistsQuery } from "@/lib/hooks"
+import { ParticipationButton } from "components/raffle/ParticipationButton"
+import ShortListItem from "components/shortlist/ShortlistItem"
+import { Button } from "components/ui/Button"
 import {
   Drawer,
   DrawerContent,
@@ -18,8 +18,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from 'components/ui/Drawer'
-import { Clapperboard, MoveDiagonal } from 'lucide-react'
+} from "components/ui/Drawer"
+import { Clapperboard, MoveDiagonal } from "lucide-react"
 
 export default function ShortlistDrawer() {
   const { data: user } = useValidateSession()
@@ -33,8 +33,8 @@ export default function ShortlistDrawer() {
     <Drawer setBackgroundColorOnScale={false} shouldScaleBackground={true}>
       <DrawerTrigger asChild>
         <Button
-          variant={'outline'}
-          size={'default'}
+          variant={"outline"}
+          size={"default"}
           className="flex flex-row items-center gap-2 rounded-tr-2xl rounded-br-none p-5"
         >
           <Clapperboard />
@@ -67,8 +67,8 @@ export default function ShortlistDrawer() {
                       checked={userShortlist?.participating}
                       onChange={(e) => {
                         participationMutation.mutate({
-                          userId: user?.id || '',
-                          shortlistId: userShortlist?.id || '',
+                          userId: user?.id || "",
+                          shortlistId: userShortlist?.id || "",
                           participating: e.target.checked,
                         })
                       }}
@@ -80,8 +80,8 @@ export default function ShortlistDrawer() {
                       checked={userShortlist?.isReady}
                       onChange={(e) => {
                         readyStateMutation.mutate({
-                          userId: user?.id || '',
-                          shortlistId: userShortlist?.id || '',
+                          userId: user?.id || "",
+                          shortlistId: userShortlist?.id || "",
                           isReady: e.target.checked,
                         })
                       }}

@@ -1,4 +1,4 @@
-import type { MovieWithReviews } from '@/types/movie.type'
+import type { MovieWithReviews } from "@/types/movie.type"
 
 export default function CollapsedView({ movie }: { movie: MovieWithReviews }) {
   return (

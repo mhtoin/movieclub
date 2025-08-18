@@ -1,6 +1,6 @@
-import { simulateRaffle } from '@/lib/movies/movies'
+import { simulateRaffle } from "@/lib/movies/movies"
 // @ts-nocheck
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(movies, { status: 200 })
   } catch (e) {
-    console.error('error', e)
+    console.error("error", e)
     if (e instanceof Error) {
       return NextResponse.json(
         { ok: false, message: e.message },
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       )
     }
     return NextResponse.json(
-      { ok: false, message: 'Something went wrong!' },
+      { ok: false, message: "Something went wrong!" },
       { status: 500 },
     )
   }

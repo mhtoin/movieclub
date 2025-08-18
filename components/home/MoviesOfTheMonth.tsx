@@ -1,21 +1,21 @@
-'use client'
-import type { MovieWithReviews } from '@/types/movie.type'
-import MovieGalleryItem from './MovieGalleryItem'
+"use client"
+import type { MovieWithReviews } from "@/types/movie.type"
+import MovieGalleryItem from "./MovieGalleryItem"
 
-import { getMoviesOfTheMonth } from '@/lib/movies/queries'
-import { getNextMonth } from '@/lib/utils'
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
-import { Loader2Icon } from 'lucide-react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { getMoviesOfTheMonth } from "@/lib/movies/queries"
+import { getNextMonth } from "@/lib/utils"
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
+import { Loader2Icon } from "lucide-react"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useEffect, useRef } from "react"
 
 export default function MoviesOfTheMonth() {
   const pathname = usePathname()
   const sentinelRef = useRef<HTMLDivElement>(null)
-  const currentMonth = useSearchParams().get('month') || ''
+  const currentMonth = useSearchParams().get("month") || ""
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useSuspenseInfiniteQuery({
-      queryKey: ['pastMovies'],
+      queryKey: ["pastMovies"],
       queryFn: ({ pageParam }) => getMoviesOfTheMonth(pageParam),
       initialPageParam: currentMonth,
       getNextPageParam: (lastPage) => {
@@ -41,7 +41,7 @@ export default function MoviesOfTheMonth() {
         }
       },
       {
-        rootMargin: '1000px 0px',
+        rootMargin: "1000px 0px",
         threshold: 0,
       },
     )
@@ -59,11 +59,11 @@ export default function MoviesOfTheMonth() {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            const month = entry.target.getAttribute('data-month')
+            const month = entry.target.getAttribute("data-month")
             if (month) {
               const params = new URLSearchParams(window.location.search)
-              params.set('month', month)
-              window.history.replaceState({}, '', `${pathname}?${params}`)
+              params.set("month", month)
+              window.history.replaceState({}, "", `${pathname}?${params}`)
             }
           }
         }
@@ -71,7 +71,7 @@ export default function MoviesOfTheMonth() {
       { threshold: 0.5 },
     )
 
-    const sections = document.querySelectorAll('[data-month]')
+    const sections = document.querySelectorAll("[data-month]")
     for (const section of sections) {
       observer.observe(section)
     }

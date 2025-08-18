@@ -1,20 +1,20 @@
-import { WatchdatePicker } from '@/components/raffle/WatchdatePicker'
-import { useValidateSession } from '@/lib/hooks'
-import { getNextDefaultWatchDate, shuffle } from '@/lib/utils'
-import type { MovieWithUser } from '@/types/movie.type'
-import type { SiteConfig } from '@prisma/client'
-import type { UseMutateFunction } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import { Dices } from 'lucide-react'
-import { useCallback, useState } from 'react'
-import { Button } from '../ui/Button'
+import { WatchdatePicker } from "@/components/raffle/WatchdatePicker"
+import { useValidateSession } from "@/lib/hooks"
+import { getNextDefaultWatchDate, shuffle } from "@/lib/utils"
+import type { MovieWithUser } from "@/types/movie.type"
+import type { SiteConfig } from "@prisma/client"
+import type { UseMutateFunction } from "@tanstack/react-query"
+import { format } from "date-fns"
+import { Dices } from "lucide-react"
+import { useCallback, useState } from "react"
+import { Button } from "../ui/Button"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../ui/Tooltip'
-import DevTools from './DevTools'
+} from "../ui/Tooltip"
+import DevTools from "./DevTools"
 
 interface ActionButtonsProps {
   isPlaying: boolean
@@ -57,8 +57,8 @@ export default function ActionButtons({
     new Date(getNextDefaultWatchDate(siteConfig.watchWeekDay)),
   )
   const isDev =
-    process.env.NODE_ENV === 'development' ||
-    process.env.VERCEL_ENV === 'preview'
+    process.env.NODE_ENV === "development" ||
+    process.env.VERCEL_ENV === "preview"
 
   const performShuffles = useCallback(
     async (movies: MovieWithUser[], shuffleCount = 4) => {
@@ -90,8 +90,8 @@ export default function ActionButtons({
 
     raffle({
       movies: finalShuffledMovies,
-      startingUserId: user?.id || '',
-      watchDate: format(watchDate, 'yyyy-MM-dd'),
+      startingUserId: user?.id || "",
+      watchDate: format(watchDate, "yyyy-MM-dd"),
     })
   }, [
     isPlaying,
@@ -110,9 +110,9 @@ export default function ActionButtons({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant={'outline'}
-              size={'default'}
-              className={`py-5 ${disabled ? 'cursor-not-allowed' : ''}`}
+              variant={"outline"}
+              size={"default"}
+              className={`py-5 ${disabled ? "cursor-not-allowed" : ""}`}
               disabled={disabled}
               onClick={startRaffle}
             >
@@ -124,7 +124,7 @@ export default function ActionButtons({
           </TooltipTrigger>
 
           <TooltipContent
-            className={`bg-card max-w-40 p-2 ${disabled ? '' : 'hidden'}`}
+            className={`bg-card max-w-40 p-2 ${disabled ? "" : "hidden"}`}
           >
             <p>
               All shortlists must be ready and last week&apos;s winner must have

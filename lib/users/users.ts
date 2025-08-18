@@ -1,6 +1,6 @@
-'use server'
-import { groupBy } from '@/lib/utils'
-import prisma from 'lib/prisma'
+"use server"
+import { groupBy } from "@/lib/utils"
+import prisma from "lib/prisma"
 
 export async function getUserRecommendedMovies(userId: string) {
   const user = await prisma.user.findUnique({

@@ -1,20 +1,20 @@
-import { discord } from '@/lib/authentication/discord'
+import { discord } from "@/lib/authentication/discord"
 import {
   createSession,
   generateSessionToken,
   setSessionTokenCookie,
-} from '@/lib/authentication/session'
-import { db } from '@/lib/db'
-import type { DiscordUser } from '@/types/common.type'
-import type { OAuth2Tokens } from 'arctic'
-import { cookies } from 'next/headers'
+} from "@/lib/authentication/session"
+import { db } from "@/lib/db"
+import type { DiscordUser } from "@/types/common.type"
+import type { OAuth2Tokens } from "arctic"
+import { cookies } from "next/headers"
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url)
-  const code = url.searchParams.get('code')
-  const state = url.searchParams.get('state')
+  const code = url.searchParams.get("code")
+  const state = url.searchParams.get("state")
   const cookieStore = await cookies()
-  const storedState = cookieStore.get('discord_oauth_state')?.value ?? null
+  const storedState = cookieStore.get("discord_oauth_state")?.value ?? null
 
   if (!code || state === null || storedState === null) {
     return new Response(null, { status: 400 })
@@ -33,14 +33,14 @@ export async function GET(request: Request): Promise<Response> {
     return new Response(null, { status: 400 })
   }
 
-  const discordUserResponse = await fetch('https://discord.com/api/users/@me', {
+  const discordUserResponse = await fetch("https://discord.com/api/users/@me", {
     headers: {
       Authorization: `Bearer ${tokens.accessToken()}`,
     },
   })
 
   const discordUserGuildsResponse = await fetch(
-    'https://discord.com/api/users/@me/guilds',
+    "https://discord.com/api/users/@me/guilds",
     {
       headers: {
         Authorization: `Bearer ${tokens.accessToken()}`,
@@ -63,7 +63,7 @@ export async function GET(request: Request): Promise<Response> {
 
   const existingUser = await db?.account.findUnique({
     where: {
-      provider: 'discord',
+      provider: "discord",
       providerAccountId: discordUser.id,
     },
     include: {
@@ -88,13 +88,13 @@ export async function GET(request: Request): Promise<Response> {
     await setSessionTokenCookie(sessionToken, session.expiresAt)
     return new Response(null, {
       status: 302,
-      headers: { Location: '/' },
+      headers: { Location: "/" },
     })
   }
 
   const user = await db?.user.create({
     data: {
-      email: discordUser.email ?? '',
+      email: discordUser.email ?? "",
       name: discordUser.username,
       image: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`,
     },
@@ -103,7 +103,7 @@ export async function GET(request: Request): Promise<Response> {
   await db?.account.create({
     data: {
       userId: user.id,
-      provider: 'discord',
+      provider: "discord",
       providerAccountId: discordUser.id,
     },
   })
@@ -114,6 +114,6 @@ export async function GET(request: Request): Promise<Response> {
 
   return new Response(null, {
     status: 302,
-    headers: { Location: '/' },
+    headers: { Location: "/" },
   })
 }

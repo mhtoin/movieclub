@@ -1,12 +1,12 @@
-'use client'
+"use client"
 import {
   useIsMobile,
   useSuspenseShortlistsQuery,
   useValidateSession,
-} from '@/lib/hooks'
-import ShortlistCard from 'components/shortlist/ShortlistCard'
-import { LoaderCircle } from 'lucide-react'
-import ShortlistDrawer from './ShortlistDrawer'
+} from "@/lib/hooks"
+import ShortlistCard from "components/shortlist/ShortlistCard"
+import { LoaderCircle } from "lucide-react"
+import ShortlistDrawer from "./ShortlistDrawer"
 
 export default function Shortlists() {
   const { data: user } = useValidateSession()

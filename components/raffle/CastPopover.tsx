@@ -1,8 +1,8 @@
-import { CastMember } from '@/types/tmdb.type'
-import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/Popover'
-import { List } from 'lucide-react'
-import { Button } from '../ui/Button'
-import CastPortrait from './CastPortrait'
+import { CastMember } from "@/types/tmdb.type"
+import { Popover, PopoverContent, PopoverTrigger } from "components/ui/Popover"
+import { List } from "lucide-react"
+import { Button } from "../ui/Button"
+import CastPortrait from "./CastPortrait"
 
 export default function CastPopover({ cast }: { cast: Array<CastMember> }) {
   return (

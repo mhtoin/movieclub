@@ -1,14 +1,14 @@
-import { getCurrentSession } from '@/lib/authentication/session'
-import { getWatchedMovies } from '@/lib/movies/movies'
-import { getUsers } from '@/lib/user'
-import { groupBy } from '@/lib/utils'
-import { redirect } from 'next/navigation'
+import { getCurrentSession } from "@/lib/authentication/session"
+import { getWatchedMovies } from "@/lib/movies/movies"
+import { getUsers } from "@/lib/user"
+import { groupBy } from "@/lib/utils"
+import { redirect } from "next/navigation"
 
 export default async function Dashboard() {
   const { user } = await getCurrentSession()
 
   if (!user) {
-    redirect('/')
+    redirect("/")
   }
 
   const users = await getUsers()

@@ -1,12 +1,12 @@
-import { CastMember, CrewMember } from '@/types/tmdb.type'
+import { CastMember, CrewMember } from "@/types/tmdb.type"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from 'components/ui/Tooltip'
-import Image from 'next/image'
-import Link from 'next/link'
+} from "components/ui/Tooltip"
+import Image from "next/image"
+import Link from "next/link"
 export default function CastPortrait({
   cast,
 }: {
@@ -34,10 +34,10 @@ export default function CastPortrait({
         <TooltipContent className="bg-card">
           <div className="flex flex-col">
             <span className="font-bold">{cast.name}</span>
-            {'character' in cast && cast.character && (
+            {"character" in cast && cast.character && (
               <span className="text-foreground/50">{cast.character}</span>
             )}
-            {'job' in cast && cast.job && (
+            {"job" in cast && cast.job && (
               <span className="text-foreground/50">{cast.job}</span>
             )}
           </div>

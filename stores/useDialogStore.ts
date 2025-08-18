@@ -1,8 +1,8 @@
-import { createSelectors } from '@/lib/createSelectors'
-import type { MovieWithUser } from '@/types/movie.type'
-import type { TMDBMovieResponse } from '@/types/tmdb.type'
-import type { Movie } from '@prisma/client'
-import { create } from 'zustand'
+import { createSelectors } from "@/lib/createSelectors"
+import type { MovieWithUser } from "@/types/movie.type"
+import type { TMDBMovieResponse } from "@/types/tmdb.type"
+import type { Movie } from "@prisma/client"
+import { create } from "zustand"
 
 interface DialogState {
   isOpen: boolean

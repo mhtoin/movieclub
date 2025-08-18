@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 
 interface NotificationState {
   notification: string
@@ -7,8 +7,8 @@ interface NotificationState {
 }
 
 export const useNotificationStore = create<NotificationState>()((set) => ({
-  notification: '',
-  type: '',
+  notification: "",
+  type: "",
   setNotification: (message, type) =>
     set(() => ({ notification: message, type: type })),
 }))

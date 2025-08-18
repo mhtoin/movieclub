@@ -1,18 +1,18 @@
-'use client'
+"use client"
 import {
   useIsMobile,
   useReplaceShortlistMutation,
   useShortlistQuery,
   useValidateSession,
-} from '@/lib/hooks'
-import { useDialogStore } from '@/stores/useDialogStore'
-import * as Ariakit from '@ariakit/react'
-import { ArrowRightLeft } from 'lucide-react'
-import { Button } from '../ui/Button'
+} from "@/lib/hooks"
+import { useDialogStore } from "@/stores/useDialogStore"
+import * as Ariakit from "@ariakit/react"
+import { ArrowRightLeft } from "lucide-react"
+import { Button } from "../ui/Button"
 
-import MovieCard from '@/components/search/MovieCard'
-import ShortListItem from 'components/shortlist/ShortlistItem'
-import { Drawer, DrawerContent } from '../ui/Drawer'
+import MovieCard from "@/components/search/MovieCard"
+import ShortListItem from "components/shortlist/ShortlistItem"
+import { Drawer, DrawerContent } from "../ui/Drawer"
 
 export default function ReplaceDialog() {
   const isMobile = useIsMobile()
@@ -21,10 +21,10 @@ export default function ReplaceDialog() {
   const setIsOpen = useDialogStore.use.setIsOpen()
   const movie = useDialogStore.use.movie()
   const { data: session } = useValidateSession()
-  const { data: shortlist } = useShortlistQuery(session?.shortlistId || '')
+  const { data: shortlist } = useShortlistQuery(session?.shortlistId || "")
   const shortlistUpdateMutation = useReplaceShortlistMutation()
 
-  const isTMDBMovie = movie && 'tmdbId' in movie
+  const isTMDBMovie = movie && "tmdbId" in movie
 
   if (isMobile) {
     return (
@@ -55,8 +55,8 @@ export default function ReplaceDialog() {
                   key={shortlistMovie.id}
                 >
                   <Button
-                    variant={'outline'}
-                    size={'icon'}
+                    variant={"outline"}
+                    size={"icon"}
                     onClick={() => {
                       if (movie) {
                         shortlistUpdateMutation.mutate({
@@ -115,17 +115,17 @@ export default function ReplaceDialog() {
               key={shortlistMovie.id}
             >
               <Button
-                variant={'outline'}
-                size={'icon'}
+                variant={"outline"}
+                size={"icon"}
                 onClick={() => {
                   if (movie) {
-                    if ('tmdbId' in movie) {
+                    if ("tmdbId" in movie) {
                       shortlistUpdateMutation.mutate({
                         replacedMovie: shortlistMovie,
                         replacingWithMovie: movie,
                         shortlistId: shortlist.id,
                       })
-                    } else if (typeof movie.id === 'number') {
+                    } else if (typeof movie.id === "number") {
                       shortlistUpdateMutation.mutate({
                         replacedMovie: shortlistMovie,
                         replacingWithMovie: movie,

@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import Popover from '../ui/PopoverBox'
-import RangeSlider from '../ui/RangeSlider'
+import { useState } from "react"
+import Popover from "../ui/PopoverBox"
+import RangeSlider from "../ui/RangeSlider"
 
 interface FilterRangeProps {
   onChange: (value: number[]) => void
@@ -19,7 +19,7 @@ export default function FilterRange({ onChange }: FilterRangeProps) {
           step={0.1}
           minValue={0}
           maxValue={10}
-          thumbLabels={['from', 'to']}
+          thumbLabels={["from", "to"]}
           onChangeEnd={onChange}
         />
       </div>

@@ -1,16 +1,16 @@
-'use client'
-import { ParticipationButton } from 'components/raffle/ParticipationButton'
-import { useGetWatchlistQuery, useValidateSession } from 'lib/hooks'
+"use client"
+import { ParticipationButton } from "components/raffle/ParticipationButton"
+import { useGetWatchlistQuery, useValidateSession } from "lib/hooks"
 
 import {
   useSuspenseShortlistsQuery,
   useUpdateReadyStateMutation,
-} from '@/lib/hooks'
+} from "@/lib/hooks"
 
-import ShortListItem from '@/components/shortlist/ShortlistItem'
-import UserAvatar from '@/components/shortlist/UserAvatar'
-import { useUpdateParticipationMutation } from '@/lib/hooks'
-import { InfoIcon } from 'lucide-react'
+import ShortListItem from "@/components/shortlist/ShortlistItem"
+import UserAvatar from "@/components/shortlist/UserAvatar"
+import { useUpdateParticipationMutation } from "@/lib/hooks"
+import { InfoIcon } from "lucide-react"
 
 export default function ShortlistSidebarContent() {
   const { data: user } = useValidateSession()
@@ -42,8 +42,8 @@ export default function ShortlistSidebarContent() {
                 checked={userShortlist?.participating}
                 onChange={(e) => {
                   participationMutation.mutate({
-                    userId: user?.id || '',
-                    shortlistId: userShortlist?.id || '',
+                    userId: user?.id || "",
+                    shortlistId: userShortlist?.id || "",
                     participating: e.target.checked,
                   })
                 }}
@@ -55,8 +55,8 @@ export default function ShortlistSidebarContent() {
                 checked={userShortlist?.isReady}
                 onChange={(e) => {
                   readyStateMutation.mutate({
-                    userId: user?.id || '',
-                    shortlistId: userShortlist?.id || '',
+                    userId: user?.id || "",
+                    shortlistId: userShortlist?.id || "",
                     isReady: e.target.checked,
                   })
                 }}
