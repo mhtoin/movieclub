@@ -705,3 +705,78 @@ export async function getAllMonths() {
     }
   })
 }
+
+export async function getWatchHistoryByMonth(
+  month: string | null,
+  search: string = "",
+) {
+  // Get the most recent month if no month is provided
+  const startMonth = month || (await getAllMonths())[0]?.month
+  
+  if (!startMonth) {
+    return {
+      month: startMonth,
+      movies: [],
+      nextMonth: null,
+      hasMore: false,
+    }
+  }
+
+  // Build where clause for the query
+  const whereClause: {
+    watchDate: {
+      not: null;
+      contains: string;
+    };
+    title?: {
+      contains: string;
+      mode: string;
+    };
+  } = {
+    watchDate: {
+      not: null,
+      contains: startMonth,
+    },
+  }
+
+  // Add search filter if provided
+  if (search.trim()) {
+    whereClause.title = {
+      contains: search.trim(),
+      mode: "insensitive",
+    }
+  }
+
+  const movies = await prisma.movie.findMany({
+    where: whereClause,
+    orderBy: {
+      watchDate: "desc",
+    },
+    include: {
+      user: true,
+      reviews: {
+        select: {
+          id: true,
+          content: true,
+          user: true,
+          rating: true,
+          userId: true,
+          timestamp: true,
+          movieId: true,
+        },
+      },
+    },
+  })
+
+  // Get next month for pagination
+  const allMonths = await getAllMonths()
+  const currentIndex = allMonths.findIndex(m => m.month === startMonth)
+  const nextMonth = currentIndex < allMonths.length - 1 ? allMonths[currentIndex + 1]?.month : null
+
+  return {
+    month: startMonth,
+    movies,
+    nextMonth,
+    hasMore: !!nextMonth,
+  }
+}

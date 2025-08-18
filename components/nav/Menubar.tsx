@@ -49,6 +49,14 @@ export default function Menubar() {
               <span className={styles["menu-label"]}>View stats</span>
             </Link>
             <Link
+              href={"/history"}
+              className="flex flex-col border-b p-2"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-foreground">History</span>
+              <span className={styles["menu-label"]}>View watch history</span>
+            </Link>
+            <Link
               href={"/home/shortlist"}
               className="flex flex-col border-b p-2"
               onClick={() => setOpen(false)}
@@ -129,6 +137,14 @@ export default function Menubar() {
                   Dashboard
                 </span>
                 <span className={styles["menu-label"]}>View stats</span>
+              </Link>
+            </MenuItem>
+            <MenuItem store={menu} className="group">
+              <Link href={"/history"}>
+                <span className="text-foreground group-[&:hover]:text-accent-foreground">
+                  History
+                </span>
+                <span className={styles["menu-label"]}>View watch history</span>
               </Link>
             </MenuItem>
             <MenuItem store={menu} className="group">
