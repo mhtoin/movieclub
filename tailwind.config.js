@@ -1,5 +1,3 @@
-import { fontFamily } from "tailwindcss/defaultTheme"
-
 const mix = (name) =>
   `color-mix(in hsl, var(${name}), transparent calc(100% - 100% * <alpha-value>))`
 /** @type {import('tailwindcss').Config} */
@@ -76,9 +74,7 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-      },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
