@@ -2,6 +2,7 @@
 import type { UserChartData } from "@/types/common.type"
 import type { MovieWithUser } from "@/types/movie.type"
 import type { Movie, User } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import { format, formatISO, isWednesday, nextWednesday, set } from "date-fns"
 import prisma from "lib/prisma"
 import { addMovieToUserRadarr } from "../radarr"
@@ -712,7 +713,7 @@ export async function getWatchHistoryByMonth(
 ) {
   // Get the most recent month if no month is provided
   const startMonth = month || (await getAllMonths())[0]?.month
-  
+
   if (!startMonth) {
     return {
       month: startMonth,
@@ -721,17 +722,16 @@ export async function getWatchHistoryByMonth(
       hasMore: false,
     }
   }
-
   // Build where clause for the query
   const whereClause: {
     watchDate: {
-      not: null;
-      contains: string;
-    };
+      not: null
+      contains: string
+    }
     title?: {
-      contains: string;
-      mode: string;
-    };
+      contains: string
+      mode: Prisma.QueryMode
+    }
   } = {
     watchDate: {
       not: null,
@@ -743,7 +743,7 @@ export async function getWatchHistoryByMonth(
   if (search.trim()) {
     whereClause.title = {
       contains: search.trim(),
-      mode: "insensitive",
+      mode: Prisma.QueryMode.insensitive,
     }
   }
 
@@ -755,14 +755,8 @@ export async function getWatchHistoryByMonth(
     include: {
       user: true,
       reviews: {
-        select: {
-          id: true,
-          content: true,
+        include: {
           user: true,
-          rating: true,
-          userId: true,
-          timestamp: true,
-          movieId: true,
         },
       },
     },
@@ -770,8 +764,11 @@ export async function getWatchHistoryByMonth(
 
   // Get next month for pagination
   const allMonths = await getAllMonths()
-  const currentIndex = allMonths.findIndex(m => m.month === startMonth)
-  const nextMonth = currentIndex < allMonths.length - 1 ? allMonths[currentIndex + 1]?.month : null
+  const currentIndex = allMonths.findIndex((m) => m.month === startMonth)
+  const nextMonth =
+    currentIndex < allMonths.length - 1
+      ? allMonths[currentIndex + 1]?.month
+      : null
 
   return {
     month: startMonth,
