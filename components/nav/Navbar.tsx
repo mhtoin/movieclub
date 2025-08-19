@@ -18,7 +18,7 @@ export default function NavBar() {
   const [isTransparent, setIsTransparent] = useState(false)
 
   useEffect(() => {
-    if (pathname === "/home") {
+    if (pathname === "/home" || pathname.startsWith("/movie/")) {
       setIsTransparent(true)
     } else {
       setIsTransparent(false)
