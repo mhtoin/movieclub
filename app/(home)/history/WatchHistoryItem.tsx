@@ -99,7 +99,7 @@ export default function WatchHistoryItem({
         </div>
       </div>
       <Link
-        href={`/home?month=${movie.watchDate?.substring(0, 7)}&date=${movie.watchDate?.split("-")[2]}`}
+        href={`/movie/${movie.id}`}
         className="absolute inset-0 z-10"
         aria-label={`View details for ${movie.title}`}
       />
