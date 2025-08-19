@@ -74,8 +74,7 @@ export default function WatchHistory() {
           <div key={pageIndex} className="space-y-8">
             {page.movies.length > 0 && (
               <div className="relative">
-                {/* Month header */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-4 my-6">
                   <div className="relative z-10 bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">
                     {pageIndex + 1}
                   </div>
@@ -84,12 +83,11 @@ export default function WatchHistory() {
                       {format(new Date(page.month + "-01"), "MMMM yyyy")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      {page.movies.length} movie{page.movies.length !== 1 ? "s" : ""}
+                      {page.movies.length} movie
+                      {page.movies.length !== 1 ? "s" : ""}
                     </p>
                   </div>
                 </div>
-
-                {/* Movies for this month */}
                 <div className="ml-12 space-y-4">
                   {page.movies.map((movie) => (
                     <WatchHistoryItem key={movie.id} movie={movie} />
@@ -100,17 +98,14 @@ export default function WatchHistory() {
           </div>
         ))}
 
-        {/* Loading indicator */}
         {isFetchingNextPage && (
           <div className="flex justify-center py-4">
             <Loader2Icon className="h-6 w-6 animate-spin" />
           </div>
         )}
 
-        {/* Sentinel for infinite scroll */}
         <div ref={sentinelRef} className="h-4" />
 
-        {/* No more content indicator */}
         {!hasNextPage && data?.pages[0]?.movies.length > 0 && (
           <div className="flex justify-center py-8">
             <div className="text-sm text-muted-foreground">
@@ -119,11 +114,12 @@ export default function WatchHistory() {
           </div>
         )}
 
-        {/* No results */}
         {data?.pages[0]?.movies.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
-              {search ? "No movies found matching your search." : "No watch history yet."}
+              {search
+                ? "No movies found matching your search."
+                : "No watch history yet."}
             </p>
           </div>
         )}
