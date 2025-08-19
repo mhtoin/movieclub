@@ -1,4 +1,4 @@
-import { getMovieByIdWithReviews } from "@/lib/movies/movies"
+import { getMovieByIdWithReviews, getWatchedMovies } from "@/lib/movies/movies"
 import CurrentMoviePoster from "@/components/home/CurrentMoviePoster"
 import { colors } from "@/components/home/ColorMap"
 import { notFound } from "next/navigation"
@@ -10,10 +10,10 @@ interface MoviePageProps {
 
 export default async function MoviePage({ params }: MoviePageProps) {
   const { id } = await params
-  
+
   try {
     const movie = await getMovieByIdWithReviews(id)
-    
+
     if (!movie || !movie.watchDate) {
       notFound()
     }
@@ -43,13 +43,10 @@ export default async function MoviePage({ params }: MoviePageProps) {
   }
 }
 
-// For static generation, we need to generate params for movies with watchDate
 export async function generateStaticParams() {
   try {
-    // We'll use the database query to get all movies with watchDate
-    const { getWatchedMovies } = await import("@/lib/movies/movies")
     const watchedMovies = await getWatchedMovies()
-    
+
     return watchedMovies.map((movie) => ({
       id: movie.id,
     }))
