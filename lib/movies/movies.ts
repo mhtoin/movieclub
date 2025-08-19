@@ -819,3 +819,27 @@ async function getWatchHistoryGlobalSearch(
     hasMore,
   }
 }
+
+export async function getMovieByIdWithReviews(id: string) {
+  const movie = await prisma.movie.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      user: true,
+      reviews: {
+        select: {
+          id: true,
+          content: true,
+          user: true,
+          rating: true,
+          userId: true,
+          timestamp: true,
+          movieId: true,
+        },
+      },
+    },
+  })
+
+  return movie
+}

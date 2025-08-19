@@ -361,3 +361,9 @@ export const getWatchHistory = async (month: string | null, search: string = "")
   } = await response.json()
   return data
 }
+
+export const getMovieById = async (id: string) => {
+  const response = await fetch(`${getBaseURL()}/api/movies/${id}`)
+  const data: MovieWithReviews = await response.json()
+  return data
+}
