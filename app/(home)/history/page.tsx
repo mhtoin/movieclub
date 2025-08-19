@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import WatchHistory from "./WatchHistory"
 
 export default function HistoryPage() {
@@ -8,12 +7,10 @@ export default function HistoryPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Watch History</h1>
           <p className="text-muted-foreground">
-            A timeline of all the movies we&apos;ve watched together
+            A timeline of all the movies watched
           </p>
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
-          <WatchHistory />
-        </Suspense>
+        <WatchHistory />
       </div>
     </div>
   )

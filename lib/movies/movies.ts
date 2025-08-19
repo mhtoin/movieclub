@@ -711,7 +711,12 @@ export async function getWatchHistoryByMonth(
   month: string | null,
   search: string = "",
 ) {
-  // Get the most recent month if no month is provided
+  // If searching, use global search across all movies
+  if (search.trim()) {
+    return getWatchHistoryGlobalSearch(search.trim(), month)
+  }
+
+  // Original month-based logic for non-search queries
   const startMonth = month || (await getAllMonths())[0]?.month
 
   if (!startMonth) {
@@ -722,29 +727,12 @@ export async function getWatchHistoryByMonth(
       hasMore: false,
     }
   }
-  // Build where clause for the query
-  const whereClause: {
-    watchDate: {
-      not: null
-      contains: string
-    }
-    title?: {
-      contains: string
-      mode: Prisma.QueryMode
-    }
-  } = {
+
+  const whereClause = {
     watchDate: {
       not: null,
       contains: startMonth,
     },
-  }
-
-  // Add search filter if provided
-  if (search.trim()) {
-    whereClause.title = {
-      contains: search.trim(),
-      mode: Prisma.QueryMode.insensitive,
-    }
   }
 
   const movies = await prisma.movie.findMany({
@@ -775,5 +763,59 @@ export async function getWatchHistoryByMonth(
     movies,
     nextMonth,
     hasMore: !!nextMonth,
+  }
+}
+
+async function getWatchHistoryGlobalSearch(
+  search: string,
+  cursor: string | null,
+) {
+  const ITEMS_PER_PAGE = 20
+
+  // Build where clause for global search
+  const whereClause = {
+    watchDate: {
+      not: null,
+    },
+    title: {
+      contains: search,
+      mode: Prisma.QueryMode.insensitive,
+    },
+  }
+
+  // Get movies with cursor-based pagination
+  const movies = await prisma.movie.findMany({
+    where: cursor
+      ? {
+          ...whereClause,
+          watchDate: {
+            ...whereClause.watchDate,
+            lt: cursor, // Less than cursor for descending order
+          },
+        }
+      : whereClause,
+    orderBy: {
+      watchDate: "desc",
+    },
+    take: ITEMS_PER_PAGE + 1, // Take one extra to check if there are more
+    include: {
+      user: true,
+      reviews: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  })
+
+  const hasMore = movies.length > ITEMS_PER_PAGE
+  const moviesToReturn = hasMore ? movies.slice(0, ITEMS_PER_PAGE) : movies
+  const nextCursor = hasMore ? movies[ITEMS_PER_PAGE - 1]?.watchDate : null
+
+  return {
+    month: "search-results", // Special identifier for search results
+    movies: moviesToReturn,
+    nextMonth: nextCursor,
+    hasMore,
   }
 }
