@@ -77,7 +77,13 @@ export default function WatchHistoryItems({ search }: WatchHistoryItemsProps) {
   return (
     <div className="relative">
       {!search.trim() && (
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
+        <div
+          className="absolute left-4 top-0 bottom-0 w-0.5 mt-5"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--sky), var(--teal) 10%, var(--green) 20%, var(--yellow) 30%, var(--peach) 40%, var(--maroon) 50%, var(--red) 60%, var(--mauve) 70%, var(--pink) 80%, var(--flamingo) 90%, var(--rosewater) 100%)",
+          }}
+        />
       )}
 
       {data?.pages.map((page, pageIndex) => (
