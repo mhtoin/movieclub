@@ -1,7 +1,8 @@
-import { getMovieById } from "@/lib/movies/queries"
 import { getMovieByIdWithReviews } from "@/lib/movies/movies"
 import CurrentMoviePoster from "@/components/home/CurrentMoviePoster"
+import { colors } from "@/components/home/ColorMap"
 import { notFound } from "next/navigation"
+import { Suspense } from "react"
 
 interface MoviePageProps {
   params: Promise<{ id: string }>
@@ -17,10 +18,22 @@ export default async function MoviePage({ params }: MoviePageProps) {
       notFound()
     }
 
+    const colorClasses = Array.from(
+      { length: movie.genres.length + 2 },
+      () => colors[Math.floor(Math.random() * colors.length)],
+    )
+
     return (
-      <div className="pt-[70px] min-h-screen">
-        <div className="relative h-[calc(100vh-70px)]">
-          <CurrentMoviePoster mostRecentMovie={movie} />
+      <div className="bg-main-background relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+        <div className="min-h-screen shrink-0 snap-start">
+          <Suspense fallback={null}>
+            <div className="relative flex h-screen w-screen snap-start items-center justify-center overflow-x-hidden">
+              <CurrentMoviePoster
+                mostRecentMovie={movie}
+                colors={colorClasses}
+              />
+            </div>
+          </Suspense>
         </div>
       </div>
     )
