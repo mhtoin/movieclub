@@ -3,7 +3,9 @@ import { Calendar, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { format } from "date-fns"
+import { useRef } from "react"
 import Avatar from "@/components/ui/Avatar"
+import { useElementInView } from "@/hooks/useScrollProgress"
 
 interface Review {
   rating: number
@@ -14,6 +16,14 @@ export default function WatchHistoryItem({
 }: {
   movie: MovieWithReviews
 }) {
+  const itemRef = useRef<HTMLDivElement>(null)
+  const { isInView, intersectionRatio } = useElementInView(
+    itemRef as React.RefObject<HTMLElement>,
+    {
+      threshold: [0, 0.1, 0.5, 1],
+      rootMargin: "-20px 0px -20px 0px",
+    },
+  )
   const posterUrl = movie?.images?.posters?.[0]?.file_path
     ? `https://image.tmdb.org/t/p/w342${movie.images.posters[0].file_path}`
     : movie?.poster_path
@@ -29,10 +39,20 @@ export default function WatchHistoryItem({
         ) / movie.reviews.length
       : null
 
+  const opacity = Math.max(0.3, intersectionRatio)
+  const translateY = isInView ? 0 : 20
+  const scale = 0.95 + intersectionRatio * 0.05
+
   return (
-    <div className="group relative bg-card border rounded-lg p-4 hover:shadow-md transition-all duration-200">
+    <div
+      ref={itemRef}
+      className="group relative bg-card border rounded-lg p-4 hover:shadow-md transition-all duration-500 ease-out hover:translate-x-0.2"
+      style={{
+        opacity,
+        transform: `translateY(${translateY}px) scale(${scale})`,
+      }}
+    >
       <div className="flex gap-4">
-        {/* Movie Poster */}
         <div className="flex-shrink-0">
           <Image
             src={posterUrl}

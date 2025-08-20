@@ -20,7 +20,6 @@ function WatchHistoryContent({
 }: WatchHistoryProps) {
   return (
     <div className="space-y-6">
-      {/* Search Bar */}
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
         <Input
@@ -31,7 +30,6 @@ function WatchHistoryContent({
         />
       </div>
 
-      {/* Search Results Header */}
       {debouncedSearch.trim() && (
         <div className="border-l-4 border-primary pl-4">
           <h2 className="text-lg font-semibold">Search Results</h2>
@@ -41,7 +39,6 @@ function WatchHistoryContent({
         </div>
       )}
 
-      {/* Watch History Items with Suspense */}
       <Suspense fallback={<WatchHistorySkeleton />}>
         <WatchHistoryItems search={debouncedSearch} />
       </Suspense>

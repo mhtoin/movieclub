@@ -3,6 +3,11 @@ import { getWatchHistory } from "@/lib/movies/queries"
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query"
 import { Loader2Icon } from "lucide-react"
 import { useEffect, useRef } from "react"
+import { useScrollProgress } from "@/hooks/useScrollProgress"
+import {
+  AnimatedTimelineNode,
+  AnimatedTimelineLine,
+} from "@/components/history/AnimatedTimeline"
 
 import WatchHistoryItem from "./WatchHistoryItem"
 import { format } from "date-fns"
@@ -14,6 +19,7 @@ interface WatchHistoryItemsProps {
 export default function WatchHistoryItems({ search }: WatchHistoryItemsProps) {
   const sentinelRef = useRef<HTMLDivElement>(null)
   const prefetchSentinelRef = useRef<HTMLDivElement>(null)
+  const { scrollProgress } = useScrollProgress({ threshold: 100 })
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useSuspenseInfiniteQuery({
@@ -77,26 +83,17 @@ export default function WatchHistoryItems({ search }: WatchHistoryItemsProps) {
   return (
     <div className="relative">
       {!search.trim() && (
-        <div
-          className="absolute left-4 top-0 bottom-0 w-0.5 mt-5"
-          style={{
-            background:
-              "linear-gradient(to bottom, var(--sky), var(--teal) 10%, var(--green) 20%, var(--yellow) 30%, var(--peach) 40%, var(--maroon) 50%, var(--red) 60%, var(--mauve) 70%, var(--pink) 80%, var(--flamingo) 90%, var(--rosewater) 100%)",
-          }}
-        />
+        <AnimatedTimelineLine scrollProgress={scrollProgress} />
       )}
 
       {data?.pages.map((page, pageIndex) => (
         <div key={pageIndex} className="space-y-8">
           {page.movies.length > 0 && (
             <div className="relative">
-              {/* Show month headers only for non-search results */}
               {!search.trim() && page.month !== "search-results" && (
                 <div className="flex items-center gap-4 my-6">
-                  <div className="relative z-10 bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold">
-                    {pageIndex + 1}
-                  </div>
-                  <div className="bg-background border rounded-lg px-4 py-2">
+                  <AnimatedTimelineNode>{pageIndex + 1}</AnimatedTimelineNode>
+                  <div className="bg-background border rounded-lg px-4 py-2 transition-all duration-500 hover:shadow-md hover:scale-[1.02]">
                     <h2 className="text-lg font-semibold">
                       {format(new Date(page.month + "-01"), "MMMM yyyy")}
                     </h2>
@@ -109,7 +106,10 @@ export default function WatchHistoryItems({ search }: WatchHistoryItemsProps) {
               )}
               <div className={search.trim() ? "space-y-4" : "ml-12 space-y-4"}>
                 {page.movies.map((movie, index) => (
-                  <div key={movie.id}>
+                  <div
+                    key={movie.id}
+                    className="transform transition-all duration-300 hover:translate-x-1"
+                  >
                     <WatchHistoryItem movie={movie} />
                     {index === Math.floor(page.movies.length / 2) &&
                       pageIndex === data.pages.length - 1 && (
