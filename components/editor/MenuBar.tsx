@@ -30,9 +30,13 @@ import { toast } from "sonner"
 export const MenuBar = ({
   editor,
   id,
+  onSave,
+  isLoading,
 }: {
   editor: Editor | null
   id: string
+  onSave?: () => void
+  isLoading?: boolean
 }) => {
   const saveReviewMutation = useMutation({
     mutationFn: async () => {
@@ -51,6 +55,14 @@ export const MenuBar = ({
       toast.error("Failed to save review")
     },
   })
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave()
+    } else {
+      saveReviewMutation.mutate()
+    }
+  }
 
   if (!editor) {
     return null
@@ -253,8 +265,8 @@ export const MenuBar = ({
         <Button
           variant={iconVariant}
           size={iconSize}
-          isLoading={saveReviewMutation.isPending}
-          onClick={() => saveReviewMutation.mutate()}
+          isLoading={isLoading || saveReviewMutation.isPending}
+          onClick={handleSave}
         >
           <Save className="h-4 w-4" />
         </Button>
