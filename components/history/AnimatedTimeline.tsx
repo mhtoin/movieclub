@@ -82,7 +82,7 @@ export function AnimatedTimelineLine({
       <div
         className="absolute top-0 left-0 w-full transition-all duration-300 ease-out"
         style={{
-          height: `${Math.min(scrollProgress * 110, 100)}%`, // Slight overshoot effect
+          height: `${Math.min(scrollProgress * 95, 100)}%`, // Slight overshoot effect
           background:
             "linear-gradient(to bottom, var(--sky), var(--teal) 10%, var(--green) 20%, var(--yellow) 30%, var(--peach) 40%, var(--maroon) 50%, var(--red) 60%, var(--mauve) 70%, var(--pink) 80%, var(--flamingo) 90%, var(--rosewater) 100%)",
           filter: "drop-shadow(0 0 6px rgba(var(--primary-rgb), 0.4))",
