@@ -1,6 +1,8 @@
 "use client"
 import DetailsView from "@/components/home/DetailsView"
 import MovieReviews from "@/components/home/MovieReviews"
+import ReviewDialog from "@/components/home/ReviewDialog"
+import ViewModeButtons from "@/components/home/ViewModeButtons"
 import { useIsMobile } from "@/lib/hooks"
 import type { MovieWithReviews } from "@/types/movie.type"
 import { AnimatePresence, motion } from "framer-motion"
@@ -30,6 +32,11 @@ export default function CurrentMoviePoster({
 
   return (
     <div className="relative h-full w-full">
+      <ViewModeButtons />
+      {/* Add Review Button - positioned to be accessible in both views */}
+      <div className="absolute top-4 right-4 z-20">
+        <ReviewDialog movie={mostRecentMovie} />
+      </div>
       <Image
         src={isMobile ? posterImage : backgroundImage}
         alt={mostRecentMovie?.title}
