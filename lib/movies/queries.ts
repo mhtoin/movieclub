@@ -347,11 +347,14 @@ export const getMoviesOfTheMonth = async (month: string) => {
   return data
 }
 
-export const getWatchHistory = async (month: string | null, search: string = "") => {
+export const getWatchHistory = async (
+  month: string | null,
+  search: string = "",
+) => {
   const params = new URLSearchParams()
   if (month) params.set("month", month)
   if (search) params.set("search", search)
-  
+
   const response = await fetch(`${getBaseURL()}/api/history?${params}`)
   const data: {
     month: string
@@ -364,6 +367,14 @@ export const getWatchHistory = async (month: string | null, search: string = "")
 
 export const getMovieById = async (id: string) => {
   const response = await fetch(`${getBaseURL()}/api/movies/${id}`)
+  const data: MovieWithReviews = await response.json()
+  return data
+}
+
+export const getMostRecentMovieOfTheWeek = async () => {
+  const response = await fetch(`${getBaseURL()}/api/movies/latest`, {
+    cache: "no-store",
+  })
   const data: MovieWithReviews = await response.json()
   return data
 }

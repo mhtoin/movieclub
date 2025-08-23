@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useCreateOrUpdateReviewMutation } from "@/lib/reviews/mutations"
 import type { Editor } from "@tiptap/react"
 import { Button } from "components/ui/Button"
 import {
@@ -25,32 +25,19 @@ import {
   Workflow,
   WrapText,
 } from "lucide-react"
-import { toast } from "sonner"
 
 export const MenuBar = ({
   editor,
-  id,
+  reviewId,
+  movieId,
+  userId,
 }: {
   editor: Editor | null
-  id: string
+  reviewId?: string
+  movieId: string
+  userId?: string
 }) => {
-  const saveReviewMutation = useMutation({
-    mutationFn: async () => {
-      const content = editor?.getJSON()
-
-      const res = await fetch(`/api/reviews?id=${id}`, {
-        method: "POST",
-        body: JSON.stringify({ content }),
-      })
-      return res.json()
-    },
-    onSuccess: () => {
-      toast.success("Review saved")
-    },
-    onError: () => {
-      toast.error("Failed to save review")
-    },
-  })
+  const reviewMutation = useCreateOrUpdateReviewMutation(userId || "", movieId)
 
   if (!editor) {
     return null
@@ -253,8 +240,14 @@ export const MenuBar = ({
         <Button
           variant={iconVariant}
           size={iconSize}
-          isLoading={saveReviewMutation.isPending}
-          onClick={() => saveReviewMutation.mutate()}
+          isLoading={reviewMutation.isPending}
+          onClick={() => {
+            const content = editor?.getJSON()
+            reviewMutation.mutate({
+              content,
+              reviewId,
+            })
+          }}
         >
           <Save className="h-4 w-4" />
         </Button>

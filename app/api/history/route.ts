@@ -6,7 +6,12 @@ export async function GET(
   request: NextRequest,
 ): Promise<
   NextResponse<
-    | { month: string; movies: MovieWithReviews[]; nextMonth: string | null; hasMore: boolean }
+    | {
+        month: string
+        movies: MovieWithReviews[]
+        nextMonth: string | null
+        hasMore: boolean
+      }
     | { ok: boolean; message: string }
   >
 > {
@@ -14,9 +19,9 @@ export async function GET(
     const searchParams = request.nextUrl.searchParams
     const month = searchParams.get("month")
     const search = searchParams.get("search") || ""
-    
+
     const result = await getWatchHistoryByMonth(month, search)
-    
+
     return NextResponse.json(result, { status: 200 })
   } catch (e) {
     if (e instanceof Error) {

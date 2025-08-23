@@ -1,8 +1,8 @@
 import { getMovieByIdWithReviews, getWatchedMovies } from "@/lib/movies/movies"
-import CurrentMoviePoster from "@/components/home/CurrentMoviePoster"
 import { colors } from "@/components/home/ColorMap"
-import { notFound } from "next/navigation"
 import { Suspense } from "react"
+import { getQueryClient } from "@/lib/getQueryClient"
+import Movie from "@/components/movie/Movie"
 
 interface MoviePageProps {
   params: Promise<{ id: string }>
@@ -11,36 +11,29 @@ interface MoviePageProps {
 export default async function MoviePage({ params }: MoviePageProps) {
   const { id } = await params
 
-  try {
-    const movie = await getMovieByIdWithReviews(id)
+  const queryClient = getQueryClient()
 
-    if (!movie || !movie.watchDate) {
-      notFound()
-    }
+  queryClient.prefetchQuery({
+    queryKey: ["movies", id],
+    queryFn: () => getMovieByIdWithReviews(id),
+  })
 
-    const colorClasses = Array.from(
-      { length: movie.genres.length + 2 },
-      () => colors[Math.floor(Math.random() * colors.length)],
-    )
+  const colorClasses = Array.from(
+    { length: 10 },
+    () => colors[Math.floor(Math.random() * colors.length)],
+  )
 
-    return (
-      <div className="bg-main-background relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
-        <div className="min-h-screen shrink-0 snap-start">
-          <Suspense fallback={null}>
-            <div className="relative flex h-screen w-screen snap-start items-center justify-center overflow-x-hidden">
-              <CurrentMoviePoster
-                mostRecentMovie={movie}
-                colors={colorClasses}
-              />
-            </div>
-          </Suspense>
-        </div>
+  return (
+    <div className="bg-main-background relative h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+      <div className="min-h-screen shrink-0 snap-start">
+        <Suspense fallback={null}>
+          <div className="relative flex h-screen w-screen snap-start items-center justify-center overflow-x-hidden">
+            <Movie colors={colorClasses} id={id} />
+          </div>
+        </Suspense>
       </div>
-    )
-  } catch (error) {
-    console.error("Error fetching movie:", error)
-    notFound()
-  }
+    </div>
+  )
 }
 
 export async function generateStaticParams() {

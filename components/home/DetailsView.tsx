@@ -7,6 +7,8 @@ import React, { useEffect, useRef, useState } from "react"
 import { FaImdb } from "react-icons/fa"
 import { SiThemoviedatabase } from "react-icons/si"
 import { cn } from "@/lib/utils"
+import ReviewDialog from "components/tierlist/ReviewDialog"
+import { useValidateSession } from "@/lib/hooks"
 
 export default React.memo(
   function DetailsView({
@@ -18,6 +20,7 @@ export default React.memo(
     isExpanded?: boolean
     colors?: string[]
   }) {
+    const { data: user } = useValidateSession()
     const containerRef = useRef<HTMLDivElement>(null)
     const [isWrapped, setIsWrapped] = useState(false)
     const [containerWidth, setContainerWidth] = useState(0)
@@ -256,6 +259,15 @@ export default React.memo(
                 className="h-10 w-10 rounded-full border border-white flex items-center justify-center text-white"
               />
               <span className="text-white text-sm">{movie.user.name}</span>
+            </div>
+          )}
+          {!movie.reviews.find((review) => review.user.id !== user?.id) && (
+            <div className="flex items-end px-8">
+              <ReviewDialog
+                movie={movie}
+                userId={user?.id}
+                key={movie.reviews.length}
+              />
             </div>
           )}
         </div>
