@@ -12,14 +12,14 @@ export async function GET(
   try {
     const id = params.id
     const movie = await getMovieByIdWithReviews(id)
-    
+
     if (!movie) {
       return NextResponse.json(
         { ok: false, message: "Movie not found" },
         { status: 404 },
       )
     }
-    
+
     return NextResponse.json(movie, { status: 200 })
   } catch (e) {
     if (e instanceof Error) {

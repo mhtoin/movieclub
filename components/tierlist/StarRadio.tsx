@@ -1,8 +1,8 @@
+import { MovieReview } from "@/types/movie.type"
 import { useMutation } from "@tanstack/react-query"
 import { getQueryClient } from "lib/getQueryClient"
 import { Loader2, Star } from "lucide-react"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useState, Dispatch, SetStateAction } from "react"
 import { toast } from "sonner"
 
 interface StarRadioProps {
@@ -11,32 +11,49 @@ interface StarRadioProps {
   size?: "sm" | "md" | "lg"
   disabled?: boolean
   name?: string
-  id: string
+  id?: string
+  movieId?: string
+  onSave?: Dispatch<SetStateAction<MovieReview | undefined>>
 }
 
 export default function StarRadio({
   value = 0,
   onChange,
+  onSave,
   size = "md",
   disabled = false,
   name = "star-rating",
   id,
+  movieId,
 }: StarRadioProps) {
   const [hoverValue, setHoverValue] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const pathname = usePathname()
-  const tierlistId = pathname.split("/").pop()
-  const queryClient = getQueryClient()
+  //const [currentReviewId, setCurrentReviewId] = useState<string | undefined>(id)
+
+  console.log("current id", id)
+
   const saveRatingMutation = useMutation({
     mutationFn: async (rating: number) => {
-      const res = await fetch(`/api/ratings?id=${id}`, {
-        method: "POST",
-        body: JSON.stringify({ rating }),
-      })
+      const res = await fetch(
+        `/api/ratings?id=${id || ""}&movieId=${movieId}`,
+        {
+          method: "POST",
+          body: JSON.stringify({ rating }),
+        },
+      )
       return res.json()
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // If we get a reviewId back, it means a new review was created
+      if (data.reviewId && !id) {
+        //setCurrentReviewId(data.reviewId)
+        onSave?.(data)
+      }
       toast.success("Rating saved")
+      const queryClient = getQueryClient()
+      queryClient.invalidateQueries({
+        queryKey: ["movies", "mostRecent"],
+      })
     },
     onError: () => {
       toast.error("Failed to save rating")
@@ -219,7 +236,7 @@ export default function StarRadio({
             id={`${name}-${starIndex + 1}`}
             name={name}
             value={starIndex + 1}
-            checked={Math.floor(displayValue) === starIndex + 1}
+            defaultChecked={Math.floor(displayValue) === starIndex + 1}
             className="sr-only" // Visually hidden but accessible
             disabled={disabled || saveRatingMutation.isPending}
           />

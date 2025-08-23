@@ -75,6 +75,7 @@ RADARR_MONITORED=               # Monitor movies flag
 After making changes, always test core user workflows:
 
 1. **Development Server Health Check**:
+
    - Start server: `pnpm dev` -- ready in ~1.3 seconds
    - Verify server responds: `curl -I http://localhost:3000`
    - Expected: 500 error without database, 200 with proper setup
@@ -104,6 +105,7 @@ After making changes, always test core user workflows:
    - Test filtering and sorting functionality
 
 ### Expected Error States in Development
+
 - **Network Restrictions**: Google Fonts failures result in fallback fonts (normal)
 - **Database Missing**: 500 errors on pages requiring authentication (expected)
 - **Prisma Not Generated**: "@prisma/client did not initialize" errors (run `pnpm prisma generate`)

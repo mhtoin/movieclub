@@ -20,7 +20,7 @@ export default React.memo(
     isExpanded?: boolean
     colors?: string[]
   }) {
-    const { data: user } = useValidateSession()
+    const { data: user, isLoading: isUserLoading } = useValidateSession()
     const containerRef = useRef<HTMLDivElement>(null)
     const [isWrapped, setIsWrapped] = useState(false)
     const [containerWidth, setContainerWidth] = useState(0)
@@ -261,12 +261,15 @@ export default React.memo(
               <span className="text-white text-sm">{movie.user.name}</span>
             </div>
           )}
-          {user &&
-            !movie.reviews.find((review) => review.user.id !== user?.id) && (
-              <div className="flex items-end px-8">
-                <ReviewDialog movie={movie} userId={user?.id} />
-              </div>
-            )}
+          {!movie.reviews.find((review) => review.user.id !== user?.id) && (
+            <div className="flex items-end px-8">
+              <ReviewDialog
+                movie={movie}
+                userId={user?.id}
+                key={movie.reviews.length}
+              />
+            </div>
+          )}
         </div>
 
         <AnimatePresence mode="wait" propagate>

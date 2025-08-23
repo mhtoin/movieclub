@@ -19,11 +19,14 @@ export default function ReviewDialog({
   userId,
 }: {
   movie: MovieWithReviews
-  userId: string
+  userId: string | undefined
 }) {
   const [open, setOpen] = useState(false)
   const userReview = movie.reviews.find((r) => r.user.id === userId)
   const [rating, setRating] = useState(userReview ? userReview.rating : 0)
+  const [reviewData, setReviewData] = useState(
+    userReview ? userReview : undefined,
+  )
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -70,10 +73,12 @@ export default function ReviewDialog({
                   <div className="flex max-w-sm shrink-0 grow-0 flex-col gap-2">
                     <StarRadio
                       value={rating}
-                      id={movie.id}
+                      id={reviewData?.id}
+                      movieId={movie.id}
                       onChange={(newValue) => {
                         setRating(newValue)
                       }}
+                      onSave={setReviewData}
                     />
                   </div>
                   <div className="flex h-full w-full flex-col gap-2">
