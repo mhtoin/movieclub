@@ -21,13 +21,16 @@ export async function POST(request: NextRequest) {
   }
 
   if (!id && movieId) {
-    // Create new review
     const newReview = await prisma?.review.create({
       data: {
         movieId: movieId,
         userId: session.user.id,
         rating: rating ?? 0,
-        content: content ? (typeof content === 'string' ? content : JSON.stringify(content)) : "",
+        content: content
+          ? typeof content === "string"
+            ? content
+            : JSON.stringify(content)
+          : "",
         timestamp: new Date().toLocaleDateString(),
       },
       include: {
@@ -41,12 +44,11 @@ export async function POST(request: NextRequest) {
     })
   }
 
-  // Update existing review
   if (id) {
     const updateData: { content?: string; rating?: number } = {}
     if (content !== undefined) {
-      // Serialize JSON content to string
-      updateData.content = typeof content === 'string' ? content : JSON.stringify(content)
+      updateData.content =
+        typeof content === "string" ? content : JSON.stringify(content)
     }
     if (rating !== undefined) updateData.rating = rating
 

@@ -55,14 +55,16 @@ export function useCreateOrUpdateReviewMutation(
 
       // Invalidate related queries
       queryClient.invalidateQueries({
-        queryKey: ["movies", "mostRecent"],
+        queryKey: ["movies", "mostRecent", movieId],
       })
 
       toast.success("Review saved")
     },
     onError: (error) => {
       console.error("Failed to save review:", error)
-      toast.error("Failed to save review")
+      toast.error("Failed to save review", {
+        description: error.message,
+      })
     },
   })
 }
