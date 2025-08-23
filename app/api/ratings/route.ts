@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
   await prisma?.review.update({
     where: { id },
-    data: { rating: rating.toString() },
+    data: { rating: rating },
   })
 
   return NextResponse.json({ message: "Rating saved" })

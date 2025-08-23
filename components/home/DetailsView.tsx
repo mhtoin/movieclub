@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { FaImdb } from "react-icons/fa"
 import { SiThemoviedatabase } from "react-icons/si"
 import { cn } from "@/lib/utils"
-import ReviewDialog from "./ReviewDialog"
+import ReviewDialog from "components/tierlist/ReviewDialog"
 import { useValidateSession } from "@/lib/hooks"
 
 export default React.memo(
@@ -261,11 +261,12 @@ export default React.memo(
               <span className="text-white text-sm">{movie.user.name}</span>
             </div>
           )}
-          {!movie.reviews.find((review) => review.user.id !== user?.id) && (
-            <div className="flex items-end px-8">
-              <ReviewDialog movie={movie} />
-            </div>
-          )}
+          {user &&
+            !movie.reviews.find((review) => review.user.id !== user?.id) && (
+              <div className="flex items-end px-8">
+                <ReviewDialog movie={movie} userId={user?.id} />
+              </div>
+            )}
         </div>
 
         <AnimatePresence mode="wait" propagate>

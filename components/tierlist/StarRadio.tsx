@@ -37,9 +37,6 @@ export default function StarRadio({
     },
     onSuccess: () => {
       toast.success("Rating saved")
-      queryClient.invalidateQueries({
-        queryKey: ["tierlists", tierlistId],
-      })
     },
     onError: () => {
       toast.error("Failed to save rating")

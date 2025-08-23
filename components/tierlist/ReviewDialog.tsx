@@ -1,125 +1,91 @@
-/*
-'use client'
-import { useQuery } from '@tanstack/react-query'
-import ReviewEditor from 'components/tierlist/ReviewEditor'
-import StarRadio from 'components/tierlist/StarRadio'
+"use client"
+import { MovieWithReviews } from "@/types/movie.type"
+import ReviewEditor from "components/tierlist/ReviewEditor"
+import StarRadio from "components/tierlist/StarRadio"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from 'components/ui/Dialog'
-import { tierlistKeys } from 'lib/tierlist/tierlistKeys'
-import { Loader2, Star } from 'lucide-react'
-import Image from 'next/image'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import type { TierMovieWithMovieData } from 'types/tierlist.type'
+} from "components/ui/Dialog"
+import Image from "next/image"
+import { useState } from "react"
+import { Button } from "../ui/Button"
+import { Star } from "lucide-react"
 
 export default function ReviewDialog({
   movie,
+  userId,
 }: {
-  movie: TierMovieWithMovieData
+  movie: MovieWithReviews
+  userId: string
 }) {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-  const tierlistId = pathname.split('/').pop()
-
-  // Fetch the latest tierlist data when the dialog is open
-  const { data: tierlistData, isLoading } = useQuery({
-    ...tierlistKeys.byId(tierlistId || ''),
-    enabled: open,
-  })
-
-  // Find the latest movie data from the tierlist
-  const latestMovieData =
-    open && tierlistData
-      ? tierlistData.tiers
-          .flatMap((tier) => tier.movies)
-          .find((m) => m.movie.id === movie.movie.id) || movie
-      : movie
-
-  const [rating, setRating] = useState(Number.parseFloat(movie.movie))
-
-  // Update the rating state when the dialog opens and movie data is available
-  useEffect(() => {
-    if (open && latestMovieData) {
-      setRating(Number.parseFloat(latestMovieData.rating))
-    }
-  }, [open, latestMovieData])
+  const userReview = movie.reviews.find((r) => r.user.id === userId)
+  const [rating, setRating] = useState(userReview ? userReview.rating : 0)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Star
-          className={`hover:fill-accent hover:text-accent h-4 w-4 fill-transparent text-yellow-500 transition-all duration-300 hover:scale-110 ${
-            Number.parseFloat(movie.rating) > 0 || movie.review
-              ? 'fill-yellow-500'
-              : ''
-          }`}
-        />
+      <DialogTrigger asChild>
+        <Button variant="outline" className="flex items-center justify-center">
+          <Star className="mr-2 h-4 w-4" />
+          <span>Add a Review</span>
+        </Button>
       </DialogTrigger>
       <DialogContent
         className="z-9999 h-[90vh] max-h-[90vh] max-w-4xl overflow-hidden p-0"
         variant="noClose"
       >
-        {isLoading ? (
-          <div className="flex h-full items-center justify-center">
-            <Loader2 className="animate-spin" />
+        <div className="relative h-full w-full">
+          <div className="absolute inset-0 h-full w-full">
+            <Image
+              src={`https://image.tmdb.org/t/p/original/${movie?.images?.backdrops[0]?.file_path || movie?.images?.posters[0]?.file_path}`}
+              alt={movie.title}
+              fill
+              className="object-cover opacity-30 blur-xs"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/50" />
           </div>
-        ) : (
-          <div className="relative h-full w-full">
-            <div className="absolute inset-0 h-full w-full">
-              <Image
-                src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.backdrop_path || latestMovieData.movie.poster_path}`}
-                alt={latestMovieData.movie.title}
-                fill
-                className="object-cover opacity-30 blur-xs"
-                priority
-              />
-              <div className="absolute inset-0 bg-black/50" />
-            </div>
 
-            <div className="relative z-10 grid h-full w-full grid-cols-2 gap-4 p-6">
-              <div className="col-span-1 h-full w-full shrink-0 border">
-                <Image
-                  src={`https://image.tmdb.org/t/p/original/${latestMovieData.movie.poster_path}`}
-                  alt={latestMovieData.movie.title}
-                  width={500}
-                  height={750}
-                  className="h-full w-full rounded-md object-cover shadow-lg"
-                />
-              </div>
-              <div>
-                <DialogHeader>
-                  <DialogTitle className="text-xl text-white">
-                    {latestMovieData.movie.title}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="flex h-full w-full gap-6 overflow-hidden bg-transparent p-2">
-                  <div className="flex h-full w-full flex-col items-start gap-4 text-white">
-                    <div className="flex max-w-sm shrink-0 grow-0 flex-col gap-2">
-                      <StarRadio
-                        value={rating}
-                        id={latestMovieData.id}
-                        onChange={(newValue) => {
-                          setRating(newValue)
-                        }}
-                      />
-                    </div>
-                    <div className="flex h-full w-full flex-col gap-2">
-                      <h2 className="text-lg font-semibold">Review</h2>
-                      <ReviewEditor movieData={latestMovieData} />
-                    </div>
+          <div className="relative z-10 grid h-full w-full grid-cols-2 gap-4 p-6">
+            <div className="col-span-1 h-full w-full shrink-0 border">
+              <Image
+                src={`https://image.tmdb.org/t/p/original/${movie?.images?.posters[0]?.file_path}`}
+                alt={movie.title}
+                width={500}
+                height={750}
+                className="h-full w-full rounded-md object-cover shadow-lg"
+              />
+            </div>
+            <div>
+              <DialogHeader>
+                <DialogTitle className="text-xl text-white">
+                  {movie.title}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="flex h-full w-full gap-6 overflow-hidden bg-transparent p-2">
+                <div className="flex h-full w-full flex-col items-start gap-4 text-white">
+                  <div className="flex max-w-sm shrink-0 grow-0 flex-col gap-2">
+                    <StarRadio
+                      value={rating}
+                      id={movie.id}
+                      onChange={(newValue) => {
+                        setRating(newValue)
+                      }}
+                    />
+                  </div>
+                  <div className="flex h-full w-full flex-col gap-2">
+                    <h2 className="text-lg font-semibold">Review</h2>
+                    <ReviewEditor reviewData={userReview} movieId={movie.id} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </DialogContent>
     </Dialog>
   )
 }
-*/
