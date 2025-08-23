@@ -20,7 +20,7 @@ export default React.memo(
     isExpanded?: boolean
     colors?: string[]
   }) {
-    const { data: user, isLoading: isUserLoading } = useValidateSession()
+    const { data: user } = useValidateSession()
     const containerRef = useRef<HTMLDivElement>(null)
     const [isWrapped, setIsWrapped] = useState(false)
     const [containerWidth, setContainerWidth] = useState(0)

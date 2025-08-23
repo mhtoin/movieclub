@@ -1,6 +1,5 @@
 import { colors } from "@/components/home/ColorMap"
 import CurrentMovie from "@/components/home/CurrentMovie"
-import MovieView from "@/components/home/MovieView"
 import { getQueryClient } from "@/lib/getQueryClient"
 import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies"
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"

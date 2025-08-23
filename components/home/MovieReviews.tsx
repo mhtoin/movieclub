@@ -117,11 +117,7 @@ export default function MovieReviews({
                       alt={review.user?.name ?? ""}
                       className="h-10 w-10 rounded-full"
                     />
-                    <StarRadio
-                      value={review.rating}
-                      id={review.user?.id ?? ""}
-                      disabled={true}
-                    />
+                    <StarRadio value={review.rating} disabled={true} />
                   </div>
                   <div className="no-scrollbar flex max-h-[50vh] flex-col gap-2 overflow-y-auto">
                     <div

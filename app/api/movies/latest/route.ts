@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
 import { getMostRecentMovieOfTheWeek } from "@/lib/movies/movies"
-
-const prisma = new PrismaClient()
 
 export async function GET() {
   try {
