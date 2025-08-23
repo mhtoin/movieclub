@@ -2,6 +2,7 @@
 import { MovieWithReviews } from "@/types/movie.type"
 import { useQuery } from "@tanstack/react-query"
 import { reviewKeys } from "@/lib/reviews/reviewKeys"
+import { useCreateOrUpdateReviewMutation } from "@/lib/reviews/mutations"
 import ReviewEditor from "components/tierlist/ReviewEditor"
 import StarRadio from "components/tierlist/StarRadio"
 import {
@@ -12,7 +13,8 @@ import {
   DialogTrigger,
 } from "components/ui/Dialog"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
+import type { Editor } from "@tiptap/react"
 import { Button } from "../ui/Button"
 import { Star } from "lucide-react"
 
@@ -24,24 +26,61 @@ export default function ReviewDialog({
   userId: string | undefined
 }) {
   const [open, setOpen] = useState(false)
+  const editorRef = useRef<Editor | null>(null)
+  const initialContentRef = useRef<string | null>(null)
 
-  // Use the existing review data from movie.reviews as initialData
   const userReview = movie.reviews.find((r) => r.user.id === userId)
+  const reviewMutation = useCreateOrUpdateReviewMutation(userId || "", movie.id)
 
-  // Fetch review data using TanStack Query
   const { data: reviewData } = useQuery({
     ...reviewKeys.byUserAndMovie(userId || "", movie.id),
     initialData: userReview || null,
-    enabled: !!userId && open, // Only fetch when dialog is open and we have userId
+    enabled: !!userId && open,
   })
 
-  // Don't render anything if userId is not available
+  useEffect(() => {
+    if (open && reviewData) {
+      initialContentRef.current = JSON.stringify(
+        JSON.parse(reviewData.content || "{}"),
+      )
+    } else if (open && !reviewData) {
+      initialContentRef.current = JSON.stringify({})
+    }
+  }, [open, reviewData])
+
+  const handleSave = useCallback(() => {
+    if (editorRef.current && userId) {
+      const content = editorRef.current.getJSON()
+      const currentContentString = JSON.stringify(content)
+
+      if (currentContentString !== initialContentRef.current) {
+        if (content && Object.keys(content).length > 0) {
+          reviewMutation.mutate({
+            content,
+            reviewId: reviewData?.id,
+          })
+        }
+      }
+    }
+  }, [reviewMutation, reviewData?.id, userId])
+
+  const handleOpenChange = useCallback(
+    (newOpen: boolean) => {
+      if (!newOpen && open) {
+        // Dialog is closing, save the content
+        handleSave()
+      }
+      setOpen(newOpen)
+    },
+    [open, handleSave],
+  )
+
   if (!userId) {
     return null
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" className="flex items-center justify-center">
           <Star className="mr-2 h-4 w-4" />
@@ -96,6 +135,7 @@ export default function ReviewDialog({
                       reviewData={reviewData}
                       movieId={movie.id}
                       userId={userId}
+                      editorRef={editorRef}
                     />
                   </div>
                 </div>

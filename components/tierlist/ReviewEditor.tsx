@@ -2,16 +2,20 @@
 
 import { MenuBar } from "@/components/editor/MenuBar"
 import { EditorContent, useEditor } from "@tiptap/react"
+import type { Editor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import { useEffect } from "react"
 
 const ReviewEditor = ({
   reviewData,
   movieId,
   userId,
+  editorRef,
 }: {
   reviewData?: { id: string; content: string } | null
   movieId: string
   userId?: string
+  editorRef?: React.MutableRefObject<Editor | null>
 }) => {
   const editor = useEditor({
     extensions: [StarterKit],
@@ -23,6 +27,13 @@ const ReviewEditor = ({
       },
     },
   })
+
+  // Update the ref whenever the editor changes
+  useEffect(() => {
+    if (editorRef && editor) {
+      editorRef.current = editor
+    }
+  }, [editor, editorRef])
 
   return (
     <div className="flex h-full flex-col gap-2">
