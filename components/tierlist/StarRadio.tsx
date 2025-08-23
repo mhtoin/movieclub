@@ -1,64 +1,35 @@
-import { MovieReview } from "@/types/movie.type"
-import { useMutation } from "@tanstack/react-query"
-import { getQueryClient } from "lib/getQueryClient"
+import { useCreateOrUpdateReviewMutation } from "@/lib/reviews/mutations"
 import { Loader2, Star } from "lucide-react"
-import { useState, Dispatch, SetStateAction } from "react"
-import { toast } from "sonner"
+import { useState } from "react"
 
 interface StarRadioProps {
   value?: number
-  onChange?: (value: number) => void
   size?: "sm" | "md" | "lg"
   disabled?: boolean
   name?: string
-  id?: string
+  reviewId?: string
   movieId?: string
-  onSave?: Dispatch<SetStateAction<MovieReview | undefined>>
+  userId?: string
+  readOnly?: boolean
 }
 
 export default function StarRadio({
   value = 0,
-  onChange,
-  onSave,
   size = "md",
   disabled = false,
   name = "star-rating",
-  id,
+  reviewId,
   movieId,
+  userId,
+  readOnly = false,
 }: StarRadioProps) {
   const [hoverValue, setHoverValue] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-  //const [currentReviewId, setCurrentReviewId] = useState<string | undefined>(id)
 
-  console.log("current id", id)
-
-  const saveRatingMutation = useMutation({
-    mutationFn: async (rating: number) => {
-      const res = await fetch(
-        `/api/ratings?id=${id || ""}&movieId=${movieId}`,
-        {
-          method: "POST",
-          body: JSON.stringify({ rating }),
-        },
-      )
-      return res.json()
-    },
-    onSuccess: (data) => {
-      // If we get a reviewId back, it means a new review was created
-      if (data.reviewId && !id) {
-        //setCurrentReviewId(data.reviewId)
-        onSave?.(data)
-      }
-      toast.success("Rating saved")
-      const queryClient = getQueryClient()
-      queryClient.invalidateQueries({
-        queryKey: ["movies", "mostRecent"],
-      })
-    },
-    onError: () => {
-      toast.error("Failed to save rating")
-    },
-  })
+  const reviewMutation = useCreateOrUpdateReviewMutation(
+    userId || "",
+    movieId || "",
+  )
 
   // Size classes for the stars
   const sizeClasses = {
@@ -76,7 +47,7 @@ export default function StarRadio({
 
   // Animation classes for wave effect
   const getAnimationClasses = (index: number): string => {
-    if (!saveRatingMutation.isPending) return ""
+    if (!reviewMutation.isPending) return ""
 
     // Use different animation delay classes based on index
     const delayClasses = [
@@ -98,7 +69,7 @@ export default function StarRadio({
     event: React.MouseEvent<HTMLLabelElement>,
     starIndex: number,
   ) => {
-    if (disabled || saveRatingMutation.isPending) return
+    if (disabled || reviewMutation.isPending || readOnly) return
 
     const { left, width } = event.currentTarget.getBoundingClientRect()
     const position = (event.clientX - left) / width
@@ -115,13 +86,17 @@ export default function StarRadio({
 
   // Handle click on a star
   const handleClick = (event: React.MouseEvent) => {
-    if (disabled || hoverValue === null || saveRatingMutation.isPending) return
+    if (disabled || hoverValue === null || reviewMutation.isPending || readOnly)
+      return
 
     // Prevent the event from triggering the radio input's default behavior
     event.preventDefault()
 
-    onChange?.(hoverValue)
-    saveRatingMutation.mutate(hoverValue)
+    // Save the rating using the mutation
+    reviewMutation.mutate({
+      rating: hoverValue,
+      reviewId,
+    })
   }
 
   // Handle keyboard events for accessibility
@@ -129,11 +104,14 @@ export default function StarRadio({
     event: React.KeyboardEvent<HTMLLabelElement>,
     starIndex: number,
   ) => {
-    if (disabled || saveRatingMutation.isPending) return
+    if (disabled || reviewMutation.isPending || readOnly) return
 
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
-      onChange?.(starIndex + 1)
+      reviewMutation.mutate({
+        rating: starIndex + 1,
+        reviewId,
+      })
     }
   }
 
@@ -146,18 +124,26 @@ export default function StarRadio({
 
   // Handle mouse down for drag functionality
   const handleMouseDown = () => {
-    if (!disabled && !saveRatingMutation.isPending) {
+    if (!disabled && !reviewMutation.isPending && !readOnly) {
       setIsDragging(true)
     }
   }
 
   // Handle mouse up to end dragging
   const handleMouseUp = (event: React.MouseEvent) => {
-    if (isDragging && hoverValue !== null && !saveRatingMutation.isPending) {
-      // Only call onChange if this is not a click event (which is handled separately)
+    if (
+      isDragging &&
+      hoverValue !== null &&
+      !reviewMutation.isPending &&
+      !readOnly
+    ) {
+      // Only call the mutation if this is not a click event (which is handled separately)
       // Check if the event target is not a label element
       if (!(event.target instanceof HTMLLabelElement)) {
-        onChange?.(hoverValue)
+        reviewMutation.mutate({
+          rating: hoverValue,
+          reviewId,
+        })
       }
       setIsDragging(false)
     }
@@ -180,7 +166,7 @@ export default function StarRadio({
         {/* Base star (outline) */}
         <Star
           className={`${sizeClasses[size]} stroke-yellow-400 transition-all duration-200 ${
-            saveRatingMutation.isPending ? "opacity-70" : ""
+            reviewMutation.isPending ? "opacity-70" : ""
           }`}
           fill="transparent"
           strokeWidth={strokeWidth[size]}
@@ -193,7 +179,7 @@ export default function StarRadio({
         >
           <Star
             className={`${sizeClasses[size]} stroke-yellow-400 ${
-              saveRatingMutation.isPending ? "opacity-70" : ""
+              reviewMutation.isPending ? "opacity-70" : ""
             }`}
             fill="rgb(250 204 21)" // text-yellow-400 equivalent
             strokeWidth={strokeWidth[size]}
@@ -201,7 +187,7 @@ export default function StarRadio({
         </div>
 
         {/* Hover indicator - shows the potential fill amount */}
-        {!disabled && !saveRatingMutation.isPending && (
+        {!disabled && !reviewMutation.isPending && !readOnly && (
           <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             <div className="flex h-1/2 w-1/2 items-center justify-center rounded-full bg-yellow-400/20">
               {fillPercentage > 0 && (
@@ -238,19 +224,19 @@ export default function StarRadio({
             value={starIndex + 1}
             defaultChecked={Math.floor(displayValue) === starIndex + 1}
             className="sr-only" // Visually hidden but accessible
-            disabled={disabled || saveRatingMutation.isPending}
+            disabled={disabled || reviewMutation.isPending}
           />
           <label
             htmlFor={`${name}-${starIndex + 1}`}
             className={`cursor-pointer transition-transform duration-200 hover:scale-110 ${
-              disabled || saveRatingMutation.isPending
+              disabled || reviewMutation.isPending || readOnly
                 ? "cursor-not-allowed opacity-60 hover:scale-100"
                 : ""
             }`}
             onMouseMove={(e) => handleMouseMove(e, starIndex)}
             onClick={(e) => handleClick(e)}
             onKeyDown={(e) => handleKeyDown(e, starIndex)}
-            tabIndex={disabled || saveRatingMutation.isPending ? -1 : 0}
+            tabIndex={disabled || reviewMutation.isPending || readOnly ? -1 : 0}
           >
             {renderStar(starIndex)}
           </label>
@@ -258,7 +244,7 @@ export default function StarRadio({
       ))}
 
       {/* Display the numeric value or loading spinner */}
-      {saveRatingMutation.isPending ? (
+      {reviewMutation.isPending ? (
         <span className="ml-3 flex items-center rounded-md bg-yellow-100 px-2 py-1 text-yellow-800">
           <Loader2 className="mr-1 h-4 w-4 animate-spin" />
           <span className="text-sm font-medium">Saving...</span>

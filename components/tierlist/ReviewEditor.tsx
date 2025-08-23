@@ -1,22 +1,21 @@
 "use client"
 
 import { MenuBar } from "@/components/editor/MenuBar"
-import { MovieWithReviews } from "@/types/movie.type"
-import type { TierMovieWithMovieData } from "@/types/tierlist.type"
-import { Review } from "@prisma/client"
-import { EditorContent, type JSONContent, useEditor } from "@tiptap/react"
+import { EditorContent, useEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 
 const ReviewEditor = ({
   reviewData,
   movieId,
+  userId,
 }: {
-  reviewData?: Review
+  reviewData?: { id: string; content: string } | null
   movieId: string
+  userId?: string
 }) => {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: reviewData?.content || "<p></p>",
+    content: JSON.parse(reviewData?.content || "{}"),
     editorProps: {
       attributes: {
         class:
@@ -27,7 +26,12 @@ const ReviewEditor = ({
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <MenuBar editor={editor} id={movieId} />
+      <MenuBar
+        editor={editor}
+        reviewId={reviewData?.id}
+        movieId={movieId}
+        userId={userId}
+      />
       <div className="relative grow overflow-hidden">
         <EditorContent
           editor={editor}

@@ -1,5 +1,7 @@
 "use client"
 import { MovieWithReviews } from "@/types/movie.type"
+import { useQuery } from "@tanstack/react-query"
+import { reviewKeys } from "@/lib/reviews/reviewKeys"
 import ReviewEditor from "components/tierlist/ReviewEditor"
 import StarRadio from "components/tierlist/StarRadio"
 import {
@@ -22,11 +24,21 @@ export default function ReviewDialog({
   userId: string | undefined
 }) {
   const [open, setOpen] = useState(false)
+
+  // Use the existing review data from movie.reviews as initialData
   const userReview = movie.reviews.find((r) => r.user.id === userId)
-  const [rating, setRating] = useState(userReview ? userReview.rating : 0)
-  const [reviewData, setReviewData] = useState(
-    userReview ? userReview : undefined,
-  )
+
+  // Fetch review data using TanStack Query
+  const { data: reviewData } = useQuery({
+    ...reviewKeys.byUserAndMovie(userId || "", movie.id),
+    initialData: userReview || null,
+    enabled: !!userId && open, // Only fetch when dialog is open and we have userId
+  })
+
+  // Don't render anything if userId is not available
+  if (!userId) {
+    return null
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -72,18 +84,19 @@ export default function ReviewDialog({
                 <div className="flex h-full w-full flex-col items-start gap-4 text-white">
                   <div className="flex max-w-sm shrink-0 grow-0 flex-col gap-2">
                     <StarRadio
-                      value={rating}
-                      id={reviewData?.id}
+                      value={reviewData?.rating || 0}
+                      reviewId={reviewData?.id}
                       movieId={movie.id}
-                      onChange={(newValue) => {
-                        setRating(newValue)
-                      }}
-                      onSave={setReviewData}
+                      userId={userId}
                     />
                   </div>
                   <div className="flex h-full w-full flex-col gap-2">
                     <h2 className="text-lg font-semibold">Review</h2>
-                    <ReviewEditor reviewData={userReview} movieId={movie.id} />
+                    <ReviewEditor
+                      reviewData={reviewData}
+                      movieId={movie.id}
+                      userId={userId}
+                    />
                   </div>
                 </div>
               </div>
